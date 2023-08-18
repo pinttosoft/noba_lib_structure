@@ -1,0 +1,38 @@
+{
+  "name": "@pinttosoft/noba_lib_segregated_structure",
+  "version": "0.0.1",
+  "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
+  "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" ",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "jest --forceExit --runInBand --detectOpenHandles",
+    "publish-version": "npm run clean && npm i && npm run build && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinttosoft/noba_lib_segregated_structure.git"
+  },
+  "author": "angel bejarano / angel.bejarano@jaspesoft.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pinttosoft/noba_lib_segregated_structure/issues"
+  },
+  "homepage": "https://github.com/pinttosoft/noba_lib_segregated_structure#readme",
+  "devDependencies": {
+    "@types/uuid": "^9.0.2",
+    "prettier": "^3.0.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1438.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.9.0",
+    "mongodb": "^5.7.0",
+    "pino": "^8.15.0",
+    "uuid": "^9.0.0"
+  }
+}
