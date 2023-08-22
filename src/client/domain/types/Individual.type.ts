@@ -1,7 +1,7 @@
 import { ResidencyStatus } from "../enums/residency_status";
 import { AddressAndContactData } from "@/shared/domain/types/address_contact_data.type";
 
-type individual = {
+type individualType = {
   firstName: string;
   dni: string;
   middleName?: string;
@@ -18,4 +18,4 @@ type individual = {
   residencyStatus: ResidencyStatus;
 };
 
-export type Individual = individual & AddressAndContactData;
+export type Individual = individualType & AddressAndContactData;

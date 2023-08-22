@@ -3,7 +3,7 @@ import { Account } from "./abstracts/account.abstract";
 import { IAccount } from "./interfaces/account.interface";
 import { OwnerAccount } from "./factories/owner_account.facytory";
 import { AccountType } from "./enums/account_type";
-import { Company } from "@/client/domain/types/company";
+import { Company } from "@/client/domain/types/company.type";
 
 export class CompanyAccount extends Account implements IAccount {
   constructor(private readonly company: Company) {

@@ -3,5 +3,5 @@ export interface IOwnerAccount {
 
   getName(): string;
   getEmail(): string;
-  getDNI(): string;
+  getIdentifyNumber(): string;
 }

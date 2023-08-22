@@ -1,10 +1,11 @@
 import { AddressAndContactData } from "@/shared/domain/types/address_contact_data.type";
 
-type company = {
+type companyType = {
   name: string;
   email: string;
   taxId: string;
+  registerNumber: string;
   taxCountry: string;
 };
 
-export type Company = company & AddressAndContactData;
+export type Company = companyType & AddressAndContactData;

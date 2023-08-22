@@ -1,4 +1,4 @@
-import { Individual } from "../../../client/domain/types/Individual";
+import { Individual } from "../../../client/domain/types/Individual.type";
 
 type member = {
   title: string;

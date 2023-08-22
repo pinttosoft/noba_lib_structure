@@ -1,5 +1,5 @@
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
-import { Individual } from "@/client/domain/types/Individual";
+import { Individual } from "@/client/domain/types/Individual.type";
 
 export class IndividualOwner implements IOwnerAccount {
   constructor(private readonly individual: Individual) {}
@@ -18,7 +18,7 @@ export class IndividualOwner implements IOwnerAccount {
     return this.individual.email;
   }
 
-  getDNI(): string {
+  getIdentifyNumber(): string {
     return this.individual.dni;
   }
 

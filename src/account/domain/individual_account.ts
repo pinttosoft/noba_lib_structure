@@ -1,5 +1,5 @@
 import { Account } from "./abstracts/account.abstract";
-import { Individual } from "@/client/domain/types/Individual";
+import { Individual } from "@/client/domain/types/Individual.type";
 import { IAccount } from "./interfaces/account.interface";
 import { OwnerAccount } from "./factories/owner_account.facytory";
 import { AccountType } from "./enums/account_type";
@@ -10,7 +10,7 @@ export class IndividualAccount extends Account implements IAccount {
     this.createOwnerAccount();
   }
 
-  private createOwnerAccount() {
+  private createOwnerAccount(): void {
     this.owner = OwnerAccount.factoryOwnerAccount(
       this.individual,
       AccountType.INDIVIDUAL,
