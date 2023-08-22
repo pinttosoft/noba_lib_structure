@@ -5,6 +5,9 @@ export interface IWallet {
   getWalletId(): string;
   toPrimitives(): any;
   getBalanceAvailable(): number;
+  getBalance(): number;
+  getLockedBalance(): number;
   setAsset(asset: Asset): IWallet;
   getWalletType(): WalletType;
+  calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 }

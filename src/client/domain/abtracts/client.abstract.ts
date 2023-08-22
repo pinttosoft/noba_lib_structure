@@ -28,12 +28,17 @@ export abstract class Client {
   protected createIdentify(): void {
     if (this.clientType == AccountType.INDIVIDUAL) {
       this.clientId =
-        this.clientData.firstName.substring(0, 1) + this.clientData.lastName;
-      this.clientData.dni;
+        this.clientData.firstName.substring(0, 1) +
+        this.clientData.lastName +
+        this.clientData.dni;
     } else {
       this.clientId =
-        this.clientData.name.replace(" ", "-") + this.clientData.dni;
+        this.clientData.name.replace(" ", "-") + this.clientData.registerNumber;
     }
+  }
+
+  getClientId(): string {
+    return this.clientId;
   }
 
   abstract toJson(): any;

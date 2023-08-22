@@ -1,8 +1,7 @@
-import { Client } from "@/client/domain/abtracts/client.abstract";
-import { Individual } from "@/client/domain/types/Individual.type";
 import { AccountType } from "@/account/domain/enums/account_type";
 import { IAccount } from "@/account/domain/interfaces/account.interface";
-import { IClient } from "./interfaces/client.interface";
+import { IClient, Individual } from "@/client";
+import { Client } from "@/client/domain/abtracts/client.abstract";
 
 export class ClientCompany extends Client implements IClient {
   constructor(client: Individual, account: IAccount, clientId?: string) {
