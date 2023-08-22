@@ -1,4 +1,4 @@
-import { AggregateRoot } from "./AggregateRoot";
+import { AggregateRoot } from "@/shared/domain/aggregate_root";
 
 export class Cache extends AggregateRoot {
   private readonly id: string | null;

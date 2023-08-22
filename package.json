@@ -24,7 +24,9 @@
   "homepage": "https://github.com/pinttosoft/noba_lib_segregated_structure#readme",
   "devDependencies": {
     "@types/uuid": "^9.0.2",
-    "prettier": "^3.0.2"
+    "prettier": "^3.0.2",
+    "ttypescript": "^1.5.15",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "aws-sdk": "^2.1438.0",

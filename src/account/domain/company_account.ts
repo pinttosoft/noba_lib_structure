@@ -1,9 +1,9 @@
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
 import { Account } from "./abstracts/account.abstract";
 import { IAccount } from "./interfaces/account.interface";
-import { Company } from "../../client/domain/types/company";
 import { OwnerAccount } from "./factories/owner_account.facytory";
 import { AccountType } from "./enums/account_type";
+import { Company } from "@/client/domain/types/company";
 
 export class CompanyAccount extends Account implements IAccount {
   constructor(private readonly company: Company) {
