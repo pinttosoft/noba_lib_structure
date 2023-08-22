@@ -1,14 +1,12 @@
 import { ResidencyStatus } from "../enums/residency_status";
+import { AddressAndContactData } from "../../../shared/domain/types/address_contact_data.type";
 
-export type Individual = {
-  accountId?: string;
+type individual = {
   firstName: string;
   dni: string;
   middleName?: string;
   lastName: string;
-  emailAddress: string;
-  phoneNumber: string;
-  phoneCountry: string;
+  email: string;
   taxId?: string;
   passport?: string;
   dateBirth?: Date;
@@ -18,10 +16,6 @@ export type Individual = {
     kycRequiredActions: { [key: string]: string };
   };
   residencyStatus: ResidencyStatus;
-  streetOne: string;
-  streetTwo: string;
-  postalCode: string;
-  city: string;
-  region: string;
-  country: string;
 };
+
+export type Individual = individual & AddressAndContactData;

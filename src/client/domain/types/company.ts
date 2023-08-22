@@ -1,15 +1,10 @@
-export type Company = {
+import { AddressAndContactData } from "../../../shared/domain/types/address_contact_data.type";
+
+type company = {
   name: string;
   email: string;
   taxId: string;
   taxCountry: string;
-  phoneCountry: string;
-  phoneNumber: string;
-  streetOne: string;
-  streetTwo: string;
-  postalCode: string;
-  city: string;
-  region: string;
-  country: string;
-  webhook: string;
 };
+
+export type Company = company & AddressAndContactData;

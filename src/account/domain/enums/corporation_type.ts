@@ -1,6 +1,6 @@
 export enum CorporationType {
-  C_CORP_PRIVATE = "C_CORP_PRIVATE",
-  C_CORP_PUBLIC = "C_CORP_PUBLIC",
+  CORP_PRIVATE = "C_CORP_PRIVATE",
+  CORP_PUBLIC = "C_CORP_PUBLIC",
   HNWI = "HNWI",
   LLC = "LLC",
   LLP = "LLP",
