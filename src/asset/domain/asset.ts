@@ -11,6 +11,14 @@ export class Asset {
     return this.assetId;
   }
 
+  getAssetCode(): string {
+    return this.code;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
   isCryptoAsset(): boolean {
     return this.code !== "USD";
   }

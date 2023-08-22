@@ -3,11 +3,11 @@ import { MongoClientFactory } from "./MongoClientFactory";
 import { CacheRepository } from "@/shared/domain/interfaces/cache_repository";
 import { Cache } from "@/shared/domain/cache";
 
-export class MongooCache
+export class MongoCache
   extends MongoRepository<Cache>
   implements CacheRepository
 {
-  private static _instance: MongooCache;
+  private static _instance: MongoCache;
 
   constructor() {
     super(MongoClientFactory.createClient());
@@ -18,7 +18,7 @@ export class MongooCache
       return this._instance;
     }
 
-    this._instance = new MongooCache();
+    this._instance = new MongoCache();
     return this._instance;
   }
 

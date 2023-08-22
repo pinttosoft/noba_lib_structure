@@ -1,8 +1,8 @@
-import { Wallet } from "./wallet";
+import { WalletAbstract } from "./abstracts/wallet.abstract";
 import { IWallet } from "./interfaces/wallet.interface";
 import { WalletType } from "./enums/wallet_type";
 
-export class CryptoWallet extends Wallet implements IWallet {
+export class CryptoWallet extends WalletAbstract implements IWallet {
   constructor(clientId: string, label: string) {
     super();
     this.clientId = clientId;

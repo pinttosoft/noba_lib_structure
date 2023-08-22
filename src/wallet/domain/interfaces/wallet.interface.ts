@@ -1,12 +1,10 @@
-import { Asset } from "../../../asset/domain/asset";
-import { Wallet } from "../wallet";
+import { Asset } from "@/asset/domain/asset";
 import { WalletType } from "../enums/wallet_type";
 
 export interface IWallet {
-  toJson(): any;
+  getWalletId(): string;
+  toPrimitives(): any;
   getBalanceAvailable(): number;
-  asset(asset: Asset): IWallet;
-  setAssetId(assetId: string): IWallet;
+  setAsset(asset: Asset): IWallet;
   getWalletType(): WalletType;
-  getBalanceAvailable(): number;
 }
