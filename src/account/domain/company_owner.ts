@@ -1,8 +1,9 @@
-import { IOwnerAccount } from "@/account/domain/interfaces/owner_account.interface";
+import { IOwnerAccount } from "@/account";
 import { Company } from "@/client/domain/types/company.type";
 
 export class CompanyOwner implements IOwnerAccount {
   constructor(private readonly company: Company) {}
+
   getIdentifyNumber(): string {
     return this.company.registerNumber;
   }

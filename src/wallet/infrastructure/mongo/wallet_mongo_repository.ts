@@ -48,7 +48,7 @@ export class WalletMongoRepository
     const wallets: IWallet[] = [];
 
     for (const wallet of result) {
-      wallets.push(WalletFactory.fromJson({ ...wallet }));
+      wallets.push(WalletFactory.fromJson(wallet._id, { ...wallet }));
     }
 
     return wallets;
@@ -70,6 +70,6 @@ export class WalletMongoRepository
   }
 
   async upsert(wallet: IWallet): Promise<void> {
-    await this.persist(wallet.getWalletId(), wallet);
+    await this.persist(wallet.getId(), wallet);
   }
 }

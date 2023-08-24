@@ -2,6 +2,7 @@ import { Asset } from "@/asset/domain/asset";
 import { WalletType } from "../enums/wallet_type";
 
 export interface IWallet {
+  getId(): string;
   getWalletId(): string;
   toPrimitives(): any;
   getBalanceAvailable(): number;

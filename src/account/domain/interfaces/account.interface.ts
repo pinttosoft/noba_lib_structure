@@ -1,10 +1,9 @@
-import { IOwnerAccount } from "./owner_account.interface";
-import { AccountType } from "../enums/account_type";
+import { AccountType, IOwnerAccount } from "@/account";
 
 export interface IAccount {
-  toJson(): any;
+  toPrimitives(): any;
   getOwnerAccount(): IOwnerAccount;
   getAccountId(): string;
   getType(): AccountType;
-  getPartners(): IOwnerAccount[];
+  getCompanyPartners(): IOwnerAccount[];
 }

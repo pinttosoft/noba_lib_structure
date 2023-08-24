@@ -25,13 +25,13 @@ export class MongoClientFactory {
     let MONGO_USER =
       process.env.NODE_ENV === "prod"
         ? process.env.MONGO_USER
-        : "noab-dev-mongodb";
+        : "noab-dev-mongo";
     let MONGO_DB =
       process.env.NODE_ENV === "prod" ? process.env.MONGO_DB : "dbnobadev";
     let MONGO_SERVER =
       process.env.NODE_ENV === "prod"
         ? process.env.MONGO_SERVER
-        : "cluster0.xdwtnb4.mongodb.net";
+        : "cluster0.xdwtnb4.mongo.net";
 
     const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}/${MONGO_DB}?retryWrites=true&w=majority`;
 

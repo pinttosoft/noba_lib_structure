@@ -1,4 +1,4 @@
-import { IOwnerAccount } from "./interfaces/owner_account.interface";
+import { IOwnerAccount } from "@/account";
 import { Individual } from "@/client/domain/types/Individual.type";
 
 export class IndividualOwner implements IOwnerAccount {

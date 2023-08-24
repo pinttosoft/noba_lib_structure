@@ -23,11 +23,12 @@ export class WalletFactory {
     return w;
   }
 
-  static fromJson(data: any): IWallet {
+  static fromJson(id: string, data: any): IWallet {
     const w: Wallet = new Wallet();
 
     try {
-      w.setWalletId(data.walletId)
+      w.setId(id)
+        .setWalletId(data.walletId)
         .setWalletType(data.walletType)
         .setAssetId(data.assetId)
         .setClientId(data.clientId)

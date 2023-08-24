@@ -1,8 +1,8 @@
 import * as AWS from "aws-sdk";
-import { MessageBus } from "../domain/interfaces/MessageBus";
+import { Message_bus } from "../../domain/interfaces/message_bus";
 import { logger } from "../../../index";
 
-export class SNSMessage implements MessageBus {
+export class SNSMessage implements Message_bus {
   private sns: AWS.SNS;
   private sqs: AWS.SQS;
 

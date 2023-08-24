@@ -4,7 +4,7 @@ import {
   Criteria,
   Filters,
   Order,
-} from "../domain/specification";
+} from "../../domain/criteria";
 
 type MongoFilterOperator =
   | "$eq"

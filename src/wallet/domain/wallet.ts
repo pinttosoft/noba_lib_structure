@@ -4,6 +4,7 @@ import { AggregateRoot } from "@/shared/domain/aggregate_root";
 import { IWallet, WalletType } from "@/wallet";
 
 export class Wallet extends AggregateRoot implements IWallet {
+  private id?: string;
   private walletId: string;
   private assetId: string;
   private walletType: WalletType;
@@ -32,6 +33,15 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   protected getAssetId(): string {
     return this.assetId;
+  }
+
+  getId(): string {
+    return this.id;
+  }
+
+  setId(id: string): Wallet {
+    this.id = id;
+    return this;
   }
 
   setWalletType(type: WalletType): Wallet {
