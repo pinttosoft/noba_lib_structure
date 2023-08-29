@@ -5,3 +5,5 @@ export { IWallet } from "./domain/interfaces/wallet.interface";
 export { WalletRepository } from "./domain/interfaces/wallet_repository.interface";
 
 export { WalletMongoRepository } from "./infrastructure/mongo/wallet_mongo_repository";
+
+export { Wallet } from "./domain/wallet";

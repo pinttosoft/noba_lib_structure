@@ -1,6 +1,6 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,6 +38,7 @@
     "express-rate-limit": "^6.9.0",
     "mongodb": "^5.7.0",
     "pino": "^8.15.0",
+    "rimraf": "^5.0.1",
     "uuid": "^9.0.0"
   }
 }
