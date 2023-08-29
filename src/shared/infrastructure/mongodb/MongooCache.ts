@@ -34,7 +34,7 @@ export class MongoCache
       return undefined;
     }
 
-    return Cache.formPrimitives(
+    return Cache.fromPrimitives(
       document._id.toString(),
       document.key,
       document.value,

@@ -1,8 +1,8 @@
 import { Collection, MongoClient, ObjectId } from "mongodb";
 import { Criteria } from "../../domain/criteria";
 import { MongoCriteriaConverter, MongoQuery } from "./MongoCriteriaConverter";
-import { AggregateRoot } from "../domain/AggregateRoot";
 import { Paginate } from "../../domain/types/paginate";
+import { AggregateRoot } from "@/shared/domain/aggregate_root";
 
 export abstract class MongoRepository<T extends AggregateRoot> {
   private criteriaConverter: MongoCriteriaConverter;

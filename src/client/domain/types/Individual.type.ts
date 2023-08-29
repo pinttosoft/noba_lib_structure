@@ -1,5 +1,5 @@
-import { ResidencyStatus } from "../enums/residency_status";
 import { AddressAndContactData } from "@/shared/domain/types/address_contact_data.type";
+import { ResidencyStatus } from "@/client";
 
 type individualType = {
   firstName: string;
@@ -18,4 +18,4 @@ type individualType = {
   residencyStatus: ResidencyStatus;
 };
 
-export type Individual = individualType & AddressAndContactData;
+export type IndividualDTO = individualType & AddressAndContactData;

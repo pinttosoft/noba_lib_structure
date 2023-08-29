@@ -36,7 +36,7 @@ export class ClientMongoRepository
       throw new AccountNotFound(client.accountId);
     }
 
-    return ClientFactory.fromJson(result._id.toString(), client, account);
+    return ClientFactory.fromPrimitives(result._id.toString(), client, account);
   }
 
   async upsert(client: IClient): Promise<void> {

@@ -8,4 +8,4 @@ type companyType = {
   taxCountry: string;
 };
 
-export type Company = companyType & AddressAndContactData;
+export type CompanyDTO = companyType & AddressAndContactData;

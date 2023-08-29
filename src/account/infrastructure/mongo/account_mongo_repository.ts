@@ -26,6 +26,6 @@ export class AccountMongoRepository
       return undefined;
     }
 
-    return AccountFactory.fromJson(result._id.toString(), { ...result });
+    return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
   }
 }

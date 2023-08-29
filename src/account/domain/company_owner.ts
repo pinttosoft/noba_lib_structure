@@ -1,8 +1,8 @@
 import { IOwnerAccount } from "@/account";
-import { Company } from "@/client/domain/types/company.type";
+import { CompanyDTO } from "@/client/domain/types/company.type";
 
 export class CompanyOwner implements IOwnerAccount {
-  constructor(private readonly company: Company) {}
+  constructor(private readonly company: CompanyDTO) {}
 
   getIdentifyNumber(): string {
     return this.company.registerNumber;
@@ -16,7 +16,7 @@ export class CompanyOwner implements IOwnerAccount {
     return this.company.name;
   }
 
-  toJson(): any {
+  toPrimitives(): any {
     return { ...this.company };
   }
 }

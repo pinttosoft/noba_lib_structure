@@ -74,9 +74,9 @@ export class Account extends AggregateRoot implements IAccount {
         accountId: this.accountId,
         type: this.getType(),
         status: this.status,
-        owner: this.owner.toJson(),
+        owner: this.owner.toPrimitives(),
         companyPartners: this.companyPartners.map((b: IOwnerAccount) =>
-          b.toJson(),
+          b.toPrimitives(),
         ),
       };
     }
@@ -85,7 +85,7 @@ export class Account extends AggregateRoot implements IAccount {
       accountId: this.accountId,
       type: this.getType(),
       status: this.status,
-      owner: this.owner.toJson(),
+      owner: this.owner.toPrimitives(),
     };
   }
 }

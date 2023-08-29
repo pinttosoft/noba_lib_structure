@@ -9,7 +9,7 @@ export class AccountFactory {
   static createNewAccount(
     accountType: AccountType,
     owner: IOwnerAccount,
-    companyPartners: IOwnerAccount[],
+    companyPartners?: IOwnerAccount[],
   ): IAccount {
     const a: Account = new Account();
     a.setAccountType(accountType).setOwner(owner);
@@ -23,7 +23,7 @@ export class AccountFactory {
     return a;
   }
 
-  static fromJson(id: string, data: any): IAccount {
+  static fromPrimitives(id: string, data: any): IAccount {
     const a: Account = new Account();
 
     try {

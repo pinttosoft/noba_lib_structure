@@ -18,12 +18,12 @@ export class WalletFactory {
       .setClient(client)
       .setLabel(label)
       .setWalletType(type)
-      .make();
+      .build();
 
     return w;
   }
 
-  static fromJson(id: string, data: any): IWallet {
+  static fromPrimitives(id: string, data: any): IWallet {
     const w: Wallet = new Wallet();
 
     try {

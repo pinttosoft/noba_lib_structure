@@ -1,5 +1,5 @@
 import { Asset } from "@/asset/domain/asset";
-import { WalletType } from "../enums/wallet_type";
+import { WalletType } from "@/wallet";
 
 export interface IWallet {
   getId(): string;

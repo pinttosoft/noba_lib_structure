@@ -17,7 +17,7 @@ export class Cache extends AggregateRoot {
     return this.id;
   }
 
-  static formPrimitives(id: string | null, key: string, value: any): Cache {
+  static fromPrimitives(id: string | null, key: string, value: any): Cache {
     return new Cache(id, key, value);
   }
 

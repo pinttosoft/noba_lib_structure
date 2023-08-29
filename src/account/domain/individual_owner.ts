@@ -1,8 +1,8 @@
 import { IOwnerAccount } from "@/account";
-import { Individual } from "@/client/domain/types/Individual.type";
+import { IndividualDTO } from "@/client/domain/types/Individual.type";
 
 export class IndividualOwner implements IOwnerAccount {
-  constructor(private readonly individual: Individual) {}
+  constructor(private readonly individual: IndividualDTO) {}
 
   getName(): string {
     return (
@@ -22,7 +22,7 @@ export class IndividualOwner implements IOwnerAccount {
     return this.individual.dni;
   }
 
-  toJson(): any {
+  toPrimitives(): any {
     return { ...this.individual };
   }
 }

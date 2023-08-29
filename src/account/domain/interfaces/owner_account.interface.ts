@@ -1,5 +1,5 @@
 export interface IOwnerAccount {
-  toJson(): any;
+  toPrimitives(): any;
 
   getName(): string;
   getEmail(): string;

@@ -88,7 +88,7 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  make(): void {
+  build(): void {
     this.balance = 0;
     this.lockedBalance = 0;
     this.walletId = this.clientId + "-" + this.assetId + "-" + this.label;

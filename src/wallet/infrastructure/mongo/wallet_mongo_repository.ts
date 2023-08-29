@@ -48,7 +48,7 @@ export class WalletMongoRepository
     const wallets: IWallet[] = [];
 
     for (const wallet of result) {
-      wallets.push(WalletFactory.fromJson(wallet._id, { ...wallet }));
+      wallets.push(WalletFactory.fromPrimitives(wallet._id, { ...wallet }));
     }
 
     return wallets;
