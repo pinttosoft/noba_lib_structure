@@ -1,9 +1,12 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsc -p tsconfig.build.json",
