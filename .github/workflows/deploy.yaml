@@ -9,7 +9,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     env:
-      NPM_AUTH_TOKEN: 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
+      NPM_AUTH_TOKEN: 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
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -20,4 +20,4 @@ jobs:
       - run: npm run build
       - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: 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
+          NODE_AUTH_TOKEN: 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
