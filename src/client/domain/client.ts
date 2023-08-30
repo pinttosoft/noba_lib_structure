@@ -1,7 +1,8 @@
-import { AccountType } from "@/account/domain/enums/account_type.enum";
-import { IAccount } from "@/account/domain/interfaces/account.interface";
-import { IClient } from "@/client";
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
+import {AccountType} from "@/account/domain/enums/account_type.enum";
+import {IAccount} from "@/account/domain/interfaces/account.interface";
+import {CompanyDTO, IClient, IndividualDTO} from "@/client";
+import {AggregateRoot} from "@/shared/domain/aggregate_root";
+import {AddressAndContactData} from "@/shared/domain/types/address_contact_data.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -75,6 +76,29 @@ export class Client extends AggregateRoot implements IClient {
 
   getEmail(): string {
     return this.clientData.email;
+  }
+
+  getIDNumber(): string {
+    if(this.clientType === AccountType.COMPANY) {
+      return ( this.toPrimitives() as CompanyDTO).registerNumber
+    } else {
+      return ( this.toPrimitives() as IndividualDTO).passport
+    }
+  }
+
+  getAddress(): AddressAndContactData {
+    const d = this.toPrimitives();
+
+    return {
+      phoneCountry: d.phoneCountry,
+      phoneNumber: d.phoneNumber,
+      streetOne: d.streetOne,
+      streetTwo: d.streetTwo,
+      postalCode: d.postalCode,
+      city: d.city,
+      region: d.region,
+      country: d.country,
+    }
   }
 
   toPrimitives(): any {
