@@ -1,6 +1,5 @@
-import { IWallet, WalletFactory, WalletRepository } from "@/wallet";
-import { MongoRepository } from "@/shared/infrastructure/mongodb/MongoRepository";
-import { MongoClientFactory } from "@/shared/infrastructure/mongodb/MongoClientFactory";
+import { IWallet, WalletFactory, WalletRepository } from "../../../wallet";
+import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 interface WalletDocument {
   _id: string;

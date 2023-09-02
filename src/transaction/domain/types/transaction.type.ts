@@ -1,9 +1,9 @@
-import { WithdrawalStatus } from "@/shared/domain/enums/withdrawal_status.enum";
-import { TransactionType } from "@/transaction";
 import {
   Beneficiary_asset_withdrawalDTO,
   BeneficiaryBankWithdrawalDTO,
-} from "@/beneficiary";
+} from "../../../beneficiary";
+import { TransactionType } from "../enums/transaction_type.enum";
+import { WithdrawalStatus } from "../../../shared";
 
 export type TransactionDTO = {
   id?: string;

@@ -1,8 +1,6 @@
 import { Transaction } from "../transaction";
-import { TransactionDTO } from "@/transaction/domain/types/transaction.type";
-import { Paginate } from "@/shared/domain/types/paginate";
-import { Criteria } from "@/shared/domain/criteria";
-import { WithdrawalStatus } from "@/shared/domain/enums/withdrawal_status.enum";
+import { TransactionDTO } from "../types/transaction.type";
+import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 
 export interface ITransactionRepository {
   historyTransactionByAssetCodeAndAccountId(

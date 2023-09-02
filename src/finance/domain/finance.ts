@@ -1,5 +1,6 @@
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
-import { FinancialMovement, FinancialMovementStatus } from "@/finance";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { FinancialMovement } from "./types/financial_movement_type";
+import { FinancialMovementStatus } from "./enums/financial_movement_status.enum";
 
 export class Finance extends AggregateRoot {
   constructor(private readonly financialMovement: FinancialMovement) {

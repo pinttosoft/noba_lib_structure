@@ -1,4 +1,4 @@
-import { TypeBankingData, IntermediaryBankDTO } from "@/banking";
+import { IntermediaryBankDTO, TypeBankingData } from "../../../banking";
 
 export type BeneficiaryBankWithdrawalDTO = {
   id?: string;

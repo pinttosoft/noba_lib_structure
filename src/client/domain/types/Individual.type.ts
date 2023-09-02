@@ -1,12 +1,11 @@
-import { AddressAndContactData } from "@/shared/domain/types/address_contact_data.type";
-import { ResidencyStatus } from "@/client";
+import { ResidencyStatus } from "../enums/residency_status";
+import { Address, ContactInformation } from "../../../shared";
 
 type individualType = {
   firstName: string;
   dni: string;
   middleName?: string;
   lastName: string;
-  email: string;
   taxId?: string;
   passport?: string;
   dateBirth?: Date;
@@ -18,4 +17,4 @@ type individualType = {
   residencyStatus: ResidencyStatus;
 };
 
-export type IndividualDTO = individualType & AddressAndContactData;
+export type IndividualDTO = individualType & Address & ContactInformation;

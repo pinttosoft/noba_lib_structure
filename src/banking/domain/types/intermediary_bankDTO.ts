@@ -1,4 +1,4 @@
-import { IntermediaryNumberType } from "@/banking";
+import { IntermediaryNumberType } from "../enums/intermediary_number_type.enum";
 
 export type IntermediaryBankDTO = {
   swiftCode: string;

@@ -1,4 +1,4 @@
-import { GenericException } from "@/shared/domain/exceptions/generic_exception";
+import { GenericException } from "../../../shared";
 
 export class BirthDate {
   private readonly value: Date;

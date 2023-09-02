@@ -1,4 +1,4 @@
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
 export class BeneficiaryAsset extends AggregateRoot {
   private id?: string;

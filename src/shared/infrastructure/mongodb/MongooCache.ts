@@ -1,7 +1,7 @@
 import { MongoRepository } from "./MongoRepository";
 import { MongoClientFactory } from "./MongoClientFactory";
-import { CacheRepository } from "@/shared/domain/interfaces/cache_repository";
-import { Cache } from "@/shared/domain/cache";
+import { Cache } from "../../domain/cache";
+import { CacheRepository } from "../../domain/interfaces/cache_repository";
 
 export class MongoCache
   extends MongoRepository<Cache>

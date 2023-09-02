@@ -1,7 +1,7 @@
-import { Asset } from "@/asset/domain/asset";
-import { IClient } from "@/client";
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
-import { IWallet, WalletType } from "@/wallet";
+import { Asset } from "../../asset/domain/asset";
+import { IClient } from "../../client";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { IWallet, WalletType } from "../../wallet";
 
 export class Wallet extends AggregateRoot implements IWallet {
   private id?: string;

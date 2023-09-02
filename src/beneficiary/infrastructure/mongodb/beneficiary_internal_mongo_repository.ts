@@ -1,12 +1,12 @@
-import { MongoRepository } from "@/shared/infrastructure/mongodb/MongoRepository";
+import { BeneficiaryInternal } from "../../domain/beneficiary_internal";
 import {
-  BeneficiaryDTO,
-  BeneficiaryInternal,
-  IBeneficiaryInternalRepository,
-} from "@/beneficiary";
-import { MongoClientFactory } from "@/shared/infrastructure/mongodb";
-import { Criteria } from "@/shared/domain/criteria";
-import { Paginate } from "@/shared/domain/types/paginate";
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
+import { IBeneficiaryInternalRepository } from "../../domain/interfaces/beneficiary_internal_repository.interface";
+import { BeneficiaryDTO } from "../../domain/types/beneficiaryDTO";
 
 export class Beneficiary_internal_mongo_repository
   extends MongoRepository<BeneficiaryInternal>

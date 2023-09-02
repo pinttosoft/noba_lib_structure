@@ -1,9 +1,7 @@
-import { Asset } from "@/asset/domain/asset";
-import { IClient } from "@/client";
-import { IWallet } from "@/wallet/domain/interfaces/wallet.interface";
-import { WalletType } from "@/wallet/domain/enums/wallet_type";
-import { Wallet } from "@/wallet/domain/wallet";
-import { GenericException } from "@/shared/domain/exceptions/generic_exception";
+import { Asset } from "../../../asset/domain/asset";
+import { IClient } from "../../../client";
+import { IWallet, WalletType, Wallet } from "../../../wallet";
+import { GenericException } from "../../../shared";
 
 export class WalletFactory {
   static createNewWallet(

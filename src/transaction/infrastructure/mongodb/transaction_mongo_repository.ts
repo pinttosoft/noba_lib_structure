@@ -1,19 +1,21 @@
 import { Transaction } from "../../domain/transaction";
-import { ITransactionRepository, TransactionType } from "@/transaction";
-import {
-  MongoClientFactory,
-  MongoRepository,
-} from "@/shared/infrastructure/mongodb";
-import { WithdrawalStatus } from "@/shared/domain/enums/withdrawal_status.enum";
-import { TransactionDTO } from "@/transaction/domain/types/transaction.type";
-import { Paginate } from "@/shared/domain/types/paginate";
 import {
   Criteria,
   Filters,
+  MongoClientFactory,
+  MongoRepository,
   Operator,
   Order,
   OrderTypes,
-} from "@/shared/domain/criteria";
+  Paginate,
+  WithdrawalStatus,
+} from "../../../shared";
+import {
+  ITransactionRepository,
+  TransactionDTO,
+  TransactionType,
+} from "../../index";
+
 export class Transaction_mongo_repository
   extends MongoRepository<Transaction>
   implements ITransactionRepository

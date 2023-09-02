@@ -1,6 +1,6 @@
-import { Criteria } from "@/shared/domain/criteria";
-import { BeneficiaryDTO, BeneficiaryInternal } from "@/beneficiary";
-import { Paginate } from "@/shared/domain/types/paginate";
+import { Criteria, Paginate } from "../../../shared";
+import { BeneficiaryInternal } from "../beneficiary_internal";
+import { BeneficiaryDTO } from "../types/beneficiaryDTO";
 
 export interface IBeneficiaryInternalRepository {
   findByAccountIdAndType(

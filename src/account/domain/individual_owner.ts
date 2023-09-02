@@ -1,5 +1,5 @@
-import { IOwnerAccount } from "@/account";
-import { IndividualDTO } from "@/client/domain/types/Individual.type";
+import { IOwnerAccount } from "./interfaces/owner_account.interface";
+import { IndividualDTO } from "../../client";
 
 export class IndividualOwner implements IOwnerAccount {
   constructor(private readonly individual: IndividualDTO) {}

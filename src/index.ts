@@ -6,4 +6,11 @@ export * from "./wallet";
 export * from "./account";
 export * from "./client";
 
+export * from "./shared/infrastructure";
+export * from "./shared/infrastructure/mongodb";
+export { MessageBus } from "./shared/domain/interfaces/message_bus";
+export { HttpStatus } from "./shared/domain/enums/http_status.enum";
+export { CacheRepository } from "./shared/domain/interfaces/cache_repository";
+export { Cache } from "./shared/domain/cache";
+
 export * from "./shared"

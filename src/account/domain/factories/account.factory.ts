@@ -1,9 +1,9 @@
-import { AccountType } from "@/account/domain/enums/account_type.enum";
-import { IAccount } from "@/account/domain/interfaces/account.interface";
-import { Account } from "@/account/domain/account";
-import { IOwnerAccount } from "@/account/domain/interfaces/owner_account.interface";
-import { GenericException } from "@/shared/domain/exceptions/generic_exception";
-import { OwnerAccountFactory } from "@/account/domain/factories/owner_account.facytory";
+import { AccountType } from "../enums/account_type.enum";
+import { IOwnerAccount } from "../interfaces/owner_account.interface";
+import { IAccount } from "../interfaces/account.interface";
+import { Account } from "../account";
+import { OwnerAccountFactory } from "./owner_account.facytory";
+import { GenericException } from "../../../shared";
 
 export class AccountFactory {
   static createNewAccount(

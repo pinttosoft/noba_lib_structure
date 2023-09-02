@@ -1,6 +1,5 @@
-import { IAccount } from "@/account/domain/interfaces/account.interface";
-import { AccountType } from "@/account/domain/enums/account_type.enum";
-import {AddressAndContactData} from "@/shared/domain/types/address_contact_data.type";
+import { AccountType, IAccount } from "../../../account";
+import { Address, ContactInformation } from "../../../shared";
 
 export interface IClient {
   getId(): string;
@@ -10,6 +9,7 @@ export interface IClient {
   getClientType(): AccountType;
   getName(): string;
   getEmail(): string;
-  getIDNumber(): string
-  getAddress(): AddressAndContactData
+  getIDNumber(): string;
+  getAddress(): Address;
+  getContactInformation(): ContactInformation;
 }

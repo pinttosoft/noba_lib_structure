@@ -1,9 +1,9 @@
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
-import { AccountStatus } from "@/account/domain/enums/account_status.enum";
-import { AccountType } from "@/account/domain/enums/account_type.enum";
-import { IOwnerAccount } from "@/account/domain/interfaces/owner_account.interface";
-import { AccountHashNoPartners } from "@/account/domain/exceptions/account_has_no_partners";
-import { IAccount } from "@/account/domain/interfaces/account.interface";
+import { IAccount } from "./interfaces/account.interface";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { AccountStatus } from "./enums/account_status.enum";
+import { AccountType } from "./enums/account_type.enum";
+import { IOwnerAccount } from "./interfaces/owner_account.interface";
+import { AccountHashNoPartners } from "./exceptions/account_has_no_partners";
 
 export class Account extends AggregateRoot implements IAccount {
   private id?: string;

@@ -1,7 +1,7 @@
-import { InvalidArgumentError } from "@/shared/domain/exceptions/invalid_argument_error";
 import { FilterField } from "./filter_field";
 import { FilterOperator } from "./filter_operator";
 import { FilterValue } from "./filter_value";
+import { InvalidArgumentError } from "../exceptions/invalid_argument_error";
 
 export class Filter {
   readonly field: FilterField;

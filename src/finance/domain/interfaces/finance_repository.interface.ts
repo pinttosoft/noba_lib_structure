@@ -1,4 +1,4 @@
-import { Finance } from "@/finance";
+import { Finance } from "../finance";
 
 export interface IFinanceRepository {
   getByReferenceId(referenceId: string): Promise<Finance | undefined>;

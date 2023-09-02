@@ -1,11 +1,10 @@
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import {
   Beneficiary_asset_withdrawalDTO,
   BeneficiaryBankWithdrawalDTO,
-} from "@/beneficiary";
-import { TransactionType } from "@/transaction";
-import { WithdrawalStatus } from "@/shared/domain/enums/withdrawal_status.enum";
-import { StringValueObject } from "@/shared/domain/value_object/string_value_object";
+} from "../../beneficiary";
+import { TransactionType } from "./enums/transaction_type.enum";
+import { StringValueObject, WithdrawalStatus } from "../../shared";
 
 export class Transaction extends AggregateRoot {
   private id?: string;

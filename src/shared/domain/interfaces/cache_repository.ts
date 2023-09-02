@@ -1,4 +1,4 @@
-import { Cache } from "@/shared/domain/cache";
+import { Cache } from "../cache";
 
 export interface CacheRepository {
   set(cacheObj: Cache): Promise<void>;

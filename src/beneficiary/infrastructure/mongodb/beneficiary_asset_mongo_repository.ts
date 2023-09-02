@@ -1,18 +1,16 @@
-import {
-  MongoClientFactory,
-  MongoRepository,
-} from "@/shared/infrastructure/mongodb";
-import { BeneficiaryAsset } from "@/beneficiary/domain/beneficiary_asset";
-import { Paginate } from "@/shared/domain/types/paginate";
-import { IBeneficiaryAssetRepository } from "@/beneficiary";
+import { ObjectId } from "mongodb";
+import { BeneficiaryAsset } from "../../domain/beneficiary_asset";
 import {
   Criteria,
   Filters,
+  MongoClientFactory,
+  MongoRepository,
   Operator,
   Order,
   OrderTypes,
-} from "@/shared/domain/criteria";
-import { ObjectId } from "mongodb";
+  Paginate,
+} from "../../../shared";
+import { IBeneficiaryAssetRepository } from "../../domain/interfaces/beneficiary_asset_repository.interface";
 
 export class BeneficiaryAssetMongoRepository
   extends MongoRepository<BeneficiaryAsset>

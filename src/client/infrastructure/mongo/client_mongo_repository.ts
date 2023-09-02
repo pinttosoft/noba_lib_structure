@@ -1,10 +1,9 @@
-import { ClientRepository } from "@/client/domain/interfaces/client_repository.interface";
-import { MongoRepository } from "@/shared/infrastructure/mongodb/MongoRepository";
-import { IClient } from "@/client";
-import { MongoClientFactory } from "@/shared/infrastructure/mongodb/MongoClientFactory";
-import { ClientFactory } from "@/client/domain/factories/client.factory";
-import { AccountMongoRepository } from "@/account/infrastructure/mongo/account_mongo_repository";
-import { AccountNotFound } from "@/account";
+import { MongoClientFactory, MongoRepository } from "../../../shared";
+import { IClient } from "../../domain/interfaces/client.interface";
+import { AccountMongoRepository } from "../../../account/infrastructure/mongo/account_mongo_repository";
+import { ClientRepository } from "../../domain/interfaces/client_repository.interface";
+import { AccountNotFound } from "../../../account";
+import { ClientFactory } from "../../domain/factories/client.factory";
 
 export class ClientMongoRepository
   extends MongoRepository<IClient>

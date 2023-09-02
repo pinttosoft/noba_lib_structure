@@ -1,4 +1,4 @@
-import { IWallet } from "@/wallet";
+import { IWallet } from "./wallet.interface";
 
 export interface WalletRepository {
   upsert(wallet: IWallet): Promise<void>;

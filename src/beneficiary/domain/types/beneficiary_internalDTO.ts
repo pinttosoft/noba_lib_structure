@@ -1,4 +1,4 @@
-import { BeneficiaryDTO } from "@/beneficiary";
+import { BeneficiaryDTO } from "./beneficiaryDTO";
 
 export type BeneficiaryInternalDTO = {
   id?: string;

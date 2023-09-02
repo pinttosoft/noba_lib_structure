@@ -1,4 +1,5 @@
-import { AccountType, IOwnerAccount } from "@/account";
+import { IOwnerAccount } from "./owner_account.interface";
+import { AccountType } from "../enums/account_type.enum";
 
 export interface IAccount {
   toPrimitives(): any;

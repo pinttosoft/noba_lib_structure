@@ -1,8 +1,9 @@
-import { CompanyDTO, IClient, IndividualDTO } from "@/client";
-import { Client } from "@/client/domain/client";
-import { IAccount } from "@/account/domain/interfaces/account.interface";
-import { AccountType } from "@/account/domain/enums/account_type.enum";
-import { GenericException } from "@/shared/domain/exceptions/generic_exception";
+import { CompanyDTO } from "../types/company.type";
+import { IndividualDTO } from "../types/Individual.type";
+import { AccountType, IAccount } from "../../../account";
+import { IClient } from "../interfaces/client.interface";
+import { Client } from "../client";
+import { GenericException } from "../../../shared";
 
 export class ClientFactory {
   static createNewClient(

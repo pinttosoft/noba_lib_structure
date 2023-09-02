@@ -1,4 +1,4 @@
-import { DomainException } from "@/shared/domain/exceptions/domain_exception";
+import { DomainException } from "../../../shared";
 
 export class AccountNotFound extends DomainException {
   name = "account_not_exists";

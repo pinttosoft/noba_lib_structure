@@ -1,11 +1,10 @@
-import { MongoRepository } from "@/shared/infrastructure/mongodb/MongoRepository";
-import { MongoClientFactory } from "@/shared/infrastructure/mongodb/MongoClientFactory";
 import {
   Account,
   AccountFactory,
   IAccount,
   IAccountRepository,
-} from "@/account";
+} from "../../index";
+import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 export class AccountMongoRepository
   extends MongoRepository<Account>

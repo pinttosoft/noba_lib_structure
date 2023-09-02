@@ -1,5 +1,5 @@
-import { BeneficiaryAsset } from "@/beneficiary/domain/beneficiary_asset";
-import { Paginate } from "@/shared/domain/types/paginate";
+import { BeneficiaryAsset } from "../beneficiary_asset";
+import { Paginate } from "../../../shared";
 
 export interface IBeneficiaryAssetRepository {
   upsertAssetBeneficiary(beneficiary: BeneficiaryAsset): Promise<string | void>;

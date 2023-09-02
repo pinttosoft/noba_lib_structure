@@ -1,4 +1,5 @@
-import { FinancialMovementStatus, TypeFinancialMovement } from "@/finance";
+import { TypeFinancialMovement } from "../enums/type_financial_movement.enum";
+import { FinancialMovementStatus } from "../enums/financial_movement_status.enum";
 
 export type FinancialMovement = {
   id?: string;

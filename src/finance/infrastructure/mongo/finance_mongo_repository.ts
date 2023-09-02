@@ -1,6 +1,5 @@
-import { Finance, FinancialMovement, IFinanceRepository } from "@/finance";
-import { MongoRepository } from "@/shared/infrastructure/mongodb/MongoRepository";
-import { MongoClientFactory } from "@/shared/infrastructure/mongodb/MongoClientFactory";
+import { FinancialMovement, IFinanceRepository, Finance } from "../../index";
+import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 export class FinanceMongoRepository
   extends MongoRepository<Finance>

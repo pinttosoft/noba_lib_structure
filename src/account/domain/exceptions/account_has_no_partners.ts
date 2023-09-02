@@ -1,4 +1,4 @@
-import { DomainException } from "@/shared/domain/exceptions/domain_exception";
+import { DomainException } from "../../../shared";
 
 export class AccountHashNoPartners extends DomainException {
   name = "account_has_no_partners";

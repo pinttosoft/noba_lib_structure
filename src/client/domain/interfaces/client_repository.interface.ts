@@ -1,4 +1,4 @@
-import { IClient } from "@/client";
+import { IClient } from "./client.interface";
 
 export interface ClientRepository {
   upsert(client: IClient): Promise<void>;

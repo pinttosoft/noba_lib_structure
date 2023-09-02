@@ -1,5 +1,5 @@
-import { AggregateRoot } from "@/shared/domain/aggregate_root";
-import { BeneficiaryInternalDTO } from "@/beneficiary";
+import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { BeneficiaryInternalDTO } from "./types/beneficiary_internalDTO";
 
 export class BeneficiaryInternal extends AggregateRoot {
   constructor(private readonly beneficiary: BeneficiaryInternalDTO) {
