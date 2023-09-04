@@ -5,6 +5,7 @@ export const logger = new CustomLogger();
 export * from "./wallet";
 export * from "./account";
 export * from "./client";
+export * from "./user";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";
@@ -13,4 +14,4 @@ export { HttpStatus } from "./shared/domain/enums/http_status.enum";
 export { CacheRepository } from "./shared/domain/interfaces/cache_repository";
 export { Cache } from "./shared/domain/cache";
 
-export * from "./shared"
+export * from "./shared";

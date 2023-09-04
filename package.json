@@ -1,6 +1,6 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,7 +13,7 @@
     "format": "prettier --write \"src/**/*.ts\" ",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
     "test": "jest --forceExit --runInBand --detectOpenHandles",
-    "publish-version": "npm run clean && npm i && npm run build && npm publish"
+    "publish-version": "npm run clean && npm i && npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/pinttosoft/noba_lib_segregated_structure#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.3",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/express-rate-limit": "^6.0.0",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1438.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-rate-limit": "^6.9.0",
