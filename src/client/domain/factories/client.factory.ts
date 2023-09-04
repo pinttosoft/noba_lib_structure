@@ -27,6 +27,7 @@ export class ClientFactory {
         .setClientData({ ...data })
         .setAccount(account)
         .setClientType(data.clientType)
+        .setTaxId(data.taxId ?? null)
         .build();
     } catch (e) {
       throw new GenericException(e.message);

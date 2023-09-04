@@ -16,11 +16,11 @@ import {
   TransactionType,
 } from "../../index";
 
-export class Transaction_mongo_repository
+export class TransactionMongoRepository
   extends MongoRepository<Transaction>
   implements ITransactionRepository
 {
-  private static _instance: Transaction_mongo_repository;
+  private static _instance: TransactionMongoRepository;
 
   constructor() {
     super(MongoClientFactory.createClient());
@@ -31,7 +31,7 @@ export class Transaction_mongo_repository
       return this._instance;
     }
 
-    this._instance = new Transaction_mongo_repository();
+    this._instance = new TransactionMongoRepository();
     return this._instance;
   }
 

@@ -6,8 +6,18 @@ export class UserMongoRepository
   extends MongoRepository<User>
   implements IUserRepository
 {
+  private static _instance: UserMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
+  }
+  public static instance() {
+    if (this._instance) {
+      return this._instance;
+    }
+
+    this._instance = new UserMongoRepository();
+    return this._instance;
   }
 
   collectionName(): string {

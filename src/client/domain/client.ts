@@ -12,9 +12,15 @@ export class Client extends AggregateRoot implements IClient {
   private accountId: string;
   private account: IAccount;
   private id?: string;
+  private taxId?: string;
 
   getId(): string {
     return this.id;
+  }
+
+  setTaxId(taxId?: string): Client {
+    this.taxId = taxId;
+    return this;
   }
 
   setId(id: string): Client {
@@ -35,6 +41,10 @@ export class Client extends AggregateRoot implements IClient {
   setClientType(clientType: AccountType): Client {
     this.clientType = clientType;
     return this;
+  }
+
+  getTaxId(): string {
+    return this.taxId;
   }
 
   getAccount(): IAccount {
@@ -112,10 +122,12 @@ export class Client extends AggregateRoot implements IClient {
 
   toPrimitives(): any {
     return {
+      id: this.id,
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
       accountId: this.accountId,
+      taxId: this.taxId,
     };
   }
 }

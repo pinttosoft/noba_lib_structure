@@ -11,5 +11,6 @@ export interface IClient {
   getEmail(): string;
   getIDNumber(): string;
   getAddress(): Address;
+  getTaxId(): string;
   getContactInformation(): ContactInformation;
 }
