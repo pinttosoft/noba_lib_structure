@@ -1,5 +1,6 @@
 import { AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
+import { ResidencyStatus } from "../enums/residency_status";
 
 export interface IClient {
   getId(): string;
@@ -13,4 +14,7 @@ export interface IClient {
   getAddress(): Address;
   getTaxId(): string;
   getContactInformation(): ContactInformation;
+  getDateOfBirth(): Date;
+  getPassportNumber(): string;
+  getResidencyStatus(): ResidencyStatus;
 }

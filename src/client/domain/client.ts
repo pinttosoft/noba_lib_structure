@@ -4,6 +4,8 @@ import { AccountType, IAccount } from "../../account";
 import { CompanyDTO } from "./types/company.type";
 import { IndividualDTO } from "./types/Individual.type";
 import { Address, ContactInformation } from "../../shared";
+import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
+import { ResidencyStatus } from "./enums/residency_status";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -118,6 +120,28 @@ export class Client extends AggregateRoot implements IClient {
       phoneNumber: d.phoneNumber,
       email: d.email,
     };
+  }
+
+  getPassportNumber(): string {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+    return this.clientData.passport;
+  }
+
+  getDateOfBirth(): Date {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+
+    return this.clientData.dateBirth;
+  }
+  getResidencyStatus(): ResidencyStatus {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+
+    return this.clientData.residencyStatus;
   }
 
   toPrimitives(): any {
