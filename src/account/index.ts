@@ -2,7 +2,6 @@ export { Account } from "./domain/account";
 
 export { AccountStatus } from "./domain/enums/account_status.enum";
 export { AccountType } from "./domain/enums/account_type.enum";
-export { CompanyType } from "./domain/enums/company_type.enum";
 
 export { AccountHashNoPartners } from "./domain/exceptions/account_has_no_partners";
 export { AccountNotFound } from "./domain/exceptions/account_not_found";

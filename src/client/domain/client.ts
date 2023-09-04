@@ -3,9 +3,10 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { AccountType, IAccount } from "../../account";
 import { CompanyDTO } from "./types/company.type";
 import { IndividualDTO } from "./types/Individual.type";
-import { Address, ContactInformation } from "../../shared";
+import { Address, ContactInformation, GenericException } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
+import { CompanyType } from "./enums/company_type.enum";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -36,7 +37,26 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   setClientData(data: any): Client {
+    if (this.clientType === AccountType.COMPANY && !("naics" in data)) {
+      throw new GenericException("Field naics is mandatory");
+    }
+
+    if (
+      this.clientType === AccountType.COMPANY &&
+      !("corporate_entity_type" in data)
+    ) {
+      throw new GenericException("Field corporate_entity_type is mandatory");
+    }
+
+    if (
+      this.clientType === AccountType.COMPANY &&
+      !("established_date" in data)
+    ) {
+      throw new GenericException("Field established_date is mandatory");
+    }
+
     this.clientData = data;
+
     return this;
   }
 
@@ -63,6 +83,30 @@ export class Client extends AggregateRoot implements IClient {
         this.clientData.lastName +
         this.clientData.dni;
     }
+  }
+
+  getCompanyType(): CompanyType {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+    return this.clientData.companyType;
+  }
+
+  getNaics(): { code: string; description: string } {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+    return {
+      code: this.clientData.naics,
+      description: this.clientData.naicsDescription,
+    };
+  }
+
+  getEstablishedDate(): Date {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+    return this.clientData.established_date;
   }
 
   getClientId(): string {

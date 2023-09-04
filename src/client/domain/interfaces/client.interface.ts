@@ -1,6 +1,7 @@
 import { AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
 import { ResidencyStatus } from "../enums/residency_status";
+import { CompanyType } from "../enums/company_type.enum";
 
 export interface IClient {
   getId(): string;
@@ -17,4 +18,7 @@ export interface IClient {
   getDateOfBirth(): Date;
   getPassportNumber(): string;
   getResidencyStatus(): ResidencyStatus;
+  getNaics(): { code: string; description: string };
+  getCompanyType(): CompanyType;
+  getEstablishedDate(): Date;
 }
