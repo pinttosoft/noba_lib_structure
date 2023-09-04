@@ -20,6 +20,8 @@ export class ValidateUserContact extends AggregateRoot {
     v.typeValidation = type;
     v.userId = userId.toString();
     v.createdAt = new Date();
+
+    return v;
   }
 
   static fromPrimitives(id: string, data: any): ValidateUserContact {

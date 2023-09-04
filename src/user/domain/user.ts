@@ -16,11 +16,12 @@ export class User extends AggregateRoot {
 
   static createNewUser(
     email: string,
-    password: PasswordValueObject,
+    password: string,
     country: string,
   ): User {
     const u: User = new User();
-    password.getValue().then((p: string) => u.password);
+    u.email = email;
+    u.password = password;
     u.country = country;
     u.createdAt = new Date();
     u.active = false;
@@ -31,6 +32,7 @@ export class User extends AggregateRoot {
 
   static fromPrimitives(id: string, data: any): User {
     const u = new User();
+    u.id = id;
     u.email = data.email;
     u.createdAt = data.createdAt;
     u.active = data.active;
