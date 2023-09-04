@@ -13,32 +13,6 @@ export class Wallet extends AggregateRoot implements IWallet {
   private lockedBalance: number;
   private label: string;
 
-  getWalletId(): string {
-    return this.walletId;
-  }
-
-  getBalance(): number {
-    return this.balance;
-  }
-
-  getLockedBalance(): number {
-    return this.lockedBalance;
-  }
-
-  calculateNewBalance(balance: number, lockedBalance: number): Wallet {
-    this.balance = balance;
-    this.lockedBalance = lockedBalance;
-    return this;
-  }
-
-  protected getAssetId(): string {
-    return this.assetId;
-  }
-
-  getId(): string {
-    return this.id;
-  }
-
   setId(id: string): Wallet {
     this.id = id;
     return this;
@@ -78,11 +52,6 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  setAsset(asset: Asset): Wallet {
-    this.assetId = asset.getAssetId();
-    return this;
-  }
-
   setClient(client: IClient): Wallet {
     this.clientId = client.getClientId();
     return this;
@@ -92,6 +61,32 @@ export class Wallet extends AggregateRoot implements IWallet {
     this.balance = 0;
     this.lockedBalance = 0;
     this.walletId = this.clientId + "-" + this.assetId + "-" + this.label;
+  }
+
+  getWalletId(): string {
+    return this.walletId;
+  }
+
+  getBalance(): number {
+    return this.balance;
+  }
+
+  getLockedBalance(): number {
+    return this.lockedBalance;
+  }
+
+  calculateNewBalance(balance: number, lockedBalance: number): Wallet {
+    this.balance = balance;
+    this.lockedBalance = lockedBalance;
+    return this;
+  }
+
+  getAssetId(): string {
+    return this.assetId;
+  }
+
+  getId(): string {
+    return this.id;
   }
 
   getWalletType(): WalletType {

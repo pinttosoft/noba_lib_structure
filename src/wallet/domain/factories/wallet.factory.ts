@@ -12,7 +12,7 @@ export class WalletFactory {
   ): IWallet {
     const w: Wallet = new Wallet();
 
-    w.setAsset(asset)
+    w.setAssetId(asset.getAssetId())
       .setClient(client)
       .setLabel(label)
       .setWalletType(type)
