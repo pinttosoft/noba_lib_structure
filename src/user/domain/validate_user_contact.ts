@@ -62,6 +62,8 @@ export class ValidateUserContact extends AggregateRoot {
     return {
       code: this.codeValidate,
       type: this.typeValidation,
+      userId: this.userId,
+      createdAt: this.createdAt
     };
   }
 }

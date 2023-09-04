@@ -19,14 +19,16 @@ describe("Contact Validation User", () => {
       ContactValidationType.VALIDATE_EMAIL,
     );
 
-    const existsPhoneCode =
+    const existsPhoneCode: ValidateUserContact =
       await ContactValidationUserMongoRepository.instance().findByTypeAndUserId(
-        ContactValidationType.VALIDATE_PHONE,
+        ContactValidationType.VALIDATE_EMAIL,
         userIdValue.value,
       );
 
-    await ContactValidationUserMongoRepository.instance().upsert(validate);
+    if (!existsPhoneCode) {
+      await ContactValidationUserMongoRepository.instance().upsert(validate);
+    }
 
-    // expect().not.toBe(undefined)
+    expect(existsPhoneCode).not.toBe(undefined);
   });
 });
