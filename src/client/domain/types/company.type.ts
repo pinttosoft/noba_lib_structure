@@ -10,6 +10,7 @@ type companyType = {
   naicsDescription: string;
   companyType: CompanyType;
   established_date: Date;
+  webSite: string;
 };
 
 export type CompanyDTO = companyType & Address & ContactInformation;

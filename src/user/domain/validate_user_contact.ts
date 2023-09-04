@@ -14,7 +14,7 @@ export class ValidateUserContact extends AggregateRoot {
   static generateCodeForValidation(
     userId: StringValueObject,
     type: ContactValidationType,
-  ) {
+  ): ValidateUserContact {
     const v: ValidateUserContact = new ValidateUserContact();
     v.codeValidate = randomString(6);
     v.typeValidation = type;

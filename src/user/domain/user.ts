@@ -2,12 +2,13 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import randomString from "../../shared/helpers/randomString";
 import { PasswordValueObject } from "./value_objects/password_value_object";
 import { v4 } from "uuid";
+import * as console from "console";
 
 export class User extends AggregateRoot {
   private id?: string;
   private userId: string;
   private email: string;
-  private password: string;
+  private password: PasswordValueObject;
   private country: string;
   private token?: string;
   private clientId?: string;
@@ -16,7 +17,7 @@ export class User extends AggregateRoot {
 
   static createNewUser(
     email: string,
-    password: string,
+    password: PasswordValueObject,
     country: string,
   ): User {
     const u: User = new User();
@@ -31,7 +32,7 @@ export class User extends AggregateRoot {
   }
 
   static fromPrimitives(id: string, data: any): User {
-    const u = new User();
+    const u: User = new User();
     u.id = id;
     u.email = data.email;
     u.createdAt = data.createdAt;
@@ -40,7 +41,7 @@ export class User extends AggregateRoot {
 
     u.clientId = data.clientId ?? null;
     u.token = data.token ?? null;
-    u.password = data.password ?? null;
+    u.password = PasswordValueObject.fromPrimitive(data.password) ?? null;
     u.userId = data.userId;
 
     return u;
@@ -60,7 +61,7 @@ export class User extends AggregateRoot {
   }
 
   getPassword(): string {
-    return this.password;
+    return this.password.getValue();
   }
 
   getToken(): string {
@@ -73,16 +74,22 @@ export class User extends AggregateRoot {
     return this;
   }
 
-  toPrimitives(): any {
+  setUpdatePassword(newPass: PasswordValueObject): User {
+    this.password = newPass;
+    return this;
+  }
+
+  async toPrimitives(): Promise<any> {
     return {
       id: this.id,
       email: this.email,
-      password: this.password,
+      password: await this.password.getValueEncrypt(),
       country: this.country,
       token: this.token,
       clientId: this.clientId,
-      createdAt: this.clientId,
+      createdAt: this.createdAt,
       active: this.active,
+      userId: this.userId,
     };
   }
 }

@@ -18,3 +18,5 @@ export { StringValueObject } from "./domain/value_object/string_value_object";
 export { server } from "./infrastructure/server";
 export * from "./infrastructure/mongodb";
 export * from "./infrastructure/AWSPubSub";
+
+export { RequestException } from "./domain/exceptions/request_exception";

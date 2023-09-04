@@ -109,6 +109,13 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.established_date;
   }
 
+  getWebSite(): string {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
+    return this.clientData.webSite;
+  }
+
   getClientId(): string {
     return this.clientId;
   }

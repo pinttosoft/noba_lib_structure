@@ -31,8 +31,6 @@ export class UserMongoRepository
       return undefined;
     }
 
-    console.log(' UserMongoRepository result', result)
-
     return User.fromPrimitives(result._id.toString(), { ...result });
   }
 

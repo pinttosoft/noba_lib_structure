@@ -21,4 +21,5 @@ export interface IClient {
   getNaics(): { code: string; description: string };
   getCompanyType(): CompanyType;
   getEstablishedDate(): Date;
+  getWebSite(): string;
 }

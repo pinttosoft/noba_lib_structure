@@ -1,12 +1,12 @@
-import {MongoClientFactory, MongoRepository} from "../../../shared";
-import {ValidateUserContact} from "../../domain/validate_user_contact";
-import {IContactValidationUser} from "../../domain/interfaces/contact_validation_user.interface";
-import {ContactValidationType} from "../../domain/enums/contact_validation_type";
+import { MongoClientFactory, MongoRepository } from "../../../shared";
+import { ValidateUserContact } from "../../domain/validate_user_contact";
+import { IContactValidationUser } from "../../domain/interfaces/contact_validation_user.interface";
+import { ContactValidationType } from "../../domain/enums/contact_validation_type";
 
 export class ContactValidationUserMongoRepository
   extends MongoRepository<ValidateUserContact>
-  implements IContactValidationUser {
-
+  implements IContactValidationUser
+{
   private static _instance: ContactValidationUserMongoRepository;
 
   constructor() {
