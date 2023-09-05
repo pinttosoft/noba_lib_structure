@@ -8,7 +8,7 @@ export interface IWallet {
   getBalanceAvailable(): number;
   getBalance(): number;
   getLockedBalance(): number;
-  setAsset(asset: Asset): IWallet;
+  getAssetId(): string;
   getWalletType(): WalletType;
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 }
