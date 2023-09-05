@@ -1,7 +1,9 @@
-import { Asset } from "../../asset/domain/asset";
 import { IClient } from "../../client";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { IWallet, WalletType } from "../../wallet";
+import { InstructionDepositFiat } from "../../banking/domain/types/instruction_deposit_fiat.type";
+import { InstructionDepositCrypto } from "./type/instruction_deposit_crypto.type";
+import { v4 } from "uuid";
 
 export class Wallet extends AggregateRoot implements IWallet {
   private id?: string;
@@ -13,6 +15,9 @@ export class Wallet extends AggregateRoot implements IWallet {
   private lockedBalance: number;
   private label: string;
   private client: IClient;
+  private instructForDeposit:
+    | InstructionDepositFiat[]
+    | InstructionDepositCrypto[];
 
   setId(id: string): Wallet {
     this.id = id;
@@ -48,21 +53,57 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  setLabel(label: string): Wallet {
-    this.label = label;
-    return this;
-  }
-
   setClient(client: IClient): Wallet {
     this.client = client;
     this.clientId = client.getClientId();
     return this;
   }
 
+  setInstructionForDeposit(
+    data: InstructionDepositCrypto[] | InstructionDepositFiat[],
+  ): Wallet {
+    this.instructForDeposit = data;
+    return this;
+  }
+
+  addNewInstructionForDeposit(
+    data: InstructionDepositCrypto | InstructionDepositFiat,
+  ): Wallet {
+    const d: any = data;
+    if (
+      this.instructForDeposit === undefined ||
+      this.instructForDeposit.length === 0
+    ) {
+      this.instructForDeposit = [d];
+      return this;
+    }
+
+    this.instructForDeposit.push(d);
+    return this;
+  }
+
   build(): void {
     this.balance = 0;
     this.lockedBalance = 0;
-    this.walletId = this.clientId + "-" + this.assetId + "-" + this.label;
+    this.walletId = v4();
+  }
+
+  /**
+   * Genera un identificador para solicitar instrucciones de deposito
+   * @param label
+   */
+  getIdentifierForInstructionOfDeposit(label: string): string {
+    return this.clientId + "-" + this.assetId + "-" + this.label;
+  }
+
+  getInstructionForDeposit():
+    | InstructionDepositCrypto[]
+    | InstructionDepositFiat {
+    if (this.walletType === WalletType.FIAT) {
+      return this.instructForDeposit[0] as InstructionDepositFiat;
+    }
+
+    return this.instructForDeposit as InstructionDepositCrypto[];
   }
 
   getAccountId(): string {
@@ -112,7 +153,7 @@ export class Wallet extends AggregateRoot implements IWallet {
       clientId: this.clientId,
       balance: this.balance,
       lockedBalance: this.lockedBalance,
-      label: this.label,
+      instructionForDeposit: this.instructForDeposit,
     };
   }
 }

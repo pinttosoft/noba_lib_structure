@@ -5,7 +5,6 @@ import { GenericException } from "../../../shared";
 
 export class WalletFactory {
   static createNewWallet(
-    label: string,
     asset: Asset,
     client: IClient,
     type: WalletType,
@@ -14,7 +13,6 @@ export class WalletFactory {
 
     w.setAssetId(asset.getAssetId())
       .setClient(client)
-      .setLabel(label)
       .setWalletType(type)
       .build();
 
@@ -30,8 +28,8 @@ export class WalletFactory {
         .setWalletType(data.walletType)
         .setAssetId(data.assetId)
         .setClient(client)
-        .setLabel(data.label)
         .setBalance(data.balance)
+        .setInstructionForDeposit(data.instructionForDeposit)
         .setLockedBalance(data.lockedBalance);
     } catch (e) {
       throw new GenericException(e.message);

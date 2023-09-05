@@ -7,3 +7,5 @@ export { WalletRepository } from "./domain/interfaces/wallet_repository.interfac
 export { WalletMongoRepository } from "./infrastructure/mongo/wallet_mongo_repository";
 
 export { Wallet } from "./domain/wallet";
+
+export { InstructionDepositCrypto } from "./domain/type/instruction_deposit_crypto.type";
