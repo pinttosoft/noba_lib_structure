@@ -10,5 +10,6 @@ export interface IWallet {
   getLockedBalance(): number;
   getAssetId(): string;
   getWalletType(): WalletType;
+  getAccountId(): string;
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 }

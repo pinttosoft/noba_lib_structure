@@ -1,5 +1,6 @@
 import { IWallet, WalletFactory, WalletRepository } from "../../../wallet";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
+import { ClientMongoRepository } from "../../../client/infrastructure/mongo/client_mongo_repository";
 
 interface WalletDocument {
   _id: string;
@@ -16,11 +17,11 @@ export class WalletMongoRepository
   extends MongoRepository<IWallet>
   implements WalletRepository
 {
+  private static _instance: WalletMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
-
-  private static _instance: WalletMongoRepository;
 
   static instance() {
     if (this._instance) {
@@ -47,7 +48,13 @@ export class WalletMongoRepository
     const wallets: IWallet[] = [];
 
     for (const wallet of result) {
-      wallets.push(WalletFactory.fromPrimitives(wallet._id, { ...wallet }));
+      const client = await ClientMongoRepository.instance().findByClientId(
+        wallet.clientId,
+      );
+
+      wallets.push(
+        WalletFactory.fromPrimitives(wallet._id, { ...wallet }, client),
+      );
     }
 
     return wallets;

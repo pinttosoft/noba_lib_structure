@@ -21,7 +21,7 @@ export class WalletFactory {
     return w;
   }
 
-  static fromPrimitives(id: string, data: any): IWallet {
+  static fromPrimitives(id: string, data: any, client: IClient): IWallet {
     const w: Wallet = new Wallet();
 
     try {
@@ -29,7 +29,7 @@ export class WalletFactory {
         .setWalletId(data.walletId)
         .setWalletType(data.walletType)
         .setAssetId(data.assetId)
-        .setClientId(data.clientId)
+        .setClient(client)
         .setLabel(data.label)
         .setBalance(data.balance)
         .setLockedBalance(data.lockedBalance);

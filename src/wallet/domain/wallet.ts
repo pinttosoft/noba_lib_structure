@@ -12,6 +12,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   private balance: number;
   private lockedBalance: number;
   private label: string;
+  private client: IClient;
 
   setId(id: string): Wallet {
     this.id = id;
@@ -53,6 +54,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   setClient(client: IClient): Wallet {
+    this.client = client;
     this.clientId = client.getClientId();
     return this;
   }
@@ -63,6 +65,9 @@ export class Wallet extends AggregateRoot implements IWallet {
     this.walletId = this.clientId + "-" + this.assetId + "-" + this.label;
   }
 
+  getAccountId(): string {
+    return this.client.getAccount().getAccountId();
+  }
   getWalletId(): string {
     return this.walletId;
   }

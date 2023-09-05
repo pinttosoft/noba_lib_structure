@@ -9,6 +9,17 @@ export class ClientMongoRepository
   extends MongoRepository<IClient>
   implements ClientRepository
 {
+  private static _instance: ClientMongoRepository;
+
+  public static instance(): ClientMongoRepository {
+    if (this._instance) {
+      return this._instance;
+    }
+
+    this._instance = new ClientMongoRepository();
+    return this._instance;
+  }
+
   constructor() {
     super(MongoClientFactory.createClient());
   }

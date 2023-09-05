@@ -13,7 +13,7 @@ export class ContactValidationUserMongoRepository
     super(MongoClientFactory.createClient());
   }
 
-  public static instance() {
+  public static instance(): ContactValidationUserMongoRepository {
     if (this._instance) {
       return this._instance;
     }
