@@ -1,6 +1,6 @@
-import { Counterparty } from "../counterparty";
 import { Criteria, Paginate } from "../../../shared";
-import { CounterpartyDTO } from "../types/counterparty.type";
+import { CounterpartyDTO } from "../../../banking/domain/types/counterparty.type";
+import { Counterparty } from "../counterparty.abstract";
 
 export interface ICounterpartyRepository {
   upsert(counterparty: Counterparty): Promise<void>;

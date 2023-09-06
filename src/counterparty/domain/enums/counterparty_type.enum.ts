@@ -1,4 +1,4 @@
 export enum CounterpartyType {
-  FIAT_US = "FIAT_US",
+  FIAT = "FIAT",
   CRYPTO = "CRYPTO",
 }

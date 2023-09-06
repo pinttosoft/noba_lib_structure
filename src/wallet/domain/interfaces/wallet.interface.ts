@@ -1,5 +1,5 @@
 import { Asset } from "../../../asset/domain/asset";
-import { WalletType } from "../enums/wallet_type";
+import { WalletType } from "../enums/wallet_type.enum";
 import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
 import { InstructionDepositFiat } from "../../../banking/domain/types/instruction_deposit_fiat.type";
 

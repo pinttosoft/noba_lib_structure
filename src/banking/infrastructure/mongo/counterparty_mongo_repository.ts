@@ -5,12 +5,12 @@ import {
   Paginate,
   removeUndefined,
 } from "../../../shared";
-import { Counterparty } from "../../domain/counterparty";
-import { ICounterpartyRepository } from "../../domain/interfaces/counterparty_repository.interface";
+import { CounterpartyBank } from "../../domain/counterpartyBank";
+import { ICounterpartyRepository } from "../../../counterparty/domain/interfaces/counterparty_repository.interface";
 import { CounterpartyDTO } from "../../domain/types/counterparty.type";
 
 export class CounterpartyMongoRepository
-  extends MongoRepository<Counterparty>
+  extends MongoRepository<CounterpartyBank>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
@@ -32,7 +32,9 @@ export class CounterpartyMongoRepository
     return "counterparty_bank";
   }
 
-  async findByClientId(clientId: string): Promise<Counterparty | undefined> {
+  async findByClientId(
+    clientId: string,
+  ): Promise<CounterpartyBank | undefined> {
     return Promise.resolve(undefined);
   }
 
@@ -46,7 +48,7 @@ export class CounterpartyMongoRepository
     return Promise.resolve(undefined);
   }
 
-  async upsert(counterparty: Counterparty): Promise<void> {
+  async upsert(counterparty: CounterpartyBank): Promise<void> {
     await this.persist(counterparty.getId(), counterparty);
   }
 }
