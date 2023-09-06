@@ -20,3 +20,5 @@ export * from "./infrastructure/mongodb";
 export * from "./infrastructure/AWSPubSub";
 
 export { RequestException } from "./domain/exceptions/request_exception";
+
+export { removeUndefined } from "./helpers/index";

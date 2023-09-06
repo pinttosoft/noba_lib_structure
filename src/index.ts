@@ -6,6 +6,7 @@ export * from "./wallet";
 export * from "./account";
 export * from "./client";
 export * from "./user";
+export * from "./banking";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";

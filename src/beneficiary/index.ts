@@ -1,5 +1,3 @@
-export { BeneficiaryBankWithdrawalDTO } from "./domain/types/beneficiary_bank_withdrawalDTO";
-export { Beneficiary_asset_withdrawalDTO } from "./domain/types/beneficiary_asset_withdrawalDTO";
 export { BeneficiaryDTO } from "./domain/types/beneficiaryDTO";
 export { BeneficiaryInternalDTO } from "./domain/types/beneficiary_internalDTO";
 

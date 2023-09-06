@@ -1,8 +1,8 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
-import {
-  Beneficiary_asset_withdrawalDTO,
-  BeneficiaryBankWithdrawalDTO,
-} from "../../beneficiary";
+// import {
+//   Beneficiary_asset_withdrawalDTO,
+//   BeneficiaryBankWithdrawalDTO,
+// } from "../../beneficiary";
 import { TransactionType } from "./enums/transaction_type.enum";
 import { StringValueObject, WithdrawalStatus } from "../../shared";
 
@@ -11,7 +11,7 @@ export class Transaction extends AggregateRoot {
   private transactionId: string;
   private accountId: string;
   private assetCode: string;
-  private to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO;
+  // private to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO;
   private nameTo?: string;
   private emailTo?: string;
   private accountTo?: string;
@@ -31,7 +31,7 @@ export class Transaction extends AggregateRoot {
     reference: string,
     isInternal: boolean,
     status?: WithdrawalStatus,
-    to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
+    //to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
     nameTo?: string,
     emailTo?: string,
     accountTo?: string,
@@ -49,7 +49,7 @@ export class Transaction extends AggregateRoot {
     reference: string,
     isInternal: boolean,
     status?: WithdrawalStatus,
-    to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
+    //to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
     nameTo?: string,
     emailTo?: string,
     accountTo?: string,
@@ -63,7 +63,7 @@ export class Transaction extends AggregateRoot {
     t.reference = reference;
     t.isInternal = isInternal;
     t.status = status ?? WithdrawalStatus.IN_PROCESS;
-    t.to = to;
+    //t.to = to;
     t.nameTo = nameTo;
     t.emailTo = emailTo;
     t.accountTo = accountTo;
@@ -81,7 +81,7 @@ export class Transaction extends AggregateRoot {
       transactionId: this.transactionId,
       accountId: this.accountId,
       assetCode: this.assetCode,
-      to: this.to,
+      //to: this.to,
       nameTo: this.nameTo,
       emailTo: this.emailTo,
       accountTo: this.accountTo,

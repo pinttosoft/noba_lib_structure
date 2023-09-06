@@ -1,7 +1,7 @@
-import {
-  Beneficiary_asset_withdrawalDTO,
-  BeneficiaryBankWithdrawalDTO,
-} from "../../../beneficiary";
+// import {
+//   Beneficiary_asset_withdrawalDTO,
+//   BeneficiaryBankWithdrawalDTO,
+// } from "../../../beneficiary";
 import { TransactionType } from "../enums/transaction_type.enum";
 import { WithdrawalStatus } from "../../../shared";
 
@@ -10,7 +10,7 @@ export type TransactionDTO = {
   transactionId: string;
   accountId: string;
   assetCode: string;
-  to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO;
+  // to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO;
 
   nameTo?: string;
   emailTo?: string;
