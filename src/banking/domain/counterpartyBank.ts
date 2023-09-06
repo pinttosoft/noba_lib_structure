@@ -1,9 +1,9 @@
-import { IClient } from "../../client";
 import { v4 } from "uuid";
 import { Address } from "../../shared";
 import { NetworkBank } from "./enums/network_bank.enum";
 import { TypeBankDetails } from "./enums/type_bank_details.enum";
 import { Counterparty } from "../../counterparty";
+import { CounterpartyBankDTO } from "./types/counterparty_bank.type";
 
 export class CounterpartyBank extends Counterparty {
   private ownerAddress: Address;
@@ -17,37 +17,30 @@ export class CounterpartyBank extends Counterparty {
   private typeBankDetails: TypeBankDetails;
 
   static newCounterparty(
-    client: IClient,
-    ownerName: string,
-    ownerAddress: Address,
-    accountNumber: string,
-    swiftCodeOrRoutingNumber: string,
-    networkBank: NetworkBank,
-    bankAddress: Address,
-    bankName: string,
-    typeBankDetails: TypeBankDetails,
+    counterpartyBank: CounterpartyBankDTO,
   ): CounterpartyBank {
     const counterparty: CounterpartyBank = new CounterpartyBank();
 
     counterparty.counterpartyId = v4();
-    counterparty.clientId = client.getClientId();
-    counterparty.ownerName = ownerName;
-    counterparty.ownerAddress = ownerAddress;
-    counterparty.accountNumber = accountNumber;
-    counterparty.typeBankDetails = typeBankDetails;
+    counterparty.clientId = counterpartyBank.clientId;
+    counterparty.accountId = counterpartyBank.accountId;
+    counterparty.ownerName = counterpartyBank.informationOwner.name;
+    counterparty.ownerAddress = counterpartyBank.informationOwner.address;
+    counterparty.accountNumber = counterpartyBank.accountNumber;
+    counterparty.typeBankDetails = counterpartyBank.informationBank.type;
 
-    counterparty.counterpartyType = "FIAT_" + bankAddress.country;
+    counterparty.counterpartyType =
+      "FIAT_" + counterpartyBank.informationBank.address.country;
 
-    if (networkBank === NetworkBank.WIRE) {
-      counterparty.routingNumber = swiftCodeOrRoutingNumber;
+    if (counterpartyBank.informationBank.networkBank === NetworkBank.WIRE) {
+      counterparty.routingNumber = counterpartyBank.swiftCode;
     } else {
-      counterparty.swiftCode = swiftCodeOrRoutingNumber;
+      counterparty.swiftCode = counterpartyBank.routingNumber;
     }
 
-    counterparty.networkBank = networkBank;
-    counterparty.bankAddress = bankAddress;
-    counterparty.bankName = bankName;
-    counterparty.accountId = client.getAccount().getAccountId();
+    counterparty.networkBank = counterpartyBank.informationBank.networkBank;
+    counterparty.bankAddress = counterpartyBank.informationBank.address;
+    counterparty.bankName = counterpartyBank.informationBank.bankName;
 
     return counterparty;
   }

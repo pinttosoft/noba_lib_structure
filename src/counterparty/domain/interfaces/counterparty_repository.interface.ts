@@ -1,5 +1,5 @@
 import { Criteria, Paginate } from "../../../shared";
-import { CounterpartyDTO } from "../../../banking/domain/types/counterparty.type";
+import { CounterpartyBankDTO } from "../../../banking/domain/types/counterparty_bank.type";
 import { Counterparty } from "../counterparty.abstract";
 
 export interface ICounterpartyRepository {
@@ -7,5 +7,5 @@ export interface ICounterpartyRepository {
 
   findByClientId(clientId: string): Promise<Counterparty | undefined>;
 
-  list(criteria: Criteria): Promise<Paginate<CounterpartyDTO> | undefined>;
+  list(criteria: Criteria): Promise<Paginate<CounterpartyBankDTO> | undefined>;
 }

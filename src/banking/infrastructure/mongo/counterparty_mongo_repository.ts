@@ -7,7 +7,7 @@ import {
 } from "../../../shared";
 import { CounterpartyBank } from "../../domain/counterpartyBank";
 import { ICounterpartyRepository } from "../../../counterparty/domain/interfaces/counterparty_repository.interface";
-import { CounterpartyDTO } from "../../domain/types/counterparty.type";
+import { CounterpartyBankDTO } from "../../domain/types/counterparty_bank.type";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
@@ -40,7 +40,7 @@ export class CounterpartyMongoRepository
 
   async list(
     criteria: Criteria,
-  ): Promise<Paginate<CounterpartyDTO> | undefined> {
+  ): Promise<Paginate<CounterpartyBankDTO> | undefined> {
     let document = await this.searchByCriteria<any>(criteria);
     document = document.map((d) => {
       return removeUndefined({ ...d, id: d._id.toString(), _id: undefined });

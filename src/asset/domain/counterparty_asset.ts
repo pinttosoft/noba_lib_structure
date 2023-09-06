@@ -2,11 +2,12 @@ import { Counterparty, CounterpartyType } from "../../counterparty";
 import { v4 } from "uuid";
 import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
-import { Address } from "../../shared";
 
 export class CounterpartyAsset extends Counterparty {
   private ownerCountry: string;
   private informationWallet: WalletInformationDTO;
+  private assetId: string;
+  private paymentAddress: string;
 
   static newCounterparty(
     client: IClient,
@@ -22,12 +23,18 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.ownerCountry = ownerCountry;
     counterparty.counterpartyType = CounterpartyType.CRYPTO;
     counterparty.informationWallet = informationWallet;
+    counterparty.assetId = informationWallet.assetId;
+    counterparty.paymentAddress = informationWallet.address;
 
     return counterparty;
   }
 
-  getInformationWallet(): WalletInformationDTO {
-    return this.informationWallet;
+  getAssetid(): string {
+    return this.assetId;
+  }
+
+  getPaymentAddress(): string {
+    return this.paymentAddress;
   }
 
   getInformationOwner(): { name: string; country: string } {
@@ -43,7 +50,7 @@ export class CounterpartyAsset extends Counterparty {
       counterpartyType: this.counterpartyType,
       accountId: this.accountId,
       informationOwner: this.getInformationOwner(),
-      informationWallet: this.getInformationWallet(),
+      informationWallet: this.informationWallet,
     };
   }
 }

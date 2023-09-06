@@ -7,6 +7,7 @@ export * from "./account";
 export * from "./client";
 export * from "./user";
 export * from "./banking";
+export * from "./counterparty";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";

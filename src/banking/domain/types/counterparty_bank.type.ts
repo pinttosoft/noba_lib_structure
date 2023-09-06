@@ -1,8 +1,10 @@
 import { Address } from "../../../shared";
 import { TypeBankDetails } from "../enums/type_bank_details.enum";
+import {NetworkBank} from "../enums/network_bank.enum";
 
-export type CounterpartyDTO = {
+export type CounterpartyBankDTO = {
   id?: string;
+  accountNumber: string
   counterpartyId: string;
   counterpartyType: string;
   clientId: string;
@@ -13,7 +15,7 @@ export type CounterpartyDTO = {
   informationBank: {
     type: TypeBankDetails;
     bankName: string;
-    networkBank: string;
+    networkBank: NetworkBank;
     address: Address;
   };
 };
