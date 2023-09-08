@@ -3,6 +3,8 @@ import randomString from "../../shared/helpers/randomString";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { StringValueObject } from "../../shared";
 import { ExpiredCodeValidation } from "./exceptions/expired_code_validation";
+import { InvalidCodeValidation } from "./exceptions/invalid_code_validation";
+import * as console from "console";
 
 export class ValidateUserContact extends AggregateRoot {
   private id?: string;
@@ -28,7 +30,7 @@ export class ValidateUserContact extends AggregateRoot {
     const v: ValidateUserContact = new ValidateUserContact();
     v.userId = data.userId;
     v.id = id;
-    v.codeValidate = data.codeValidate;
+    v.codeValidate = data.code;
     v.typeValidation = data.typeValidation;
     v.createdAt = data.createdAt;
 
@@ -40,6 +42,11 @@ export class ValidateUserContact extends AggregateRoot {
   }
 
   getCodeForValidation(): string {
+    this.validationLiveToCode();
+    return this.codeValidate;
+  }
+
+  private validationLiveToCode(): void {
     const now: Date = new Date();
 
     const differenceInMilliseconds: number =
@@ -50,8 +57,14 @@ export class ValidateUserContact extends AggregateRoot {
     if (differenceInMilliseconds >= limitInMilliseconds) {
       throw new ExpiredCodeValidation();
     }
+  }
 
-    return this.codeValidate;
+  verificationCode(code: string): void {
+    this.validationLiveToCode();
+
+    if (this.codeValidate !== code) {
+      throw new InvalidCodeValidation();
+    }
   }
 
   getTypeValidation(): ContactValidationType {
@@ -63,7 +76,7 @@ export class ValidateUserContact extends AggregateRoot {
       code: this.codeValidate,
       type: this.typeValidation,
       userId: this.userId,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
     };
   }
 }

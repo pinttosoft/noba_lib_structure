@@ -6,7 +6,6 @@ import { WalletInformationDTO } from "./types/wallet_information.type";
 export class CounterpartyAsset extends Counterparty {
   private ownerCountry: string;
   private informationWallet: WalletInformationDTO;
-  private assetId: string;
   private paymentAddress: string;
 
   static newCounterparty(
@@ -29,10 +28,6 @@ export class CounterpartyAsset extends Counterparty {
     return counterparty;
   }
 
-  getAssetid(): string {
-    return this.assetId;
-  }
-
   getPaymentAddress(): string {
     return this.paymentAddress;
   }
@@ -43,6 +38,11 @@ export class CounterpartyAsset extends Counterparty {
       country: this.ownerCountry,
     };
   }
+
+  getInformationWallet(): WalletInformationDTO {
+    return this.informationWallet;
+  }
+
   toPrimitives(): any {
     return {
       clientId: this.clientId,

@@ -3,10 +3,12 @@ export { User } from "./domain/user";
 export { ValidateUserContact } from "./domain/validate_user_contact";
 
 export { IUserRepository } from "./domain/interfaces/user_repository.interface";
-export { IContactValidationUser } from "./domain/interfaces/contact_validation_user.interface";
+export { IContactValidationUserRepository } from "./domain/interfaces/contact_validation_user.interface_repository";
 
 export { InvalidPassword } from "./domain/exceptions/invalid_password";
 export { ExpiredCodeValidation } from "./domain/exceptions/expired_code_validation";
+export { CodeValidationNotFound } from "./domain/exceptions/code_validation_not_found";
+export { InvalidCodeValidation } from "./domain/exceptions/invalid_code_validation";
 export { InvalidateCodeValidation } from "./domain/exceptions/invalidate_code_validation";
 export { UserDisabled } from "./domain/exceptions/user_disabled";
 export { UserFound } from "./domain/exceptions/user_found";

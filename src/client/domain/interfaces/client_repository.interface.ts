@@ -1,6 +1,6 @@
 import { IClient } from "./client.interface";
 
-export interface ClientRepository {
+export interface IClientRepository {
   upsert(client: IClient): Promise<void>;
   findByClientId(clientId: string): Promise<IClient | undefined>;
 }

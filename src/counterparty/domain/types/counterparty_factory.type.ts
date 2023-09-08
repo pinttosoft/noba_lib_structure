@@ -22,7 +22,7 @@ export type CounterpartyFactoryDTO = {
   informationBank?: {
     accountNumber: string;
     swiftCodeOrRoutingNumber: string;
-    type: TypeBankDetails;
+    // type: TypeBankDetails;
     bankName: string;
     networkBank: NetworkBank;
     address: Address;

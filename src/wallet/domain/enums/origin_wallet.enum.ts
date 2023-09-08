@@ -1,5 +1,5 @@
 export enum OriginWallet {
   INSTITUTION = "INSTITUTION",
-  "OTHER" = "OTHER",
-  "UNKNOWN" = "UNKNOWN",
+  OTHER = "OTHER",
+  UNKNOWN = "UNKNOWN",
 }

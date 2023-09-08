@@ -3,8 +3,8 @@ import { Counterparty } from "../counterparty.abstract";
 import { CounterpartyBank } from "../../../banking/domain/counterpartyBank";
 import { CounterpartyType } from "../enums/counterparty_type.enum";
 import { Address, GenericException } from "../../../shared";
-import { CounterpartyAsset } from "../../../asset/domain/counterparty_asset";
 import { v4 } from "uuid";
+import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyFactory {
   static createNewCounterparty(
@@ -35,10 +35,14 @@ export class CounterpartyFactory {
   private static factoryCounterpartyBank(
     counterparty: CounterpartyFactoryDTO,
   ): Counterparty {
+    const counterpartyType =
+      "FIAT_" + counterparty.informationBank.address.country;
+
     return CounterpartyBank.newCounterparty({
+      assetId: CounterpartyFactory.getAssetId(),
       accountNumber: counterparty.informationBank.accountNumber,
       counterpartyId: v4(),
-      counterpartyType: counterparty.informationBank.type,
+      counterpartyType: counterpartyType,
       clientId: counterparty.client.getClientId(),
       accountId: counterparty.client.getAccount().getAccountId(),
       routingNumber: counterparty.informationBank.swiftCodeOrRoutingNumber,
@@ -52,5 +56,14 @@ export class CounterpartyFactory {
         address: counterparty.informationBank.address as Address,
       },
     });
+  }
+
+  private static getAssetId(): string {
+    if (process.env.NODE_ENV === "prod") {
+      // TODO assetIde de USD para PROD
+      return "";
+    }
+
+    return "FIAT_TESTNET_USD";
   }
 }

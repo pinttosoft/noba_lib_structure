@@ -28,6 +28,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     const collection = await this.collection();
 
     let primitives: any;
+
     if (aggregateRoot.toPrimitives() instanceof Promise) {
       primitives = await aggregateRoot.toPrimitives();
     } else {
@@ -44,7 +45,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     }
 
     const document = {
-      ...aggregateRoot.toPrimitives(),
+      ...primitives,
       id: undefined,
     };
 

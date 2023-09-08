@@ -2,6 +2,7 @@ export { CompanyDTO } from "./domain/types/company.type";
 export { IndividualDTO } from "./domain/types/Individual.type";
 export { ResidencyStatus } from "./domain/enums/residency_status";
 export { IClient } from "./domain/interfaces/client.interface";
+export { IClientRepository } from "./domain/interfaces/client_repository.interface";
 
 export { CompanyType } from "./domain/enums/company_type.enum";
 

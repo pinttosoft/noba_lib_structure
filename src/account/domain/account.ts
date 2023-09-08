@@ -13,6 +13,10 @@ export class Account extends AggregateRoot implements IAccount {
   protected owner: IOwnerAccount;
   protected companyPartners: IOwnerAccount[];
 
+  getId() {
+    return this.id;
+  }
+
   setId(id: string): Account {
     this.id = id;
     return this;

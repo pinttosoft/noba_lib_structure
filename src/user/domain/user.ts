@@ -14,6 +14,7 @@ export class User extends AggregateRoot {
   private clientId?: string;
   private createdAt?: Date;
   private active: boolean;
+  private referredByAccountId?: string;
 
   static createNewUser(
     email: string,
@@ -68,6 +69,10 @@ export class User extends AggregateRoot {
     return this.token;
   }
 
+  getEmail(): string {
+    return this.email;
+  }
+
   createToken(): User {
     this.token = randomString(140);
 
@@ -77,6 +82,15 @@ export class User extends AggregateRoot {
   setUpdatePassword(newPass: PasswordValueObject): User {
     this.password = newPass;
     return this;
+  }
+
+  setReferredByAccountId(referredByAccountId: string): User {
+    this.referredByAccountId = referredByAccountId;
+    return this;
+  }
+
+  isActive(): boolean {
+    return this.active;
   }
 
   async toPrimitives(): Promise<any> {
@@ -90,6 +104,7 @@ export class User extends AggregateRoot {
       createdAt: this.createdAt,
       active: this.active,
       userId: this.userId,
+      referredByAccountId: this.referredByAccountId,
     };
   }
 }

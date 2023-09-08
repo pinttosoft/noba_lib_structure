@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { Address } from "../../shared";
+import { Address, GenericException } from "../../shared";
 import { NetworkBank } from "./enums/network_bank.enum";
 import { TypeBankDetails } from "./enums/type_bank_details.enum";
 import { Counterparty } from "../../counterparty";
@@ -11,6 +11,7 @@ export class CounterpartyBank extends Counterparty {
   private accountNumber: string;
   private routingNumber?: string;
   private swiftCode?: string;
+  private iban?: string;
   private bankName: string;
   private bankAddress: Address;
   private networkBank: NetworkBank;
@@ -22,20 +23,34 @@ export class CounterpartyBank extends Counterparty {
     const counterparty: CounterpartyBank = new CounterpartyBank();
 
     counterparty.counterpartyId = v4();
+    counterparty.assetId = counterpartyBank.assetId;
     counterparty.clientId = counterpartyBank.clientId;
     counterparty.accountId = counterpartyBank.accountId;
     counterparty.ownerName = counterpartyBank.informationOwner.name;
     counterparty.ownerAddress = counterpartyBank.informationOwner.address;
     counterparty.accountNumber = counterpartyBank.accountNumber;
-    counterparty.typeBankDetails = counterpartyBank.informationBank.type;
 
-    counterparty.counterpartyType =
-      "FIAT_" + counterpartyBank.informationBank.address.country;
+    counterparty.counterpartyType = counterpartyBank.counterpartyType;
 
-    if (counterpartyBank.informationBank.networkBank === NetworkBank.WIRE) {
-      counterparty.routingNumber = counterpartyBank.swiftCode;
+    if (
+      counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||
+      counterpartyBank.informationBank.networkBank === NetworkBank.ACH
+    ) {
+      counterparty.routingNumber = counterpartyBank.routingNumber;
+      if (counterpartyBank.routingNumber === undefined) {
+        throw new GenericException("The field routing Number is mandatory");
+      }
     } else {
-      counterparty.swiftCode = counterpartyBank.routingNumber;
+      if (
+        counterpartyBank.swiftCode === undefined ||
+        counterpartyBank.iban === undefined
+      ) {
+        throw new GenericException(
+          "The fields swiftCode and IBAN are mandatory",
+        );
+      }
+      counterparty.swiftCode = counterpartyBank.swiftCode;
+      counterparty.iban = counterpartyBank.iban;
     }
 
     counterparty.networkBank = counterpartyBank.informationBank.networkBank;
@@ -74,20 +89,26 @@ export class CounterpartyBank extends Counterparty {
     return this.swiftCode;
   }
 
+  getIban(): string {
+    return this.iban;
+  }
+
   getRoutingNumber(): string | undefined {
     return this.routingNumber;
   }
 
+  getAccountNumber(): string {
+    return this.accountNumber;
+  }
+
   getInformationBank(): {
-    type: TypeBankDetails;
     accountNumber: string;
     bankName: string;
-    networkBank: string;
+    networkBank: NetworkBank;
     address: Address;
   } {
     return {
       accountNumber: this.accountNumber,
-      type: this.typeBankDetails,
       bankName: this.bankName,
       networkBank: this.networkBank,
       address: this.bankAddress,
@@ -109,6 +130,7 @@ export class CounterpartyBank extends Counterparty {
       accountId: this.accountId,
       routingNumber: this.routingNumber,
       swiftCode: this.swiftCode,
+      iba: this.iban,
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
     };

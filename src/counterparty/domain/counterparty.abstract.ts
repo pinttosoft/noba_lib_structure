@@ -7,9 +7,18 @@ export abstract class Counterparty extends AggregateRoot {
   clientId: string;
   accountId: string;
   ownerName: string;
+  assetId: string;
 
   getId(): string | undefined {
     return this.id;
+  }
+
+  getAssetId() {
+    return this.assetId;
+  }
+
+  getCounterpartyType(): string {
+    return this.counterpartyType;
   }
 
   getCounterpartyId(): string {

@@ -5,6 +5,6 @@ export class UserNotFound extends DomainException {
 
   constructor(email: string) {
     super();
-    this.message = `Usuario con email ${email} no fue encontrado en el sistema.`;
+    this.message = `User with email ${email} was not found in the system.`;
   }
 }

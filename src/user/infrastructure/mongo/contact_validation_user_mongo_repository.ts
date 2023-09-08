@@ -1,11 +1,12 @@
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { ValidateUserContact } from "../../domain/validate_user_contact";
-import { IContactValidationUser } from "../../domain/interfaces/contact_validation_user.interface";
+import { IContactValidationUserRepository } from "../../domain/interfaces/contact_validation_user.interface_repository";
 import { ContactValidationType } from "../../domain/enums/contact_validation_type";
+import { ObjectId } from "mongodb";
 
 export class ContactValidationUserMongoRepository
   extends MongoRepository<ValidateUserContact>
-  implements IContactValidationUser
+  implements IContactValidationUserRepository
 {
   private static _instance: ContactValidationUserMongoRepository;
 
@@ -47,5 +48,13 @@ export class ContactValidationUserMongoRepository
 
   async upsert(contactValidation: ValidateUserContact): Promise<void> {
     await this.persist(contactValidation.getId(), contactValidation);
+  }
+
+  async deleteBydIdAndValidationType(
+    id: string,
+    validationType: ContactValidationType,
+  ): Promise<void> {
+    const collection = await this.collection();
+    await collection.deleteOne({ _id: new ObjectId(id), type: validationType });
   }
 }

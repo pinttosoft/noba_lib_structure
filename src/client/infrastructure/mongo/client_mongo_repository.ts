@@ -1,13 +1,13 @@
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { IClient } from "../../domain/interfaces/client.interface";
 import { AccountMongoRepository } from "../../../account/infrastructure/mongo/account_mongo_repository";
-import { ClientRepository } from "../../domain/interfaces/client_repository.interface";
+import { IClientRepository } from "../../domain/interfaces/client_repository.interface";
 import { AccountNotFound } from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
 
 export class ClientMongoRepository
   extends MongoRepository<IClient>
-  implements ClientRepository
+  implements IClientRepository
 {
   private static _instance: ClientMongoRepository;
 

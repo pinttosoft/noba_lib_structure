@@ -10,6 +10,17 @@ export class AccountMongoRepository
   extends MongoRepository<Account>
   implements IAccountRepository
 {
+  private static _instance: AccountMongoRepository;
+
+  public static instance(): AccountMongoRepository {
+    if (this._instance) {
+      return this._instance;
+    }
+
+    this._instance = new AccountMongoRepository();
+    return this._instance;
+  }
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
@@ -26,5 +37,9 @@ export class AccountMongoRepository
     }
 
     return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
+  }
+
+  async upsert(account: Account): Promise<void> {
+    await this.persist(account.getId(), account);
   }
 }
