@@ -1,12 +1,13 @@
 import { IClient } from "./interfaces/client.interface";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
-import { AccountType, IAccount } from "../../account";
+import { AccountStatus, AccountType, IAccount } from "../../account";
 import { CompanyDTO } from "./types/company.type";
 import { IndividualDTO } from "./types/Individual.type";
 import { Address, ContactInformation, GenericException } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
 import { CompanyType } from "./enums/company_type.enum";
+import { FeeSwap, FeeWire } from "../../system_configuration";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -16,9 +17,17 @@ export class Client extends AggregateRoot implements IClient {
   private account: IAccount;
   private id?: string;
   private taxId?: string;
+  private status: AccountStatus;
+  private feeSwap?: FeeSwap;
+  private feeWire?: FeeWire;
 
   getId(): string {
     return this.id;
+  }
+
+  setStatus(clientStatus: AccountStatus): Client {
+    this.status = clientStatus;
+    return this;
   }
 
   setTaxId(taxId?: string): Client {
@@ -34,6 +43,16 @@ export class Client extends AggregateRoot implements IClient {
   setAccount(account: IAccount): Client {
     this.account = account;
     return this;
+  }
+
+  setFeeWire(fee: FeeWire): Client {
+    this.feeWire = fee;
+    return;
+  }
+
+  setFeeSwap(fee: FeeSwap): Client {
+    this.feeSwap = fee;
+    return;
   }
 
   setClientData(data: any): Client {
@@ -69,12 +88,16 @@ export class Client extends AggregateRoot implements IClient {
     return this.taxId;
   }
 
+  getStatus(): AccountStatus {
+    return this.status;
+  }
+
   getAccount(): IAccount {
     return this.account;
   }
 
   build(): void {
-    if (this.clientType == AccountType.INDIVIDUAL) {
+    if (this.clientType == AccountType.COMPANY) {
       this.clientId =
         this.clientData.name.replace(" ", "-") + this.clientData.registerNumber;
     } else {
@@ -121,6 +144,9 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getClientType(): AccountType {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType);
+    }
     return this.clientType;
   }
 
@@ -152,6 +178,9 @@ export class Client extends AggregateRoot implements IClient {
 
   getAddress(): Address {
     const d = this.toPrimitives();
+    if (this.clientType === AccountType.COMPANY) {
+      return (this.toPrimitives() as CompanyDTO).physicalAddress;
+    }
 
     return {
       streetOne: d.streetOne,
@@ -195,6 +224,14 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.residencyStatus;
   }
 
+  getFeeSwap(): FeeSwap {
+    return this.feeSwap;
+  }
+
+  getFeeWire(): FeeWire {
+    return this.feeWire;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
@@ -202,7 +239,10 @@ export class Client extends AggregateRoot implements IClient {
       ...this.clientData,
       type: this.clientType,
       accountId: this.accountId,
-      taxId: this.taxId,
+      taxId: this.taxId ?? "",
+      status: this.status,
+      feeSwap: this.feeSwap.toPrimitives(),
+      feeWire: this.feeWire.toPrimitives(),
     };
   }
 }

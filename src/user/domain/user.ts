@@ -2,7 +2,6 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import randomString from "../../shared/helpers/randomString";
 import { PasswordValueObject } from "./value_objects/password_value_object";
 import { v4 } from "uuid";
-import * as console from "console";
 
 export class User extends AggregateRoot {
   private id?: string;

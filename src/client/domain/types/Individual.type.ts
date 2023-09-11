@@ -9,7 +9,7 @@ type individualType = {
   taxId?: string;
   passport?: string;
   dateBirth?: Date;
-  kyc: {
+  kyc?: {
     cipChecks: string;
 
     kycRequiredActions: { [key: string]: string };

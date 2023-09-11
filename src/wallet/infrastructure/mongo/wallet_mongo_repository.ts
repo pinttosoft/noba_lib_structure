@@ -1,9 +1,10 @@
 import { IWallet, WalletFactory, WalletRepository } from "../../../wallet";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { ClientMongoRepository } from "../../../client/infrastructure/mongo/client_mongo_repository";
+import { ObjectId } from "mongodb";
 
 interface WalletDocument {
-  _id: string;
+  _id: ObjectId;
   walletId: string;
   assetId: string;
   walletType: string;
@@ -53,7 +54,11 @@ export class WalletMongoRepository
       );
 
       wallets.push(
-        WalletFactory.fromPrimitives(wallet._id, { ...wallet }, client),
+        WalletFactory.fromPrimitives(
+          wallet._id.toString(),
+          { ...wallet },
+          client,
+        ),
       );
     }
 

@@ -1,20 +1,32 @@
 import { CompanyDTO } from "../types/company.type";
 import { IndividualDTO } from "../types/Individual.type";
-import { AccountType, IAccount } from "../../../account";
+import { AccountStatus, AccountType, IAccount } from "../../../account";
 import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
+import {
+  FeeSwap,
+  FeeWire,
+  ISystemConfigurationRepository,
+  SystemConfigurationMongoRepository,
+} from "../../../system_configuration";
 
 export class ClientFactory {
-  static createNewClient(
+  static async createNewClient(
     clientData: IndividualDTO | CompanyDTO,
     clientType: AccountType,
     account: IAccount,
-  ): IClient {
-    const c = new Client();
+  ): Promise<IClient> {
+    const systemConfig: ISystemConfigurationRepository =
+      SystemConfigurationMongoRepository.instance();
+
+    const c: Client = new Client();
     c.setAccount(account)
+      .setStatus(AccountStatus.REGISTERED)
       .setClientType(clientType)
       .setClientData(clientData)
+      .setFeeWire(await systemConfig.getDefaultFeeWire())
+      .setFeeSwap(await systemConfig.getDefaultFeeSwap())
       .build();
     return c;
   }
@@ -24,9 +36,12 @@ export class ClientFactory {
 
     try {
       c.setId(id)
+        .setStatus(data.status)
         .setClientData({ ...data })
         .setAccount(account)
         .setClientType(data.clientType)
+        .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
+        .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
         .build();
     } catch (e) {

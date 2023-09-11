@@ -9,6 +9,8 @@ export * from "./user";
 export * from "./banking";
 export * from "./counterparty";
 export * from "./asset";
+export * from "./system_configuration";
+export * from "./business_allie_program";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";
