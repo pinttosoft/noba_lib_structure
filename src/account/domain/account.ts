@@ -7,11 +7,11 @@ import { AccountHashNoPartners } from "./exceptions/account_has_no_partners";
 
 export class Account extends AggregateRoot implements IAccount {
   private id?: string;
-  protected accountId: string;
-  protected status: AccountStatus;
-  protected type: AccountType;
-  protected owner: IOwnerAccount;
-  protected companyPartners: IOwnerAccount[];
+  private accountId: string;
+  private status: AccountStatus;
+  private type: AccountType;
+  private owner: IOwnerAccount;
+  private companyPartners: IOwnerAccount[];
 
   getId() {
     return this.id;
@@ -39,6 +39,12 @@ export class Account extends AggregateRoot implements IAccount {
 
   setCompanyPartners(partners: IOwnerAccount[]): Account {
     this.companyPartners = partners;
+    return this;
+  }
+
+  setStatus(status: AccountStatus): Account {
+    this.status = status;
+
     return this;
   }
 

@@ -32,6 +32,10 @@ export class AccountFactory {
       );
 
       a.setId(id)
+        .setOwner(
+          OwnerAccountFactory.factoryOwnerAccount(data.owner, data.type),
+        )
+        .setStatus(data.status)
         .setAccountType(data.type)
         .setCompanyPartners(companyPartners)
         .setAccountId(data.accountId);

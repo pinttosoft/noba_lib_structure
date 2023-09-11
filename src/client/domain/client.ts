@@ -47,12 +47,12 @@ export class Client extends AggregateRoot implements IClient {
 
   setFeeWire(fee: FeeWire): Client {
     this.feeWire = fee;
-    return;
+    return this;
   }
 
   setFeeSwap(fee: FeeSwap): Client {
     this.feeSwap = fee;
-    return;
+    return this;
   }
 
   setClientData(data: any): Client {
