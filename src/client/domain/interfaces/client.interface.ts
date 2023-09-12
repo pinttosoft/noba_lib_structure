@@ -2,8 +2,8 @@ import { AccountStatus, AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
 import { ResidencyStatus } from "../enums/residency_status";
 import { CompanyType } from "../enums/company_type.enum";
-import { FeeWire } from "../../../system_configuration/domain/fee_wire";
-import { FeeSwap } from "../../../system_configuration/domain/fee_swap";
+import { FeeSwap, FeeWire } from "../../../system_configuration";
+import { CompanyDTO } from "../types/company.type";
 
 export interface IClient {
   getId(): string;
@@ -21,7 +21,7 @@ export interface IClient {
   getPassportNumber(): string;
   getResidencyStatus(): ResidencyStatus;
   getNaics(): { code: string; description: string };
-  getCompanyType(): CompanyType;
+  getCompanyToPrimitives(): CompanyDTO;
   getEstablishedDate(): Date;
   getWebSite(): string;
   getStatus(): AccountStatus;

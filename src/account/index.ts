@@ -12,3 +12,5 @@ export { OwnerAccountFactory } from "./domain/factories/owner_account.facytory";
 export { IAccountRepository } from "./domain/interfaces/account_repository.interface";
 export { IAccount } from "./domain/interfaces/account.interface";
 export { IOwnerAccount } from "./domain/interfaces/owner_account.interface";
+
+export { AccountMongoRepository } from "./infrastructure/mongo/account_mongo_repository";

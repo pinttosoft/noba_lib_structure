@@ -39,7 +39,7 @@ export class ClientFactory {
         .setStatus(data.status)
         .setClientData({ ...data })
         .setAccount(account)
-        .setClientType(data.clientType)
+        .setClientType(data.type)
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)

@@ -6,14 +6,12 @@ import { IndividualDTO } from "./types/Individual.type";
 import { Address, ContactInformation, GenericException } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
-import { CompanyType } from "./enums/company_type.enum";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
   private clientData: any;
   private clientType: AccountType;
-  private accountId: string;
   private account: IAccount;
   private id?: string;
   private taxId?: string;
@@ -108,11 +106,11 @@ export class Client extends AggregateRoot implements IClient {
     }
   }
 
-  getCompanyType(): CompanyType {
+  getCompanyToPrimitives(): CompanyDTO {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(this.clientType);
     }
-    return this.clientData.companyType;
+    return this.clientData as CompanyDTO;
   }
 
   getNaics(): { code: string; description: string } {
@@ -238,7 +236,7 @@ export class Client extends AggregateRoot implements IClient {
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
-      accountId: this.accountId,
+      accountId: this.account.getAccountId(),
       taxId: this.taxId ?? "",
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),

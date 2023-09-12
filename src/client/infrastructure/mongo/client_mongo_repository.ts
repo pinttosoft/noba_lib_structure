@@ -1,8 +1,11 @@
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { IClient } from "../../domain/interfaces/client.interface";
-import { AccountMongoRepository } from "../../../account/infrastructure/mongo/account_mongo_repository";
 import { IClientRepository } from "../../domain/interfaces/client_repository.interface";
-import { AccountNotFound } from "../../../account";
+import {
+  AccountMongoRepository,
+  AccountNotFound,
+  IAccount,
+} from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
 
 export class ClientMongoRepository
@@ -28,6 +31,28 @@ export class ClientMongoRepository
     return "clients";
   }
 
+  async findByEmail(email: string): Promise<IClient> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne({ email });
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  private async buildClient(client: any, resultId: string): Promise<IClient> {
+    const account: IAccount =
+      await new AccountMongoRepository().findByAccountId(client.accountId);
+
+    if (!account) {
+      throw new AccountNotFound(client.accountId);
+    }
+
+    return ClientFactory.fromPrimitives(resultId, client, account);
+  }
+
   async findByClientId(clientId: string): Promise<IClient | undefined> {
     const collection = await this.collection();
 
@@ -36,17 +61,7 @@ export class ClientMongoRepository
       return undefined;
     }
 
-    const client: any = { ...result };
-
-    const account = await new AccountMongoRepository().findByAccountId(
-      client.accountId,
-    );
-
-    if (!account) {
-      throw new AccountNotFound(client.accountId);
-    }
-
-    return ClientFactory.fromPrimitives(result._id.toString(), client, account);
+    return this.buildClient({ ...result }, result._id.toString());
   }
 
   async upsert(client: IClient): Promise<void> {

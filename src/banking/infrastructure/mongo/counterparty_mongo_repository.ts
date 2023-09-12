@@ -6,8 +6,8 @@ import {
   removeUndefined,
 } from "../../../shared";
 import { CounterpartyBank } from "../../domain/counterpartyBank";
-import { ICounterpartyRepository } from "../../../counterparty/domain/interfaces/counterparty_repository.interface";
 import { CounterpartyBankDTO } from "../../domain/types/counterparty_bank.type";
+import { ICounterpartyRepository } from "../../../counterparty";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
