@@ -4,6 +4,5 @@ describe("Account", () => {
   it("FindBy AccountId", async () => {
     const account =
       await AccountMongoRepository.instance().findByAccountId("DANIELLEE002");
-    console.log(account.toPrimitives());
   });
 });

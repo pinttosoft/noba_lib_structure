@@ -1,7 +1,6 @@
 import bcrypt = require("bcryptjs");
 
 export async function encrypt(plain: string): Promise<string> {
-  console.log(plain);
   return await bcrypt.hash(plain, 10);
 }
 

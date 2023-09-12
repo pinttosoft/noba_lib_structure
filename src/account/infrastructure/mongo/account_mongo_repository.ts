@@ -42,4 +42,15 @@ export class AccountMongoRepository
   async upsert(account: Account): Promise<void> {
     await this.persist(account.getId(), account);
   }
+
+  async findAccountByOwnerEmail(email: string): Promise<IAccount | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ "owner.email": email });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
+  }
 }

@@ -8,3 +8,6 @@ export { CompanyType } from "./domain/enums/company_type.enum";
 
 export { ClientFactory } from "./domain/factories/client.factory";
 export { Client } from "./domain/client";
+
+export { ClientNotFound } from "./domain/exceptions/client_not_found";
+export { InvalidMethodForClientType } from "./domain/exceptions/invalid_method_client_type";
