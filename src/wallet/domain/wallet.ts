@@ -1,9 +1,9 @@
 import { IClient } from "../../client";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { IWallet, WalletType } from "../../wallet";
-import { InstructionDepositFiat } from "../../banking/domain/types/instruction_deposit_fiat.type";
 import { InstructionDepositCrypto } from "./type/instruction_deposit_crypto.type";
 import { v4 } from "uuid";
+import { InstructionDepositFiat } from "../../banking";
 
 export class Wallet extends AggregateRoot implements IWallet {
   private id?: string;

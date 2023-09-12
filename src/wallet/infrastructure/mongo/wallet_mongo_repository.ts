@@ -1,7 +1,7 @@
-import { IWallet, WalletFactory, WalletRepository } from "../../../wallet";
+import { IWallet, WalletFactory, IWalletRepository } from "../../../wallet";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
-import { ClientMongoRepository } from "../../../client/infrastructure/mongo/client_mongo_repository";
 import { ObjectId } from "mongodb";
+import { ClientMongoRepository } from "../../../client";
 
 interface WalletDocument {
   _id: ObjectId;
@@ -16,7 +16,7 @@ interface WalletDocument {
 
 export class WalletMongoRepository
   extends MongoRepository<IWallet>
-  implements WalletRepository
+  implements IWalletRepository
 {
   private static _instance: WalletMongoRepository;
 

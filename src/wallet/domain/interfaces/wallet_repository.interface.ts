@@ -1,6 +1,6 @@
 import { IWallet } from "./wallet.interface";
 
-export interface WalletRepository {
+export interface IWalletRepository {
   upsert(wallet: IWallet): Promise<void>;
   updateBalance(wallet: IWallet): Promise<void>;
 
