@@ -1,6 +1,7 @@
 import { IUserRepository } from "../../domain/interfaces/user_repository.interface";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { User } from "../../domain/user";
+import { ObjectId } from "mongodb";
 
 export class UserMongoRepository
   extends MongoRepository<User>
@@ -45,6 +46,20 @@ export class UserMongoRepository
   }
 
   async upsert(user: User): Promise<void> {
-    await this.persist(user.getId(), user);
+    if (!user.getId()) {
+      await this.persist(user.getId(), user);
+      return;
+    }
+
+    const primitives = await user.toPrimitives();
+
+    const document = {
+      ...primitives,
+      id: undefined,
+    };
+
+    delete document.password;
+
+    await this.execUpdateOne(user.getId(), document);
   }
 }

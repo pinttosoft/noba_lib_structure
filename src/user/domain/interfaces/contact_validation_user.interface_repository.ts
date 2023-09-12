@@ -9,8 +9,8 @@ export interface IContactValidationUserRepository {
 
   upsert(contactValidation: ValidateUserContact): Promise<void>;
 
-  deleteBydIdAndValidationType(
-    id: string,
+  deleteByUserIdAndValidationType(
+    userId: string,
     validationType: ContactValidationType,
   ): Promise<void>;
 }

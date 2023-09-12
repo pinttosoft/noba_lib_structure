@@ -50,11 +50,11 @@ export class ContactValidationUserMongoRepository
     await this.persist(contactValidation.getId(), contactValidation);
   }
 
-  async deleteBydIdAndValidationType(
-    id: string,
+  async deleteByUserIdAndValidationType(
+    userId: string,
     validationType: ContactValidationType,
   ): Promise<void> {
     const collection = await this.collection();
-    await collection.deleteOne({ _id: new ObjectId(id), type: validationType });
+    await collection.deleteOne({ userId: userId, type: validationType });
   }
 }

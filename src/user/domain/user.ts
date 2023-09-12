@@ -92,6 +92,10 @@ export class User extends AggregateRoot {
     return this.active;
   }
 
+  setClientId(clientId: string): void {
+    this.clientId = clientId;
+  }
+
   async toPrimitives(): Promise<any> {
     return {
       id: this.id,
