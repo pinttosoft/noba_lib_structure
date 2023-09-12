@@ -1,8 +1,8 @@
 import { InstructionDepositFiat } from "../types/instruction_deposit_fiat.type";
-import { Client } from "../../../client";
+import { IClient } from "../../../client";
 
 export interface IBankingRepository {
   findBankDataForDeposit(
-    client: Client,
+    client: IClient,
   ): Promise<InstructionDepositFiat | undefined>;
 }
