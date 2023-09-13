@@ -1,7 +1,7 @@
 import { AggregateRoot } from "./aggregate_root";
 
 export class Cache extends AggregateRoot {
-  private readonly id: string | null;
+  private readonly id?: string;
   private readonly key: string;
   private value: any;
 

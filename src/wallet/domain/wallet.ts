@@ -78,7 +78,7 @@ export class Wallet extends AggregateRoot implements IWallet {
       this.instructForDeposit === undefined ||
       this.instructForDeposit.length === 0
     ) {
-      this.instructForDeposit = d;
+      this.instructForDeposit = [d];
       return this;
     }
 
