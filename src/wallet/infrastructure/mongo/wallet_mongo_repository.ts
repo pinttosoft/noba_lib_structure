@@ -1,7 +1,13 @@
-import { IWallet, WalletFactory, IWalletRepository } from "../../../wallet";
+import {
+  IWallet,
+  WalletFactory,
+  IWalletRepository,
+  InstructionDepositCrypto,
+} from "../../../wallet";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { ObjectId } from "mongodb";
-import { ClientMongoRepository } from "../../../client";
+import { ClientMongoRepository, IClient } from "../../../client";
+import { InstructionDepositFiat } from "../../../banking";
 
 interface WalletDocument {
   _id: ObjectId;
@@ -67,9 +73,8 @@ export class WalletMongoRepository
 
   async updateBalance(wallet: IWallet): Promise<void> {
     const collection = await this.collection();
-
     await collection.updateOne(
-      { walletId: wallet.getWalletId() },
+      { walletId: wallet.getWalletId(), assetId: wallet.getAssetId() },
       {
         $set: {
           balance: wallet.getBalance(),
@@ -80,7 +85,55 @@ export class WalletMongoRepository
     return Promise.resolve(undefined);
   }
 
-  async upsert(wallet: IWallet): Promise<void> {
-    await this.persist(wallet.getId(), wallet);
+  async upsert(wallet: IWallet): Promise<IWallet> {
+    const id: ObjectId = await this.persist(wallet.getId(), wallet);
+
+    return WalletFactory.fromPrimitives(
+      id.toString(),
+      wallet.toPrimitives(),
+      wallet.getClient(),
+    );
+  }
+
+  async findWalletsByClientIdAndAssetId(
+    clientId: string,
+    assetId: string,
+  ): Promise<IWallet | undefined> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<WalletDocument>({
+      clientId,
+      assetId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    const client: IClient =
+      await ClientMongoRepository.instance().findByClientId(clientId);
+
+    return WalletFactory.fromPrimitives(result._id.toString(), result, client);
+  }
+
+  async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
+    const collection = await this.collection();
+
+    const instructions: InstructionDepositCrypto[] | InstructionDepositFiat[] =
+      wallet.getInstructionForDeposit();
+
+    const updateDocument = {
+      $push: {
+        instructForDeposit: instructions[instructions.length - 1],
+      },
+    };
+
+    await collection.updateOne(
+      { clientId: wallet.getClientId(), assetId: wallet.getAssetId() },
+      updateDocument,
+      {
+        upsert: true,
+      },
+    );
   }
 }

@@ -1,7 +1,7 @@
-import { Asset } from "../../../asset/domain/asset";
 import { IClient } from "../../../client";
 import { IWallet, WalletType, Wallet } from "../../../wallet";
 import { GenericException } from "../../../shared";
+import { Asset } from "../../../asset";
 
 export class WalletFactory {
   static createNewWallet(

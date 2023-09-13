@@ -24,7 +24,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   }
 
   // todo return types
-  protected async persist(id: string, aggregateRoot: T): Promise<any | void> {
+  protected async persist(id: string, aggregateRoot: T): Promise<ObjectId> {
     let primitives: any;
 
     if (aggregateRoot.toPrimitives() instanceof Promise) {
@@ -33,20 +33,22 @@ export abstract class MongoRepository<T extends AggregateRoot> {
       primitives = aggregateRoot.toPrimitives();
     }
 
-    await this.execUpdateOne(id, {
+    return await this.execUpdateOne(id, {
       ...primitives,
       id: id,
     });
   }
 
-  protected async execUpdateOne(id: string, document: any) {
+  protected async execUpdateOne(id: string, document: any): Promise<ObjectId> {
     const collection = await this.collection();
 
-    await collection.updateOne(
+    const result = await collection.updateOne(
       { _id: new ObjectId(id) },
       { $set: document },
       { upsert: true },
     );
+
+    return result.upsertedId;
   }
 
   protected async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {

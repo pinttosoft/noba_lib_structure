@@ -19,6 +19,8 @@ export class Wallet extends AggregateRoot implements IWallet {
     | InstructionDepositFiat[]
     | InstructionDepositCrypto[];
 
+  private recentInstruction: InstructionDepositFiat | InstructionDepositCrypto;
+
   setId(id: string): Wallet {
     this.id = id;
     return this;
@@ -70,11 +72,13 @@ export class Wallet extends AggregateRoot implements IWallet {
     data: InstructionDepositCrypto | InstructionDepositFiat,
   ): Wallet {
     const d: any = data;
+    this.recentInstruction = d;
+
     if (
       this.instructForDeposit === undefined ||
       this.instructForDeposit.length === 0
     ) {
-      this.instructForDeposit = [d];
+      this.instructForDeposit = d;
       return this;
     }
 
@@ -82,10 +86,22 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
+  getRecentInstruction(): InstructionDepositFiat | InstructionDepositCrypto {
+    return this.recentInstruction;
+  }
+
   build(): void {
     this.balance = 0;
     this.lockedBalance = 0;
     this.walletId = v4();
+  }
+
+  getClientId(): string {
+    return this.clientId;
+  }
+
+  getClient(): IClient {
+    return this.client;
   }
 
   /**
@@ -98,12 +114,8 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   getInstructionForDeposit():
     | InstructionDepositCrypto[]
-    | InstructionDepositFiat {
-    if (this.walletType === WalletType.FIAT) {
-      return this.instructForDeposit[0] as InstructionDepositFiat;
-    }
-
-    return this.instructForDeposit as InstructionDepositCrypto[];
+    | InstructionDepositFiat[] {
+    return this.instructForDeposit;
   }
 
   getAccountId(): string {
@@ -147,6 +159,7 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   toPrimitives(): any {
     return {
+      id: this.id,
       walletId: this.walletId,
       assetId: this.getAssetId(),
       walletType: this.walletType,

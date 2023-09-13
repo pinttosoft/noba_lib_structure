@@ -1,10 +1,12 @@
-import { Asset } from "../../../asset/domain/asset";
 import { WalletType } from "../enums/wallet_type.enum";
 import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
-import { InstructionDepositFiat } from "../../../banking/domain/types/instruction_deposit_fiat.type";
+import { InstructionDepositFiat } from "../../../banking";
+import { IClient } from "../../../client";
 
 export interface IWallet {
   getId(): string;
+  getClient(): IClient;
+  getClientId(): string;
   getWalletId(): string;
   toPrimitives(): any;
   getBalanceAvailable(): number;
@@ -16,7 +18,7 @@ export interface IWallet {
   getIdentifierForInstructionOfDeposit(label: string): string;
   getInstructionForDeposit():
     | InstructionDepositCrypto[]
-    | InstructionDepositFiat;
+    | InstructionDepositFiat[];
   addNewInstructionForDeposit(
     data: InstructionDepositCrypto | InstructionDepositFiat,
   ): IWallet;

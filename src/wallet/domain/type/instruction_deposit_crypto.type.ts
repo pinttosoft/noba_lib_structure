@@ -1,8 +1,8 @@
 export type InstructionDepositCrypto = {
-  id: string;
+  id?: string;
   label: string;
   qr: string;
-  blockchain: string;
-  network: string;
   address: string;
+  balance: number;
+  lockedBalance: number;
 };
