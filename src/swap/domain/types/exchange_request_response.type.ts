@@ -5,7 +5,6 @@ export type ExchangeRequestResponse = {
   id: "string";
   status: ExchangeStatus;
   createdAt: Date;
-  acceptedAt: Date;
   exchange_type: string;
   action: ExchangeMarketActionType;
   source_details: {
