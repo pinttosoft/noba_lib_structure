@@ -2,6 +2,7 @@ import { WalletType } from "../enums/wallet_type.enum";
 import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
 import { InstructionDepositFiat } from "../../../banking";
 import { IClient } from "../../../client";
+import { Asset } from "../../../asset";
 
 export interface IWallet {
   getId(): string;
@@ -12,7 +13,7 @@ export interface IWallet {
   getBalanceAvailable(): number;
   getBalance(): number;
   getLockedBalance(): number;
-  getAssetId(): string;
+  getAsset(): Asset;
   getWalletType(): WalletType;
   getAccountId(): string;
   getIdentifierForInstructionOfDeposit(label: string): string;

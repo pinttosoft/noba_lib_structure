@@ -8,6 +8,7 @@ import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
 import { ObjectId } from "mongodb";
 import { ClientMongoRepository, IClient } from "../../../client";
 import { InstructionDepositFiat } from "../../../banking";
+import { AssetMongoRepository } from "../../../asset";
 
 interface WalletDocument {
   _id: ObjectId;
@@ -64,6 +65,7 @@ export class WalletMongoRepository
           wallet._id.toString(),
           { ...wallet },
           client,
+          await AssetMongoRepository.instance().findById(wallet.assetId),
         ),
       );
     }
@@ -74,7 +76,10 @@ export class WalletMongoRepository
   async updateBalance(wallet: IWallet): Promise<void> {
     const collection = await this.collection();
     await collection.updateOne(
-      { walletId: wallet.getWalletId(), assetId: wallet.getAssetId() },
+      {
+        walletId: wallet.getWalletId(),
+        assetId: wallet.getAsset().getAssetId(),
+      },
       {
         $set: {
           balance: wallet.getBalance(),
@@ -92,6 +97,7 @@ export class WalletMongoRepository
       id.toString(),
       wallet.toPrimitives(),
       wallet.getClient(),
+      wallet.getAsset(),
     );
   }
 
@@ -171,10 +177,12 @@ export class WalletMongoRepository
       return undefined;
     }
 
-    const client: IClient =
-      await ClientMongoRepository.instance().findByClientId(clientId);
-
-    return WalletFactory.fromPrimitives(result._id.toString(), result, client);
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
   }
 
   async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
@@ -190,7 +198,10 @@ export class WalletMongoRepository
     };
 
     await collection.updateOne(
-      { clientId: wallet.getClientId(), assetId: wallet.getAssetId() },
+      {
+        clientId: wallet.getClientId(),
+        assetId: wallet.getAsset().getAssetId(),
+      },
       updateDocument,
       {
         upsert: true,
