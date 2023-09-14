@@ -51,4 +51,27 @@ describe("Wallet", () => {
 
     console.log(wallet.toPrimitives());
   });
+
+  it("should paginate payment address by clientId and assetId", async () => {
+    const paymentAddress =
+      await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
+        clientId,
+        "BITCOIN_TESTNET_BTC",
+        1,
+        10,
+      );
+
+    console.log(JSON.stringify(paymentAddress));
+  });
+
+  it("should paginate payment address by clientId", async () => {
+    const paymentAddress =
+      await WalletMongoRepository.instance().findPaymentAddressByClientId(
+        clientId,
+        0,
+        10,
+      );
+
+    console.log(JSON.stringify(paymentAddress));
+  });
 });
