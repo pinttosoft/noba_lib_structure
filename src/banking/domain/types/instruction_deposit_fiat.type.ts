@@ -20,6 +20,7 @@ export type InstructionDepositFiat = {
       postal_code: string;
       country_code: string;
     };
+    memo: string;
   };
   ACH: {
     holderName: string;
