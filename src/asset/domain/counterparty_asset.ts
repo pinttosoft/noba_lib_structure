@@ -24,6 +24,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.informationWallet = informationWallet;
     counterparty.assetId = informationWallet.assetId;
     counterparty.relationshipConsumer = informationWallet.relationshipConsumer;
+    counterparty.createdAt = new Date();
 
     return counterparty;
   }
@@ -41,6 +42,7 @@ export class CounterpartyAsset extends Counterparty {
 
     counterparty.relationshipConsumer =
       data.informationWallet.relationshipConsumer;
+    counterparty.createdAt = data.createdAt;
 
     return counterparty;
   }
@@ -69,6 +71,7 @@ export class CounterpartyAsset extends Counterparty {
       accountId: this.accountId,
       informationOwner: this.getInformationOwner(),
       informationWallet: this.informationWallet,
+      createdAt: this.createdAt,
     };
   }
 }

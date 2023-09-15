@@ -56,6 +56,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.networkBank = counterpartyBank.informationBank.networkBank;
     counterparty.bankAddress = counterpartyBank.informationBank.address;
     counterparty.bankName = counterpartyBank.informationBank.bankName;
+    counterparty.createdAt = new Date();
 
     return counterparty;
   }
@@ -81,6 +82,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.clientId = data.clientId;
     counterparty.accountId = data.accountId;
     counterparty.counterpartyType = data.counterpartyType;
+    counterparty.createdAt = data.createdAt;
 
     return counterparty;
   }
@@ -133,6 +135,7 @@ export class CounterpartyBank extends Counterparty {
       iba: this.iban,
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
+      createdAt: this.createdAt,
     };
   }
 }

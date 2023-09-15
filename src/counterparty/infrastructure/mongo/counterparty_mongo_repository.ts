@@ -13,6 +13,7 @@ import {
 } from "../../index";
 import { CounterpartyFactory } from "../../domain/factories/counterparty.factory";
 import { CounterpartyBank } from "../../../banking";
+import { TransactionDTO } from "../../../transaction";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
@@ -37,19 +38,25 @@ export class CounterpartyMongoRepository
     return "counterparty";
   }
 
-  async findByClientId(
+  async findByClientIdAndCounterpartyType(
     clientId: string,
     counterpartyType: CounterpartyType,
   ): Promise<Paginate<Counterparty> | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({
-      clientId,
-      counterpartyType,
-    });
+    const result = await collection
+      .find({
+        clientId,
+        counterpartyType,
+      })
+      .toArray();
 
     if (!result) {
       return undefined;
     }
+
+    result.map((r) => {
+      CounterpartyFactory.fromPrimitives(r._id.toString(), r);
+    });
 
     return Promise.resolve(undefined);
   }
@@ -71,11 +78,13 @@ export class CounterpartyMongoRepository
   }
 
   async list(criteria: Criteria): Promise<Paginate<Counterparty> | undefined> {
-    let document = await this.searchByCriteria<any>(criteria);
-    document = document.map((d) => {
-      return removeUndefined({ ...d, id: d._id.toString(), _id: undefined });
-    });
-    return Promise.resolve(undefined);
+    let document: any[] = await this.searchByCriteria<any>(criteria);
+
+    document = document.map((d) =>
+      CounterpartyFactory.fromPrimitives(d._id.toString(), d),
+    );
+
+    return this.buildPaginate<Counterparty>(document);
   }
 
   async upsert(counterparty: CounterpartyBank): Promise<void> {
@@ -89,7 +98,7 @@ export class CounterpartyMongoRepository
     const collection = await this.collection();
     const result = await collection.findOne({
       clientId: clientId,
-      "instructForDeposit.address": addressPayment,
+      "informationWallet.address": addressPayment,
     });
 
     if (!result) {

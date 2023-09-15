@@ -12,6 +12,7 @@ export abstract class Counterparty extends AggregateRoot {
   protected ownerCountry: string;
   protected assetId: string;
   protected relationshipConsumer: RelationshipConsumer;
+  protected createdAt: Date;
 
   getId(): string | undefined {
     return this.id;
