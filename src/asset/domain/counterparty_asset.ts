@@ -4,7 +4,6 @@ import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
 
 export class CounterpartyAsset extends Counterparty {
-  private ownerCountry: string;
   private informationWallet: WalletInformationDTO;
   private paymentAddress: string;
 
@@ -18,12 +17,30 @@ export class CounterpartyAsset extends Counterparty {
 
     counterparty.counterpartyId = v4();
     counterparty.clientId = client.getClientId();
+    counterparty.accountId = client.getAccount().getAccountId();
     counterparty.ownerName = ownerName;
     counterparty.ownerCountry = ownerCountry;
     counterparty.counterpartyType = CounterpartyType.CRYPTO;
     counterparty.informationWallet = informationWallet;
     counterparty.assetId = informationWallet.assetId;
-    counterparty.paymentAddress = informationWallet.address;
+    counterparty.relationshipConsumer = informationWallet.relationshipConsumer;
+
+    return counterparty;
+  }
+
+  static fromPrimitives(id: string, data: any): CounterpartyAsset {
+    const counterparty: CounterpartyAsset = new CounterpartyAsset();
+    counterparty.id = id;
+
+    counterparty.clientId = data.clientId;
+    counterparty.ownerName = data.informationOwner.name;
+    counterparty.ownerCountry = data.informationOwner.country;
+    counterparty.counterpartyType = CounterpartyType.CRYPTO;
+    counterparty.informationWallet = data.informationWallet;
+    counterparty.assetId = data.informationWallet.assetId;
+
+    counterparty.relationshipConsumer =
+      data.informationWallet.relationshipConsumer;
 
     return counterparty;
   }
@@ -45,6 +62,7 @@ export class CounterpartyAsset extends Counterparty {
 
   toPrimitives(): any {
     return {
+      id: this.id,
       clientId: this.clientId,
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,

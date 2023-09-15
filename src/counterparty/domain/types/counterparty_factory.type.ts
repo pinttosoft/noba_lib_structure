@@ -1,9 +1,9 @@
-import { TypeBankDetails } from "../../../banking/domain/enums/type_bank_details.enum";
 import { Address } from "../../../shared";
 import { OriginWallet } from "../../../wallet";
 import { IClient } from "../../../client";
 import { CounterpartyType } from "../enums/counterparty_type.enum";
 import { NetworkBank } from "../../../banking";
+import { RelationshipConsumer } from "../enums/relationship_consumer.enum";
 
 export type CounterpartyFactoryDTO = {
   type: CounterpartyType;
@@ -33,5 +33,6 @@ export type CounterpartyFactoryDTO = {
     originWallet: OriginWallet;
     institutionName?: string;
     institutionAddress?: Address;
+    relationshipConsumer: RelationshipConsumer;
   };
 };

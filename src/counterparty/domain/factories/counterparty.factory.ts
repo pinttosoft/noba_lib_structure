@@ -1,17 +1,17 @@
 import { CounterpartyFactoryDTO } from "../types/counterparty_factory.type";
 import { Counterparty } from "../counterparty.abstract";
-import { CounterpartyBank } from "../../../banking/domain/counterpartyBank";
 import { CounterpartyType } from "../enums/counterparty_type.enum";
 import { Address, GenericException } from "../../../shared";
 import { v4 } from "uuid";
 import { CounterpartyAsset } from "../../../asset";
+import { CounterpartyBank } from "../../../banking";
 
 export class CounterpartyFactory {
   static createNewCounterparty(
     counterparty: CounterpartyFactoryDTO,
   ): Counterparty {
     try {
-      if ((counterparty.type = CounterpartyType.FIAT)) {
+      if (counterparty.type === CounterpartyType.FIAT) {
         return CounterpartyFactory.factoryCounterpartyBank(counterparty);
       }
 
@@ -19,6 +19,14 @@ export class CounterpartyFactory {
     } catch (e) {
       throw new GenericException(e.message);
     }
+  }
+
+  static fromPrimitives(id: string, data: any): Counterparty {
+    if (data.counterpartyType === CounterpartyType.FIAT) {
+      return CounterpartyBank.fromPrimitives(id, data);
+    }
+
+    return CounterpartyAsset.fromPrimitives(id, data);
   }
 
   private static factoryCounterpartyAsset(

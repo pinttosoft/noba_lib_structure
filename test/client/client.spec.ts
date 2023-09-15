@@ -1,5 +1,9 @@
-import { AccountMongoRepository } from "../../src/account/infrastructure/mongo/account_mongo_repository";
-import { AccountType, ClientFactory, IndividualDTO } from "../../src";
+import {
+  AccountMongoRepository,
+  AccountType,
+  ClientFactory,
+  IndividualDTO,
+} from "../../src";
 
 describe("Client", () => {
   it("new indivual account", async () => {

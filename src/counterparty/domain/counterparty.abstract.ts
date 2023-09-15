@@ -1,13 +1,17 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
+import { IClient } from "../../client";
 
 export abstract class Counterparty extends AggregateRoot {
-  id?: string;
-  counterpartyId: string;
-  counterpartyType: string;
-  clientId: string;
-  accountId: string;
-  ownerName: string;
-  assetId: string;
+  protected id?: string;
+  protected counterpartyId: string;
+  protected counterpartyType: string;
+  protected clientId: string;
+  protected accountId: string;
+  protected ownerName: string;
+  protected ownerCountry: string;
+  protected assetId: string;
+  protected relationshipConsumer: RelationshipConsumer;
 
   getId(): string | undefined {
     return this.id;
@@ -27,5 +31,13 @@ export abstract class Counterparty extends AggregateRoot {
 
   getAccountId() {
     return this.accountId;
+  }
+
+  getClientId() {
+    return this.clientId;
+  }
+
+  getRelationConsumer(): RelationshipConsumer {
+    return this.relationshipConsumer;
   }
 }
