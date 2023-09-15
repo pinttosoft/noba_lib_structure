@@ -5,3 +5,5 @@ export { CounterpartyBank } from "./domain/counterparty_bank";
 
 export { IBankingRepository } from "./domain/interfaces/banking_repository.interface";
 export { BankingMongoRepository } from "./infrastructure/mongo/banking_mongo_repository";
+
+export { IBankingService } from "./domain/interfaces/banking_service.interface";
