@@ -7,7 +7,7 @@ export interface ISwapIntegratorService {
     exchangePayload: ExchangeMarketPayload,
   ): Promise<any>;
 
-  acceptExchange(exchangeId: string): Promise<any>;
+  acceptExchange(exchangeId: string, maximumSlippage: number): Promise<any>;
 
   getExchange(exchangeId: string): Promise<any>;
 }
