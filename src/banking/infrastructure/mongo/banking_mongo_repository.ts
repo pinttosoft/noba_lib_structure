@@ -1,7 +1,5 @@
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { IBankingRepository } from "../../domain/interfaces/banking_repository.interface";
-import { IClient } from "../../../client";
-import { InstructionDepositFiat } from "../../domain/types/instruction_deposit_fiat.type";
 
 export class BankingMongoRepository
   extends MongoRepository<any>
@@ -24,11 +22,6 @@ export class BankingMongoRepository
 
   collectionName(): string {
     return "";
-  }
-  findBankDataForDeposit(
-    client: IClient,
-  ): Promise<InstructionDepositFiat | undefined> {
-    return Promise.resolve(undefined);
   }
 
   saveExternalTransfer(

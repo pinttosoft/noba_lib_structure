@@ -43,6 +43,10 @@ export class Asset extends AggregateRoot {
     return a;
   }
 
+  getId(): string {
+    return this.id;
+  }
+
   getAssetId() {
     return this.assetId;
   }

@@ -1,4 +1,6 @@
 import { IWallet } from "./wallet.interface";
+import { Paginate } from "../../../shared";
+import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
 
 export interface IWalletRepository {
   upsert(wallet: IWallet): Promise<IWallet>;
@@ -13,4 +15,17 @@ export interface IWalletRepository {
     clientId: string,
     assetId: string,
   ): Promise<IWallet | undefined>;
+
+  findPaymentAddressesByClientIdAndByAssetId(
+    clientId: string,
+    assetId: string,
+    page: number,
+    rowPerPage: number,
+  ): Promise<Paginate<InstructionDepositCrypto>>;
+
+  findPaymentAddressByClientId(
+    clientId: string,
+    page: number,
+    rowPerPage: number,
+  ): Promise<Paginate<InstructionDepositCrypto>>;
 }

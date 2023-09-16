@@ -5,6 +5,8 @@ export type InstructionDepositFiat = {
     holderName: string;
     accountNumber: string;
     accountRoutingNumber: string;
+    bankName: string;
+    memo: string;
     holderAddress: {
       addressLine1: string;
       city: string;

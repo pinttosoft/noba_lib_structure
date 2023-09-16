@@ -4,11 +4,12 @@ import { IWallet, WalletType } from "../../wallet";
 import { InstructionDepositCrypto } from "./type/instruction_deposit_crypto.type";
 import { v4 } from "uuid";
 import { InstructionDepositFiat } from "../../banking";
+import { Asset } from "../../asset";
 
 export class Wallet extends AggregateRoot implements IWallet {
   private id?: string;
   private walletId: string;
-  private assetId: string;
+  private asset: Asset;
   private walletType: WalletType;
   private clientId: string;
   private balance: number;
@@ -50,8 +51,8 @@ export class Wallet extends AggregateRoot implements IWallet {
     this.lockedBalance = lockedBalance;
   }
 
-  setAssetId(assetId: string): Wallet {
-    this.assetId = assetId;
+  setAsset(asset: Asset): Wallet {
+    this.asset = asset;
     return this;
   }
 
@@ -78,7 +79,7 @@ export class Wallet extends AggregateRoot implements IWallet {
       this.instructForDeposit === undefined ||
       this.instructForDeposit.length === 0
     ) {
-      this.instructForDeposit = d;
+      this.instructForDeposit = [d];
       return this;
     }
 
@@ -109,7 +110,7 @@ export class Wallet extends AggregateRoot implements IWallet {
    * @param label
    */
   getIdentifierForInstructionOfDeposit(label: string): string {
-    return this.clientId + "-" + this.assetId + "-" + this.label;
+    return this.clientId + "-" + this.asset.getAssetId() + "-" + this.label;
   }
 
   getInstructionForDeposit():
@@ -139,8 +140,8 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  getAssetId(): string {
-    return this.assetId;
+  getAsset(): Asset {
+    return this.asset;
   }
 
   getId(): string {
@@ -157,11 +158,16 @@ export class Wallet extends AggregateRoot implements IWallet {
       : Number((this.balance - this.lockedBalance).toPrecision(6));
   }
 
+  updateLookBalance(amount: number): Wallet {
+    this.lockedBalance = Number(this.lockedBalance) + Number(amount);
+    return this;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
       walletId: this.walletId,
-      assetId: this.getAssetId(),
+      assetId: this.getAsset().getAssetId(),
       walletType: this.walletType,
       clientId: this.clientId,
       balance: this.balance,

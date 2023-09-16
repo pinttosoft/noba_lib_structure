@@ -11,22 +11,24 @@ export class WalletFactory {
   ): IWallet {
     const w: Wallet = new Wallet();
 
-    w.setAssetId(asset.getAssetId())
-      .setClient(client)
-      .setWalletType(type)
-      .build();
+    w.setAsset(asset).setClient(client).setWalletType(type).build();
 
     return w;
   }
 
-  static fromPrimitives(id: string, data: any, client: IClient): IWallet {
+  static fromPrimitives(
+    id: string,
+    data: any,
+    client: IClient,
+    asset: Asset,
+  ): IWallet {
     const w: Wallet = new Wallet();
 
     try {
       w.setId(id)
         .setWalletId(data.walletId)
         .setWalletType(data.walletType)
-        .setAssetId(data.assetId)
+        .setAsset(asset)
         .setClient(client)
         .setBalance(data.balance)
         .setInstructionForDeposit(data.instructionForDeposit)

@@ -4,10 +4,11 @@ import {
   IWalletRepository,
   InstructionDepositCrypto,
 } from "../../../wallet";
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
 import { ObjectId } from "mongodb";
 import { ClientMongoRepository, IClient } from "../../../client";
 import { InstructionDepositFiat } from "../../../banking";
+import { AssetMongoRepository } from "../../../asset";
 
 interface WalletDocument {
   _id: ObjectId;
@@ -64,6 +65,7 @@ export class WalletMongoRepository
           wallet._id.toString(),
           { ...wallet },
           client,
+          await AssetMongoRepository.instance().findById(wallet.assetId),
         ),
       );
     }
@@ -74,7 +76,10 @@ export class WalletMongoRepository
   async updateBalance(wallet: IWallet): Promise<void> {
     const collection = await this.collection();
     await collection.updateOne(
-      { walletId: wallet.getWalletId(), assetId: wallet.getAssetId() },
+      {
+        walletId: wallet.getWalletId(),
+        assetId: wallet.getAsset().getAssetId(),
+      },
       {
         $set: {
           balance: wallet.getBalance(),
@@ -82,7 +87,6 @@ export class WalletMongoRepository
         },
       },
     );
-    return Promise.resolve(undefined);
   }
 
   async upsert(wallet: IWallet): Promise<IWallet> {
@@ -92,7 +96,69 @@ export class WalletMongoRepository
       id.toString(),
       wallet.toPrimitives(),
       wallet.getClient(),
+      wallet.getAsset(),
     );
+  }
+
+  async findPaymentAddressByClientId(
+    clientId: string,
+    page: number,
+    perPage: number,
+  ): Promise<Paginate<InstructionDepositCrypto>> {
+    return await this.paginatePaymentAddress({ clientId }, page, perPage);
+  }
+
+  async findPaymentAddressesByClientIdAndByAssetId(
+    clientId: string,
+    assetId: string,
+    page: number,
+    rowPerPage: number,
+  ): Promise<Paginate<InstructionDepositCrypto>> {
+    return await this.paginatePaymentAddress(
+      { clientId, assetId },
+      page,
+      rowPerPage,
+    );
+  }
+
+  async paginatePaymentAddress(filter: any, page: number, rowPerPage: number) {
+    const collection = await this.collection();
+
+    const result = await collection
+      .find(filter)
+      .project({
+        instructForDeposit: {
+          $slice: [(page - 1) * rowPerPage, rowPerPage],
+        },
+      })
+      .toArray();
+
+    const instructForDepositCount = await collection
+      .find(filter)
+      .project({
+        instructForDeposit: 1,
+      })
+      .toArray();
+
+    let count = 0;
+
+    const hasNextPage: boolean = page * rowPerPage < count;
+
+    let list: InstructionDepositCrypto[] = [];
+
+    for (const r of result) {
+      for (const instElement of r.instructForDeposit) {
+        count++;
+        list.push(instElement as InstructionDepositCrypto);
+      }
+    }
+
+    return {
+      nextPag: hasNextPage ? Number(page) + 1 : null,
+      prevPag: null,
+      count: count,
+      results: list,
+    };
   }
 
   async findWalletsByClientIdAndAssetId(
@@ -110,10 +176,12 @@ export class WalletMongoRepository
       return undefined;
     }
 
-    const client: IClient =
-      await ClientMongoRepository.instance().findByClientId(clientId);
-
-    return WalletFactory.fromPrimitives(result._id.toString(), result, client);
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
   }
 
   async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
@@ -129,7 +197,10 @@ export class WalletMongoRepository
     };
 
     await collection.updateOne(
-      { clientId: wallet.getClientId(), assetId: wallet.getAssetId() },
+      {
+        clientId: wallet.getClientId(),
+        assetId: wallet.getAsset().getAssetId(),
+      },
       updateDocument,
       {
         upsert: true,
