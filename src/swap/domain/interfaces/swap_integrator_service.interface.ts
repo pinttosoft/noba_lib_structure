@@ -3,9 +3,7 @@ import { ExchangeRequestResponse } from "../types/exchange_request_response.type
 
 // todo remove any and place ExchangeRequestResponse
 export interface ISwapIntegratorService {
-  createExchange(
-    exchangePayload: ExchangeMarketPayload,
-  ): Promise<any>;
+  createExchange(exchangePayload: ExchangeMarketPayload): Promise<any>;
 
   acceptExchange(exchangeId: string, maximumSlippage: number): Promise<any>;
 

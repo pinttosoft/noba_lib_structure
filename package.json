@@ -1,6 +1,6 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "0.0.64-dev5",
+  "version": "0.0.64-dev6",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -43,6 +43,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^4.0.6",
     "aws-sdk": "^2.1438.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

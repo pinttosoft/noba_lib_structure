@@ -1,9 +1,12 @@
-import {MongoClientFactory, MongoRepository, Paginate} from "../../shared";
-import {ISwapRepository} from "../domain/interfaces/swap.repository";
-import {ExchangeType} from "../domain/types/exchange.type";
-import {FeeSwapDTO} from "../../system_configuration";
+import { MongoClientFactory, MongoRepository, Paginate } from "../../shared";
+import { ISwapRepository } from "../domain/interfaces/swap.repository";
+import { ExchangeType } from "../domain/types/exchange.type";
+import { FeeSwapDTO } from "../../system_configuration";
 
-export class SwapMongoRepository extends MongoRepository<any> implements ISwapRepository{
+export class SwapMongoRepository
+  extends MongoRepository<any>
+  implements ISwapRepository
+{
   private static _instance: SwapMongoRepository;
 
   public static instance(): SwapMongoRepository {
@@ -27,7 +30,10 @@ export class SwapMongoRepository extends MongoRepository<any> implements ISwapRe
     return Promise.resolve(undefined);
   }
 
-  getExchangesByClientId(clientId: string, initDoc?: string): Promise<Paginate<ExchangeType> | undefined> {
+  getExchangesByClientId(
+    clientId: string,
+    initDoc?: string,
+  ): Promise<Paginate<ExchangeType> | undefined> {
     return Promise.resolve(undefined);
   }
 
@@ -49,5 +55,5 @@ export class SwapMongoRepository extends MongoRepository<any> implements ISwapRe
   updateExchange(exchange: ExchangeType): Promise<void> {
     return Promise.resolve(undefined);
   }
-//
+  //
 }
