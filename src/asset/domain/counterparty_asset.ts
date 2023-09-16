@@ -8,6 +8,7 @@ export class CounterpartyAsset extends Counterparty {
   private paymentAddress: string;
 
   static newCounterparty(
+    counterpartyId: string,
     client: IClient,
     ownerName: string,
     ownerCountry: string,
@@ -15,7 +16,8 @@ export class CounterpartyAsset extends Counterparty {
   ): CounterpartyAsset {
     const counterparty: CounterpartyAsset = new CounterpartyAsset();
 
-    counterparty.counterpartyId = v4();
+    counterparty.counterpartyId = counterpartyId;
+    counterparty.paymentAddress = informationWallet.address;
     counterparty.clientId = client.getClientId();
     counterparty.accountId = client.getAccount().getAccountId();
     counterparty.ownerName = ownerName;

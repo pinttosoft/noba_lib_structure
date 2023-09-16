@@ -3,17 +3,14 @@ import {
   MongoClientFactory,
   MongoRepository,
   Paginate,
-  removeUndefined,
 } from "../../../shared";
-import { CounterpartyBankDTO } from "../../../banking/domain/types/counterparty_bank.type";
 import {
   Counterparty,
   CounterpartyType,
   ICounterpartyRepository,
 } from "../../index";
-import { CounterpartyFactory } from "../../domain/factories/counterparty.factory";
 import { CounterpartyBank } from "../../../banking";
-import { TransactionDTO } from "../../../transaction";
+import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
@@ -55,7 +52,11 @@ export class CounterpartyMongoRepository
     }
 
     result.map((r) => {
-      CounterpartyFactory.fromPrimitives(r._id.toString(), r);
+      if (r.counterpartyType === CounterpartyType.CRYPTO) {
+        CounterpartyAsset.fromPrimitives(r._id.toString(), r);
+      } else {
+        CounterpartyBank.fromPrimitives(r._id.toString(), r);
+      }
     });
 
     return Promise.resolve(undefined);
@@ -74,15 +75,22 @@ export class CounterpartyMongoRepository
       return undefined;
     }
 
-    return CounterpartyFactory.fromPrimitives(result._id.toString(), result);
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyBank.fromPrimitives(result._id.toString(), result);
   }
 
   async list(criteria: Criteria): Promise<Paginate<Counterparty> | undefined> {
     let document: any[] = await this.searchByCriteria<any>(criteria);
 
-    document = document.map((d) =>
-      CounterpartyFactory.fromPrimitives(d._id.toString(), d),
-    );
+    document = document.map((d): Counterparty => {
+      if (d.counterpartyType === CounterpartyType.CRYPTO) {
+        return CounterpartyAsset.fromPrimitives(d._id.toString(), d);
+      }
+      return CounterpartyBank.fromPrimitives(d._id.toString(), d);
+    });
 
     return this.buildPaginate<Counterparty>(document);
   }
@@ -105,6 +113,10 @@ export class CounterpartyMongoRepository
       return undefined;
     }
 
-    return CounterpartyFactory.fromPrimitives(result._id.toString(), result);
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyBank.fromPrimitives(result._id.toString(), result);
   }
 }

@@ -63,6 +63,7 @@ export class CounterpartyBank extends Counterparty {
 
   static fromPrimitives(id: string, data: any): CounterpartyBank {
     const counterparty: CounterpartyBank = new CounterpartyBank();
+    counterparty.id = id;
 
     const informationOwner = data.informationOwner;
     const informationBank = data.informationBank;
@@ -126,13 +127,14 @@ export class CounterpartyBank extends Counterparty {
 
   toPrimitives(): any {
     return {
+      id: this.id,
       clientId: this.clientId,
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,
       accountId: this.accountId,
       routingNumber: this.routingNumber,
       swiftCode: this.swiftCode,
-      iba: this.iban,
+      iban: this.iban,
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
       createdAt: this.createdAt,
