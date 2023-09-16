@@ -39,6 +39,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.counterpartyType = CounterpartyType.CRYPTO;
     counterparty.informationWallet = data.informationWallet;
     counterparty.assetId = data.informationWallet.assetId;
+    counterparty.counterpartyId = data.counterpartyId;
 
     counterparty.relationshipConsumer =
       data.informationWallet.relationshipConsumer;

@@ -87,7 +87,6 @@ export class WalletMongoRepository
         },
       },
     );
-    return Promise.resolve(undefined);
   }
 
   async upsert(wallet: IWallet): Promise<IWallet> {

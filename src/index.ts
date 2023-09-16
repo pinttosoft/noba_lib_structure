@@ -14,6 +14,7 @@ export * from "./business_allie_program";
 export * from "./blockchain";
 export * from "./swap";
 export * from "./beneficiary";
+export * from "./withdrawal";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";

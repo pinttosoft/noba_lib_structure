@@ -11,3 +11,5 @@ export { Wallet } from "./domain/wallet";
 export { InstructionDepositCrypto } from "./domain/type/instruction_deposit_crypto.type";
 
 export { OriginWallet } from "./domain/enums/origin_wallet.enum";
+
+export { InsufficientBalance } from "./domain/exceptions/insufficient_balance";

@@ -1,7 +1,8 @@
 export enum WithdrawalStatus {
-  PENDING = "pending",
-  IN_PROCESS = "in_process",
-  PROCESSED = "processed",
-  CANCELLED = "cancelled",
-  REVERSED = "reversed",
+  PENDING = "PENDING",
+  IN_PROCESS = "IN_PROCESS",
+  PROCESSED = "PROCESSED",
+  CANCELLED = "CANCELLED",
+  REVERSED = "REVERSED",
+  PROCESS_WITH_ERROR = "PROCESS_WITH_ERROR",
 }

@@ -158,6 +158,11 @@ export class Wallet extends AggregateRoot implements IWallet {
       : Number((this.balance - this.lockedBalance).toPrecision(6));
   }
 
+  updateLookBalance(amount: number): Wallet {
+    this.lockedBalance = Number(this.lockedBalance) + Number(amount);
+    return this;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,

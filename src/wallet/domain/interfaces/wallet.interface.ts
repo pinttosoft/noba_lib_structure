@@ -24,4 +24,5 @@ export interface IWallet {
     data: InstructionDepositCrypto | InstructionDepositFiat,
   ): IWallet;
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
+  updateLookBalance(amount: number): IWallet;
 }

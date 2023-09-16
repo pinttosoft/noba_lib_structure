@@ -10,4 +10,6 @@ export { RelationshipConsumer } from "./domain/enums/relationship_consumer.enum"
 
 export { CounterpartyMongoRepository } from "./infrastructure/mongo/counterparty_mongo_repository";
 
+export { CounterpartyNotFound } from "./domain/exceptions/counterparty_not_found";
+
 export { CounterpartyFound } from "./domain/exceptions/counterparty_found";
