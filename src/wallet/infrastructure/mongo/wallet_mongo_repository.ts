@@ -183,6 +183,28 @@ export class WalletMongoRepository
     );
   }
 
+  async findWalletByClientIdAndWalletId(
+    clientId: string,
+    walletId: string,
+  ): Promise<IWallet | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<WalletDocument>({
+      clientId,
+      walletId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
+  }
+
   // TODO es posible que a futuro se necesite tener varios instructForDeposit
   // async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
   //   const collection = await this.collection();

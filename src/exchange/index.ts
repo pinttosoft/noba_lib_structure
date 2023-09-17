@@ -6,3 +6,5 @@ export { ExchangeStatus } from "./domain/enums/exchange_status.enum";
 
 export { IExchangeIntegratorService } from "./domain/interfaces/exchange_integrator_service.interface";
 export { IExchangeRepository } from "./domain/interfaces/exchange_repository.interface";
+
+export { Exchange } from "./domain/exchange";
