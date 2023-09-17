@@ -16,11 +16,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   private lockedBalance: number;
   private label: string;
   private client: IClient;
-  private instructForDeposit:
-    | InstructionDepositFiat[]
-    | InstructionDepositCrypto[];
-
-  private recentInstruction: InstructionDepositFiat | InstructionDepositCrypto;
+  private instructForDeposit: InstructionDepositFiat | InstructionDepositCrypto;
 
   setId(id: string): Wallet {
     this.id = id;
@@ -63,32 +59,10 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   setInstructionForDeposit(
-    data: InstructionDepositCrypto[] | InstructionDepositFiat[],
+    data: InstructionDepositCrypto | InstructionDepositFiat,
   ): Wallet {
     this.instructForDeposit = data;
     return this;
-  }
-
-  addNewInstructionForDeposit(
-    data: InstructionDepositCrypto | InstructionDepositFiat,
-  ): Wallet {
-    const d: any = data;
-    this.recentInstruction = d;
-
-    if (
-      this.instructForDeposit === undefined ||
-      this.instructForDeposit.length === 0
-    ) {
-      this.instructForDeposit = [d];
-      return this;
-    }
-
-    this.instructForDeposit.push(d);
-    return this;
-  }
-
-  getRecentInstruction(): InstructionDepositFiat | InstructionDepositCrypto {
-    return this.recentInstruction;
   }
 
   build(): void {
@@ -114,8 +88,8 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   getInstructionForDeposit():
-    | InstructionDepositCrypto[]
-    | InstructionDepositFiat[] {
+    | InstructionDepositFiat
+    | InstructionDepositCrypto {
     return this.instructForDeposit;
   }
 
