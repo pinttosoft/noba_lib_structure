@@ -6,8 +6,7 @@ import {
 } from "../../../wallet";
 import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
 import { ObjectId } from "mongodb";
-import { ClientMongoRepository, IClient } from "../../../client";
-import { InstructionDepositFiat } from "../../../banking";
+import { ClientMongoRepository } from "../../../client";
 import { AssetMongoRepository } from "../../../asset";
 
 interface WalletDocument {
@@ -184,27 +183,28 @@ export class WalletMongoRepository
     );
   }
 
-  async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
-    const collection = await this.collection();
-
-    const instructions: InstructionDepositCrypto[] | InstructionDepositFiat[] =
-      wallet.getInstructionForDeposit();
-
-    const updateDocument = {
-      $push: {
-        instructForDeposit: instructions[instructions.length - 1],
-      },
-    };
-
-    await collection.updateOne(
-      {
-        clientId: wallet.getClientId(),
-        assetId: wallet.getAsset().getAssetId(),
-      },
-      updateDocument,
-      {
-        upsert: true,
-      },
-    );
-  }
+  // TODO es posible que a futuro se necesite tener varios instructForDeposit
+  // async addNewInstructionForDeposit(wallet: IWallet): Promise<void> {
+  //   const collection = await this.collection();
+  //
+  //   const instructions: InstructionDepositCrypto[] | InstructionDepositFiat[] =
+  //     wallet.getInstructionForDeposit();
+  //
+  //   const updateDocument = {
+  //     $push: {
+  //       instructForDeposit: instructions[instructions.length - 1],
+  //     },
+  //   };
+  //
+  //   await collection.updateOne(
+  //     {
+  //       clientId: wallet.getClientId(),
+  //       assetId: wallet.getAsset().getAssetId(),
+  //     },
+  //     updateDocument,
+  //     {
+  //       upsert: true,
+  //     },
+  //   );
+  // }
 }

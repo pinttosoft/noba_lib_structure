@@ -1,17 +1,28 @@
 import { IClient } from "../../../client";
-import { IWallet, WalletType, Wallet } from "../../../wallet";
+import {
+  IWallet,
+  WalletType,
+  Wallet,
+  InstructionDepositCrypto,
+} from "../../../wallet";
 import { GenericException } from "../../../shared";
 import { Asset } from "../../../asset";
+import { InstructionDepositFiat } from "../../../banking";
 
 export class WalletFactory {
   static createNewWallet(
     asset: Asset,
     client: IClient,
     type: WalletType,
+    instructionForDeposit: InstructionDepositCrypto | InstructionDepositFiat,
   ): IWallet {
     const w: Wallet = new Wallet();
 
-    w.setAsset(asset).setClient(client).setWalletType(type).build();
+    w.setAsset(asset)
+      .setInstructionForDeposit(instructionForDeposit)
+      .setClient(client)
+      .setWalletType(type)
+      .build();
 
     return w;
   }
