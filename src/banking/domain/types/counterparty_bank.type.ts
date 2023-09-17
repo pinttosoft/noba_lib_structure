@@ -15,7 +15,6 @@ export type CounterpartyBankDTO = {
   iban?: string;
   informationOwner: { name: string; address: Address };
   informationBank: {
-    // type: TypeBankDetails;
     bankName: string;
     networkBank: NetworkBank;
     address: Address;
