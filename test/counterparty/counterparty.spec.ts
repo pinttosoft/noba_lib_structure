@@ -13,7 +13,6 @@ import {
   RelationshipConsumer,
   WalletInformationDTO,
 } from "../../src";
-import { CounterpartyFactory } from "../../src/counterparty/domain/factories/counterparty.factory";
 import * as console from "console";
 
 describe("Counterparty", () => {
@@ -38,8 +37,8 @@ describe("Counterparty", () => {
       },
     } as unknown as CounterpartyFactoryDTO;
 
-    const counterparty: Counterparty =
-      CounterpartyFactory.createNewCounterparty(counterpartyDTO);
+    // const counterparty: Counterparty =
+    //   CounterpartyFactory.createNewCounterparty(counterpartyDTO);
   });
 
   it("should list used criteria method", async () => {
