@@ -18,6 +18,14 @@ export class FeeSwap extends AggregateRoot {
     return f;
   }
 
+  getFeeForBuy() {
+    return this.swapBuy;
+  }
+
+  getFeeForSell() {
+    return this.swapSell;
+  }
+
   toPrimitives(): any {
     return {
       swapBuy: this.swapBuy,

@@ -5,7 +5,7 @@ export type BusinessOpportunityDTO = {
   taxId: string;
   name: string;
   email: string;
-  feeSwap: number; // es lo que es aliado se gana por cada swap
+  feeSwap: number; // es lo que es aliado se gana por cada exchange
   status: BusinessOpportunityStatus;
   referredByAccountId: string;
   accountId?: string;

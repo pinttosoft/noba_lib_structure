@@ -26,16 +26,6 @@ export interface IBusinessAllieRepository {
     accountId: string,
   ): Promise<BusinessAllieDTO[] | undefined>;
 
-  /**
-   * @deprecated
-   */
-  updateOpportunity(
-    accountId: string,
-    taxId: string,
-    opportunityStatus: BusinessOpportunityStatus,
-    opportunityAccountId: string,
-  ): Promise<void>;
-
   updateBusinessOpportunityData(
     opportunity: BusinessOpportunity,
   ): Promise<void>;

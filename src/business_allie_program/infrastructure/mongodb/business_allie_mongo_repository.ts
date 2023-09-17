@@ -60,27 +60,6 @@ export class Business_allie_mongo_repository
     })) as unknown as BusinessAllieDTO;
   }
 
-  /**
-   * @deprecated
-   */
-  async updateOpportunity(
-    accountId: string,
-    taxId: string,
-    opportunityStatus: BusinessOpportunityStatus,
-    opportunityAccountId: string,
-  ): Promise<void> {
-    const collection = await this.collection();
-    await collection.updateOne(
-      { accountId, "businessOpportunities.taxId": taxId },
-      {
-        $set: {
-          "businessOpportunities.$.status": opportunityStatus,
-          "businessOpportunities.$.accountId": opportunityAccountId,
-        },
-      },
-    );
-  }
-
   async updateBusinessOpportunityData(
     opportunity: BusinessOpportunity,
   ): Promise<void> {
