@@ -5,6 +5,6 @@ export class UserDisabled extends DomainException {
 
   constructor(email: string) {
     super();
-    this.message = `Usuario con email ${email} fue deshabilitado en la plataforma.`;
+    this.message = `User with email ${email} fue deshabilitado en la plataforma.`;
   }
 }

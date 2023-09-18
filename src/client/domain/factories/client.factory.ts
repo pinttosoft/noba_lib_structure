@@ -1,6 +1,11 @@
 import { CompanyDTO } from "../types/company.type";
 import { IndividualDTO } from "../types/Individual.type";
-import { AccountStatus, AccountType, IAccount } from "../../../account";
+import {
+  AccountStatus,
+  AccountType,
+  IAccount,
+  IOwnerAccount,
+} from "../../../account";
 import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
@@ -16,6 +21,7 @@ export class ClientFactory {
     clientData: IndividualDTO | CompanyDTO,
     clientType: AccountType,
     account: IAccount,
+    companyPartners?: IOwnerAccount[],
   ): Promise<IClient> {
     const systemConfig: ISystemConfigurationRepository =
       SystemConfigurationMongoRepository.instance();
@@ -28,6 +34,11 @@ export class ClientFactory {
       .setFeeWire(await systemConfig.getDefaultFeeWire())
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
       .build();
+
+    if (clientType === AccountType.COMPANY) {
+      c.setCompanyPartners(companyPartners);
+    }
+
     return c;
   }
 

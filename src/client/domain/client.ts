@@ -1,12 +1,18 @@
 import { IClient } from "./interfaces/client.interface";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
-import { AccountStatus, AccountType, IAccount } from "../../account";
+import {
+  AccountStatus,
+  AccountType,
+  IAccount,
+  IOwnerAccount,
+} from "../../account";
 import { CompanyDTO } from "./types/company.type";
 import { IndividualDTO } from "./types/Individual.type";
 import { Address, ContactInformation, GenericException } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
+import { Documents } from "../../documents";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -18,6 +24,8 @@ export class Client extends AggregateRoot implements IClient {
   private status: AccountStatus;
   private feeSwap?: FeeSwap;
   private feeWire?: FeeWire;
+  private documents: Documents[];
+  private companyPartners: IOwnerAccount[];
 
   getId(): string {
     return this.id;
@@ -79,6 +87,11 @@ export class Client extends AggregateRoot implements IClient {
 
   setClientType(clientType: AccountType): Client {
     this.clientType = clientType;
+    return this;
+  }
+
+  setCompanyPartners(partners: IOwnerAccount[]): Client {
+    this.companyPartners = partners;
     return this;
   }
 
@@ -231,7 +244,7 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   toPrimitives(): any {
-    return {
+    const r = {
       id: this.id,
       clientId: this.clientId,
       ...this.clientData,
@@ -242,5 +255,15 @@ export class Client extends AggregateRoot implements IClient {
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
     };
+    if (this.clientType === AccountType.COMPANY) {
+      return {
+        ...r,
+        companyPartners: this.companyPartners.map((b: IOwnerAccount) =>
+          b.toPrimitives(),
+        ),
+      };
+    }
+
+    return r;
   }
 }

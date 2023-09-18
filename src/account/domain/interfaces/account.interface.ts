@@ -1,5 +1,6 @@
 import { IOwnerAccount } from "./owner_account.interface";
 import { AccountType } from "../enums/account_type.enum";
+import { AccountStatus } from "../enums/account_status.enum";
 
 export interface IAccount {
   getId(): string;
@@ -7,5 +8,8 @@ export interface IAccount {
   getOwnerAccount(): IOwnerAccount;
   getAccountId(): string;
   getType(): AccountType;
-  getCompanyPartners(): IOwnerAccount[];
+  getApprovalDate(): Date;
+  getStatus(): AccountStatus;
+  getApprovalDate(): Date;
+  getCreatedAt(): Date;
 }
