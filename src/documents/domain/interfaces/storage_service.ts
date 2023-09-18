@@ -1,4 +1,4 @@
 export interface IStorageService {
-  uploadFile(file: File): Promise<string>;
+  uploadFile(file: any): Promise<string>;
   downloadFile(fileName: string): Promise<string>;
 }

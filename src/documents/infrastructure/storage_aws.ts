@@ -1,6 +1,5 @@
 import AWS = require("aws-sdk");
 import { IStorageService } from "../domain/interfaces/storage_service";
-import { SharedIniFileCredentials } from "aws-sdk";
 import * as fs from "fs";
 import { GenericException } from "../../shared";
 import { logger } from "../../index";
