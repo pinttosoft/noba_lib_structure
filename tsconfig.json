@@ -7,7 +7,8 @@
     "experimentalDecorators": true,
     "lib": [
       "es2015",
-      "es2017"
+      "es2017",
+      "dom"
     ],
     "target": "es2016",
     "sourceMap": true,
@@ -19,7 +20,7 @@
         "transform": "ts-auto-mock/transformer",
         "cacheBetweenTests": false
       }
-    ],
+    ]
   },
   "exclude": ["node_modules", "dist"]
 }
