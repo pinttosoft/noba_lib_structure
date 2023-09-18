@@ -1,0 +1,15 @@
+export enum DocumentType {
+  PASSPORT = "passport",
+  DRIVERS_LICENSE = "drivers_license",
+  GOVERNMENT_ID = "government_id",
+  RESIDENCE_PERMIT = "residence_permit",
+  UTILITY_BILL = "utility_bill",
+  STATEMENT = "statements",
+  OTHER = "other",
+  MONTHLY_UTILITY = "monthly_utility",
+  RENTAL_LEASE_AGREEMENT = "rental_lease_agreement",
+  VEHICLE_REGISTRATION = "vehicle_registration",
+  REAL_ESTATE_PROPERTY_TITLE = "real_estate_property_title",
+  PROPERTY_TAX_BILL = "property_tax_bill",
+  W2 = "w2",
+}

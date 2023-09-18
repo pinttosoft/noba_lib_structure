@@ -19,7 +19,7 @@
         "transform": "ts-auto-mock/transformer",
         "cacheBetweenTests": false
       }
-    ],
+    ]
   },
   "exclude": ["node_modules", "dist"]
 }

@@ -4,7 +4,8 @@ import { Address } from "../../../shared";
 
 export type InformationBankDTO = {
   accountNumber: string;
-  swiftCodeOrRoutingNumber: string;
+  swiftCode: string;
+  IBANOrRoutingNumber: string;
   bankName: string;
   networkBank: NetworkBank;
   address: Address;
