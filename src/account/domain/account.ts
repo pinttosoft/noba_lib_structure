@@ -3,7 +3,6 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { AccountStatus } from "./enums/account_status.enum";
 import { AccountType } from "./enums/account_type.enum";
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
-import { AccountHashNoPartners } from "./exceptions/account_has_no_partners";
 
 export class Account extends AggregateRoot implements IAccount {
   private id?: string;
@@ -11,7 +10,8 @@ export class Account extends AggregateRoot implements IAccount {
   private status: AccountStatus;
   private type: AccountType;
   private owner: IOwnerAccount;
-  private companyPartners: IOwnerAccount[];
+  private createdAt: Date;
+  private approvalDate?: Date;
 
   getId() {
     return this.id;
@@ -34,11 +34,6 @@ export class Account extends AggregateRoot implements IAccount {
 
   setOwner(owner: IOwnerAccount): Account {
     this.owner = owner;
-    return this;
-  }
-
-  setCompanyPartners(partners: IOwnerAccount[]): Account {
-    this.companyPartners = partners;
     return this;
   }
 
@@ -67,31 +62,21 @@ export class Account extends AggregateRoot implements IAccount {
     return this.type;
   }
 
-  getCompanyPartners(): IOwnerAccount[] {
-    if (
-      this.companyPartners.length === 0 ||
-      this.type === AccountType.INDIVIDUAL
-    ) {
-      throw new AccountHashNoPartners(this.accountId);
-    }
+  getStatus(): AccountStatus {
+    return this.status;
+  }
+  getApprovalDate(): Date {
+    return this.approvalDate;
+  }
 
-    return this.companyPartners;
+  getCreatedAt(): Date {
+    return this.createdAt;
   }
 
   toPrimitives(): any {
-    if (this.type === AccountType.COMPANY) {
-      return {
-        accountId: this.accountId,
-        type: this.getType(),
-        status: this.status,
-        owner: this.owner.toPrimitives(),
-        companyPartners: this.companyPartners.map((b: IOwnerAccount) =>
-          b.toPrimitives(),
-        ),
-      };
-    }
-
     return {
+      approvalDate: this.approvalDate,
+      createdAt: this.createdAt,
       accountId: this.accountId,
       type: this.getType(),
       status: this.status,

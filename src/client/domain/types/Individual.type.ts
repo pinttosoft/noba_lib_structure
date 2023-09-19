@@ -1,5 +1,6 @@
 import { ResidencyStatus } from "../enums/residency_status";
 import { Address, ContactInformation } from "../../../shared";
+import { DocumentType } from "../../../documents";
 
 type individualType = {
   firstName: string;
@@ -15,6 +16,10 @@ type individualType = {
     kycRequiredActions: { [key: string]: string };
   };
   residencyStatus: ResidencyStatus;
+  documents: {
+    patch: string;
+    documentType: DocumentType;
+  }[];
 };
 
 export type IndividualDTO = individualType & Address & ContactInformation;

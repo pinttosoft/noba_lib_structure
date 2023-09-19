@@ -9,14 +9,9 @@ export class AccountFactory {
   static createNewAccount(
     accountType: AccountType,
     owner: IOwnerAccount,
-    companyPartners?: IOwnerAccount[],
   ): IAccount {
     const a: Account = new Account();
     a.setAccountType(accountType).setOwner(owner);
-
-    if (accountType === AccountType.COMPANY) {
-      a.setCompanyPartners(companyPartners);
-    }
 
     a.build();
 
@@ -37,7 +32,6 @@ export class AccountFactory {
         )
         .setStatus(data.status)
         .setAccountType(data.type)
-        .setCompanyPartners(companyPartners)
         .setAccountId(data.accountId);
 
       return a;
