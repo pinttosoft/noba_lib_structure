@@ -1,16 +1,17 @@
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
 import { CompanyDTO } from "../../client";
 import { Address } from "../../shared";
+import { Documents } from "../../documents";
 
 export class CompanyOwner implements IOwnerAccount {
   constructor(private readonly company: CompanyDTO) {}
 
   getAddress(): Address {
-    return this.company.physicalAddress;
+    return this.company.informationCompany.physicalAddress;
   }
 
   getIdentifyNumber(): string {
-    return this.company.registerNumber;
+    return this.company.informationCompany.registerNumber;
   }
 
   getEmail(): string {
@@ -18,7 +19,15 @@ export class CompanyOwner implements IOwnerAccount {
   }
 
   getName(): string {
-    return this.company.name;
+    return this.company.informationCompany.name;
+  }
+
+  setDocument(document: Documents) {
+    if (this.company.documents && this.company.documents.length > 0) {
+      this.company.documents.push(document.toPrimitives());
+    } else {
+      this.company.documents = [document.toPrimitives()];
+    }
   }
 
   toPrimitives(): any {

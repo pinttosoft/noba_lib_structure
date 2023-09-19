@@ -4,6 +4,7 @@ import { IAccount } from "../interfaces/account.interface";
 import { Account } from "../account";
 import { OwnerAccountFactory } from "./owner_account.facytory";
 import { GenericException } from "../../../shared";
+import { AccountStatus } from "../enums/account_status.enum";
 
 export class AccountFactory {
   static createNewAccount(
@@ -12,6 +13,7 @@ export class AccountFactory {
   ): IAccount {
     const a: Account = new Account();
     a.setAccountType(accountType).setOwner(owner);
+    a.setStatus(AccountStatus.REGISTERED);
 
     a.build();
 

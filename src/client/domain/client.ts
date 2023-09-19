@@ -24,8 +24,9 @@ export class Client extends AggregateRoot implements IClient {
   private status: AccountStatus;
   private feeSwap?: FeeSwap;
   private feeWire?: FeeWire;
-  private documents: Documents[];
-  private companyPartners: IOwnerAccount[];
+  private documents: Documents[] = [];
+  private companyPartners: IOwnerAccount[] = [];
+  private twoFactorActive: boolean = false;
 
   getId(): string {
     return this.id;
@@ -81,6 +82,32 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     this.clientData = data;
+
+    return this;
+  }
+
+  setDocument(dni: string, document: Documents): Client {
+    if (dni === this.getIDNumber()) {
+      if (this.documents && this.documents.length > 0) {
+        this.documents.push(document);
+      } else {
+        this.documents = [document];
+      }
+
+      return;
+    }
+
+    if (!this.companyPartners || this.companyPartners.length === 0) {
+      throw new GenericException("Company partners not found");
+    }
+
+    const partner: IOwnerAccount = this.companyPartners.find(
+      (p: IOwnerAccount): boolean => p.getIdentifyNumber() === dni,
+    );
+
+    if (partner) {
+      partner.setDocument(document);
+    }
 
     return this;
   }
@@ -181,16 +208,18 @@ export class Client extends AggregateRoot implements IClient {
 
   getIDNumber(): string {
     if (this.clientType === AccountType.COMPANY) {
-      return (this.toPrimitives() as CompanyDTO).registerNumber;
+      return (this.toPrimitives() as CompanyDTO).informationCompany
+        .registerNumber;
     } else {
-      return (this.toPrimitives() as IndividualDTO).passport;
+      return (this.toPrimitives() as IndividualDTO).dni;
     }
   }
 
   getAddress(): Address {
     const d = this.toPrimitives();
     if (this.clientType === AccountType.COMPANY) {
-      return (this.toPrimitives() as CompanyDTO).physicalAddress;
+      return (this.toPrimitives() as CompanyDTO).informationCompany
+        .physicalAddress;
     }
 
     return {
@@ -243,6 +272,14 @@ export class Client extends AggregateRoot implements IClient {
     return this.feeWire;
   }
 
+  activeTwoFactorAuth(): void {
+    this.twoFactorActive = true;
+  }
+
+  disableTwoFactorAuth(): void {
+    this.twoFactorActive = false;
+  }
+
   toPrimitives(): any {
     const r = {
       id: this.id,
@@ -254,6 +291,8 @@ export class Client extends AggregateRoot implements IClient {
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
+      documents: this.documents.map((d: Documents) => d.toPrimitives()),
+      twoFactorActive: this.twoFactorActive,
     };
     if (this.clientType === AccountType.COMPANY) {
       return {

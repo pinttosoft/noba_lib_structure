@@ -14,3 +14,5 @@ export { IAccount } from "./domain/interfaces/account.interface";
 export { IOwnerAccount } from "./domain/interfaces/owner_account.interface";
 
 export { AccountMongoRepository } from "./infrastructure/mongo/account_mongo_repository";
+
+export { CompanyQuestionnaire } from "./domain/types/company_questionnaire.type";
