@@ -3,31 +3,18 @@ import { TransactionDTO } from "../types/transaction.type";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 
 export interface ITransactionRepository {
-  historyTransactionByAssetCodeAndAccountId(
-    accountId: string,
+  historyTransactionByAssetCodeAndClientId(
+    clientId: string,
     assetCode: string,
     initDoc?: string | Number,
   ): Promise<Paginate<TransactionDTO> | null>;
 
   upsertTransaction(transaction: Transaction): Promise<void>;
 
-  findTransactionByAccountId(
+  findTransactionByClientId(
     accountId: string,
     initDoc?: string,
   ): Promise<Paginate<TransactionDTO> | null>;
-
-  findByAssetTransferMethodAndStatusAndAmount(
-    assetCode: string,
-    assetTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null>;
-
-  findByFundsTransferMethodAndStatusAndAmount(
-    fundsTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null>;
 
   findTransactionByTransactionId(
     transactionId: string,
@@ -42,8 +29,8 @@ export interface ITransactionRepository {
 
   transactionListing(criteria: Criteria): Promise<Paginate<TransactionDTO>>;
 
-  findWithdrawalByAccountIdAndAssetCodeAndAmountAndStatusAndReference(
-    accountId: string,
+  findWithdrawalByClientIdAndAssetCodeAndAmountAndStatusAndReference(
+    clientId: string,
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,

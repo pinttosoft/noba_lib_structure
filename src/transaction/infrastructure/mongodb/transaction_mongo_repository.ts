@@ -39,57 +39,6 @@ export class TransactionMongoRepository
     return "transaction";
   }
 
-  async findByAssetTransferMethodAndStatusAndAmount(
-    assetCode: string,
-    assetTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null> {
-    const collection = await this.collection();
-    const filter = {
-      "to.assetTransferMethod": assetTransferMethod,
-      assetCode: assetCode,
-      status,
-      amount,
-    };
-
-    const result = await collection.findOne(filter);
-
-    if (!result) {
-      return null;
-    }
-
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
-  }
-
-  async findByFundsTransferMethodAndStatusAndAmount(
-    fundsTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null> {
-    const collection = await this.collection();
-    const filter = {
-      "to.fundsTransferMethods": fundsTransferMethod,
-      status,
-      amount,
-      assetCode: "USD",
-    };
-
-    const result = await collection.findOne(filter);
-
-    if (!result) {
-      return null;
-    }
-
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
-  }
-
   async findDepositByAssetCodeAndAmountAndStatusAndReference(
     assetCode: string,
     amount: number,
@@ -117,7 +66,7 @@ export class TransactionMongoRepository
     } as unknown as TransactionDTO;
   }
 
-  async findTransactionByAccountId(
+  async findTransactionByClientId(
     accountId: string,
     initDoc?: string,
   ): Promise<Paginate<TransactionDTO>> {
@@ -158,15 +107,15 @@ export class TransactionMongoRepository
     } as unknown as TransactionDTO;
   }
 
-  async findWithdrawalByAccountIdAndAssetCodeAndAmountAndStatusAndReference(
-    accountId: string,
+  async findWithdrawalByClientIdAndAssetCodeAndAmountAndStatusAndReference(
+    clientId: string,
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
   ): Promise<TransactionDTO> {
     const filter = {
-      accountId,
+      clientId,
       assetCode,
       status,
       amount,
@@ -186,15 +135,15 @@ export class TransactionMongoRepository
     } as unknown as TransactionDTO;
   }
 
-  async historyTransactionByAssetCodeAndAccountId(
-    accountId: string,
+  async historyTransactionByAssetCodeAndClientId(
+    clientId: string,
     assetCode: string,
     initDoc?: string | Number,
   ): Promise<Paginate<TransactionDTO> | null> {
     const filterAccountId: Map<string, string> = new Map([
-      ["field", "accountId"],
+      ["field", "clientId"],
       ["operator", Operator.EQUAL],
-      ["value", accountId],
+      ["value", clientId],
     ]);
 
     const filterAssetCode: Map<string, string> = new Map([
