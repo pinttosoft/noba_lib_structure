@@ -96,7 +96,7 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    const fee: number = this.baseAmount * this.feeNoba;
+  const fee: number = (this.baseAmount * this.feeNoba) / 100;
     if (this.feeBusinessAllie > 0) {
       this.feeAmount = fee + this.feeBusinessAllie;
     } else {
@@ -132,6 +132,14 @@ export class Exchange extends AggregateRoot {
 
   getTotalAmount(): number {
     return this.totalAmount;
+  }
+
+  getSourceDetails() {
+    return this.sourceDetails;
+  }
+
+  getDestinationDetails() {
+    return this.destinationDetails;
   }
 
   toPrimitives(): any {
