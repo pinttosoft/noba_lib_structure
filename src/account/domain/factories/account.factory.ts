@@ -24,14 +24,13 @@ export class AccountFactory {
     const a: Account = new Account();
 
     try {
-      const companyPartners: IOwnerAccount[] = data.companyPartners.map(
-        (p: any) => OwnerAccountFactory.factoryOwnerAccount(p, data.type),
+      const owner = OwnerAccountFactory.factoryOwnerAccount(
+        data.owner,
+        data.type,
       );
 
       a.setId(id)
-        .setOwner(
-          OwnerAccountFactory.factoryOwnerAccount(data.owner, data.type),
-        )
+        .setOwner(owner)
         .setStatus(data.status)
         .setAccountType(data.type)
         .setAccountId(data.accountId);

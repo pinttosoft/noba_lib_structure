@@ -63,24 +63,6 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   setClientData(data: any): Client {
-    if (this.clientType === AccountType.COMPANY && !("naics" in data)) {
-      throw new GenericException("Field naics is mandatory");
-    }
-
-    if (
-      this.clientType === AccountType.COMPANY &&
-      !("corporate_entity_type" in data)
-    ) {
-      throw new GenericException("Field corporate_entity_type is mandatory");
-    }
-
-    if (
-      this.clientType === AccountType.COMPANY &&
-      !("established_date" in data)
-    ) {
-      throw new GenericException("Field established_date is mandatory");
-    }
-
     this.clientData = data;
 
     return this;
@@ -137,7 +119,8 @@ export class Client extends AggregateRoot implements IClient {
   build(): void {
     if (this.clientType == AccountType.COMPANY) {
       this.clientId =
-        this.clientData.name.replace(" ", "-") + this.clientData.registerNumber;
+        this.clientData.informationCompany.name.replace(" ", "-") +
+        this.clientData.informationCompany.registerNumber;
     } else {
       this.clientId =
         this.clientData.firstName.substring(0, 1) +
@@ -281,7 +264,7 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   toPrimitives(): any {
-    const r = {
+    return {
       id: this.id,
       clientId: this.clientId,
       ...this.clientData,
@@ -294,15 +277,5 @@ export class Client extends AggregateRoot implements IClient {
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
     };
-    if (this.clientType === AccountType.COMPANY) {
-      return {
-        ...r,
-        companyPartners: this.companyPartners.map((b: IOwnerAccount) =>
-          b.toPrimitives(),
-        ),
-      };
-    }
-
-    return r;
   }
 }
