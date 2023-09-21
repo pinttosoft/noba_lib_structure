@@ -16,7 +16,7 @@ describe("Business Allie", () => {
     if (!allieExist) {
       const alliePayload: BusinessAllieDTO = {
         // client id
-        accountId: clientId,
+        clientId: clientId,
         name: "angel",
         email: "angel@gmail.com",
         referredBy: "string",
@@ -40,7 +40,7 @@ describe("Business Allie", () => {
     if (!allieExist) {
       const alliePayload: BusinessAllieDTO = {
         // client id
-        accountId: clientId,
+        clientId: clientId,
         name: "angel",
         email: "angel@gmail.com",
         referredBy: "string",
@@ -54,10 +54,8 @@ describe("Business Allie", () => {
       await businessRepo.saveBusinessAllie(bAllie)
     }
 
-    const opportunityExist = await businessRepo.getOpportunityByAccountId(opportunityClientId);
-    //
-    console.log('opportunityExist', opportunityExist)
-    //
+    const opportunityExist = await businessRepo.getOpportunityByClientId(opportunityClientId);
+
     if(!opportunityExist) {
       const opportuntyPayload : BusinessOpportunityDTO = {
         taxId: "  ",
@@ -65,8 +63,8 @@ describe("Business Allie", () => {
         email: "some@email.com;",
         feeSwap: 0.5,
         status: BusinessOpportunityStatus.OPPORTUNITY_WITH_ACTIVE_ACCOUNT,
-        referredByAccountId: clientId,
-        accountId: opportunityClientId ,
+        referredByClientId: clientId,
+        clientId: opportunityClientId ,
         createdAt: new Date()
       }
 

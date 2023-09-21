@@ -7,8 +7,8 @@ export type BusinessOpportunityDTO = {
   email: string;
   feeSwap: number; // es lo que es aliado se gana por cada exchange
   status: BusinessOpportunityStatus;
-  referredByAccountId: string;
-  accountId?: string;
+  referredByClientId: string;
+  clientId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };

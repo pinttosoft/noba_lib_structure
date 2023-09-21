@@ -26,10 +26,10 @@ export class BusinessAllieMongoRepository
     return this._instance;
   }
   async getBusinessAllie(
-    accountId: string,
+    clientId: string,
   ): Promise<BusinessAllieDTO | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ accountId });
+    const result = await collection.findOne({ clientId });
 
     if (!result) {
       return undefined;
@@ -43,19 +43,19 @@ export class BusinessAllieMongoRepository
   }
 
   async addOpportunityToAllie(
-    accountId: string,
+    clientId: string,
     opportunityPayload: BusinessOpportunityDTO,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
     await collection.updateOne(
-      { accountId },
+      { clientId },
       { $push: { businessOpportunities: opportunityPayload } },
       { upsert: true },
     );
 
     return (await collection.findOne({
-      accountId,
+      clientId,
     })) as unknown as BusinessAllieDTO;
   }
 
@@ -66,7 +66,7 @@ export class BusinessAllieMongoRepository
 
     await collection.updateOne(
       {
-        accountId: opportunity.getAccountIdToBusinessAllie(),
+        clientId: opportunity.getClientIdToBusinessAllie(),
         "businessOpportunities.taxId": opportunity.getTaxId(),
       },
       {
@@ -90,21 +90,21 @@ export class BusinessAllieMongoRepository
     })) as unknown as BusinessAllieDTO;
   }
 
-  async getBusinessAllieByOpportunityAccountId(
-    accountId: string,
+  async getBusinessAllieByOpportunityClientId(
+    clientId: string,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
     return (await collection.findOne({
-      "businessOpportunities.accountId": accountId,
+      "businessOpportunities.clientId": clientId,
     })) as unknown as BusinessAllieDTO;
   }
 
-  async getAllieOpportunitiesByAccountId(
-    accountId: string,
+  async getAllieOpportunitiesByClientId(
+    clientId: string,
   ): Promise<BusinessAllieDTO[] | null> {
     const collection = await this.collection();
-    const result = await collection.findOne({ accountId });
+    const result = await collection.findOne({ clientId });
     if (!result) {
       return null;
     }
@@ -130,12 +130,12 @@ export class BusinessAllieMongoRepository
     return new BusinessOpportunity({ ...opportunity, id: opportunity._id });
   }
 
-  async getOpportunityByAccountId(
-    accountId: string,
+  async getOpportunityByClientId(
+    clientId: string,
   ): Promise<BusinessOpportunity | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne(
-      { "businessOpportunities.accountId": accountId },
+      { "businessOpportunities.clientId": clientId },
       { projection: { "businessOpportunities.$": 1 } },
     );
 

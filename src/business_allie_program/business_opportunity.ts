@@ -14,8 +14,8 @@ export class BusinessOpportunity extends AggregateRoot {
     return this.businessOpportunity.id;
   }
 
-  getAccountIdToBusinessAllie() {
-    return this.businessOpportunity.referredByAccountId;
+  getClientIdToBusinessAllie() {
+    return this.businessOpportunity.referredByClientId;
   }
 
   setFeeSwap(fee: number) {
