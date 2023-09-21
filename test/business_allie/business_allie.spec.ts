@@ -3,6 +3,7 @@ import {
   BusinessAllieDTO,
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
+  BusinessOpportunity,
   BusinessOpportunityDTO,
   BusinessOpportunityStatus
 } from "../../src";
@@ -54,7 +55,7 @@ describe("Business Allie", () => {
       await businessRepo.saveBusinessAllie(bAllie)
     }
 
-    const opportunityExist = await businessRepo.getOpportunityByClientId(opportunityClientId);
+    const opportunityExist: BusinessOpportunity = await businessRepo.getOpportunityByClientId(opportunityClientId);
 
     if(!opportunityExist) {
       const opportuntyPayload : BusinessOpportunityDTO = {

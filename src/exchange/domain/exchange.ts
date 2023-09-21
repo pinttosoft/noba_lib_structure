@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { ExchangeStatus } from "./enums/exchange_status.enum";
 import { AmountValueObject, StringValueObject } from "../../shared";
-import { BusinessOpportunityDTO } from "../../business_allie_program";
+import { BusinessOpportunity } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
 
 export class Exchange extends AggregateRoot {
@@ -39,7 +39,7 @@ export class Exchange extends AggregateRoot {
       wallet: IWallet;
       amountCredit: AmountValueObject;
     },
-    opportunity?: BusinessOpportunityDTO,
+    opportunity?: BusinessOpportunity,
   ): Exchange {
     const e: Exchange = new Exchange();
 
@@ -72,7 +72,7 @@ export class Exchange extends AggregateRoot {
     };
 
     if (opportunity) {
-      e.feeBusinessAllie = opportunity.feeSwap;
+      e.feeBusinessAllie = opportunity.getFeeSwap();
     }
 
     return e;
