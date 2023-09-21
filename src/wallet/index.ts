@@ -13,3 +13,4 @@ export { InstructionDepositCrypto } from "./domain/type/instruction_deposit_cryp
 export { OriginWallet } from "./domain/enums/origin_wallet.enum";
 
 export { InsufficientBalance } from "./domain/exceptions/insufficient_balance";
+export { WalletNotFound } from "./domain/exceptions/wallet_not_found";

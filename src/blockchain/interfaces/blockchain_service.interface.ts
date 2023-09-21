@@ -18,4 +18,11 @@ export interface IBlockchainService {
     },
     informationWallet: WalletInformationDTO,
   ): Promise<CounterpartyAsset>;
+
+  internalTransfer(
+    sourceWalletId: string,
+    destinationWalletId: string,
+    amount: number,
+    description?: string,
+  ): Promise<string>;
 }

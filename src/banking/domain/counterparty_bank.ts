@@ -18,6 +18,7 @@ export class CounterpartyBank extends Counterparty {
 
   static newCounterparty(
     counterpartyBank: CounterpartyBankDTO,
+    isInternal: boolean = false,
   ): CounterpartyBank {
     const counterparty: CounterpartyBank = new CounterpartyBank();
 
@@ -30,6 +31,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.accountNumber = counterpartyBank.accountNumber;
 
     counterparty.counterpartyType = counterpartyBank.counterpartyType;
+    counterparty.isInternal = isInternal;
 
     if (
       counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||

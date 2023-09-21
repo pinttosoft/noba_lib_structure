@@ -13,7 +13,6 @@ export * from "./system_configuration";
 export * from "./business_allie_program";
 export * from "./blockchain";
 export * from "./swap";
-export * from "./beneficiary";
 export * from "./withdrawal";
 export * from "./documents";
 export * from "./transaction";

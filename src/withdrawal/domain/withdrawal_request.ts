@@ -28,6 +28,7 @@ export class WithdrawalRequest extends AggregateRoot {
     counterparty: Counterparty,
     amount: AmountValueObject,
     reference: string,
+    withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
@@ -38,6 +39,7 @@ export class WithdrawalRequest extends AggregateRoot {
     w.reference = reference;
     w.status = WithdrawalStatus.PENDING;
     w.createdAt = new Date();
+    w.withdrawalType = withdrawalType;
 
     return w;
   }

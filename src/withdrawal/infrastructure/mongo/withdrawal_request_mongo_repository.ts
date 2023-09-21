@@ -10,7 +10,6 @@ import {
 } from "../../../shared";
 import { IWithdrawalRequestRepository } from "../../domain/interfaces/withdrawal_request.interface";
 import { WithdrawalRequest } from "../../domain/withdrawal_request";
-import { BeneficiaryAsset } from "../../../beneficiary/domain/beneficiary_asset";
 
 export class WithdrawalRequestMongoRepository
   extends MongoRepository<WithdrawalRequest>
