@@ -58,6 +58,18 @@ export class WithdrawalRequest extends AggregateRoot {
     return w;
   }
 
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  getReference(): string {
+    return this.reference;
+  }
+
+  getClientId(): string {
+    return this.clientId;
+  }
+
   markAsProcessed(): WithdrawalRequest {
     this.status = WithdrawalStatus.PROCESSED;
     this.dateWasProcessed = new Date();
@@ -77,6 +89,10 @@ export class WithdrawalRequest extends AggregateRoot {
 
   getWithdrawalId(): string {
     return this.withdrawalId;
+  }
+
+  isInternal(): boolean {
+    return this.withdrawalType === WithdrawalType.INTERNAL;
   }
 
   toPrimitives(): any {

@@ -263,6 +263,10 @@ export class Client extends AggregateRoot implements IClient {
     this.twoFactorActive = false;
   }
 
+  updateData(data: IndividualDTO | CompanyDTO): void {
+    this.clientData = data;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,

@@ -3,37 +3,37 @@ import { TransactionDTO } from "../types/transaction.type";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 
 export interface ITransactionRepository {
-  historyTransactionByAssetCodeAndClientId(
+  historyTransactionByAssetIdAndClientId(
     clientId: string,
     assetCode: string,
     initDoc?: string | Number,
-  ): Promise<Paginate<TransactionDTO> | null>;
+  ): Promise<Paginate<Transaction> | undefined>;
 
   upsertTransaction(transaction: Transaction): Promise<void>;
 
   findTransactionByClientId(
     accountId: string,
     initDoc?: string,
-  ): Promise<Paginate<TransactionDTO> | null>;
+  ): Promise<Paginate<Transaction> | undefined>;
 
   findTransactionByTransactionId(
     transactionId: string,
-  ): Promise<TransactionDTO | null>;
+  ): Promise<Transaction | null>;
 
-  findDepositByAssetCodeAndAmountAndStatusAndReference(
+  findDepositByAssetIdAndAmountAndStatusAndReference(
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO | null>;
+  ): Promise<Transaction | null>;
 
-  transactionListing(criteria: Criteria): Promise<Paginate<TransactionDTO>>;
+  transactionListing(criteria: Criteria): Promise<Paginate<Transaction>>;
 
-  findWithdrawalByClientIdAndAssetCodeAndAmountAndStatusAndReference(
+  findWithdrawalByClientIdAndAssetIdAndAmountAndStatusAndReference(
     clientId: string,
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO>;
+  ): Promise<Transaction | undefined>;
 }
