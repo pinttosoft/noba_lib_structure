@@ -2,11 +2,10 @@ import { IBusinessAllieRepository } from "../../interfaces/business_allie_reposi
 import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
 import { BusinessOpportunityDTO } from "../../type/business_opportunity.type";
-import { BusinessOpportunityStatus } from "../../enums/business_opportunity_status.enum";
 import { BusinessOpportunity } from "../../business_opportunity";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 
-export class Business_allie_mongo_repository
+export class BusinessAllieMongoRepository
   extends MongoRepository<BusinessAllie>
   implements IBusinessAllieRepository
 {
@@ -16,14 +15,14 @@ export class Business_allie_mongo_repository
   collectionName(): string {
     return "business_allie";
   }
-  private static _instance: Business_allie_mongo_repository;
+  private static _instance: BusinessAllieMongoRepository;
 
   static instance() {
     if (this._instance) {
       return this._instance;
     }
 
-    this._instance = new Business_allie_mongo_repository();
+    this._instance = new BusinessAllieMongoRepository();
     return this._instance;
   }
   async getBusinessAllie(

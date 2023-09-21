@@ -1,6 +1,6 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { ExchangeStatus } from "./enums/exchange_status.enum";
-import { AmountValueObject } from "../../shared";
+import { AmountValueObject, StringValueObject } from "../../shared";
 import { BusinessOpportunityDTO } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
 
@@ -10,15 +10,17 @@ export class Exchange extends AggregateRoot {
   private exchangeId: string;
   private status: ExchangeStatus;
   private baseAmount: number;
-  private feeAmount: number;
   private totalAmount: number;
+  private feeAmount: number;
   private feeNoba: number;
   private feeBusinessAllie: number;
   private sourceDetails: {
+    assetCode: string;
     walletId: string;
     amountDebit: number;
   };
   private destinationDetails: {
+    assetCode: string;
     walletId: string;
     amountCredit: number;
   };
@@ -28,10 +30,12 @@ export class Exchange extends AggregateRoot {
   static newExchange(
     exchangeId: string,
     sourceDetails: {
+      assetCode: StringValueObject;
       wallet: IWallet;
       amountDebit: AmountValueObject;
     },
     destinationDetails: {
+      assetCode: StringValueObject;
       wallet: IWallet;
       amountCredit: AmountValueObject;
     },
@@ -55,14 +59,16 @@ export class Exchange extends AggregateRoot {
     }
     e.createdAt = new Date();
 
-    e.destinationDetails = {
-      amountCredit: destinationDetails.amountCredit.getValue(),
-      walletId: destinationDetails.wallet.getWalletId(),
-    };
-
     e.sourceDetails = {
+      assetCode: sourceDetails.assetCode.getValue(),
       amountDebit: sourceDetails.amountDebit.getValue(),
       walletId: sourceDetails.wallet.getWalletId(),
+    };
+
+    e.destinationDetails = {
+      assetCode: destinationDetails.assetCode.getValue(),
+      amountCredit: destinationDetails.amountCredit.getValue(),
+      walletId: destinationDetails.wallet.getWalletId(),
     };
 
     if (opportunity) {
@@ -78,8 +84,8 @@ export class Exchange extends AggregateRoot {
     e.exchangeId = data.exchangeId;
     e.status = data.status;
     e.baseAmount = data.baseAmount;
-    e.feeAmount = data.feeAmount;
     e.totalAmount = data.totalAmount;
+    e.feeAmount = data.feeAmount;
     e.feeNoba = data.feeNoba;
     e.feeBusinessAllie = data.feeBusinessAllie;
     e.sourceDetails = data.sourceDetails;
@@ -96,12 +102,23 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    const fee: number = (this.baseAmount * this.feeNoba) / 100;
+    // const fee: number = (this.baseAmount * this.feeNoba) / 100;
+    // if (this.feeBusinessAllie > 0) {
+    //   this.feeAmount = fee + this.feeBusinessAllie;
+    // } else {
+    //   this.feeAmount = fee;
+    // }
+    //
+    // this.calculateTotalAmount();
+    // return this;
+
+    let feePercentageTotal = 0;
     if (this.feeBusinessAllie > 0) {
-      this.feeAmount = fee + this.feeBusinessAllie;
+      feePercentageTotal = this.feeNoba + this.feeBusinessAllie;
     } else {
-      this.feeAmount = fee;
+      feePercentageTotal = this.feeNoba;
     }
+    this.feeAmount = (this.baseAmount * feePercentageTotal) / 100;
 
     this.calculateTotalAmount();
     return this;
@@ -142,14 +159,18 @@ export class Exchange extends AggregateRoot {
     return this.destinationDetails;
   }
 
+  getClientId(): string {
+    return this.clientId;
+  }
+
   toPrimitives(): any {
     return {
       clientId: this.clientId,
       exchangeId: this.exchangeId,
       status: this.status,
       baseAmount: this.baseAmount,
-      feeAmount: this.feeAmount,
       totalAmount: this.totalAmount,
+      feeAmount: this.feeAmount,
       feeNoba: this.feeNoba,
       feeBusinessAllie: this.feeBusinessAllie,
       sourceDetails: this.sourceDetails,
