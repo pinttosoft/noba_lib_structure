@@ -15,7 +15,6 @@ export class CounterpartyBank extends Counterparty {
   private bankName: string;
   private bankAddress: Address;
   private networkBank: NetworkBank;
-  private typeBankDetails: TypeBankDetails;
 
   static newCounterparty(
     counterpartyBank: CounterpartyBankDTO,
@@ -78,7 +77,6 @@ export class CounterpartyBank extends Counterparty {
 
     counterparty.bankName = informationBank.bankName;
     counterparty.networkBank = informationBank.networkBank;
-    counterparty.typeBankDetails = informationBank.typeBankDetails;
 
     counterparty.clientId = data.clientId;
     counterparty.accountId = data.accountId;

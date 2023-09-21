@@ -10,16 +10,8 @@ import {
   Paginate,
   WithdrawalStatus,
 } from "../../../shared";
-import {
-  ITransactionRepository,
-  TransactionDTO,
-  TransactionType,
-} from "../../index";
-import {
-  Counterparty,
-  CounterpartyMongoRepository,
-  CounterpartyType,
-} from "../../../counterparty";
+import { ITransactionRepository, TransactionType } from "../../index";
+import { Counterparty, CounterpartyType } from "../../../counterparty";
 import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
 
@@ -77,7 +69,7 @@ export class TransactionMongoRepository
 
   async findTransactionByClientId(
     accountId: string,
-    initDoc?: string,
+    initDoc: number,
   ): Promise<Paginate<Transaction>> {
     const filterAccountId: Map<string, string> = new Map([
       ["field", "accountId"],
@@ -89,7 +81,7 @@ export class TransactionMongoRepository
       Filters.fromValues([filterAccountId]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       20,
-      Number(initDoc),
+      initDoc,
     );
 
     const document = await this.searchByCriteria<Transaction>(criteria);
@@ -165,7 +157,7 @@ export class TransactionMongoRepository
   async historyTransactionByAssetIdAndClientId(
     clientId: string,
     assetId: string,
-    initDoc?: string | Number,
+    initDoc: number = 1,
   ): Promise<Paginate<Transaction> | null> {
     const filterAccountId: Map<string, string> = new Map([
       ["field", "clientId"],
@@ -179,20 +171,14 @@ export class TransactionMongoRepository
       ["value", assetId],
     ]);
 
-    const criteria = new Criteria(
+    const criteria: Criteria = new Criteria(
       Filters.fromValues([filterAccountId, filterAssetCode]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       20,
-      Number(initDoc === "" ? 1 : initDoc),
+      initDoc,
     );
 
-    let document = await this.searchByCriteria<any>(criteria);
-
-    document = document.map((d) => ({
-      ...d,
-      id: d._id.toString(),
-      _id: undefined,
-    }));
+    let document = await this.searchByCriteria<Transaction>(criteria);
 
     return this.buildPaginate<Transaction>(document);
   }

@@ -6,14 +6,14 @@ export interface ITransactionRepository {
   historyTransactionByAssetIdAndClientId(
     clientId: string,
     assetCode: string,
-    initDoc?: string | Number,
-  ): Promise<Paginate<Transaction> | undefined>;
+    initDoc: number,
+  ): Promise<Paginate<Transaction>>;
 
   upsertTransaction(transaction: Transaction): Promise<void>;
 
   findTransactionByClientId(
     accountId: string,
-    initDoc?: string,
+    initDoc: number,
   ): Promise<Paginate<Transaction> | undefined>;
 
   findTransactionByTransactionId(
@@ -25,7 +25,7 @@ export interface ITransactionRepository {
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<Transaction | null>;
+  ): Promise<Transaction | undefined>;
 
   transactionListing(criteria: Criteria): Promise<Paginate<Transaction>>;
 

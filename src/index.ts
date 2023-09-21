@@ -16,6 +16,7 @@ export * from "./swap";
 export * from "./beneficiary";
 export * from "./withdrawal";
 export * from "./documents";
+export * from "./transaction";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";
