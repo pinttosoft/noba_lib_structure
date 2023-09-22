@@ -10,6 +10,9 @@ import {
 } from "../../../shared";
 import { IWithdrawalRequestRepository } from "../../domain/interfaces/withdrawal_request.interface";
 import { WithdrawalRequest } from "../../domain/withdrawal_request";
+import { Counterparty, CounterpartyType } from "../../../counterparty";
+import { CounterpartyAsset } from "../../../asset";
+import { CounterpartyBank } from "../../../banking";
 
 export class WithdrawalRequestMongoRepository
   extends MongoRepository<WithdrawalRequest>
@@ -66,11 +69,28 @@ export class WithdrawalRequestMongoRepository
 
   async findByWithdrawalId(withdrawalId: string): Promise<WithdrawalRequest> {
     const collection = await this.collection();
-    const reuslt = await collection.findOne({ withdrawalId });
-    if (!reuslt) {
+    const result = await collection.findOne({ withdrawalId });
+    if (!result) {
       return undefined;
     }
 
-    return WithdrawalRequest.fromPrimitives(reuslt._id.toString(), reuslt);
+    let counterparty: Counterparty;
+    if (result.counterparty.counterpartyType === CounterpartyType.CRYPTO) {
+      counterparty = CounterpartyAsset.fromPrimitives(
+        result.counterparty.id,
+        result.counterparty,
+      );
+    } else {
+      counterparty = CounterpartyBank.fromPrimitives(
+        result.counterparty.id,
+        result.counterparty,
+      );
+    }
+
+    return WithdrawalRequest.fromPrimitives(
+      result._id.toString(),
+      result,
+      counterparty,
+    );
   }
 }

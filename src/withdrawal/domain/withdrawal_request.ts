@@ -11,13 +11,13 @@ export class WithdrawalRequest extends AggregateRoot {
   private withdrawalId: string;
   private clientId: string;
   private amount: number;
-  private counterpartyId: string;
   private reference: string;
   private status: WithdrawalStatus;
   private withdrawalType: WithdrawalType;
   private observation?: string;
   private createdAt: Date;
   private dateWasProcessed?: Date;
+  private counterparty: Counterparty;
 
   getId(): string {
     return this.id;
@@ -34,7 +34,7 @@ export class WithdrawalRequest extends AggregateRoot {
 
     w.withdrawalId = v4();
     w.clientId = client.getClientId();
-    w.counterpartyId = counterparty.getCounterpartyId();
+    w.counterparty = counterparty;
     w.amount = amount.getValue();
     w.reference = reference;
     w.status = WithdrawalStatus.PENDING;
@@ -44,13 +44,17 @@ export class WithdrawalRequest extends AggregateRoot {
     return w;
   }
 
-  static fromPrimitives(id: string, plainData: any): WithdrawalRequest {
+  static fromPrimitives(
+    id: string,
+    plainData: any,
+    counterparty: Counterparty,
+  ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
     w.id = id;
     w.clientId = plainData.clientId;
     w.amount = plainData.amount;
-    w.counterpartyId = plainData.counterpartyId;
+    w.counterparty = counterparty;
     w.reference = plainData.reference;
     w.status = plainData.status;
     w.withdrawalType = plainData.withdrawalType;
@@ -98,13 +102,21 @@ export class WithdrawalRequest extends AggregateRoot {
     return this.withdrawalType === WithdrawalType.INTERNAL;
   }
 
+  getAmount() {
+    return this.amount;
+  }
+
+  getCounterparty(): Counterparty {
+    return this.counterparty;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
       withdrawalId: this.withdrawalId,
       clientId: this.clientId,
       amount: this.amount,
-      counterpartyId: this.counterpartyId,
+      counterparty: this.counterparty,
       reference: this.reference,
       status: this.status,
       withdrawalType: this.withdrawalType,
