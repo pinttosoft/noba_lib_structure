@@ -67,4 +67,14 @@ export class ClientMongoRepository
   async upsert(client: IClient): Promise<void> {
     await this.persist(client.getId(), client);
   }
+
+  async findByIDNumber(idNumber: string): Promise<IClient> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ idNumber });
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
 }

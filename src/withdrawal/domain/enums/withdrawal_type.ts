@@ -1,4 +1,4 @@
 export enum WithdrawalType {
-  INTERNAL = "EXTERNAL",
-  EXTERNAL = "INTERNAL",
+  INTERNAL = "INTERNAL",
+  EXTERNAL = "EXTERNAL",
 }

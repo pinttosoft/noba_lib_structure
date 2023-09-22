@@ -18,6 +18,7 @@ export class Transaction extends AggregateRoot {
   private createdAt: Date;
 
   static newTransaction(
+    transactionId: string,
     amount: number,
     reference: string,
     clientId: string,
@@ -26,7 +27,7 @@ export class Transaction extends AggregateRoot {
     transactionType: TransactionType,
   ): Transaction {
     const t: Transaction = new Transaction();
-    t.transactionId = v4();
+    t.transactionId = transactionId;
 
     t.reference = reference;
     t.clientId = clientId;

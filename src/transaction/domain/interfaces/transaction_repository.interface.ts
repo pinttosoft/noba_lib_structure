@@ -9,7 +9,7 @@ export interface ITransactionRepository {
     initDoc: number,
   ): Promise<Paginate<Transaction>>;
 
-  upsertTransaction(transaction: Transaction): Promise<void>;
+  upsert(transaction: Transaction): Promise<void>;
 
   findTransactionByClientId(
     accountId: string,

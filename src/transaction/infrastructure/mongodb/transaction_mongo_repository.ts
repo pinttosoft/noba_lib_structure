@@ -183,7 +183,7 @@ export class TransactionMongoRepository
     return this.buildPaginate<Transaction>(document);
   }
 
-  async upsertTransaction(transaction: Transaction): Promise<void> {
+  async upsert(transaction: Transaction): Promise<void> {
     await this.persist(transaction.getId(), transaction.toPrimitives());
   }
 
