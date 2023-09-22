@@ -10,10 +10,8 @@ describe("Exchanges", () => {
       10,
     );
 
-    console.log("test exchanges.results", exchanges.results);
-
-    // expect(Array.isArray(exchanges.results)).toBe(true);
-    // expect(exchanges.results.length).toBeGreaterThan(0);
-    // expect(exchanges.results[0]).toHaveProperty('clientId', clientId);
+    expect(Array.isArray(exchanges.results)).toBe(true);
+    expect(exchanges.results.length).toBeGreaterThan(0);
+    expect(exchanges.results[0]).toHaveProperty("clientId", clientId);
   });
 });
