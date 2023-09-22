@@ -47,7 +47,7 @@ export class Exchange extends AggregateRoot {
     e.exchangeId = exchangeId;
     e.status = ExchangeStatus.REQUESTED;
 
-    if (sourceDetails.wallet.getWalletId().includes("USD")) {
+    if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
       e.feeNoba = sourceDetails.wallet.getClient().getFeeSwap().getFeeForBuy();
       e.baseAmount = sourceDetails.amountDebit.getValue();
     } else {
