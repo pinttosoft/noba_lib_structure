@@ -3,7 +3,7 @@ import { BusinessOpportunityDTO } from "./business_opportunity.type";
 
 export type BusinessAllieDTO = {
   id?: string;
-  accountId: string;
+  clientId: string;
   name: string;
   email: string;
   referredBy?: string;

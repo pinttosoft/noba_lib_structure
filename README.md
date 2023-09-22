@@ -14,3 +14,4 @@ Que para noba.cash son los clientes; los clientes pueden ser clientes due#o de u
 - **Account** Seria lo que llamamos wallet. importante que al momento que en a API de Layer2 se llama al endpoint  v1/accounts/deposits 
 (endpoint para crear lo que llama layer2 account) en seguida se debe llamar al endpoint v1/deposits para obtener la direccion de pago
 en caso de critpos o las referencias de la cuenta en caso de wallet fiat.
+- **Swap** Datos para el proceso de Exchange.

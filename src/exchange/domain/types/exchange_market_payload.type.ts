@@ -1,9 +1,10 @@
 import { ExchangeMarketActionType } from "../enums/exchange_market_action.enum";
+import { IWallet } from "../../../wallet";
 
 export type ExchangeMarketPayload = {
-  sourceAccountId: string;
-  destinationAccountId: string;
+  sourceWallet: IWallet;
+  destinationWallet: IWallet;
   amount: number;
-  action?: ExchangeMarketActionType;
   description: string;
+  action?: ExchangeMarketActionType;
 };

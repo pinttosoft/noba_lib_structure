@@ -26,4 +26,9 @@ export interface IWalletRepository {
     page: number,
     rowPerPage: number,
   ): Promise<Paginate<InstructionDepositCrypto>>;
+
+  findWalletByClientIdAndWalletId(
+    clientId: string,
+    walletId: string,
+  ): Promise<IWallet | undefined>;
 }

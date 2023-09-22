@@ -12,4 +12,4 @@ export { IBusinessAllieRepository } from "./interfaces/business_allie_repository
 export { BusinessAllieStatus } from "./enums/business_allie_status.enum";
 export { BusinessOpportunityStatus } from "./enums/business_opportunity_status.enum";
 
-export { Business_allie_mongo_repository } from "./infrastructure/mongodb/business_allie_mongo_repository";
+export { BusinessAllieMongoRepository } from "./infrastructure/mongodb/business_allie_mongo_repository";
