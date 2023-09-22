@@ -1,4 +1,5 @@
 import { Address } from "../../../shared";
+import { Documents } from "../../../documents";
 
 export interface IOwnerAccount {
   toPrimitives(): any;
@@ -6,4 +7,5 @@ export interface IOwnerAccount {
   getName(): string;
   getEmail(): string;
   getIdentifyNumber(): string;
+  setDocument(document: Documents): void;
 }

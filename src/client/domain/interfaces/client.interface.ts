@@ -4,6 +4,8 @@ import { ResidencyStatus } from "../enums/residency_status";
 import { CompanyType } from "../enums/company_type.enum";
 import { FeeSwap, FeeWire } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
+import { Documents } from "../../../documents";
+import { IndividualDTO } from "../types/Individual.type";
 
 export interface IClient {
   getId(): string;
@@ -27,4 +29,8 @@ export interface IClient {
   getStatus(): AccountStatus;
   getFeeSwap(): FeeSwap;
   getFeeWire(): FeeWire;
+  setDocument(dni: string, document: Documents): IClient;
+  activeTwoFactorAuth(): void;
+  disableTwoFactorAuth(): void;
+  updateData(data: IndividualDTO | CompanyDTO): void;
 }

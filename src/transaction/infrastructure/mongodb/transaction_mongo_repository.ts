@@ -10,11 +10,10 @@ import {
   Paginate,
   WithdrawalStatus,
 } from "../../../shared";
-import {
-  ITransactionRepository,
-  TransactionDTO,
-  TransactionType,
-} from "../../index";
+import { ITransactionRepository, TransactionType } from "../../index";
+import { Counterparty, CounterpartyType } from "../../../counterparty";
+import { CounterpartyBank } from "../../../banking";
+import { CounterpartyAsset } from "../../../asset";
 
 export class TransactionMongoRepository
   extends MongoRepository<Transaction>
@@ -39,66 +38,15 @@ export class TransactionMongoRepository
     return "transaction";
   }
 
-  async findByAssetTransferMethodAndStatusAndAmount(
-    assetCode: string,
-    assetTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null> {
-    const collection = await this.collection();
-    const filter = {
-      "to.assetTransferMethod": assetTransferMethod,
-      assetCode: assetCode,
-      status,
-      amount,
-    };
-
-    const result = await collection.findOne(filter);
-
-    if (!result) {
-      return null;
-    }
-
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
-  }
-
-  async findByFundsTransferMethodAndStatusAndAmount(
-    fundsTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null> {
-    const collection = await this.collection();
-    const filter = {
-      "to.fundsTransferMethods": fundsTransferMethod,
-      status,
-      amount,
-      assetCode: "USD",
-    };
-
-    const result = await collection.findOne(filter);
-
-    if (!result) {
-      return null;
-    }
-
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
-  }
-
-  async findDepositByAssetCodeAndAmountAndStatusAndReference(
-    assetCode: string,
+  async findDepositByAssetIdAndAmountAndStatusAndReference(
+    assetId: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO | null> {
+  ): Promise<Transaction | undefined> {
     const collection = await this.collection();
     const filter = {
-      assetCode,
+      assetId,
       status,
       amount,
       reference,
@@ -111,16 +59,18 @@ export class TransactionMongoRepository
       return null;
     }
 
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
+    const counterparty: Counterparty = this.buildCounterparty(result);
+    return Transaction.fromPrimitives(
+      result._id.toString(),
+      result,
+      counterparty,
+    );
   }
 
-  async findTransactionByAccountId(
+  async findTransactionByClientId(
     accountId: string,
-    initDoc?: string,
-  ): Promise<Paginate<TransactionDTO>> {
+    initDoc: number,
+  ): Promise<Paginate<Transaction>> {
     const filterAccountId: Map<string, string> = new Map([
       ["field", "accountId"],
       ["operator", Operator.EQUAL],
@@ -131,17 +81,17 @@ export class TransactionMongoRepository
       Filters.fromValues([filterAccountId]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       20,
-      Number(initDoc),
+      initDoc,
     );
 
-    const document = await this.searchByCriteria<TransactionDTO>(criteria);
+    const document = await this.searchByCriteria<Transaction>(criteria);
 
-    return this.buildPaginate<TransactionDTO>(document);
+    return this.buildPaginate<Transaction>(document);
   }
 
   async findTransactionByTransactionId(
     transactionId: string,
-  ): Promise<TransactionDTO | null> {
+  ): Promise<Transaction | undefined> {
     const filter = {
       transactionId,
     };
@@ -149,25 +99,40 @@ export class TransactionMongoRepository
     const result = await collection.findOne(filter);
 
     if (!result) {
-      return null;
+      return undefined;
     }
 
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
+    const counterparty: Counterparty = this.buildCounterparty(result);
+
+    return Transaction.fromPrimitives(
+      result._id.toString(),
+      result,
+      counterparty,
+    );
   }
 
-  async findWithdrawalByAccountIdAndAssetCodeAndAmountAndStatusAndReference(
-    accountId: string,
-    assetCode: string,
+  private buildCounterparty(result: any): Counterparty {
+    return result.counterparty.counterpartyType == CounterpartyType.FIAT
+      ? CounterpartyBank.fromPrimitives(
+          result.counterparty.id,
+          result.counterparty,
+        )
+      : CounterpartyAsset.fromPrimitives(
+          result.counterparty.id,
+          result.counterparty,
+        );
+  }
+
+  async findWithdrawalByClientIdAndAssetIdAndAmountAndStatusAndReference(
+    clientId: string,
+    assetId: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO> {
+  ): Promise<Transaction | undefined> {
     const filter = {
-      accountId,
-      assetCode,
+      clientId,
+      assetId,
       status,
       amount,
       reference,
@@ -177,57 +142,52 @@ export class TransactionMongoRepository
     const result = await collection.findOne(filter);
 
     if (!result) {
-      return null;
+      return undefined;
     }
 
-    return {
-      ...result,
-      id: result._id.toString(),
-    } as unknown as TransactionDTO;
+    const counterparty: Counterparty = this.buildCounterparty(result);
+
+    return Transaction.fromPrimitives(
+      result._id.toString(),
+      result,
+      counterparty,
+    );
   }
 
-  async historyTransactionByAssetCodeAndAccountId(
-    accountId: string,
-    assetCode: string,
-    initDoc?: string | Number,
-  ): Promise<Paginate<TransactionDTO> | null> {
+  async historyTransactionByAssetIdAndClientId(
+    clientId: string,
+    assetId: string,
+    initDoc: number = 1,
+  ): Promise<Paginate<Transaction> | null> {
     const filterAccountId: Map<string, string> = new Map([
-      ["field", "accountId"],
+      ["field", "clientId"],
       ["operator", Operator.EQUAL],
-      ["value", accountId],
+      ["value", clientId],
     ]);
 
     const filterAssetCode: Map<string, string> = new Map([
-      ["field", "assetCode"],
+      ["field", "assetId"],
       ["operator", Operator.EQUAL],
-      ["value", assetCode],
+      ["value", assetId],
     ]);
 
-    const criteria = new Criteria(
+    const criteria: Criteria = new Criteria(
       Filters.fromValues([filterAccountId, filterAssetCode]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       20,
-      Number(initDoc === "" ? 1 : initDoc),
+      initDoc,
     );
 
-    let document = await this.searchByCriteria<any>(criteria);
+    let document = await this.searchByCriteria<Transaction>(criteria);
 
-    document = document.map((d) => ({
-      ...d,
-      id: d._id.toString(),
-      _id: undefined,
-    }));
-
-    return this.buildPaginate<TransactionDTO>(document);
+    return this.buildPaginate<Transaction>(document);
   }
 
   async upsertTransaction(transaction: Transaction): Promise<void> {
     await this.persist(transaction.getId(), transaction.toPrimitives());
   }
 
-  async transactionListing(
-    criteria: Criteria,
-  ): Promise<Paginate<TransactionDTO>> {
+  async transactionListing(criteria: Criteria): Promise<Paginate<Transaction>> {
     let document = await this.searchByCriteria<any>(criteria);
 
     document = document.map((d) => ({
@@ -236,6 +196,6 @@ export class TransactionMongoRepository
       _id: undefined,
     }));
 
-    return this.buildPaginate<TransactionDTO>(document);
+    return this.buildPaginate<Transaction>(document);
   }
 }

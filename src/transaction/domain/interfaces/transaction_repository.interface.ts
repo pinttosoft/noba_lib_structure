@@ -3,50 +3,37 @@ import { TransactionDTO } from "../types/transaction.type";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 
 export interface ITransactionRepository {
-  historyTransactionByAssetCodeAndAccountId(
-    accountId: string,
+  historyTransactionByAssetIdAndClientId(
+    clientId: string,
     assetCode: string,
-    initDoc?: string | Number,
-  ): Promise<Paginate<TransactionDTO> | null>;
+    initDoc: number,
+  ): Promise<Paginate<Transaction>>;
 
   upsertTransaction(transaction: Transaction): Promise<void>;
 
-  findTransactionByAccountId(
+  findTransactionByClientId(
     accountId: string,
-    initDoc?: string,
-  ): Promise<Paginate<TransactionDTO> | null>;
-
-  findByAssetTransferMethodAndStatusAndAmount(
-    assetCode: string,
-    assetTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null>;
-
-  findByFundsTransferMethodAndStatusAndAmount(
-    fundsTransferMethod: string,
-    status: WithdrawalStatus,
-    amount: number,
-  ): Promise<TransactionDTO | null>;
+    initDoc: number,
+  ): Promise<Paginate<Transaction> | undefined>;
 
   findTransactionByTransactionId(
     transactionId: string,
-  ): Promise<TransactionDTO | null>;
+  ): Promise<Transaction | null>;
 
-  findDepositByAssetCodeAndAmountAndStatusAndReference(
+  findDepositByAssetIdAndAmountAndStatusAndReference(
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO | null>;
+  ): Promise<Transaction | undefined>;
 
-  transactionListing(criteria: Criteria): Promise<Paginate<TransactionDTO>>;
+  transactionListing(criteria: Criteria): Promise<Paginate<Transaction>>;
 
-  findWithdrawalByAccountIdAndAssetCodeAndAmountAndStatusAndReference(
-    accountId: string,
+  findWithdrawalByClientIdAndAssetIdAndAmountAndStatusAndReference(
+    clientId: string,
     assetCode: string,
     amount: number,
     status: WithdrawalStatus,
     reference: string,
-  ): Promise<TransactionDTO>;
+  ): Promise<Transaction | undefined>;
 }

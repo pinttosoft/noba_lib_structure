@@ -1,72 +1,63 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
-// import {
-//   Beneficiary_asset_withdrawalDTO,
-//   BeneficiaryBankWithdrawalDTO,
-// } from "../../beneficiary";
 import { TransactionType } from "./enums/transaction_type.enum";
-import { StringValueObject, WithdrawalStatus } from "../../shared";
+import { WithdrawalStatus } from "../../shared";
+import { Counterparty } from "../../counterparty";
+import { v4 } from "uuid";
 
 export class Transaction extends AggregateRoot {
   private id?: string;
   private transactionId: string;
-  private accountId: string;
-  private assetCode: string;
-  // private to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO;
-  private nameTo?: string;
-  private emailTo?: string;
-  private accountTo?: string;
+  private clientId: string;
+  private assetId: string;
   private amount: number;
   private transactionType: TransactionType;
   private reference: string;
   private isInternal: boolean;
+  private counterparty: Counterparty;
   private status: WithdrawalStatus;
   private createdAt: Date;
 
   static newTransaction(
-    transactionId: string,
-    accountId: StringValueObject,
-    assetCode: string,
     amount: number,
-    transactionType: TransactionType,
     reference: string,
+    clientId: string,
     isInternal: boolean,
-    status?: WithdrawalStatus,
-    //to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
-    nameTo?: string,
-    emailTo?: string,
-    accountTo?: string,
+    counterparty: Counterparty,
+    transactionType: TransactionType,
   ): Transaction {
-    return new Transaction();
+    const t: Transaction = new Transaction();
+    t.transactionId = v4();
+
+    t.reference = reference;
+    t.clientId = clientId;
+    t.isInternal = isInternal;
+    t.createdAt = new Date();
+    t.amount = amount;
+
+    t.status = WithdrawalStatus.IN_PROCESS;
+    t.transactionType = transactionType;
+    t.counterparty = counterparty;
+    t.assetId = counterparty.getAssetId();
+
+    return t;
   }
 
   static fromPrimitives(
     id: string,
-    transactionId: string,
-    accountId: StringValueObject,
-    assetCode: string,
-    amount: number,
-    transactionType: TransactionType,
-    reference: string,
-    isInternal: boolean,
-    status?: WithdrawalStatus,
-    //to?: BeneficiaryBankWithdrawalDTO | Beneficiary_asset_withdrawalDTO,
-    nameTo?: string,
-    emailTo?: string,
-    accountTo?: string,
+    data: any,
+    counterparty: Counterparty,
   ): Transaction {
     const t: Transaction = new Transaction();
-    t.transactionId = transactionId;
-    t.accountId = accountId.toString();
-    t.assetCode = assetCode;
-    t.amount = amount;
-    t.transactionType = transactionType;
-    t.reference = reference;
-    t.isInternal = isInternal;
-    t.status = status ?? WithdrawalStatus.IN_PROCESS;
-    //t.to = to;
-    t.nameTo = nameTo;
-    t.emailTo = emailTo;
-    t.accountTo = accountTo;
+    t.clientId = data.clientId;
+    t.amount = data.amount;
+    t.reference = data.reference;
+    t.status = data.status;
+    t.transactionType = data.transactionType;
+    t.isInternal = data.isInternal;
+    t.createdAt = data.createdAt;
+    t.id = id;
+    t.counterparty = counterparty;
+    t.assetId = counterparty.getAssetId();
 
     return t;
   }
@@ -75,23 +66,23 @@ export class Transaction extends AggregateRoot {
     return this.id;
   }
 
+  getCounterparty(): Counterparty {
+    return this.counterparty;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
       transactionId: this.transactionId,
-      accountId: this.accountId,
-      assetCode: this.assetCode,
-      //to: this.to,
-      nameTo: this.nameTo,
-      emailTo: this.emailTo,
-      accountTo: this.accountTo,
+      clientId: this.clientId,
+      assetId: this.assetId,
+      counterparty: this.counterparty.toPrimitives(),
       amount: this.amount,
       transactionType: this.transactionType,
       reference: this.reference,
       isInternal: this.isInternal,
-
-      status: WithdrawalStatus,
-      createdAt: Date,
+      status: this.status,
+      createdAt: this.createdAt,
     };
   }
 }

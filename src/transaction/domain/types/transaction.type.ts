@@ -1,7 +1,3 @@
-// import {
-//   Beneficiary_asset_withdrawalDTO,
-//   BeneficiaryBankWithdrawalDTO,
-// } from "../../../beneficiary";
 import { TransactionType } from "../enums/transaction_type.enum";
 import { WithdrawalStatus } from "../../../shared";
 

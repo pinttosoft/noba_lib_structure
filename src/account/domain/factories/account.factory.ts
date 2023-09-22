@@ -4,6 +4,7 @@ import { IAccount } from "../interfaces/account.interface";
 import { Account } from "../account";
 import { OwnerAccountFactory } from "./owner_account.facytory";
 import { GenericException } from "../../../shared";
+import { AccountStatus } from "../enums/account_status.enum";
 
 export class AccountFactory {
   static createNewAccount(
@@ -12,6 +13,7 @@ export class AccountFactory {
   ): IAccount {
     const a: Account = new Account();
     a.setAccountType(accountType).setOwner(owner);
+    a.setStatus(AccountStatus.REGISTERED);
 
     a.build();
 
@@ -22,14 +24,13 @@ export class AccountFactory {
     const a: Account = new Account();
 
     try {
-      const companyPartners: IOwnerAccount[] = data.companyPartners.map(
-        (p: any) => OwnerAccountFactory.factoryOwnerAccount(p, data.type),
+      const owner = OwnerAccountFactory.factoryOwnerAccount(
+        data.owner,
+        data.type,
       );
 
       a.setId(id)
-        .setOwner(
-          OwnerAccountFactory.factoryOwnerAccount(data.owner, data.type),
-        )
+        .setOwner(owner)
         .setStatus(data.status)
         .setAccountType(data.type)
         .setAccountId(data.accountId);

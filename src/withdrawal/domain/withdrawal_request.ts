@@ -28,6 +28,7 @@ export class WithdrawalRequest extends AggregateRoot {
     counterparty: Counterparty,
     amount: AmountValueObject,
     reference: string,
+    withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
@@ -38,6 +39,7 @@ export class WithdrawalRequest extends AggregateRoot {
     w.reference = reference;
     w.status = WithdrawalStatus.PENDING;
     w.createdAt = new Date();
+    w.withdrawalType = withdrawalType;
 
     return w;
   }
@@ -56,6 +58,18 @@ export class WithdrawalRequest extends AggregateRoot {
     w.dateWasProcessed = plainData.dateWasProcessed ?? null;
 
     return w;
+  }
+
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  getReference(): string {
+    return this.reference;
+  }
+
+  getClientId(): string {
+    return this.clientId;
   }
 
   markAsProcessed(): WithdrawalRequest {
@@ -77,6 +91,10 @@ export class WithdrawalRequest extends AggregateRoot {
 
   getWithdrawalId(): string {
     return this.withdrawalId;
+  }
+
+  isInternal(): boolean {
+    return this.withdrawalType === WithdrawalType.INTERNAL;
   }
 
   toPrimitives(): any {

@@ -5,3 +5,4 @@ export { ITransactionRepository } from "./domain/interfaces/transaction_reposito
 export { ITransactionService } from "./domain/interfaces/transaction_service";
 
 export { TransactionMongoRepository } from "./infrastructure/mongodb/transaction_mongo_repository";
+export { Transaction } from "./domain/transaction";

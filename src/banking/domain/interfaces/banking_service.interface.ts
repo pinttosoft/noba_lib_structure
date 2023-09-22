@@ -19,4 +19,11 @@ export interface IBankingService {
     assetId: string,
     informationBank: InformationBankDTO,
   ): Promise<CounterpartyBank>;
+
+  internalTransfer(
+    sourceWalletId: string,
+    destinationWalletId: string,
+    amount: number,
+    description?: string,
+  ): Promise<string>;
 }

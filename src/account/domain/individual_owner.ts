@@ -1,6 +1,7 @@
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
 import { IndividualDTO } from "../../client";
 import { Address } from "../../shared";
+import { Documents } from "../../documents";
 
 export class IndividualOwner implements IOwnerAccount {
   constructor(private readonly individual: IndividualDTO) {}
@@ -25,6 +26,14 @@ export class IndividualOwner implements IOwnerAccount {
 
   toPrimitives(): any {
     return { ...this.individual };
+  }
+
+  setDocument(document: Documents) {
+    if (this.individual.documents && this.individual.documents.length > 0) {
+      this.individual.documents.push(document.toPrimitives());
+    } else {
+      this.individual.documents = [document.toPrimitives()];
+    }
   }
 
   getAddress(): Address {

@@ -13,6 +13,7 @@ export abstract class Counterparty extends AggregateRoot {
   protected assetId: string;
   protected relationshipConsumer: RelationshipConsumer;
   protected createdAt: Date;
+  protected isInternal: boolean;
 
   getId(): string | undefined {
     return this.id;
@@ -36,6 +37,10 @@ export abstract class Counterparty extends AggregateRoot {
 
   getClientId() {
     return this.clientId;
+  }
+
+  getIsInternal(): boolean {
+    return this.isInternal;
   }
 
   getRelationConsumer(): RelationshipConsumer {
