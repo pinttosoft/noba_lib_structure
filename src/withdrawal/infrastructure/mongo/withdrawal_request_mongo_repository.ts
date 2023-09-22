@@ -63,4 +63,14 @@ export class WithdrawalRequestMongoRepository
   async upsert(withdrawal: WithdrawalRequest): Promise<void> {
     await this.persist(withdrawal.getId(), withdrawal);
   }
+
+  async findByWithdrawalId(withdrawalId: string): Promise<WithdrawalRequest> {
+    const collection = await this.collection();
+    const reuslt = await collection.findOne({ withdrawalId });
+    if (!reuslt) {
+      return undefined;
+    }
+
+    return WithdrawalRequest.fromPrimitives(reuslt._id.toString(), reuslt);
+  }
 }

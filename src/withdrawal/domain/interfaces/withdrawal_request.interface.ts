@@ -8,5 +8,10 @@ export interface IWithdrawalRequestRepository {
     page: number,
     rowPerPage: number,
   ): Promise<Paginate<WithdrawalRequest>>;
+
+  findByWithdrawalId(
+    withdrawalId: string,
+  ): Promise<WithdrawalRequest | undefined>;
+
   list(criteria: Criteria): Promise<Paginate<WithdrawalRequest>>;
 }

@@ -44,9 +44,10 @@ export class WithdrawalRequest extends AggregateRoot {
     return w;
   }
 
-  static fromPrimitives(plainData: any): WithdrawalRequest {
+  static fromPrimitives(id: string, plainData: any): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
+    w.id = id;
     w.clientId = plainData.clientId;
     w.amount = plainData.amount;
     w.counterpartyId = plainData.counterpartyId;
