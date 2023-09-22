@@ -57,8 +57,8 @@ export class ExchangeMongoRepository
     const criteria: Criteria = new Criteria(
       Filters.fromValues([filterClientId]),
       Order.fromValues("createdAt", OrderTypes.DESC),
-      page,
       perPage,
+      page,
     );
 
     const document = await this.searchByCriteria<Exchange>(criteria);
