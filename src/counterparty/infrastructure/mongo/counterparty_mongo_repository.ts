@@ -10,7 +10,12 @@ import {
   ICounterpartyRepository,
 } from "../../index";
 import { CounterpartyBank } from "../../../banking";
-import { CounterpartyAsset } from "../../../asset";
+import {
+  Asset,
+  AssetMongoRepository,
+  AssetNotFound,
+  CounterpartyAsset,
+} from "../../../asset";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
@@ -69,6 +74,35 @@ export class CounterpartyMongoRepository
 
     const result = await collection.findOne({
       counterpartyId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+  }
+
+  async findByCounterpartyIdAndAssetCode(
+    counterpartyId: string,
+    assetCode: string,
+  ): Promise<Counterparty | undefined> {
+    const asset: Asset =
+      await AssetMongoRepository.instance().findAssetByCode(assetCode);
+
+    if (!asset) {
+      throw new AssetNotFound();
+    }
+
+    const collection = await this.collection();
+
+    const result = await collection.findOne({
+      counterpartyId,
+      "informationWallet.assetId": asset.getAssetId(),
     });
 
     if (!result) {

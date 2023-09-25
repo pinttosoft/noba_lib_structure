@@ -68,6 +68,10 @@ export class CounterpartyAsset extends Counterparty {
     return this.informationWallet;
   }
 
+  getName(): string {
+    return this.ownerName;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,

@@ -26,4 +26,11 @@ export interface IBankingService {
     amount: number,
     description?: string,
   ): Promise<string>;
+
+  makeWithdrawal(
+    sourceWalletId: string,
+    amount: number,
+    counterparty: CounterpartyBank,
+    description?: string,
+  ): Promise<string>;
 }

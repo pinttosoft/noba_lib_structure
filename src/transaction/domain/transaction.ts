@@ -2,7 +2,6 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { TransactionType } from "./enums/transaction_type.enum";
 import { WithdrawalStatus } from "../../shared";
 import { Counterparty } from "../../counterparty";
-import { v4 } from "uuid";
 
 export class Transaction extends AggregateRoot {
   private id?: string;
@@ -25,6 +24,7 @@ export class Transaction extends AggregateRoot {
     isInternal: boolean,
     counterparty: Counterparty,
     transactionType: TransactionType,
+    status?: WithdrawalStatus,
   ): Transaction {
     const t: Transaction = new Transaction();
     t.transactionId = transactionId;
@@ -35,10 +35,10 @@ export class Transaction extends AggregateRoot {
     t.createdAt = new Date();
     t.amount = amount;
 
-    t.status = WithdrawalStatus.IN_PROCESS;
     t.transactionType = transactionType;
     t.counterparty = counterparty;
     t.assetId = counterparty.getAssetId();
+    t.status = status ?? WithdrawalStatus.IN_PROCESS;
 
     return t;
   }
@@ -67,8 +67,33 @@ export class Transaction extends AggregateRoot {
     return this.id;
   }
 
+  getTransactionId(): string {
+    return this.transactionId;
+  }
+
   getCounterparty(): Counterparty {
     return this.counterparty;
+  }
+
+  getClientId(): string {
+    return this.clientId;
+  }
+
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  getAmount(): number {
+    return this.amount;
+  }
+
+  getReference(): string {
+    return this.reference;
+  }
+
+  cancelTransaction(): Transaction {
+    this.status = WithdrawalStatus.CANCELLED;
+    return this;
   }
 
   toPrimitives(): any {

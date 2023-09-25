@@ -133,8 +133,36 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   updateLookBalance(amount: number): Wallet {
-    this.lockedBalance = Number(this.lockedBalance) + Number(amount);
+    let d = 3;
+
+    if (this.getAsset().getAssetCode() !== "USD") {
+      d = 8;
+    }
+
+    this.lockedBalance = this.truncate(
+      Number(this.lockedBalance) - Number(amount),
+      d,
+    );
     return this;
+  }
+
+  updateBalance(amount: number): Wallet {
+    let d = 3;
+
+    if (this.getAsset().getAssetCode() !== "USD") {
+      d = 8;
+    }
+
+    this.balance = this.truncate(Number(this.balance) - Number(amount), d);
+    return this;
+  }
+
+  private truncate(n, d: number) {
+    let s = n.toString();
+    let l = s.length;
+    let decimalLength = s.indexOf(".") + 1;
+    let numStr = s.substr(0, decimalLength + d);
+    return Number(numStr);
   }
 
   toPrimitives(): any {

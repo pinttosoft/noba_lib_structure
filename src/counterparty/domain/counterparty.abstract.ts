@@ -46,4 +46,6 @@ export abstract class Counterparty extends AggregateRoot {
   getRelationConsumer(): RelationshipConsumer {
     return this.relationshipConsumer;
   }
+
+  abstract getName(): string;
 }

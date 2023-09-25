@@ -43,11 +43,11 @@ export class CounterpartyBank extends Counterparty {
       }
     } else {
       if (
-        counterpartyBank.swiftCode === undefined ||
+        counterpartyBank.swiftCode === undefined &&
         counterpartyBank.iban === undefined
       ) {
         throw new GenericException(
-          "The fields swiftCode and IBAN are mandatory",
+          "The fields swiftCode or IBAN are mandatory",
         );
       }
       counterparty.swiftCode = counterpartyBank.swiftCode;
@@ -123,6 +123,10 @@ export class CounterpartyBank extends Counterparty {
       name: this.ownerName,
       address: this.ownerAddress,
     };
+  }
+
+  getName() {
+    return this.ownerName;
   }
 
   toPrimitives(): any {

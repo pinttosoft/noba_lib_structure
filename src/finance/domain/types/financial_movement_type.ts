@@ -3,7 +3,7 @@ import { FinancialMovementStatus } from "../enums/financial_movement_status.enum
 
 export type FinancialMovement = {
   id?: string;
-  accountId: string;
+  clientId: string;
   referenceId: string;
   amount: number;
   typeFinancialMovement: TypeFinancialMovement;

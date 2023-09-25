@@ -19,5 +19,10 @@ export interface ICounterpartyRepository {
     counterpartyId: string,
   ): Promise<Counterparty | undefined>;
 
+  findByCounterpartyIdAndAssetCode(
+    counterpartyId: string,
+    assetCode: string,
+  ): Promise<Counterparty | undefined>;
+
   list(criteria: Criteria): Promise<Paginate<Counterparty> | undefined>;
 }

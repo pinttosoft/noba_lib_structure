@@ -1,6 +1,6 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "0.0.144",
+  "version": "0.0.152",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/pinttosoft/noba_lib_segregated_structure.git"
   },
-  "author": "angel bejarano / angel.bejarano@jaspesoft.com",
+  "author": "angel bej arano / angel.bejarano@jaspesoft.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/pinttosoft/noba_lib_segregated_structure/issues"
