@@ -13,3 +13,5 @@ export { CounterpartyMongoRepository } from "./infrastructure/mongo/counterparty
 export { CounterpartyNotFound } from "./domain/exceptions/counterparty_not_found";
 
 export { CounterpartyFound } from "./domain/exceptions/counterparty_found";
+
+export { RegisterOrSearchCounterpartyInternal } from "./application/register_or_search_counterparty_internal";
