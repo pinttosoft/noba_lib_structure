@@ -87,22 +87,15 @@ export class CounterpartyMongoRepository
     return CounterpartyBank.fromPrimitives(result._id.toString(), result);
   }
 
-  async findByCounterpartyIdAndAssetCode(
+  async findByCounterpartyIdAndAssetId(
     counterpartyId: string,
-    assetCode: string,
+    assetId: string,
   ): Promise<Counterparty | undefined> {
-    const asset: Asset =
-      await AssetMongoRepository.instance().findAssetByCode(assetCode);
-
-    if (!asset) {
-      throw new AssetNotFound();
-    }
-
     const collection = await this.collection();
 
     const result = await collection.findOne({
       counterpartyId,
-      "informationWallet.assetId": asset.getAssetId(),
+      "informationWallet.assetId": assetId,
     });
 
     if (!result) {
