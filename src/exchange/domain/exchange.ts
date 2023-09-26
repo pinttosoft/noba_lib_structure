@@ -100,6 +100,9 @@ export class Exchange extends AggregateRoot {
   getId(): string {
     return this.id;
   }
+  getAssetCode(): string {
+    return this.sourceDetails.assetCode;
+  }
 
   calculateFee(): Exchange {
     // const fee: number = (this.baseAmount * this.feeNoba) / 100;
