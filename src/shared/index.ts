@@ -28,3 +28,5 @@ export { removeUndefined, exceptionResponse } from "./helpers/index";
 export { checkPassword } from "./helpers/hash";
 
 export { PubSubMessage } from "./infrastructure/pubsub";
+
+export { encrypt } from "./helpers/hash";
