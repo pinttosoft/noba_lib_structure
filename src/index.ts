@@ -17,6 +17,7 @@ export * from "./withdrawal";
 export * from "./documents";
 export * from "./transaction";
 export * from "./finance";
+export * from "./world";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";
