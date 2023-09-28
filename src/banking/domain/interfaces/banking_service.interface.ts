@@ -33,4 +33,9 @@ export interface IBankingService {
     counterparty: CounterpartyBank,
     description?: string,
   ): Promise<string>;
+
+  searchBalanceWallet(walletId: string): Promise<{
+    current_balance: number;
+    available_balance: number;
+  }>;
 }

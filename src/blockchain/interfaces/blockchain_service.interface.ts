@@ -32,4 +32,9 @@ export interface IBlockchainService {
     counterparty: CounterpartyAsset,
     description?: string,
   ): Promise<string>;
+
+  searchBalanceWallet(walletId: string): Promise<{
+    current_balance: number;
+    available_balance: number;
+  }>;
 }

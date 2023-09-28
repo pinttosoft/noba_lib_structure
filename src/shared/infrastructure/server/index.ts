@@ -1,8 +1,8 @@
-import bodyParser = require("body-parser");
 import cors = require("cors");
 import express = require("express");
 import fileUpload = require("express-fileupload");
 import rateLimit from "express-rate-limit";
+import bodyParser = require("body-parser");
 
 export function server(port = 8080) {
   const app = express();
