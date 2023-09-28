@@ -18,7 +18,7 @@ export interface IWallet {
   getAccountId(): string;
   getIdentifierForInstructionOfDeposit(label: string): string;
   getInstructionForDeposit(): InstructionDepositCrypto | InstructionDepositFiat;
-
+  setNewBalance(balance: number, lockedBalance: number): IWallet;
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
   updateLookBalance(amount: number): IWallet;
   updateBalance(amount: number): IWallet;

@@ -166,6 +166,14 @@ export class Exchange extends AggregateRoot {
     return this.clientId;
   }
 
+  getFeeNoba() {
+    return this.feeNoba;
+  }
+
+  getFeeBusinessAllie() {
+    return this.feeBusinessAllie;
+  }
+
   toPrimitives(): any {
     return {
       clientId: this.clientId,

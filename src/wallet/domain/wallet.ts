@@ -157,6 +157,12 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
+  setNewBalance(balance: number, lockedBalance: number): Wallet {
+    this.balance = balance;
+    this.lockedBalance = lockedBalance;
+    return this;
+  }
+
   private truncate(n, d: number) {
     let s = n.toString();
     let l = s.length;

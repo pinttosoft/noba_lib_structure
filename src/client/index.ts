@@ -13,3 +13,5 @@ export { ClientNotFound } from "./domain/exceptions/client_not_found";
 export { InvalidMethodForClientType } from "./domain/exceptions/invalid_method_client_type";
 
 export { ClientMongoRepository } from "./infrastructure/mongo/client_mongo_repository";
+
+export { FindByClientId } from "./applications/find_by_client_id";

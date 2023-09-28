@@ -229,4 +229,19 @@ export class WalletMongoRepository
   //     },
   //   );
   // }
+
+  async findByWalletId(walletId: string): Promise<IWallet | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<WalletDocument>({ walletId });
+    if (!result) {
+      return undefined;
+    }
+
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(result.clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
+  }
 }

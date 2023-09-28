@@ -31,4 +31,6 @@ export interface IWalletRepository {
     clientId: string,
     walletId: string,
   ): Promise<IWallet | undefined>;
+
+  findByWalletId(walletId: string): Promise<IWallet | undefined>;
 }
