@@ -9,7 +9,6 @@ export function server(port = 8080) {
   app.use(express.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.disable("x-powered-by");
-  app.set("trust proxy", true);
 
   const corsOptions = {
     origin: "*",
