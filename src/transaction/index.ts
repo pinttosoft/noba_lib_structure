@@ -6,4 +6,4 @@ export { ITransactionService } from "./domain/interfaces/transaction_service";
 
 export { TransactionMongoRepository } from "./infrastructure/mongodb/transaction_mongo_repository";
 export { Transaction } from "./domain/transaction";
-export { MakeInternalTransfer } from "./applications/make_internal_transfer";
+export { MakeRequestInternalTransfer } from "./applications/make_request_internal_transfer";

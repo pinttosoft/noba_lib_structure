@@ -20,7 +20,7 @@ import { FindByClientId, IClient, IClientRepository } from "../../client";
 import { AmountValueObject } from "../../shared";
 import { logger } from "../../index";
 
-export class MakeInternalTransfer {
+export class MakeRequestInternalTransfer {
   constructor(
     private readonly clientRepository: IClientRepository,
     private readonly walletRepository: IWalletRepository,
