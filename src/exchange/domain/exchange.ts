@@ -14,6 +14,8 @@ export class Exchange extends AggregateRoot {
   private feeAmount: number;
   private feeNoba: number;
   private feeBusinessAllie: number;
+  private feePercentageBusinessAllie: number;
+  private feePercentageNoba: number;
   private sourceDetails: {
     assetCode: string;
     walletId: string;
@@ -48,7 +50,10 @@ export class Exchange extends AggregateRoot {
     e.status = ExchangeStatus.REQUESTED;
 
     if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
-      e.feeNoba = sourceDetails.wallet.getClient().getFeeSwap().getFeeForBuy();
+      e.feePercentageNoba = sourceDetails.wallet
+        .getClient()
+        .getFeeSwap()
+        .getFeeForBuy();
       e.baseAmount = sourceDetails.amountDebit.getValue();
     } else {
       e.feeNoba = destinationDetails.wallet
@@ -72,8 +77,10 @@ export class Exchange extends AggregateRoot {
     };
 
     if (opportunity) {
-      e.feeBusinessAllie = opportunity.getFeeSwap();
+      e.feePercentageBusinessAllie = opportunity.getFeeSwap();
     }
+
+    e.calculateFee();
 
     return e;
   }
@@ -93,6 +100,8 @@ export class Exchange extends AggregateRoot {
     e.createdAt = data.createdAt;
     e.acceptedAt = data.acceptedAt;
     e.id = id;
+    e.feePercentageNoba = data.feePercentageNoba;
+    e.feePercentageBusinessAllie = data.feePercentageBusinessAllie;
 
     return e;
   }
@@ -100,28 +109,21 @@ export class Exchange extends AggregateRoot {
   getId(): string {
     return this.id;
   }
+
   getAssetCode(): string {
     return this.sourceDetails.assetCode;
   }
 
   calculateFee(): Exchange {
-    // const fee: number = (this.baseAmount * this.feeNoba) / 100;
-    // if (this.feeBusinessAllie > 0) {
-    //   this.feeAmount = fee + this.feeBusinessAllie;
-    // } else {
-    //   this.feeAmount = fee;
-    // }
-    //
-    // this.calculateTotalAmount();
-    // return this;
-
-    let feePercentageTotal = 0;
     if (this.feeBusinessAllie > 0) {
-      feePercentageTotal = this.feeNoba + this.feeBusinessAllie;
+      this.feeBusinessAllie =
+        (this.baseAmount * this.feePercentageBusinessAllie) / 100;
     } else {
-      feePercentageTotal = this.feeNoba;
+      this.feeBusinessAllie = 0;
+      this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
     }
-    this.feeAmount = (this.baseAmount * feePercentageTotal) / 100;
+
+    this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
 
     this.calculateTotalAmount();
     return this;
