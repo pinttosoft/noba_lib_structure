@@ -27,7 +27,6 @@ export class MakeRequestInternalTransfer {
     private readonly assetRepository: IAssetRepository,
     private readonly withdrawalRequest: IWithdrawalRequestRepository,
     private readonly counterpartyRepository: ICounterpartyRepository,
-    private readonly message: MessageBus,
   ) {}
 
   async run(
@@ -78,15 +77,15 @@ export class MakeRequestInternalTransfer {
       amount,
     );
 
-    await this.message.transmissionMessage(
-      JSON.stringify({
-        transactionId: withdrawalRequest.getWithdrawalId(),
-        type: WithdrawalType.INTERNAL,
-      }),
-      counterparty.getCounterpartyType() === CounterpartyType.CRYPTO
-        ? process.env.TOPIC_TRANSACTION_ASSET
-        : process.env.TOPIC_TRANSACTION_FIAT,
-    );
+    // await this.message.transmissionMessage(
+    //   JSON.stringify({
+    //     transactionId: withdrawalRequest.getWithdrawalId(),
+    //     type: WithdrawalType.INTERNAL,
+    //   }),
+    //   counterparty.getCounterpartyType() === CounterpartyType.CRYPTO
+    //     ? process.env.TOPIC_TRANSACTION_ASSET
+    //     : process.env.TOPIC_TRANSACTION_FIAT,
+    // );
 
     return withdrawalRequest.getWithdrawalId();
   }
