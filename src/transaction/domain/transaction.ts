@@ -12,7 +12,7 @@ export class Transaction extends AggregateRoot {
   private transactionType: TransactionType;
   private reference: string;
   private isInternal: boolean;
-  private counterparty: Counterparty;
+  private counterparty?: Counterparty;
   private status: WithdrawalStatus;
   private createdAt: Date;
 
@@ -46,7 +46,7 @@ export class Transaction extends AggregateRoot {
   static fromPrimitives(
     id: string,
     data: any,
-    counterparty: Counterparty,
+    counterparty: Counterparty | undefined,
   ): Transaction {
     const t: Transaction = new Transaction();
     t.clientId = data.clientId;
@@ -71,7 +71,7 @@ export class Transaction extends AggregateRoot {
     return this.transactionId;
   }
 
-  getCounterparty(): Counterparty {
+  getCounterparty(): Counterparty | undefined {
     return this.counterparty;
   }
 

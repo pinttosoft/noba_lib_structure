@@ -83,4 +83,57 @@ describe("Swap", () => {
       Number(exchangeRequest.amount) + Number(exchange.getFeeNoba()),
     );
   });
+
+  it("should create exchange between ETH and USD", async () => {
+    const exchangeRequest = {
+      clientId: "FSilva187263254",
+      destinationAssetId: "FIAT_TESTNET_USD",
+      sourceAssetId: "ETHEREUM_GOERLI_ETH",
+      amount: 0.06547,
+    };
+
+    const sourceWallet =
+      await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
+        exchangeRequest.clientId,
+        exchangeRequest.sourceAssetId,
+      );
+
+    const destinationWallet =
+      await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
+        exchangeRequest.clientId,
+        exchangeRequest.destinationAssetId,
+      );
+
+    const exchangePayload: ExchangeMarketPayload = {
+      sourceWallet: sourceWallet,
+      destinationWallet: destinationWallet,
+      amount: exchangeRequest.amount,
+      action: ExchangeMarketActionType.FIX_SOURCE,
+      description: `Exchange ${
+        exchangeRequest.amount
+      } ${sourceWallet.getAsset()} to ${destinationWallet.getAsset()}`,
+    };
+
+    const opportunity: BusinessOpportunity =
+      await BusinessAllieMongoRepository.instance().getOpportunityByClientId(
+        exchangeRequest.clientId,
+      );
+
+    const exchange: Exchange = Exchange.newExchange(
+      v4(),
+      {
+        assetCode: StringValueObject.create(exchangeRequest.sourceAssetId),
+        wallet: exchangePayload.sourceWallet,
+        amountDebit: AmountValueObject.create(exchangePayload.amount),
+      },
+      {
+        assetCode: StringValueObject.create(exchangeRequest.destinationAssetId),
+        wallet: exchangePayload.destinationWallet,
+        amountCredit: AmountValueObject.create(456),
+      },
+      opportunity,
+    );
+
+    console.log(exchange.toPrimitives());
+  });
 });

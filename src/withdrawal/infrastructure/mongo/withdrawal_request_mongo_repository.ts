@@ -10,7 +10,11 @@ import {
 } from "../../../shared";
 import { IWithdrawalRequestRepository } from "../../domain/interfaces/withdrawal_request.interface";
 import { WithdrawalRequest } from "../../domain/withdrawal_request";
-import { Counterparty, CounterpartyType } from "../../../counterparty";
+import {
+  Counterparty,
+  CounterpartyMongoRepository,
+  CounterpartyType,
+} from "../../../counterparty";
 import { CounterpartyAsset } from "../../../asset";
 import { CounterpartyBank } from "../../../banking";
 
@@ -74,18 +78,10 @@ export class WithdrawalRequestMongoRepository
       return undefined;
     }
 
-    let counterparty: Counterparty;
-    if (result.counterparty.counterpartyType === CounterpartyType.CRYPTO) {
-      counterparty = CounterpartyAsset.fromPrimitives(
+    const counterparty: Counterparty =
+      await CounterpartyMongoRepository.instance().findByCounterpartyId(
         result.counterparty.id,
-        result.counterparty,
       );
-    } else {
-      counterparty = CounterpartyBank.fromPrimitives(
-        result.counterparty.id,
-        result.counterparty,
-      );
-    }
 
     return WithdrawalRequest.fromPrimitives(
       result._id.toString(),

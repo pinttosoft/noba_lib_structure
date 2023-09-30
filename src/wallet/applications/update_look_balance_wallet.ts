@@ -12,9 +12,6 @@ export class UpdateLookBalanceWallet {
         assetId,
       );
 
-    console.log(wallet);
-    console.log(wallet.getClientId());
-
     logger.info(
       ` clientId${wallet.getClientId()} wallet ${wallet
         .getAsset()

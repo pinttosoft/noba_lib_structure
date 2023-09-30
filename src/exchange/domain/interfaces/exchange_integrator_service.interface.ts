@@ -8,4 +8,6 @@ export interface IExchangeIntegratorService {
   ): Promise<ExchangeRequestResponse>;
 
   acceptExchange(exchange: Exchange): Promise<ExchangeRequestResponse>;
+
+  searchExchangeData(exchangeId: string): Promise<ExchangeRequestResponse>;
 }

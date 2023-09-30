@@ -1,6 +1,7 @@
 import { Transaction } from "../transaction";
 import { TransactionDTO } from "../types/transaction.type";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
+import { ExchangeTransaction } from "../../../exchange/domain/exchange_transaction";
 
 export interface ITransactionRepository {
   historyTransactionByAssetIdAndClientId(
@@ -36,4 +37,6 @@ export interface ITransactionRepository {
     status: WithdrawalStatus,
     reference: string,
   ): Promise<Transaction | undefined>;
+
+  saveExchangeTransaction(transaction: ExchangeTransaction): Promise<void>;
 }

@@ -176,6 +176,11 @@ export class Exchange extends AggregateRoot {
     return this.feeBusinessAllie;
   }
 
+  setUpdateAmountReceived(amount: number): Exchange {
+    this.destinationDetails.amountCredit = amount;
+    return this;
+  }
+
   toPrimitives(): any {
     return {
       clientId: this.clientId,

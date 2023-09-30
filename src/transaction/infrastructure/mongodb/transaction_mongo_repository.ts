@@ -14,9 +14,10 @@ import { ITransactionRepository, TransactionType } from "../../index";
 import { Counterparty, CounterpartyType } from "../../../counterparty";
 import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
+import { ExchangeTransaction } from "../../../exchange";
 
 export class TransactionMongoRepository
-  extends MongoRepository<Transaction>
+  extends MongoRepository<Transaction | ExchangeTransaction>
   implements ITransactionRepository
 {
   private static _instance: TransactionMongoRepository;
@@ -184,7 +185,7 @@ export class TransactionMongoRepository
   }
 
   async upsert(transaction: Transaction): Promise<void> {
-    await this.persist(transaction.getId(), transaction.toPrimitives());
+    await this.persist(transaction.getId(), transaction);
   }
 
   async transactionListing(criteria: Criteria): Promise<Paginate<Transaction>> {
@@ -197,5 +198,9 @@ export class TransactionMongoRepository
     }));
 
     return this.buildPaginate<Transaction>(document);
+  }
+
+  async saveExchangeTransaction(transaction: ExchangeTransaction) {
+    await this.persist(transaction.getId(), transaction);
   }
 }
