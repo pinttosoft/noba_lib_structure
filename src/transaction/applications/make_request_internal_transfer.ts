@@ -29,6 +29,14 @@ export class MakeRequestInternalTransfer {
     private readonly counterpartyRepository: ICounterpartyRepository,
   ) {}
 
+  /**
+   *
+   * @param clientIdOrigin Es el cliente que va a realizar la transferencia
+   * @param clientIdDestination Es el cliente que va a recibir la transferencia
+   * @param amount
+   * @param assetCode
+   * @param reference
+   */
   async run(
     clientIdOrigin: string,
     clientIdDestination: string,

@@ -7,3 +7,5 @@ export { ITransactionService } from "./domain/interfaces/transaction_service";
 export { TransactionMongoRepository } from "./infrastructure/mongodb/transaction_mongo_repository";
 export { Transaction } from "./domain/transaction";
 export { MakeRequestInternalTransfer } from "./applications/make_request_internal_transfer";
+export { ExchangeTransaction } from "./domain/exchange_transaction";
+export { TransactionDeposit } from "./domain/transaction_deposit";

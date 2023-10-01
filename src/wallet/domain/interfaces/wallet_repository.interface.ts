@@ -33,4 +33,8 @@ export interface IWalletRepository {
   ): Promise<IWallet | undefined>;
 
   findByWalletId(walletId: string): Promise<IWallet | undefined>;
+
+  findByInstructionForDepositId(
+    instructionDepositId: string,
+  ): Promise<IWallet | undefined>;
 }

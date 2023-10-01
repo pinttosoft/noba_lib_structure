@@ -10,14 +10,20 @@ import {
   Paginate,
   WithdrawalStatus,
 } from "../../../shared";
-import { ITransactionRepository, TransactionType } from "../../index";
+import {
+  ExchangeTransaction,
+  ITransactionRepository,
+  TransactionType,
+} from "../../index";
 import { Counterparty, CounterpartyType } from "../../../counterparty";
 import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
-import { ExchangeTransaction } from "../../../exchange";
+import { TransactionDeposit } from "../../domain/transaction_deposit";
 
 export class TransactionMongoRepository
-  extends MongoRepository<Transaction | ExchangeTransaction>
+  extends MongoRepository<
+    Transaction | ExchangeTransaction | TransactionDeposit
+  >
   implements ITransactionRepository
 {
   private static _instance: TransactionMongoRepository;
@@ -200,7 +206,13 @@ export class TransactionMongoRepository
     return this.buildPaginate<Transaction>(document);
   }
 
-  async saveExchangeTransaction(transaction: ExchangeTransaction) {
+  async saveExchangeTransaction(
+    transaction: ExchangeTransaction,
+  ): Promise<void> {
+    await this.persist(transaction.getId(), transaction);
+  }
+
+  async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
     await this.persist(transaction.getId(), transaction);
   }
 }

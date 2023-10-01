@@ -1,8 +1,8 @@
-import { TransactionType } from "../../transaction";
-import { WithdrawalStatus } from "../../shared";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { TransactionType } from "./enums/transaction_type.enum";
+import { WithdrawalStatus } from "../../shared";
 
-export class ExchangeTransaction extends AggregateRoot {
+export class TransactionDeposit extends AggregateRoot {
   private transactionId: string;
   private clientId: string;
   private assetId: string;
@@ -13,28 +13,40 @@ export class ExchangeTransaction extends AggregateRoot {
   private status: WithdrawalStatus;
   private createdAt: Date;
 
-  static newExchangeTransaction(
-    exchangeId: string,
+  /**
+   *
+   * @param depositId
+   * @param assetId
+   * @param clientId
+   * @param amount
+   * @param reference
+   * @param status Opcional si no se pasa se asume que es PROCESSED
+   */
+  static newTransactionDeposit(
+    depositId: string,
     assetId: string,
     clientId: string,
     amount: number,
     reference: string,
-    transactionType: TransactionType,
     status?: WithdrawalStatus,
-  ): ExchangeTransaction {
-    const t = new ExchangeTransaction();
-    t.transactionId = exchangeId;
+  ) {
+    const t = new TransactionDeposit();
+    t.transactionId = depositId;
     t.reference = reference;
     t.clientId = clientId;
-    t.isInternal = true;
+    t.isInternal = false;
     t.createdAt = new Date();
     t.amount = amount;
 
-    t.transactionType = transactionType;
+    t.transactionType = TransactionType.DEPOSIT;
     t.assetId = assetId;
-    t.status = status ?? WithdrawalStatus.IN_PROCESS;
+    t.status = status ?? WithdrawalStatus.PROCESSED;
 
     return t;
+  }
+
+  getId(): string {
+    return undefined;
   }
 
   toPrimitives(): any {
@@ -49,9 +61,5 @@ export class ExchangeTransaction extends AggregateRoot {
       status: this.status,
       createdAt: this.createdAt,
     };
-  }
-
-  getId(): string | undefined {
-    return undefined;
   }
 }

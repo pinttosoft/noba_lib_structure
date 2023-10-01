@@ -244,4 +244,23 @@ export class WalletMongoRepository
       await AssetMongoRepository.instance().findById(result.assetId),
     );
   }
+
+  async findByInstructionForDepositId(
+    instructionDepositId: string,
+  ): Promise<IWallet | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<WalletDocument>({
+      "instructionForDeposit.id": instructionDepositId,
+    });
+    if (!result) {
+      return undefined;
+    }
+
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(result.clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
+  }
 }

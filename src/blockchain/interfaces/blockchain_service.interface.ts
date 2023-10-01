@@ -1,6 +1,7 @@
 import { InstructionDepositCrypto, WalletType } from "../../wallet";
 import { IClient } from "../../client";
 import { CounterpartyAsset, WalletInformationDTO } from "../../asset";
+import { DepositInformation } from "../../shared";
 
 export interface IBlockchainService {
   lookWalletAddress(
@@ -37,4 +38,9 @@ export interface IBlockchainService {
     current_balance: number;
     available_balance: number;
   }>;
+
+  searchDepositInformation(
+    instructionDepositId: string,
+    depositId: string,
+  ): Promise<DepositInformation>;
 }

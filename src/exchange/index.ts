@@ -11,5 +11,3 @@ export { IExchangeRepository } from "./domain/interfaces/exchange_repository.int
 export { ExchangeMongoRepository } from "./infrastructure/exchange_mongo_repository";
 
 export { Exchange } from "./domain/exchange";
-
-export { ExchangeTransaction } from "./domain/exchange_transaction";
