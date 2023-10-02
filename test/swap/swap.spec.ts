@@ -136,4 +136,20 @@ describe("Swap", () => {
 
     console.log(exchange.toPrimitives());
   });
+
+  it("should paginate exchanges by client id", async () => {
+    const clientId = "MSerrano181263254";
+    const page = 1;
+    const perPage = 20;
+
+    const findExchangesByClientId =
+      await ExchangeMongoRepository.instance().getExchangesByClientId(
+        clientId,
+        page,
+        perPage,
+      );
+    console.log(findExchangesByClientId);
+
+    expect(findExchangesByClientId?.results.length).toBe(20);
+  });
 });

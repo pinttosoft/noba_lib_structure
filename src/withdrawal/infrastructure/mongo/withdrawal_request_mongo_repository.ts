@@ -80,7 +80,7 @@ export class WithdrawalRequestMongoRepository
 
     const counterparty: Counterparty =
       await CounterpartyMongoRepository.instance().findByCounterpartyId(
-        result.counterparty.id,
+        result.counterparty.counterpartyId,
       );
 
     return WithdrawalRequest.fromPrimitives(

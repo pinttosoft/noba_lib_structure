@@ -11,7 +11,7 @@ export class Criteria {
     this.filters = filters;
     this.order = order;
     this.limit = limit;
-    this.offset = offset !== undefined ? offset - 1 : undefined;
+    this.offset = offset !== undefined ? (offset - 1) * limit : undefined;
   }
 
   public hasFilters(): boolean {
