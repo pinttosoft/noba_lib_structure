@@ -124,7 +124,7 @@ export class Client extends AggregateRoot implements IClient {
     } else {
       this.clientId =
         this.clientData.firstName.substring(0, 1) +
-        this.clientData.lastName +
+        this.clientData.lastName.replace(" ", "-") +
         this.clientData.dni;
     }
   }

@@ -84,7 +84,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.accountId = data.accountId;
     counterparty.counterpartyType = data.counterpartyType;
     counterparty.createdAt = data.createdAt;
-
+    counterparty.isInternal = data.isInternal === "S";
     return counterparty;
   }
 
@@ -141,6 +141,7 @@ export class CounterpartyBank extends Counterparty {
       iban: this.iban,
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
+      isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
     };
   }

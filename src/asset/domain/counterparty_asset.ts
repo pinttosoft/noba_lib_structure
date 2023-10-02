@@ -48,7 +48,7 @@ export class CounterpartyAsset extends Counterparty {
       data.informationWallet.relationshipConsumer;
     counterparty.createdAt = data.createdAt;
 
-    counterparty.isInternal = data.isInternal;
+    counterparty.isInternal = data.isInternal === "S";
 
     return counterparty;
   }
@@ -81,6 +81,7 @@ export class CounterpartyAsset extends Counterparty {
       accountId: this.accountId,
       informationOwner: this.getInformationOwner(),
       informationWallet: this.informationWallet,
+      isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
     };
   }
