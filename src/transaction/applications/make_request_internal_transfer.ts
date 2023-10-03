@@ -43,7 +43,7 @@ export class MakeRequestInternalTransfer {
     reference: string,
   ): Promise<string> {
     logger.info(
-      `Iniciando la transferencia interna ${clientIdOrigin} ${amount} ${assetCode} ${reference}`,
+      `Iniciando la transferencia interna origin: ${clientIdOrigin} destino: clientIdDestination, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
     );
     const clientOrigin: IClient = await new FindByClientId(
       this.clientRepository,

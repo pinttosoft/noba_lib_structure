@@ -26,7 +26,7 @@ export class ExchangeTransaction extends AggregateRoot {
     t.transactionId = exchangeId;
     t.reference = reference;
     t.clientId = clientId;
-    t.isInternal = true;
+    t.isInternal = false;
     t.createdAt = new Date();
     t.amount = amount;
 
@@ -45,7 +45,7 @@ export class ExchangeTransaction extends AggregateRoot {
       amount: this.amount,
       transactionType: this.transactionType,
       reference: this.reference,
-      isInternal: this.isInternal,
+      isInternal: this.isInternal ? "S" : "N",
       status: this.status,
       createdAt: this.createdAt,
     };
