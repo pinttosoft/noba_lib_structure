@@ -22,7 +22,6 @@ export class CounterpartyBank extends Counterparty {
   ): CounterpartyBank {
     const counterparty: CounterpartyBank = new CounterpartyBank();
 
-    counterparty.counterpartyId = v4();
     counterparty.assetId = counterpartyBank.assetId;
     counterparty.clientId = counterpartyBank.clientId;
     counterparty.accountId = counterpartyBank.accountId;
@@ -32,6 +31,12 @@ export class CounterpartyBank extends Counterparty {
 
     counterparty.counterpartyType = counterpartyBank.counterpartyType;
     counterparty.isInternal = isInternal;
+
+    if (counterparty.isInternal) {
+      counterparty.counterpartyId = counterpartyBank.counterpartyId;
+    } else {
+      counterparty.counterpartyId = v4();
+    }
 
     if (
       counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||
@@ -68,6 +73,7 @@ export class CounterpartyBank extends Counterparty {
 
     const informationOwner = data.informationOwner;
     const informationBank = data.informationBank;
+    counterparty.assetId = data.assetId;
 
     counterparty.counterpartyId = data.counterpartyId;
     counterparty.ownerName = informationOwner.name;
@@ -132,6 +138,7 @@ export class CounterpartyBank extends Counterparty {
   toPrimitives(): any {
     return {
       id: this.id,
+      assetId: this.assetId,
       clientId: this.clientId,
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,

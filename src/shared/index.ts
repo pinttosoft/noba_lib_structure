@@ -32,3 +32,4 @@ export { PubSubMessage } from "./infrastructure/pubsub";
 export { encrypt } from "./helpers/hash";
 
 export { DepositInformation } from "./domain/types/deposit_information.type";
+export { InternalDepositInformation } from "./domain/types/internal_deposit_information";

@@ -1,7 +1,5 @@
-import { MessageBus } from "../../shared/domain/interfaces/message_bus";
 import {
   Counterparty,
-  CounterpartyType,
   ICounterpartyRepository,
   RegisterOrSearchCounterpartyInternal,
 } from "../../counterparty";
@@ -44,6 +42,9 @@ export class MakeRequestInternalTransfer {
     assetCode: string,
     reference: string,
   ): Promise<string> {
+    logger.info(
+      `Iniciando la transferencia interna ${clientIdOrigin} ${amount} ${assetCode} ${reference}`,
+    );
     const clientOrigin: IClient = await new FindByClientId(
       this.clientRepository,
     ).run(clientIdOrigin);
@@ -60,6 +61,11 @@ export class MakeRequestInternalTransfer {
         this.counterpartyRepository,
       ).run(clientOrigin, clientDestination, asset);
 
+    logger.info(
+      `Counterparty para la transferencia interna ${assetCode} ${JSON.stringify(
+        counterparty,
+      )}`,
+    );
     await new ValidateBalance(this.walletRepository).run(
       clientIdOrigin,
       amount,
@@ -74,6 +80,10 @@ export class MakeRequestInternalTransfer {
         reference,
         WithdrawalType.INTERNAL,
       );
+    logger.info(
+      `solicitud de transferencia creada ${JSON.stringify(withdrawalRequest)}`,
+    );
+
     await this.withdrawalRequest.upsert(withdrawalRequest);
     logger.info(
       `id de la solicitud de la transferencia  ${withdrawalRequest.getWithdrawalId()}`,

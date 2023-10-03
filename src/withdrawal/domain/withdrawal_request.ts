@@ -112,7 +112,6 @@ export class WithdrawalRequest extends AggregateRoot {
 
   toPrimitives(): any {
     return {
-      id: this.id,
       withdrawalId: this.withdrawalId,
       clientId: this.clientId,
       amount: this.amount,

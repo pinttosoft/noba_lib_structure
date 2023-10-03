@@ -95,7 +95,7 @@ export class CounterpartyMongoRepository
 
     const result = await collection.findOne({
       counterpartyId,
-      "informationWallet.assetId": assetId,
+      assetId,
     });
 
     if (!result) {

@@ -12,6 +12,7 @@ import { Asset, CounterpartyAsset, WalletInformationDTO } from "../../asset";
 import { RelationshipConsumer } from "../domain/enums/relationship_consumer.enum";
 import { CounterpartyBank, InstructionDepositFiat } from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
+import { logger } from "../../index";
 
 export class RegisterOrSearchCounterpartyInternal {
   constructor(
@@ -30,6 +31,9 @@ export class RegisterOrSearchCounterpartyInternal {
         asset.getAssetId(),
       );
     if (counterparty) {
+      logger.info(
+        `Se encontro el counterparty ${counterparty.getCounterpartyId()} para el asset ${counterparty.getAssetId()}`,
+      );
       return counterparty;
     }
 
@@ -57,10 +61,11 @@ export class RegisterOrSearchCounterpartyInternal {
     } else {
       const instruction: InstructionDepositFiat =
         wallet.getInstructionForDeposit() as InstructionDepositFiat;
+
       counterparty = CounterpartyBank.newCounterparty(
         {
-          accountId: clientDestination.getIDNumber(),
-          clientId: clientDestination.getClientId(),
+          accountId: clientDestination.getAccount().getAccountId(),
+          clientId: clientOrigin.getClientId(),
           counterpartyId: clientDestination.getClientId(),
           counterpartyType: CounterpartyType.FIAT,
           swiftCode: "SWIFT INTERNAL",

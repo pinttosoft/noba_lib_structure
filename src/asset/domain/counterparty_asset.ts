@@ -49,7 +49,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.createdAt = data.createdAt;
 
     counterparty.isInternal = data.isInternal === "S";
-
+    counterparty.assetId = data.assetId;
     return counterparty;
   }
 
@@ -79,6 +79,7 @@ export class CounterpartyAsset extends Counterparty {
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,
       accountId: this.accountId,
+      assetId: this.informationWallet.assetId,
       informationOwner: this.getInformationOwner(),
       informationWallet: this.informationWallet,
       isInternal: this.isInternal === true ? "S" : "N",

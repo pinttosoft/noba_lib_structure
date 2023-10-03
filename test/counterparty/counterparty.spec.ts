@@ -1,6 +1,6 @@
 import {
+  AssetMongoRepository,
   ClientMongoRepository,
-  Counterparty,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
   CounterpartyType,
@@ -10,8 +10,10 @@ import {
   Order,
   OrderTypes,
   OriginWallet,
+  RegisterOrSearchCounterpartyInternal,
   RelationshipConsumer,
   WalletInformationDTO,
+  WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
 
@@ -65,5 +67,24 @@ describe("Counterparty", () => {
 
     const result = await CounterpartyMongoRepository.instance().list(criteria);
     console.log(result);
+  });
+
+  it("should register or search counterparty internal", async () => {
+    const clientOrigin =
+      await ClientMongoRepository.instance().findByClientId("FSilva187263254");
+
+    const clientDestination =
+      await ClientMongoRepository.instance().findByClientId(
+        "ABejarano187263254",
+      );
+
+    const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
+
+    const counterparty = await new RegisterOrSearchCounterpartyInternal(
+      WalletMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(clientOrigin, clientDestination, asset);
+    console.log(counterparty);
+    expect(counterparty.getCounterpartyId()).toBe("ABejarano187263254");
   });
 });

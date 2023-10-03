@@ -17,6 +17,7 @@ import {
 } from "../../../counterparty";
 import { CounterpartyAsset } from "../../../asset";
 import { CounterpartyBank } from "../../../banking";
+import { logger } from "../../../index";
 
 export class WithdrawalRequestMongoRepository
   extends MongoRepository<WithdrawalRequest>
@@ -68,6 +69,11 @@ export class WithdrawalRequestMongoRepository
   }
 
   async upsert(withdrawal: WithdrawalRequest): Promise<void> {
+    logger.info(
+      `solicitud de transferencia DB ${withdrawal.getId()} ${JSON.stringify(
+        withdrawal.toPrimitives(),
+      )}}`,
+    );
     await this.persist(withdrawal.getId(), withdrawal);
   }
 
@@ -79,8 +85,9 @@ export class WithdrawalRequestMongoRepository
     }
 
     const counterparty: Counterparty =
-      await CounterpartyMongoRepository.instance().findByCounterpartyId(
+      await CounterpartyMongoRepository.instance().findByCounterpartyIdAndAssetId(
         result.counterparty.counterpartyId,
+        result.counterparty.assetId,
       );
 
     return WithdrawalRequest.fromPrimitives(
