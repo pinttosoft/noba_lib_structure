@@ -102,6 +102,9 @@ export class RegisterOrSearchCounterpartyInternal {
       );
 
     if (!wallet) {
+      logger.info(
+        `Wallet not found for client ${clientDestination.getClientId()} and asset ${assetId}`,
+      );
       throw new WalletNotFound();
     }
 

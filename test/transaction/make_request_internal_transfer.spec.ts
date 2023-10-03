@@ -12,7 +12,7 @@ describe("Make request internal transfer", () => {
     const payload = {
       amount: 100,
       clientIdOrign: "FSilva187263254",
-      clientIdDestination: "ABejarano187263254",
+      clientIdDestination: "DANIELLEE002",
       reference: "Teste",
     };
 

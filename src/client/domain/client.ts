@@ -42,6 +42,11 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  setClientId(clientId: string): Client {
+    this.clientId = clientId;
+    return this;
+  }
+
   setId(id: string): Client {
     this.id = id;
     return this;

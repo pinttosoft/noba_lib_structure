@@ -43,7 +43,7 @@ export class MakeRequestInternalTransfer {
     reference: string,
   ): Promise<string> {
     logger.info(
-      `Iniciando la transferencia interna origin: ${clientIdOrigin} destino: clientIdDestination, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
+      `Iniciando la transferencia interna origin: ${clientIdOrigin} destino: clientIdDestination ${clientIdDestination}, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
     );
     const clientOrigin: IClient = await new FindByClientId(
       this.clientRepository,
@@ -94,16 +94,6 @@ export class MakeRequestInternalTransfer {
       asset.getAssetId(),
       amount,
     );
-
-    // await this.message.transmissionMessage(
-    //   JSON.stringify({
-    //     transactionId: withdrawalRequest.getWithdrawalId(),
-    //     type: WithdrawalType.INTERNAL,
-    //   }),
-    //   counterparty.getCounterpartyType() === CounterpartyType.CRYPTO
-    //     ? process.env.TOPIC_TRANSACTION_ASSET
-    //     : process.env.TOPIC_TRANSACTION_FIAT,
-    // );
 
     return withdrawalRequest.getWithdrawalId();
   }
