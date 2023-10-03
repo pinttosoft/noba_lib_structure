@@ -21,6 +21,7 @@ export class TransactionDeposit extends AggregateRoot {
    * @param amount
    * @param reference
    * @param status Opcional si no se pasa se asume que es PROCESSED
+   * @param isInternal
    */
   static newTransactionDeposit(
     depositId: string,
@@ -28,13 +29,14 @@ export class TransactionDeposit extends AggregateRoot {
     clientId: string,
     amount: number,
     reference: string,
-    status?: WithdrawalStatus,
+    status: WithdrawalStatus,
+    isInternal: boolean = false,
   ) {
     const t = new TransactionDeposit();
     t.transactionId = depositId;
     t.reference = reference;
     t.clientId = clientId;
-    t.isInternal = false;
+    t.isInternal = isInternal;
     t.createdAt = new Date();
     t.amount = amount;
 
@@ -57,7 +59,7 @@ export class TransactionDeposit extends AggregateRoot {
       amount: this.amount,
       transactionType: this.transactionType,
       reference: this.reference,
-      isInternal: this.isInternal,
+      isInternal: this.isInternal === true ? "S" : "N",
       status: this.status,
       createdAt: this.createdAt,
     };

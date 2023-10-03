@@ -54,7 +54,7 @@ export class Transaction extends AggregateRoot {
     t.reference = data.reference;
     t.status = data.status;
     t.transactionType = data.transactionType;
-    t.isInternal = data.isInternal;
+    t.isInternal = data.isInternal === "S";
     t.createdAt = data.createdAt;
     t.id = id;
     t.counterparty = counterparty;
@@ -106,7 +106,7 @@ export class Transaction extends AggregateRoot {
       amount: this.amount,
       transactionType: this.transactionType,
       reference: this.reference,
-      isInternal: this.isInternal,
+      isInternal: this.isInternal === true ? "S" : "N",
       status: this.status,
       createdAt: this.createdAt,
     };

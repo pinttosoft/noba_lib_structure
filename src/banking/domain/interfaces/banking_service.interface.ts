@@ -2,19 +2,13 @@ import { InstructionDepositFiat } from "../types/instruction_deposit_fiat.type";
 import { IClient } from "../../../client";
 import { CounterpartyBank } from "../counterparty_bank";
 import { InformationBankDTO } from "../types/information_bank.type";
-import { Address, InternalDepositInformation } from "../../../shared";
-import { DepositInformation } from "../../../shared/domain/types/deposit_information.type";
+import { Address, DepositInformation } from "../../../shared";
 
 export interface IBankingService {
   searchDepositInformation(
     instructionDepositId: string,
     depositId: string,
   ): Promise<DepositInformation>;
-
-  searchInternalDepositInformation(
-    instructionDepositId: string,
-    depositId: string,
-  ): Promise<InternalDepositInformation>;
 
   searchBankInstructionForDeposit(
     client: IClient,
