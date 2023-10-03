@@ -10,6 +10,7 @@ export enum Operator {
   NOT_CONTAINS = "NOT_CONTAINS",
   GTE = ">=",
   LTE = "<=",
+  DATE_RANGE = "DATE_RANGE",
 }
 
 export class FilterOperator extends EnumValueObject<Operator> {

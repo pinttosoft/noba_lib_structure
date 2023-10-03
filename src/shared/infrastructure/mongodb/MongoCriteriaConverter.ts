@@ -14,6 +14,10 @@ type MongoFilterOperator =
   | "$regex"
   | "$lte"
   | "$gte";
+
+type MongoFilterBetween = {
+  [p: string]: { $gte: Date; $lte: Date };
+};
 type MongoFilterValue = boolean | string | number;
 type MongoFilterOperation = {
   [operator in MongoFilterOperator]?: MongoFilterValue;
@@ -24,6 +28,10 @@ type MongoFilter =
 type MongoDirection = 1 | -1;
 type MongoSort = { [field: string]: MongoDirection };
 
+export type MongoFilterBetweenDate = {
+  startDate: string;
+  endDate: string;
+};
 export interface MongoQuery {
   filter: MongoFilter;
   sort: MongoSort;
@@ -38,13 +46,13 @@ interface TransformerFunction<T, K> {
 export class MongoCriteriaConverter {
   private filterTransformers: Map<
     Operator,
-    TransformerFunction<Filter, MongoFilter>
+    TransformerFunction<Filter, MongoFilter | MongoFilterBetween>
   >;
 
   constructor() {
     this.filterTransformers = new Map<
       Operator,
-      TransformerFunction<Filter, MongoFilter>
+      TransformerFunction<Filter, MongoFilter | MongoFilterBetween>
     >([
       [Operator.EQUAL, this.equalFilter],
       [Operator.NOT_EQUAL, this.notEqualFilter],
@@ -54,6 +62,7 @@ export class MongoCriteriaConverter {
       [Operator.NOT_CONTAINS, this.notContainsFilter],
       [Operator.GTE, this.greaterThanOrEqualFilter],
       [Operator.LTE, this.lowerThanOrEqualFilter],
+      [Operator.DATE_RANGE, this.dateRangeFilter],
     ]);
   }
 
@@ -120,5 +129,20 @@ export class MongoCriteriaConverter {
 
   private notContainsFilter(filter: Filter): MongoFilter {
     return { [filter.field.value]: { $not: { $regex: filter.value.value } } };
+  }
+
+  private dateRangeFilter(filter: Filter): MongoFilterBetween {
+    if (!filter.value.value.startDate || !filter.value.value.endDate) {
+      throw new Error(
+        "Start and end date are required for date range filtering.",
+      );
+    }
+
+    return {
+      [filter.field.toString()]: {
+        $gte: new Date(filter.value.value.startDate),
+        $lte: new Date(filter.value.value.endDate),
+      },
+    };
   }
 }
