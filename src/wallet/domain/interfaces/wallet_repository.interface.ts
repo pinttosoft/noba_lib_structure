@@ -16,10 +16,8 @@ export interface IWalletRepository {
 
   findPaymentAddressesByClientIdAndByAssetId(
     clientId: string,
-    assetId: string,
-    page: number,
-    rowPerPage: number,
-  ): Promise<Paginate<InstructionDepositCrypto>>;
+    assetId?: string,
+  ): Promise<InstructionDepositCrypto[]>;
 
   findPaymentAddressByClientId(
     clientId: string,

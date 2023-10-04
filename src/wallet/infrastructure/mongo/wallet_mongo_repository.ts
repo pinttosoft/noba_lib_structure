@@ -4,10 +4,16 @@ import {
   IWalletRepository,
   InstructionDepositCrypto,
 } from "../../../wallet";
-import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
+import {
+  MongoClientFactory,
+  MongoRepository,
+  Operator,
+  Paginate,
+} from "../../../shared";
 import { ObjectId } from "mongodb";
 import { ClientMongoRepository } from "../../../client";
 import { AssetMongoRepository } from "../../../asset";
+import { Transaction } from "../../../transaction";
 
 interface WalletDocument {
   _id: ObjectId;
@@ -109,15 +115,32 @@ export class WalletMongoRepository
 
   async findPaymentAddressesByClientIdAndByAssetId(
     clientId: string,
-    assetId: string,
-    page: number,
-    rowPerPage: number,
-  ): Promise<Paginate<InstructionDepositCrypto>> {
-    return await this.paginatePaymentAddress(
-      { clientId, assetId },
-      page,
-      rowPerPage,
-    );
+    assetId?: string,
+  ): Promise<InstructionDepositCrypto[]> {
+    const collection = await this.collection();
+
+    let filter: any;
+    if (assetId) {
+      filter = { clientId, assetId, walletType: "DEPOSIT_FORT_CRYPTO" };
+    } else {
+      filter = { clientId, walletType: "DEPOSIT_FORT_CRYPTO" };
+    }
+    const pipeline = [
+      {
+        $match: filter,
+      },
+      {
+        $project: {
+          _id: 0,
+          instructionForDeposit: 1,
+          assetId: 1,
+        },
+      },
+    ];
+
+    return await collection
+      .aggregate<InstructionDepositCrypto>(pipeline)
+      .toArray();
   }
 
   async paginatePaymentAddress(filter: any, page: number, rowPerPage: number) {
@@ -139,7 +162,7 @@ export class WalletMongoRepository
       })
       .toArray();
 
-    let count = 0;
+    let count = instructForDepositCount.length;
 
     const hasNextPage: boolean = page * rowPerPage < count;
 

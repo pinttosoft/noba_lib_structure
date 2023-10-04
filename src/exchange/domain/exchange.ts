@@ -63,8 +63,6 @@ export class Exchange extends AggregateRoot {
       e.baseAmount = destinationDetails.amountCredit.getValue();
     }
 
-    console.log("BASE AMOUNT", e.baseAmount);
-    console.log("PERCENTAGE NOBA", e.feePercentageNoba);
     e.createdAt = new Date();
 
     e.sourceDetails = {
@@ -128,8 +126,6 @@ export class Exchange extends AggregateRoot {
 
     this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
 
-    console.log("FEEE", this.feeAmount);
-
     this.calculateTotalAmount();
     return this;
   }
@@ -140,6 +136,7 @@ export class Exchange extends AggregateRoot {
     } else {
       this.totalAmount = this.baseAmount - this.feeAmount;
     }
+
   }
 
   accept(): Exchange {

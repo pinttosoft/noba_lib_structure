@@ -13,7 +13,7 @@ import * as console from "console";
 import { v4 } from "uuid";
 
 describe("Wallet", () => {
-  const clientId = "FSilva187263254";
+  const clientId = "ABejarano187263254";
 
   // it("should create empty crypto wallet", async () => {
   //   const asset: Asset =
@@ -51,27 +51,26 @@ describe("Wallet", () => {
   //
   //   console.log(wallet.toPrimitives());
   // });
-
-  it("should paginate payment address by clientId and assetId", async () => {
-    const paymentAddress =
-      await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
-        clientId,
-        "BITCOIN_TESTNET_BTC",
-        1,
-        10,
-      );
-
-    console.log(JSON.stringify(paymentAddress));
-  });
+  //
+  // it("should paginate payment address by clientId and assetId", async () => {
+  //   const paymentAddress =
+  //     await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
+  //       clientId,
+  //       "BITCOIN_TESTNET_BTC",
+  //       1,
+  //       10,
+  //     );
+  //
+  //   console.log(JSON.stringify(paymentAddress));
+  // });
 
   it("should paginate payment address by clientId", async () => {
     const paymentAddress =
-      await WalletMongoRepository.instance().findPaymentAddressByClientId(
+      await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
         clientId,
-        0,
-        10,
+        undefined,
       );
 
-    console.log(JSON.stringify(paymentAddress));
+    console.log(paymentAddress);
   });
 });
