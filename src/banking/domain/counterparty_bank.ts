@@ -84,6 +84,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.bankAddress = { ...informationBank.address } as Address;
 
     counterparty.bankName = informationBank.bankName;
+    counterparty.accountNumber = informationBank.accountNumber;
     counterparty.networkBank = informationBank.networkBank;
 
     counterparty.clientId = data.clientId;
@@ -112,6 +113,7 @@ export class CounterpartyBank extends Counterparty {
 
   getInformationBank(): {
     accountNumber: string;
+    routingNumber: string | undefined;
     bankName: string;
     networkBank: NetworkBank;
     address: Address;
@@ -121,6 +123,7 @@ export class CounterpartyBank extends Counterparty {
       bankName: this.bankName,
       networkBank: this.networkBank,
       address: this.bankAddress,
+      routingNumber: this.routingNumber,
     };
   }
 
@@ -143,7 +146,6 @@ export class CounterpartyBank extends Counterparty {
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,
       accountId: this.accountId,
-      routingNumber: this.routingNumber,
       swiftCode: this.swiftCode,
       iban: this.iban,
       informationOwner: this.getInformationOwner(),
