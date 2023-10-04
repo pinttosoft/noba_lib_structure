@@ -28,7 +28,7 @@ export interface IBlockchainService {
   ): Promise<string>;
 
   makeWithdrawal(
-    sourceWalletId: string,
+    instructionForDepositId: string,
     amount: number,
     counterparty: CounterpartyAsset,
     description?: string,

@@ -73,4 +73,14 @@ describe("Wallet", () => {
 
     console.log(paymentAddress);
   });
+
+  it("should calculate locked balance", async () => {
+    const wallet =
+      await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
+        "ABejarano187263254",
+        "BITCOIN_TESTNET_BTC",
+      );
+
+    console.log(wallet.getLockedBalance());
+  });
 });

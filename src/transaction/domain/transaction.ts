@@ -96,6 +96,11 @@ export class Transaction extends AggregateRoot {
     return this;
   }
 
+  markAsCompleted(): Transaction {
+    this.status = WithdrawalStatus.PROCESSED;
+    return this;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
