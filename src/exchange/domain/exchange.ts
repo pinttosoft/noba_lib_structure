@@ -3,6 +3,7 @@ import { ExchangeStatus } from "./enums/exchange_status.enum";
 import { AmountValueObject, StringValueObject } from "../../shared";
 import { BusinessOpportunity } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
+import { ExchangeCalculatedAmount } from "./types/exchange_calculated_amount";
 
 export class Exchange extends AggregateRoot {
   private id?: string;
@@ -42,26 +43,13 @@ export class Exchange extends AggregateRoot {
       amountCredit: AmountValueObject;
     },
     opportunity?: BusinessOpportunity,
+    calculateAmount?: ExchangeCalculatedAmount,
   ): Exchange {
     const e: Exchange = new Exchange();
 
     e.clientId = sourceDetails.wallet.getClientId();
     e.exchangeId = exchangeId;
     e.status = ExchangeStatus.REQUESTED;
-
-    if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
-      e.feePercentageNoba = sourceDetails.wallet
-        .getClient()
-        .getFeeSwap()
-        .getFeeForBuy();
-      e.baseAmount = sourceDetails.amountDebit.getValue();
-    } else {
-      e.feePercentageNoba = sourceDetails.wallet
-        .getClient()
-        .getFeeSwap()
-        .getFeeForSell();
-      e.baseAmount = destinationDetails.amountCredit.getValue();
-    }
 
     e.createdAt = new Date();
 
@@ -81,7 +69,27 @@ export class Exchange extends AggregateRoot {
       e.feePercentageBusinessAllie = opportunity.getFeeSwap();
     }
 
-    e.calculateFee();
+    if (!calculateAmount) {
+      if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
+        e.feePercentageNoba = sourceDetails.wallet
+          .getClient()
+          .getFeeSwap()
+          .getFeeForBuy();
+        e.baseAmount = sourceDetails.amountDebit.getValue();
+      } else {
+        e.feePercentageNoba = sourceDetails.wallet
+          .getClient()
+          .getFeeSwap()
+          .getFeeForSell();
+        e.baseAmount = destinationDetails.amountCredit.getValue();
+      }
+      e.calculateFee();
+    } else {
+      e.feeNoba = calculateAmount.feeNoba;
+      e.feeAmount = calculateAmount.feeAmount;
+      e.feeBusinessAllie = calculateAmount.feeBusinessAllie;
+      e.totalAmount = calculateAmount.totalAmount;
+    }
 
     return e;
   }
@@ -136,7 +144,6 @@ export class Exchange extends AggregateRoot {
     } else {
       this.totalAmount = this.baseAmount - this.feeAmount;
     }
-
   }
 
   accept(): Exchange {
@@ -181,6 +188,8 @@ export class Exchange extends AggregateRoot {
   getFeeBusinessAllie() {
     return this.feeBusinessAllie;
   }
+
+  getTotalFee() {}
 
   setUpdateAmountReceived(amount: number): Exchange {
     this.destinationDetails.amountCredit = amount;
