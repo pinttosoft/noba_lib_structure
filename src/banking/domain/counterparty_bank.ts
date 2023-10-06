@@ -1,9 +1,9 @@
 import { v4 } from "uuid";
 import { Address, GenericException } from "../../shared";
 import { NetworkBank } from "./enums/network_bank.enum";
-import { TypeBankDetails } from "./enums/type_bank_details.enum";
 import { Counterparty } from "../../counterparty";
 import { CounterpartyBankDTO } from "./types/counterparty_bank.type";
+import { InformationIntermediaryBankDTO } from "./types/information_intermediary_bank.type";
 
 export class CounterpartyBank extends Counterparty {
   private ownerAddress: Address;
@@ -15,34 +15,35 @@ export class CounterpartyBank extends Counterparty {
   private bankName: string;
   private bankAddress: Address;
   private networkBank: NetworkBank;
+  private informationIntermediaryBank?: InformationIntermediaryBankDTO;
 
   static newCounterparty(
     counterpartyBank: CounterpartyBankDTO,
     isInternal: boolean = false,
   ): CounterpartyBank {
-    const counterparty: CounterpartyBank = new CounterpartyBank();
+    const c: CounterpartyBank = new CounterpartyBank();
 
-    counterparty.assetId = counterpartyBank.assetId;
-    counterparty.clientId = counterpartyBank.clientId;
-    counterparty.accountId = counterpartyBank.accountId;
-    counterparty.ownerName = counterpartyBank.informationOwner.name;
-    counterparty.ownerAddress = counterpartyBank.informationOwner.address;
-    counterparty.accountNumber = counterpartyBank.accountNumber;
+    c.assetId = counterpartyBank.assetId;
+    c.clientId = counterpartyBank.clientId;
+    c.accountId = counterpartyBank.accountId;
+    c.ownerName = counterpartyBank.informationOwner.name;
+    c.ownerAddress = counterpartyBank.informationOwner.address;
+    c.accountNumber = counterpartyBank.accountNumber;
 
-    counterparty.counterpartyType = counterpartyBank.counterpartyType;
-    counterparty.isInternal = isInternal;
+    c.counterpartyType = counterpartyBank.counterpartyType;
+    c.isInternal = isInternal;
 
-    if (counterparty.isInternal) {
-      counterparty.counterpartyId = counterpartyBank.counterpartyId;
+    if (c.isInternal) {
+      c.counterpartyId = counterpartyBank.counterpartyId;
     } else {
-      counterparty.counterpartyId = v4();
+      c.counterpartyId = v4();
     }
 
     if (
       counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||
       counterpartyBank.informationBank.networkBank === NetworkBank.ACH
     ) {
-      counterparty.routingNumber = counterpartyBank.routingNumber;
+      c.routingNumber = counterpartyBank.routingNumber;
       if (counterpartyBank.routingNumber === undefined) {
         throw new GenericException("The field routing Number is mandatory");
       }
@@ -55,16 +56,22 @@ export class CounterpartyBank extends Counterparty {
           "The fields swiftCode or IBAN are mandatory",
         );
       }
-      counterparty.swiftCode = counterpartyBank.swiftCode;
-      counterparty.iban = counterpartyBank.iban;
+      c.swiftCode = counterpartyBank.swiftCode;
+      c.iban = counterpartyBank.iban;
     }
 
-    counterparty.networkBank = counterpartyBank.informationBank.networkBank;
-    counterparty.bankAddress = counterpartyBank.informationBank.address;
-    counterparty.bankName = counterpartyBank.informationBank.bankName;
-    counterparty.createdAt = new Date();
+    c.networkBank = counterpartyBank.informationBank.networkBank;
+    c.bankAddress = counterpartyBank.informationBank.address;
+    c.bankName = counterpartyBank.informationBank.bankName;
+    c.createdAt = new Date();
 
-    return counterparty;
+    if (counterpartyBank.informationIntermediaryBank) {
+      c.informationIntermediaryBank = {
+        ...counterpartyBank.informationIntermediaryBank,
+      };
+    }
+
+    return c;
   }
 
   static fromPrimitives(id: string, data: any): CounterpartyBank {
@@ -138,6 +145,10 @@ export class CounterpartyBank extends Counterparty {
     return this.ownerName;
   }
 
+  getInformationIntermediaryBank(): InformationIntermediaryBankDTO {
+    return this.informationIntermediaryBank;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
@@ -150,6 +161,7 @@ export class CounterpartyBank extends Counterparty {
       iban: this.iban,
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
+      informationIntermediaryBank: this.getInformationIntermediaryBank(),
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
     };

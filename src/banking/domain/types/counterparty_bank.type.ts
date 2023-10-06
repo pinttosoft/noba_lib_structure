@@ -1,6 +1,6 @@
 import { Address } from "../../../shared";
-import { TypeBankDetails } from "../enums/type_bank_details.enum";
 import { NetworkBank } from "../enums/network_bank.enum";
+import { InformationIntermediaryBankDTO } from "./information_intermediary_bank.type";
 
 export type CounterpartyBankDTO = {
   id?: string;
@@ -19,4 +19,5 @@ export type CounterpartyBankDTO = {
     networkBank: NetworkBank;
     address: Address;
   };
+  informationIntermediaryBank?: InformationIntermediaryBankDTO;
 };

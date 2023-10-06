@@ -12,4 +12,6 @@ export { CounterpartyBankDTO } from "./domain/types/counterparty_bank.type";
 
 export { InformationBankDTO } from "./domain/types/information_bank.type";
 
+export { InformationIntermediaryBankDTO } from "./domain/types/information_intermediary_bank.type";
+
 export { DepositStatus } from "./domain/enums/deposit_status.enum";
