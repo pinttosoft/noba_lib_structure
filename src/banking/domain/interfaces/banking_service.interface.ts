@@ -3,6 +3,7 @@ import { IClient } from "../../../client";
 import { CounterpartyBank } from "../counterparty_bank";
 import { InformationBankDTO } from "../types/information_bank.type";
 import { Address, DepositInformation } from "../../../shared";
+import { InformationIntermediaryBankDTO } from "../types/information_intermediary_bank.type";
 
 export interface IBankingService {
   searchDepositInformation(
@@ -23,6 +24,7 @@ export interface IBankingService {
     },
     assetId: string,
     informationBank: InformationBankDTO,
+    informationIntermediaryBank?: InformationIntermediaryBankDTO,
   ): Promise<CounterpartyBank>;
 
   internalTransfer(

@@ -4,6 +4,5 @@ import { Address } from "../../../shared";
 export type InformationIntermediaryBankDTO = {
   swiftCode: string;
   bankName: string;
-  networkBank: NetworkBank;
   address: Address;
 };
