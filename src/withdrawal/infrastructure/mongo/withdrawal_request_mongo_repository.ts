@@ -72,7 +72,7 @@ export class WithdrawalRequestMongoRepository
     logger.info(
       `solicitud de transferencia DB ${withdrawal.getId()} ${JSON.stringify(
         withdrawal.toPrimitives(),
-      )}}`,
+      )}`,
     );
     await this.persist(withdrawal.getId(), withdrawal);
   }
