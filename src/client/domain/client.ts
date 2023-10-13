@@ -136,14 +136,14 @@ export class Client extends AggregateRoot implements IClient {
 
   getCompanyToPrimitives(): CompanyDTO {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getCompanyToPrimitives");
     }
     return this.clientData as CompanyDTO;
   }
 
   getNaics(): { code: string; description: string } {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getNaics");
     }
     return {
       code: this.clientData.naics,
@@ -153,14 +153,14 @@ export class Client extends AggregateRoot implements IClient {
 
   getEstablishedDate(): Date {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getEstablishedDate");
     }
     return this.clientData.established_date;
   }
 
   getWebSite(): string {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getWebSite");
     }
     return this.clientData.webSite;
   }
@@ -171,7 +171,7 @@ export class Client extends AggregateRoot implements IClient {
 
   getClientType(): AccountType {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getClientType");
     }
     return this.clientType;
   }
@@ -232,21 +232,21 @@ export class Client extends AggregateRoot implements IClient {
 
   getPassportNumber(): string {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getPassportNumber");
     }
     return this.clientData.passport;
   }
 
   getDateOfBirth(): Date {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getDateOfBirth");
     }
 
     return this.clientData.dateBirth;
   }
   getResidencyStatus(): ResidencyStatus {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType);
+      throw new InvalidMethodForClientType(this.clientType, "getResidencyStatus");
     }
 
     return this.clientData.residencyStatus;
