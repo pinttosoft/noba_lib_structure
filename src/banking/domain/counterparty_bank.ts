@@ -33,7 +33,7 @@ export class CounterpartyBank extends Counterparty {
     c.counterpartyType = counterpartyBank.counterpartyType;
     c.isInternal = isInternal;
 
-    if (c.isInternal) {
+    if (!c.isInternal) {
       c.counterpartyId = counterpartyBank.counterpartyId;
     } else {
       c.counterpartyId = v4();
