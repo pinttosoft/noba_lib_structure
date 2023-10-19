@@ -30,6 +30,7 @@ export interface IClient {
   getFeeSwap(): FeeSwap;
   getFeeWire(): FeeWire;
   setDocument(dni: string, document: Documents): IClient;
+  setStatus(clientStatus: AccountStatus): IClient;
   activeTwoFactorAuth(): void;
   disableTwoFactorAuth(): void;
   updateData(data: IndividualDTO | CompanyDTO): void;
