@@ -4,4 +4,5 @@ export interface IUserRepository {
   upsert(user: User): Promise<void>;
   findByEmail(email: string): Promise<User | undefined>;
   findByToken(token: string): Promise<User | undefined>;
+  updatePassword(user: User): Promise<void>;
 }

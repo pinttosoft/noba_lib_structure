@@ -62,4 +62,19 @@ export class UserMongoRepository
 
     await this.execUpdateOne(user.getId(), document);
   }
+
+  async updatePassword(user: User): Promise<void> {
+    const collection = await this.collection();
+
+    const primitives = await user.toPrimitives();
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(user.getId()) },
+      {
+        $set: {
+          password: await primitives.password,
+        },
+      },
+    );
+  }
 }

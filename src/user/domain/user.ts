@@ -102,7 +102,6 @@ export class User extends AggregateRoot {
 
   async toPrimitives(): Promise<any> {
     return {
-      id: this.id,
       email: this.email,
       password: await this.password.getValueEncrypt(),
       country: this.country,
