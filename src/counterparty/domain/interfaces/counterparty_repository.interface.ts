@@ -23,6 +23,9 @@ export interface ICounterpartyRepository {
     counterpartyId: string,
     assetId: string,
   ): Promise<Counterparty | undefined>;
+  delete(
+      counterpartyId: string
+  ): Promise<void>;
 
   list(criteria: Criteria): Promise<Paginate<Counterparty> | undefined>;
 }

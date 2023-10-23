@@ -36,6 +36,11 @@ export class CounterpartyMongoRepository
     super(MongoClientFactory.createClient());
   }
 
+  async delete(counterpartyId: string): Promise<void> {
+       const collection = await this.collection();
+       await collection.deleteMany({counterpartyId});
+  }
+
   collectionName(): string {
     return "counterparty";
   }
