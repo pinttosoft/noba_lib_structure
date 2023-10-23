@@ -84,7 +84,7 @@ export class Wallet extends AggregateRoot implements IWallet {
    * @param label
    */
   getIdentifierForInstructionOfDeposit(label: string): string {
-    return this.clientId + "-" + this.asset.getAssetId() + "-" + this.label;
+    return this.instructForDeposit.id;
   }
 
   getInstructionForDeposit():
@@ -139,12 +139,12 @@ export class Wallet extends AggregateRoot implements IWallet {
       d = 8;
     }
 
-    if(Number(amount) > 0) {
+    if (Number(amount) > 0) {
       this.lockedBalance = this.truncate(
-          Number(this.lockedBalance) - Number(amount),
-          d,
+        Number(this.lockedBalance) - Number(amount),
+        d,
       );
-      return this
+      return this;
     }
     this.lockedBalance = this.truncate(
       Number(this.lockedBalance) + Number(amount),
