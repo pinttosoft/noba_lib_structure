@@ -136,7 +136,10 @@ export class Client extends AggregateRoot implements IClient {
 
   getCompanyToPrimitives(): CompanyDTO {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType, "getCompanyToPrimitives");
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getCompanyToPrimitives",
+      );
     }
     return this.clientData as CompanyDTO;
   }
@@ -153,7 +156,10 @@ export class Client extends AggregateRoot implements IClient {
 
   getEstablishedDate(): Date {
     if (this.clientType === AccountType.INDIVIDUAL) {
-      throw new InvalidMethodForClientType(this.clientType, "getEstablishedDate");
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getEstablishedDate",
+      );
     }
     return this.clientData.established_date;
   }
@@ -232,7 +238,10 @@ export class Client extends AggregateRoot implements IClient {
 
   getPassportNumber(): string {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType, "getPassportNumber");
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getPassportNumber",
+      );
     }
     return this.clientData.passport;
   }
@@ -246,7 +255,10 @@ export class Client extends AggregateRoot implements IClient {
   }
   getResidencyStatus(): ResidencyStatus {
     if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType, "getResidencyStatus");
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getResidencyStatus",
+      );
     }
 
     return this.clientData.residencyStatus;
@@ -270,6 +282,14 @@ export class Client extends AggregateRoot implements IClient {
 
   updateData(data: IndividualDTO | CompanyDTO): void {
     this.clientData = data;
+  }
+
+  approveSegregated(): void {
+    this.status = AccountStatus.APPROVED;
+  }
+
+  reject(): void {
+    this.status = AccountStatus.REJECTED;
   }
 
   toPrimitives(): any {

@@ -34,4 +34,6 @@ export interface IClient {
   activeTwoFactorAuth(): void;
   disableTwoFactorAuth(): void;
   updateData(data: IndividualDTO | CompanyDTO): void;
+  approveSegregated(): void;
+  reject(): void;
 }
