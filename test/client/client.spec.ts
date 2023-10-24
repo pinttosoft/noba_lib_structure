@@ -118,8 +118,6 @@ describe("Client", () => {
       account,
     );
 
-    // client.approveSegregated();
-
     client.rejectSegregated();
 
     await clientRepo.upsert(client);
