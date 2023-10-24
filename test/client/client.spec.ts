@@ -2,6 +2,7 @@ import {
   AccountMongoRepository,
   AccountType,
   ClientFactory,
+  ClientMongoRepository,
   IndividualDTO,
 } from "../../src";
 
@@ -35,5 +36,11 @@ describe("Client", () => {
       AccountType.INDIVIDUAL,
       account,
     );
+  });
+
+  it("should return data of the client", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("PNOBA123654");
+    console.log(client.toPrimitives());
   });
 });

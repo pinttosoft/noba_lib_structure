@@ -15,6 +15,7 @@ import {
   ISystemConfigurationRepository,
   SystemConfigurationMongoRepository,
 } from "../../../system_configuration";
+import { Documents } from "../../../documents";
 
 export class ClientFactory {
   static async createNewClient(
@@ -33,6 +34,7 @@ export class ClientFactory {
       .setClientData(clientData)
       .setFeeWire(await systemConfig.getDefaultFeeWire())
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
+
       .build();
 
     if (clientType === AccountType.COMPANY) {
@@ -55,10 +57,45 @@ export class ClientFactory {
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
+
+      if (data.type !== AccountType.COMPANY) {
+        // c.setDocument(
+        //   data.dni,
+        //   Documents.fromPrimitives({
+        //     ...data.documents,
+        //     clientId: data.clientId,
+        //   }),
+        // );
+
+        data.documents.forEach((document: any) => {
+          c.setDocument(
+            data.dni,
+            Documents.fromPrimitives({
+              ...document,
+              clientId: data.clientId,
+            }),
+          );
+        });
+
+        return c;
+      }
+
+      c.setDocument(data.informationCompany.registerNumber, data.documents);
+      data.partners.forEach((partner: any) => {
+        partner.documents.forEach((document: any) => {
+          c.setDocument(
+            partner.dni,
+            Documents.fromPrimitives({
+              ...document,
+              clientId: data.clientId,
+            }),
+          );
+        });
+      });
+
+      return c;
     } catch (e) {
       throw new GenericException(e.message);
     }
-
-    return c;
   }
 }
