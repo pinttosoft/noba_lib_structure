@@ -39,10 +39,13 @@ export class ClientFactory {
       c.setCompanyPartners(companyPartners);
     }
 
+    c.setCreatedAt(new Date());
+
     return c;
   }
 
   static fromPrimitives(id: string, data: any, account: IAccount): IClient {
+    console.log("fromPrimitives");
     const c: Client = new Client();
 
     try {

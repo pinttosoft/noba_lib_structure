@@ -27,6 +27,8 @@ export class Client extends AggregateRoot implements IClient {
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
+  private createdAt: Date;
+  private approvedAt: Date;
 
   getId(): string {
     return this.id;
@@ -106,6 +108,16 @@ export class Client extends AggregateRoot implements IClient {
 
   setCompanyPartners(partners: IOwnerAccount[]): Client {
     this.companyPartners = partners;
+    return this;
+  }
+
+  setCreatedAt(date: Date): Client {
+    this.createdAt = date;
+    return this;
+  }
+
+  setApprovedAt(date: Date): Client {
+    this.approvedAt = date;
     return this;
   }
 
@@ -286,13 +298,15 @@ export class Client extends AggregateRoot implements IClient {
 
   approveSegregated(): void {
     this.status = AccountStatus.APPROVED;
+    this.setApprovedAt(new Date());
   }
 
-  reject(): void {
+  rejectSegregated(): void {
     this.status = AccountStatus.REJECTED;
   }
 
   toPrimitives(): any {
+    console.log("- toPrimitives");
     return {
       id: this.id,
       clientId: this.clientId,
@@ -305,6 +319,8 @@ export class Client extends AggregateRoot implements IClient {
       feeWire: this.feeWire.toPrimitives(),
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
+      createdAt: this.createdAt,
+      approvedAt: this.approvedAt,
     };
   }
 }

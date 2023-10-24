@@ -35,5 +35,5 @@ export interface IClient {
   disableTwoFactorAuth(): void;
   updateData(data: IndividualDTO | CompanyDTO): void;
   approveSegregated(): void;
-  reject(): void;
+  rejectSegregated(): void;
 }

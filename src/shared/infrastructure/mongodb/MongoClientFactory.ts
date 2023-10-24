@@ -35,6 +35,7 @@ export class MongoClientFactory {
 
     const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}/${MONGO_DB}?retryWrites=true&w=majority`;
 
+    console.log("uri", uri);
     const client = new MongoClient(uri, { ignoreUndefined: true });
 
     await client.connect();
