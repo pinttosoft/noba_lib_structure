@@ -26,8 +26,8 @@ describe("Client", () => {
       streetTwo: "rua vazia, 1",
       postalCode: "33106",
       city: "MIAMI",
-      region: "todo FLORIDA",
-      country: "todo US",
+      region: "FLORIDA",
+      country: "US",
       referredByAccountId: "",
     } as unknown as IndividualDTO;
 
@@ -39,6 +39,12 @@ describe("Client", () => {
       AccountType.INDIVIDUAL,
       account,
     );
+  });
+
+  it("should return data of the client", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("PNOBA123654");
+    console.log(client.toPrimitives());
   });
 
   // it("Approve client", async () => {

@@ -26,6 +26,17 @@ export class Documents {
     return d;
   }
 
+  static fromPrimitives(data: any): Documents {
+    const f = new Documents();
+    f.clientId = data.clientId;
+    f.patch = data.patch;
+    f.documentType = data.documentType;
+    f.documentId = data.documentId;
+    f.documentSide = data.documentSide;
+
+    return f;
+  }
+
   getClientId(): string {
     return this.clientId;
   }
