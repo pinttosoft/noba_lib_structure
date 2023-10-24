@@ -13,6 +13,7 @@ import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_t
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
+import * as process from "process";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -20,6 +21,7 @@ export class Client extends AggregateRoot implements IClient {
   private clientType: AccountType;
   private account: IAccount;
   private id?: string;
+  private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
   private feeSwap?: FeeSwap;
@@ -56,6 +58,7 @@ export class Client extends AggregateRoot implements IClient {
 
   setAccount(account: IAccount): Client {
     this.account = account;
+    this.accountId = account.getAccountId();
     return this;
   }
 
@@ -299,6 +302,8 @@ export class Client extends AggregateRoot implements IClient {
   approveSegregated(): void {
     this.status = AccountStatus.APPROVED;
     this.setApprovedAt(new Date());
+
+    this.accountId = process.env.PINTTOSOFT_ACCOUNT;
   }
 
   rejectSegregated(): void {
@@ -306,13 +311,12 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   toPrimitives(): any {
-    console.log("- toPrimitives");
     return {
       id: this.id,
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
-      accountId: this.account.getAccountId(),
+      accountId: this.accountId,
       taxId: this.taxId ?? "",
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),

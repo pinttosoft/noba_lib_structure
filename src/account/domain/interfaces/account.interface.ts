@@ -12,5 +12,4 @@ export interface IAccount {
   getStatus(): AccountStatus;
   getApprovalDate(): Date;
   getCreatedAt(): Date;
-  reject(): void;
 }

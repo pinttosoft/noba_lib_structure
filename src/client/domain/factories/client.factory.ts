@@ -45,7 +45,6 @@ export class ClientFactory {
   }
 
   static fromPrimitives(id: string, data: any, account: IAccount): IClient {
-    console.log("fromPrimitives");
     const c: Client = new Client();
 
     try {
