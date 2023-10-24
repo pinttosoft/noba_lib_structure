@@ -61,14 +61,6 @@ export class ClientFactory {
         .setClientId(data.clientId);
 
       if (data.type !== AccountType.COMPANY) {
-        // c.setDocument(
-        //   data.dni,
-        //   Documents.fromPrimitives({
-        //     ...data.documents,
-        //     clientId: data.clientId,
-        //   }),
-        // );
-
         data.documents.forEach((document: any) => {
           c.setDocument(
             data.dni,
