@@ -194,4 +194,14 @@ describe("Client", () => {
 
     await clientRepo.upsert(client);
   });
+
+  it("Delete kyc action", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client: IClient =
+      await clientRepo.findByClientId("kbros-XD187263254");
+
+    client.deleteKycAction("kyc-0.18776280337277518");
+
+    await clientRepo.upsert(client);
+  });
 });
