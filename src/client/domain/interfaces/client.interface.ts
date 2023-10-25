@@ -39,6 +39,7 @@ export interface IClient {
   rejectSegregated(): void;
   markAsSendData(): IClient;
   markAsUnderReview(): IClient;
-  getKycAction(): KycAction[];
-  setKycAction(kycActions: KycAction[]): void;
+  getKycActions(): KycAction[];
+  setKycActions(kycActions: KycAction[]): void;
+  deleteKycAction(id: string): void;
 }

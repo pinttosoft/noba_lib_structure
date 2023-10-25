@@ -325,12 +325,18 @@ export class Client extends AggregateRoot implements IClient {
     this.status = AccountStatus.REJECTED;
   }
 
-  getKycAction(): KycAction[] {
+  getKycActions(): KycAction[] {
     return this.kycRequestedChanges;
   }
 
-  setKycAction(kycActions: KycAction[]): void {
+  setKycActions(kycActions: KycAction[]): void {
     this.kycRequestedChanges.push(...kycActions);
+  }
+
+  deleteKycAction(id: string) {
+    this.kycRequestedChanges = this.kycRequestedChanges.filter(
+      (kyc: KycAction) => kyc.id !== id,
+    );
   }
 
   toPrimitives(): any {

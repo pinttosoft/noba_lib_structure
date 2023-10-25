@@ -175,11 +175,11 @@ describe("Client", () => {
       account,
     );
 
-    client.setKycAction([
+    client.setKycActions([
       { action: "cambiar foto de perfil", date: new Date() },
     ]);
 
-    client.setKycAction([
+    client.setKycActions([
       { action: "agregar foto de pasaporte", date: new Date() },
     ]);
 
