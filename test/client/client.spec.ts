@@ -142,4 +142,47 @@ describe("Client", () => {
 
     await clientRepo.upsert(client);
   });
+
+  it("Add kyc requested changes to client", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const email: string = "sonic_kyc@pc.com";
+    const payload = {
+      firstName: "kyc sonic",
+      middleName: "luigi",
+      lastName: "bros XD",
+      email,
+      dateBirth: "1987-02-23",
+      dni: "187263254",
+      taxId: "",
+      passport: "5882997992",
+      phoneCountry: "+55",
+      phoneNumber: "2191256101",
+      streetOne: "rua dos bobos, 0",
+      streetTwo: "rua vazia, 1",
+      postalCode: "33106",
+      city: "- ASTORIA",
+      region: "todo FLORIDA",
+      country: "todo US",
+      referredByAccountId: "",
+    } as unknown as IndividualDTO;
+
+    const account: IAccount =
+      await AccountMongoRepository.instance().findByAccountId("DANIELLEE002");
+
+    const client: IClient = await ClientFactory.createNewClient(
+      payload,
+      AccountType.INDIVIDUAL,
+      account,
+    );
+
+    client.setKycAction([
+      { action: "cambiar foto de perfil", date: new Date() },
+    ]);
+
+    client.setKycAction([
+      { action: "agregar foto de pasaporte", date: new Date() },
+    ]);
+
+    await clientRepo.upsert(client);
+  });
 });

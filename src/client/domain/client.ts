@@ -14,6 +14,7 @@ import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
 import * as process from "process";
+import { KycAction } from "../../account/domain/types/kyc-action.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -22,6 +23,7 @@ export class Client extends AggregateRoot implements IClient {
   private account: IAccount;
   private id?: string;
   private isSegregated?: boolean;
+  private kycRequestedChanges?: KycAction[] = [];
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -323,16 +325,21 @@ export class Client extends AggregateRoot implements IClient {
     this.status = AccountStatus.REJECTED;
   }
 
+  getKycAction(): KycAction[] {
+    return this.kycRequestedChanges;
+  }
+
+  setKycAction(kycAction: KycAction[]): void {
+    this.kycRequestedChanges.push(...kycAction);
+  }
+
   toPrimitives(): any {
     return {
-      id: this.id,
       isSegregated: this.isSegregated,
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
       accountId: this.accountId,
-      taxId: this.taxId ?? "",
-      //taxId: this.taxId ?? "",
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
@@ -340,6 +347,7 @@ export class Client extends AggregateRoot implements IClient {
       twoFactorActive: this.twoFactorActive,
       createdAt: this.createdAt,
       approvedAt: this.approvedAt,
+      kycRequestedChanges: this.kycRequestedChanges,
     };
   }
 }

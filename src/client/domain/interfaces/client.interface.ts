@@ -6,6 +6,7 @@ import { FeeSwap, FeeWire } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
 import { IndividualDTO } from "../types/Individual.type";
+import { KycAction } from "../../../account/domain/types/kyc-action.type";
 
 export interface IClient {
   getId(): string;
@@ -38,4 +39,6 @@ export interface IClient {
   rejectSegregated(): void;
   markAsSendData(): IClient;
   markAsUnderReview(): IClient;
+  getKycAction(): KycAction[];
+  setKycAction(kycAction: KycAction[]): void;
 }
