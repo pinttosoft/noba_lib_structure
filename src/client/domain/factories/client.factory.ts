@@ -71,11 +71,16 @@ export class ClientFactory {
             }),
           );
         });
+
+        return c;
       }
 
-      c.setDocument(data.informationCompany.registerNumber, data.documents);
+      if (data.documents && data.documents.length > 0) {
+        c.setDocument(data.informationCompany.registerNumber, data.documents);
+      }
+
       data.partners.forEach((partner: any) => {
-        if (data.documents && data.documents.length > 0) {
+        if (partner.documents && partner.documents.length > 0) {
           partner?.documents.forEach((document: any) => {
             c.setDocument(
               partner.dni,

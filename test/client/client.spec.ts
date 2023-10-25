@@ -40,7 +40,14 @@ describe("Client", () => {
 
   it("should return data of the client", async () => {
     const client = await ClientMongoRepository.instance().findByClientId(
-      "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
+      "B-LINE TRANSPORTATION",
+    );
+    console.log(client);
+  });
+
+  it("should return data of the client by email", async () => {
+    const client = await ClientMongoRepository.instance().findByEmail(
+      "programador.angel@gmail.com",
     );
     console.log(client);
   });

@@ -13,6 +13,7 @@ import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_t
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
+import * as console from "console";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -202,6 +203,7 @@ export class Client extends AggregateRoot implements IClient {
 
   getIDNumber(): string {
     if (this.clientType === AccountType.COMPANY) {
+      console.log("SSS");
       return (this.toPrimitives() as CompanyDTO).informationCompany
         .registerNumber;
     } else {
@@ -282,6 +284,7 @@ export class Client extends AggregateRoot implements IClient {
 
   updateData(data: IndividualDTO | CompanyDTO): void {
     this.clientData = data;
+    delete this.clientData.password;
     delete this.clientData._id;
   }
 
