@@ -21,6 +21,7 @@ export class Client extends AggregateRoot implements IClient {
   private clientType: AccountType;
   private account: IAccount;
   private id?: string;
+  private isSegregated?: boolean;
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -304,6 +305,7 @@ export class Client extends AggregateRoot implements IClient {
     this.setApprovedAt(new Date());
 
     this.accountId = process.env.PINTTOSOFT_ACCOUNT;
+    this.isSegregated = true;
   }
 
   rejectSegregated(): void {
@@ -313,6 +315,7 @@ export class Client extends AggregateRoot implements IClient {
   toPrimitives(): any {
     return {
       id: this.id,
+      isSegregated: this.isSegregated,
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
