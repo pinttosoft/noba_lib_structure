@@ -40,6 +40,6 @@ export interface IClient {
   markAsSendData(): IClient;
   markAsUnderReview(): IClient;
   getKycActions(): KycAction[];
-  setKycActions(kycActions: KycAction[]): void;
+  setKycActions(kycActions: KycAction[]): IClient;
   deleteKycAction(id: string): void;
 }

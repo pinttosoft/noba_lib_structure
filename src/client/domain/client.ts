@@ -23,7 +23,7 @@ export class Client extends AggregateRoot implements IClient {
   private account: IAccount;
   private id?: string;
   private isSegregated?: boolean;
-  private kycRequestedChanges?: KycAction[] = [];
+  private kycRequestedChanges?: KycAction[];
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -329,8 +329,14 @@ export class Client extends AggregateRoot implements IClient {
     return this.kycRequestedChanges;
   }
 
-  setKycActions(kycActions: KycAction[]): void {
-    this.kycRequestedChanges.push(...kycActions);
+  setKycActions(kycActions: KycAction[]): IClient {
+    if (!this.kycRequestedChanges) {
+      this.kycRequestedChanges = [...kycActions];
+    } else {
+      this.kycRequestedChanges.push(...kycActions);
+    }
+
+    return this;
   }
 
   deleteKycAction(id: string) {

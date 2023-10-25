@@ -185,4 +185,13 @@ describe("Client", () => {
 
     await clientRepo.upsert(client);
   });
+
+  it("Get kyc actions", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client = await clientRepo.findByClientId("kbros-XD187263254");
+
+    client.setKycActions([{ action: "agregado ", date: new Date() }]);
+
+    await clientRepo.upsert(client);
+  });
 });

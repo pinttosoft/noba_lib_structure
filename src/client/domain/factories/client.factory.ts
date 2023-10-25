@@ -58,7 +58,8 @@ export class ClientFactory {
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
-        .setClientId(data.clientId);
+        .setClientId(data.clientId)
+        .setKycActions(data.kycRequestedChanges ?? []);
 
       if (data.type !== AccountType.COMPANY) {
         if (!data.documents || data.documents.length === 0) {
