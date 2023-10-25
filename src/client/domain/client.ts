@@ -59,7 +59,6 @@ export class Client extends AggregateRoot implements IClient {
 
   setAccount(account: IAccount): Client {
     this.account = account;
-    this.accountId = account.getAccountId();
     return this;
   }
 
@@ -298,6 +297,18 @@ export class Client extends AggregateRoot implements IClient {
 
   updateData(data: IndividualDTO | CompanyDTO): void {
     this.clientData = data;
+    delete this.clientData.password;
+    delete this.clientData._id;
+  }
+
+  markAsSendData(): IClient {
+    this.status = AccountStatus.SUBMITTED;
+    return this;
+  }
+
+  markAsUnderReview(): IClient {
+    this.status = AccountStatus.PROCESSING;
+    return this;
   }
 
   approveSegregated(): void {
@@ -321,6 +332,7 @@ export class Client extends AggregateRoot implements IClient {
       type: this.clientType,
       accountId: this.accountId,
       taxId: this.taxId ?? "",
+      //taxId: this.taxId ?? "",
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),

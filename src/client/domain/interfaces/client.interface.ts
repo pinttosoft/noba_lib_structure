@@ -36,4 +36,6 @@ export interface IClient {
   updateData(data: IndividualDTO | CompanyDTO): void;
   approveSegregated(): void;
   rejectSegregated(): void;
+  markAsSendData(): IClient;
+  markAsUnderReview(): IClient;
 }

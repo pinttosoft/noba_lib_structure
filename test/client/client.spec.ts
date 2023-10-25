@@ -42,9 +42,31 @@ describe("Client", () => {
   });
 
   it("should return data of the client", async () => {
+    const client = await ClientMongoRepository.instance().findByClientId(
+      "B-LINE TRANSPORTATION",
+    );
+    console.log(client);
+  });
+
+  it("should return data of the client by email", async () => {
+    const client = await ClientMongoRepository.instance().findByEmail(
+      "programador.angel@gmail.com",
+    );
+    console.log(client);
+  });
+
+  it("should update data of the client", async () => {
     const client =
       await ClientMongoRepository.instance().findByClientId("PNOBA123654");
-    console.log(client.toPrimitives());
+
+    const data = client.toPrimitives();
+
+    data.firstName = "Angel Test";
+    data.middleName = "Angel Test";
+    data.lastName = "Angel Test";
+    client.updateData(data);
+
+    await ClientMongoRepository.instance().upsert(client);
   });
 
   it("Approve client", async () => {

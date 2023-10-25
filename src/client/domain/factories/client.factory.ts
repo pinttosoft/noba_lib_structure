@@ -61,6 +61,9 @@ export class ClientFactory {
         .setClientId(data.clientId);
 
       if (data.type !== AccountType.COMPANY) {
+        if (!data.documents || data.documents.length === 0) {
+          return c;
+        }
         data.documents.forEach((document: any) => {
           c.setDocument(
             data.dni,
@@ -74,17 +77,22 @@ export class ClientFactory {
         return c;
       }
 
-      c.setDocument(data.informationCompany.registerNumber, data.documents);
+      if (data.documents && data.documents.length > 0) {
+        c.setDocument(data.informationCompany.registerNumber, data.documents);
+      }
+
       data.partners.forEach((partner: any) => {
-        partner.documents.forEach((document: any) => {
-          c.setDocument(
-            partner.dni,
-            Documents.fromPrimitives({
-              ...document,
-              clientId: data.clientId,
-            }),
-          );
-        });
+        if (partner.documents && partner.documents.length > 0) {
+          partner?.documents.forEach((document: any) => {
+            c.setDocument(
+              partner.dni,
+              Documents.fromPrimitives({
+                ...document,
+                clientId: data.clientId,
+              }),
+            );
+          });
+        }
       });
 
       return c;
