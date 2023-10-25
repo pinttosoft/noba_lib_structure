@@ -39,9 +39,10 @@ describe("Client", () => {
   });
 
   it("should return data of the client", async () => {
-    const client =
-      await ClientMongoRepository.instance().findByClientId("PNOBA123654");
-    console.log(client.toPrimitives());
+    const client = await ClientMongoRepository.instance().findByClientId(
+      "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
+    );
+    console.log(client);
   });
 
   it("should update data of the client", async () => {
