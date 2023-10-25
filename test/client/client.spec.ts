@@ -43,4 +43,18 @@ describe("Client", () => {
       await ClientMongoRepository.instance().findByClientId("PNOBA123654");
     console.log(client.toPrimitives());
   });
+
+  it("should update data of the client", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("PNOBA123654");
+
+    const data = client.toPrimitives();
+
+    data.firstName = "Angel Test";
+    data.middleName = "Angel Test";
+    data.lastName = "Angel Test";
+    client.updateData(data);
+
+    await ClientMongoRepository.instance().upsert(client);
+  });
 });

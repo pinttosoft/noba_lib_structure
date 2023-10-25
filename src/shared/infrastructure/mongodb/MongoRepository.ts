@@ -35,7 +35,6 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
     return await this.execUpdateOne(id, {
       ...primitives,
-      id: id,
     });
   }
 
