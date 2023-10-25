@@ -14,7 +14,7 @@ import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
 import * as process from "process";
-import { KycAction } from "../../account/domain/types/kyc-action.type";
+import { KycAction } from "./types/kyc-action.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -329,8 +329,8 @@ export class Client extends AggregateRoot implements IClient {
     return this.kycRequestedChanges;
   }
 
-  setKycAction(kycAction: KycAction[]): void {
-    this.kycRequestedChanges.push(...kycAction);
+  setKycAction(kycActions: KycAction[]): void {
+    this.kycRequestedChanges.push(...kycActions);
   }
 
   toPrimitives(): any {
