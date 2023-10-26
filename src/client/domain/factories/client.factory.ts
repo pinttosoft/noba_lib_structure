@@ -58,13 +58,16 @@ export class ClientFactory {
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
-        .setClientId(data.clientId)
-        .setKycActions(data.kycRequestedChanges ?? []);
+        .setClientId(data.clientId);
 
+      // natural
       if (data.type !== AccountType.COMPANY) {
+        c.setKycActions(data.kycRequestedChanges ?? []);
+
         if (!data.documents || data.documents.length === 0) {
           return c;
         }
+
         data.documents.forEach((document: any) => {
           c.setDocument(
             data.dni,
@@ -77,6 +80,10 @@ export class ClientFactory {
 
         return c;
       }
+
+      // company
+      // todo
+      c.setCompanyPartners(data.partners ?? []);
 
       if (data.documents && data.documents.length > 0) {
         c.setDocument(data.informationCompany.registerNumber, data.documents);

@@ -116,6 +116,19 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  getCompanyPartners() {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getCompanyToPrimitives",
+      );
+    }
+
+    return this.clientData.partners;
+    // todo
+    // return this.clientData.partners;
+  }
+
   setCreatedAt(date: Date): Client {
     this.createdAt = date;
     return this;
@@ -326,7 +339,15 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getKycActions(): KycAction[] {
-    return this.kycRequestedChanges;
+    console.log("getKycActions clientType", this.clientType);
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return this.kycRequestedChanges;
+    }
+
+    const kcys = this.getCompanyPartners().map((partner) => {
+      return partner;
+    });
+    console.log(" getCompanyPartners");
   }
 
   setKycActions(kycActions: KycAction[]): IClient {
@@ -335,6 +356,32 @@ export class Client extends AggregateRoot implements IClient {
     } else {
       this.kycRequestedChanges.push(...kycActions);
     }
+
+    return this;
+  }
+
+  setKycActionsToPartner(kycAction: KycAction): IClient {
+    const partners = this.getCompanyPartners().map((partner) => {
+      // console.log("- setKycActions partner", partner);
+      // console.log(
+      //   'partner["kycRequestedChanges"]',
+      //   partner.kycRequestedChanges,
+      // );
+      if (partner.dni === kycAction.dni) {
+        const actions = partner.kycRequestedChanges ?? [];
+        console.log("actions", actions);
+        console.log("kycActions", kycAction);
+        return {
+          ...partner,
+          kycRequestedChanges: [...actions, kycAction],
+        };
+      }
+
+      return partner;
+    });
+
+    console.log("= partners", partners);
+    this.setClientData({ ...this.clientData, partners });
 
     return this;
   }
