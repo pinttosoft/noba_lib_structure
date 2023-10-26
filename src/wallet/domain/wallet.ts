@@ -160,7 +160,8 @@ export class Wallet extends AggregateRoot implements IWallet {
       d = 8;
     }
 
-    this.balance = this.truncate(Number(this.balance) - Number(amount), d);
+    // this.balance = this.truncate(Number(this.balance) - Number(amount), d);
+    this.balance = Number((Number(this.balance) - Number(amount)).toFixed(d));
     return this;
   }
 
