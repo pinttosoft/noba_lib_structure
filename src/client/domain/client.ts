@@ -204,9 +204,9 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getClientType(): AccountType {
-    if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType, "getClientType");
-    }
+    // if (this.clientType === AccountType.COMPANY) {
+    //   throw new InvalidMethodForClientType(this.clientType, "getClientType");
+    // }
     return this.clientType;
   }
 

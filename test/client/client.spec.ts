@@ -241,6 +241,7 @@ describe("Client", () => {
       "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
     );
 
+    console.log("-- tipo", client.getClientType());
     client.deleteKycActionToPartner({
       action: "rk",
       date: new Date(),
