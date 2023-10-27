@@ -217,26 +217,37 @@ describe("Client", () => {
       dni: "11111",
       id: "555",
     });
-    //
-    // client.setKycActionsToPartner([
-    //   {
-    //     action: "2 test",
-    //     date: new Date(),
-    //     dni: "187263254",
-    //     id: "2",
-    //   },
-    //   {
-    //     action: "3 test",
-    //     date: new Date(),
-    //     dni: "187263254",
-    //     id: "3",
-    //   },
-    // ]);
+
+    client.setKycActionsToPartner({
+      action: "2 test",
+      date: new Date(),
+      dni: "187263254",
+      id: "2",
+    });
+
+    client.setKycActionsToPartner({
+      action: "final test",
+      date: new Date(),
+      dni: "11111",
+      id: "142fgdasfgdfg",
+    });
 
     await clientRepo.upsert(client);
+  });
 
-    console.log(
-      client.getCompanyToPrimitives().partners[0].kycRequestedChanges,
+  it("Delete kyc action to partner", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client: IClient = await clientRepo.findByClientId(
+      "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
     );
+
+    client.deleteKycActionToPartner({
+      action: "rk",
+      date: new Date(),
+      dni: "11111",
+      id: "142fgdasfgdfg",
+    });
+
+    await clientRepo.upsert(client);
   });
 });

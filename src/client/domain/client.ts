@@ -125,8 +125,6 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     return this.clientData.partners;
-    // todo
-    // return this.clientData.partners;
   }
 
   setCreatedAt(date: Date): Client {
@@ -339,7 +337,6 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getKycActions(): KycAction[] {
-    console.log("getKycActions clientType", this.clientType);
     if (this.clientType === AccountType.INDIVIDUAL) {
       return this.kycRequestedChanges;
     }
@@ -347,7 +344,6 @@ export class Client extends AggregateRoot implements IClient {
     const kcys = this.getCompanyPartners().map((partner) => {
       return partner;
     });
-    console.log(" getCompanyPartners");
   }
 
   setKycActions(kycActions: KycAction[]): IClient {
@@ -362,15 +358,9 @@ export class Client extends AggregateRoot implements IClient {
 
   setKycActionsToPartner(kycAction: KycAction): IClient {
     const partners = this.getCompanyPartners().map((partner) => {
-      // console.log("- setKycActions partner", partner);
-      // console.log(
-      //   'partner["kycRequestedChanges"]',
-      //   partner.kycRequestedChanges,
-      // );
       if (partner.dni === kycAction.dni) {
         const actions = partner.kycRequestedChanges ?? [];
-        console.log("actions", actions);
-        console.log("kycActions", kycAction);
+
         return {
           ...partner,
           kycRequestedChanges: [...actions, kycAction],
@@ -379,8 +369,6 @@ export class Client extends AggregateRoot implements IClient {
 
       return partner;
     });
-
-    console.log("= partners", partners);
     this.setClientData({ ...this.clientData, partners });
 
     return this;
@@ -390,6 +378,18 @@ export class Client extends AggregateRoot implements IClient {
     this.kycRequestedChanges = this.kycRequestedChanges.filter(
       (kyc: KycAction) => kyc.id !== id,
     );
+  }
+
+  deleteKycActionToPartner(kycAction: KycAction): void {
+    const partners = this.getCompanyPartners().map((partner) => {
+      const partnerActions = partner.kycRequestedChanges.filter(
+        (action) => action.id !== kycAction.id,
+      );
+
+      return { ...partner, kycRequestedChanges: partnerActions };
+    });
+
+    this.setClientData({ ...this.clientData, partners });
   }
 
   toPrimitives(): any {

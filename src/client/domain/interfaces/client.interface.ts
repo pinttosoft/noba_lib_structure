@@ -42,5 +42,6 @@ export interface IClient {
   getKycActions(): KycAction[];
   setKycActions(kycActions: KycAction[]): IClient;
   deleteKycAction(id: string): void;
-  setKycActionsToPartner(kycActions: KycAction): IClient;
+  setKycActionsToPartner(kycAction: KycAction): IClient;
+  deleteKycActionToPartner(kycAction: KycAction): void;
 }
