@@ -241,12 +241,11 @@ describe("Client", () => {
       "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
     );
 
-    console.log("-- tipo", client.getClientType());
     client.deleteKycActionToPartner({
       action: "rk",
       date: new Date(),
-      dni: "11111",
-      id: "142fgdasfgdfg",
+      dni: "187263254",
+      id: "1",
     });
 
     await clientRepo.upsert(client);
