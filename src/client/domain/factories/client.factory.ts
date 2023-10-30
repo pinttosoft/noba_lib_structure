@@ -77,7 +77,13 @@ export class ClientFactory {
       }
 
       if (data.documents && data.documents.length > 0) {
-        c.setDocument(data.informationCompany.registerNumber, data.documents);
+        c.setDocument(
+          data.informationCompany.registerNumber,
+          Documents.fromPrimitives({
+            ...data.documents,
+            clientId: data.clientId,
+          }),
+        );
       }
 
       if (data.partners.length === 0) {
@@ -89,20 +95,6 @@ export class ClientFactory {
           OwnerAccountFactory.factoryOwnerAccount(p, AccountType.INDIVIDUAL),
         ),
       );
-
-      data.partners.forEach((partner: any) => {
-        if (partner.documents && partner.documents.length > 0) {
-          partner?.documents.forEach((document: any) => {
-            c.setDocument(
-              partner.dni,
-              Documents.fromPrimitives({
-                ...document,
-                clientId: data.clientId,
-              }),
-            );
-          });
-        }
-      });
 
       return c;
     } catch (e) {

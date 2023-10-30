@@ -36,6 +36,10 @@ export class IndividualOwner implements IOwnerAccount {
     }
   }
 
+  deleteAllDocs() {
+    this.individual.documents = [];
+  }
+
   getAddress(): Address {
     return {
       streetOne: this.individual.streetOne,

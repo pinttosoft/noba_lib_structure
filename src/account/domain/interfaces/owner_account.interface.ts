@@ -8,4 +8,5 @@ export interface IOwnerAccount {
   getEmail(): string;
   getIdentifyNumber(): string;
   setDocument(document: Documents): void;
+  deleteAllDocs(): void;
 }

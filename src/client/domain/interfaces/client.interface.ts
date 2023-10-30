@@ -36,4 +36,5 @@ export interface IClient {
   updateData(data: IndividualDTO | CompanyDTO): void;
   markAsSendData(): IClient;
   markAsUnderReview(): IClient;
+  deleteAllDocuemtnsPartners(dni: string);
 }

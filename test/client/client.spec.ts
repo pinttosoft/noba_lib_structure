@@ -8,6 +8,7 @@ import {
   DocumentType,
   IndividualDTO,
 } from "../../src";
+import * as console from "console";
 
 describe("Client", () => {
   it("new indivual account", async () => {
@@ -73,27 +74,36 @@ describe("Client", () => {
     const client = await ClientMongoRepository.instance().findByClientId(
       "pinttosoftpinttosoft",
     );
-    const doc = Documents.newDocument(
-      client.getClientId(),
-      "/home/abejarano/Downloads/1.png",
-      DocumentType.INCORPORATION_DOCUMENT,
-      DocumentSide.FRONT,
-    );
-    client.setDocument(client.getIDNumber(), doc);
-
-    expect(client.toPrimitives().documents.length > 0).toBe(true);
 
     // asignar docuemnto a socios
     const partner = client.getCompanyToPrimitives().partners[0];
-    const docPartner = Documents.newDocument(
+    client.deleteAllDocuemtnsPartners(partner.dni);
+
+    client.setDocument(
       partner.dni,
-      "/home/abejarano/Downloads/1.png",
-      DocumentType.GOVERNMENT_ID,
-      DocumentSide.FRONT,
+      Documents.newDocument(
+        partner.dni,
+        "/home/abejarano/Downloads/2.png",
+        DocumentType.GOVERNMENT_ID,
+        DocumentSide.BACK,
+      ),
     );
+    await ClientMongoRepository.instance().upsert(client);
 
-    client.setDocument(partner.dni, docPartner);
+    const client2 = await ClientMongoRepository.instance().findByClientId(
+      "pinttosoftpinttosoft",
+    );
+    client2.setDocument(
+      partner.dni,
+      Documents.newDocument(
+        partner.dni,
+        "/home/abejarano/Downloads/2-FRONT.png",
+        DocumentType.GOVERNMENT_ID,
+        DocumentSide.FRONT,
+      ),
+    );
+    await ClientMongoRepository.instance().upsert(client2);
 
-    expect(client.toPrimitives().partners[0].documents.length > 0).toBe(true);
+    expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });

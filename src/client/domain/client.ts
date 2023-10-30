@@ -89,16 +89,11 @@ export class Client extends AggregateRoot implements IClient {
       throw new GenericException("Company partners not found");
     }
 
-    const partner: IOwnerAccount = this.companyPartners.find(
-      (p: IOwnerAccount): boolean => {
-        return p.getIdentifyNumber() === dni;
-      },
-    );
-
-    if (partner) {
-      partner.setDocument(document);
-    }
-
+    this.companyPartners.forEach((p: IOwnerAccount) => {
+      if (p.getIdentifyNumber() === dni) {
+        p.setDocument(document);
+      }
+    });
     return this;
   }
 
@@ -299,13 +294,20 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  deleteAllDocuemtnsPartners(dni: string) {
+    this.companyPartners.forEach((p: IOwnerAccount) => {
+      if (p.getIdentifyNumber() === dni) {
+        p.deleteAllDocs();
+      }
+    });
+  }
+
   toPrimitives(): any {
     return {
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
       accountId: this.account.getAccountId(),
-      //taxId: this.taxId ?? "",
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),

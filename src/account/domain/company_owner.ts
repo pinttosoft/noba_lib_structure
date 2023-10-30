@@ -33,4 +33,8 @@ export class CompanyOwner implements IOwnerAccount {
   toPrimitives(): any {
     return { ...this.company };
   }
+
+  deleteAllDocs(): void {
+    this.company.documents = [];
+  }
 }
