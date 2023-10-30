@@ -5,6 +5,7 @@ import {
   AccountType,
   IAccount,
   IOwnerAccount,
+  OwnerAccountFactory,
 } from "../../../account";
 import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
@@ -78,6 +79,16 @@ export class ClientFactory {
       if (data.documents && data.documents.length > 0) {
         c.setDocument(data.informationCompany.registerNumber, data.documents);
       }
+
+      if (data.partners.length === 0) {
+        return c;
+      }
+
+      c.setCompanyPartners(
+        data.partners.map((p) =>
+          OwnerAccountFactory.factoryOwnerAccount(p, AccountType.INDIVIDUAL),
+        ),
+      );
 
       data.partners.forEach((partner: any) => {
         if (partner.documents && partner.documents.length > 0) {

@@ -3,6 +3,9 @@ import {
   AccountType,
   ClientFactory,
   ClientMongoRepository,
+  Documents,
+  DocumentSide,
+  DocumentType,
   IndividualDTO,
 } from "../../src";
 
@@ -64,5 +67,33 @@ describe("Client", () => {
     client.updateData(data);
 
     await ClientMongoRepository.instance().upsert(client);
+  });
+
+  it("should return data of the client company", async () => {
+    const client = await ClientMongoRepository.instance().findByClientId(
+      "pinttosoftpinttosoft",
+    );
+    const doc = Documents.newDocument(
+      client.getClientId(),
+      "/home/abejarano/Downloads/1.png",
+      DocumentType.INCORPORATION_DOCUMENT,
+      DocumentSide.FRONT,
+    );
+    client.setDocument(client.getIDNumber(), doc);
+
+    expect(client.toPrimitives().documents.length > 0).toBe(true);
+
+    // asignar docuemnto a socios
+    const partner = client.getCompanyToPrimitives().partners[0];
+    const docPartner = Documents.newDocument(
+      partner.dni,
+      "/home/abejarano/Downloads/1.png",
+      DocumentType.GOVERNMENT_ID,
+      DocumentSide.FRONT,
+    );
+
+    client.setDocument(partner.dni, docPartner);
+
+    expect(client.toPrimitives().partners[0].documents.length > 0).toBe(true);
   });
 });

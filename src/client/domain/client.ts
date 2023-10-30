@@ -90,7 +90,9 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     const partner: IOwnerAccount = this.companyPartners.find(
-      (p: IOwnerAccount): boolean => p.getIdentifyNumber() === dni,
+      (p: IOwnerAccount): boolean => {
+        return p.getIdentifyNumber() === dni;
+      },
     );
 
     if (partner) {
@@ -203,7 +205,6 @@ export class Client extends AggregateRoot implements IClient {
 
   getIDNumber(): string {
     if (this.clientType === AccountType.COMPANY) {
-      console.log("SSS");
       return (this.toPrimitives() as CompanyDTO).informationCompany
         .registerNumber;
     } else {
