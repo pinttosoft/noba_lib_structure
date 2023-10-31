@@ -11,8 +11,8 @@ export enum DocumentType {
   VEHICLE_REGISTRATION = "vehicle_registration",
   REAL_ESTATE_PROPERTY_TITLE = "real_estate_property_title",
   PROPERTY_TAX_BILL = "property_tax_bill",
-  INCOPORATION_DOCUMENT = "incorporation_document",
   ACCOUNT_AGREEMENT = "account_agreement",
   BENEFICIAL_OWNERSHIP_CERTIFICATE = "beneficial_ownership_certificate",
+  INCORPORATION_DOCUMENT = "incorporation_document",
   W2 = "w2",
 }

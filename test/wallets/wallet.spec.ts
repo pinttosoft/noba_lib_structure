@@ -81,6 +81,6 @@ describe("Wallet", () => {
         "BITCOIN_TESTNET_BTC",
       );
 
-    console.log(wallet.getLockedBalance());
+    console.log(wallet.getClient().getFeeSwap().getFeeForBuy());
   });
 });

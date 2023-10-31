@@ -44,4 +44,5 @@ export interface IClient {
   deleteKycAction(id: string): void;
   setKycActionsToPartner(kycAction: KycAction): IClient;
   deleteKycActionToPartner(kycAction: KycAction): void;
+  deleteAllDocuemtnsPartners(dni: string);
 }

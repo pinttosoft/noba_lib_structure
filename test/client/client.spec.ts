@@ -6,6 +6,9 @@ import {
   IAccount,
   IClient,
   IClientRepository,
+  Documents,
+  DocumentSide,
+  DocumentType,
   IndividualDTO,
 } from "../../src";
 
@@ -249,5 +252,42 @@ describe("Client", () => {
     });
 
     await clientRepo.upsert(client);
+  });
+
+  it("should return data of the client company", async () => {
+    const client = await ClientMongoRepository.instance().findByClientId(
+      "pinttosoftpinttosoft",
+    );
+
+    // asignar docuemnto a socios
+    const partner = client.getCompanyToPrimitives().partners[0];
+    client.deleteAllDocuemtnsPartners(partner.dni);
+
+    client.setDocument(
+      partner.dni,
+      Documents.newDocument(
+        partner.dni,
+        "/home/abejarano/Downloads/2.png",
+        DocumentType.GOVERNMENT_ID,
+        DocumentSide.BACK,
+      ),
+    );
+    await ClientMongoRepository.instance().upsert(client);
+
+    const client2 = await ClientMongoRepository.instance().findByClientId(
+      "pinttosoftpinttosoft",
+    );
+    client2.setDocument(
+      partner.dni,
+      Documents.newDocument(
+        partner.dni,
+        "/home/abejarano/Downloads/2-FRONT.png",
+        DocumentType.GOVERNMENT_ID,
+        DocumentSide.FRONT,
+      ),
+    );
+    await ClientMongoRepository.instance().upsert(client2);
+
+    expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });

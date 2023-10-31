@@ -23,7 +23,6 @@ describe("Swap", () => {
         page,
         perPage,
       );
-    console.log(findExchangesByClientId);
   });
 
   it("should create exchange between USD and ETH", async () => {

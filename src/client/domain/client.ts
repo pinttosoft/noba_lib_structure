@@ -95,14 +95,11 @@ export class Client extends AggregateRoot implements IClient {
       throw new GenericException("Company partners not found");
     }
 
-    const partner: IOwnerAccount = this.companyPartners.find(
-      (p: IOwnerAccount): boolean => p.getIdentifyNumber() === dni,
-    );
-
-    if (partner) {
-      partner.setDocument(document);
-    }
-
+    this.companyPartners.forEach((p: IOwnerAccount) => {
+      if (p.getIdentifyNumber() === dni) {
+        p.setDocument(document);
+      }
+    });
     return this;
   }
 
@@ -204,9 +201,6 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getClientType(): AccountType {
-    // if (this.clientType === AccountType.COMPANY) {
-    //   throw new InvalidMethodForClientType(this.clientType, "getClientType");
-    // }
     return this.clientType;
   }
 
@@ -221,7 +215,7 @@ export class Client extends AggregateRoot implements IClient {
       );
     }
 
-    return this.clientData.name;
+    return this.clientData.informationCompany.name;
   }
 
   getEmail(): string {
@@ -390,6 +384,14 @@ export class Client extends AggregateRoot implements IClient {
     });
 
     this.setClientData({ ...this.clientData, partners });
+  }
+
+  deleteAllDocuemtnsPartners(dni: string) {
+    this.companyPartners.forEach((p: IOwnerAccount) => {
+      if (p.getIdentifyNumber() === dni) {
+        p.deleteAllDocs();
+      }
+    });
   }
 
   toPrimitives(): any {
