@@ -42,6 +42,8 @@ export class ClientFactory {
       c.setCompanyPartners(companyPartners);
     }
 
+    c.setCreatedAt(new Date());
+
     return c;
   }
 
@@ -59,10 +61,14 @@ export class ClientFactory {
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
 
+      // natural
       if (data.type !== AccountType.COMPANY) {
+        c.setKycActions(data.kycRequestedChanges ?? []);
+
         if (!data.documents || data.documents.length === 0) {
           return c;
         }
+
         data.documents.forEach((document: any) => {
           c.setDocument(
             data.dni,

@@ -13,7 +13,8 @@ import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_t
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
-import * as console from "console";
+import * as process from "process";
+import { KycAction } from "./types/kyc-action.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -21,6 +22,9 @@ export class Client extends AggregateRoot implements IClient {
   private clientType: AccountType;
   private account: IAccount;
   private id?: string;
+  private isSegregated?: boolean;
+  private kycRequestedChanges?: KycAction[];
+  private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
   private feeSwap?: FeeSwap;
@@ -28,6 +32,8 @@ export class Client extends AggregateRoot implements IClient {
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
+  private createdAt: Date;
+  private approvedAt: Date;
 
   getId(): string {
     return this.id;
@@ -104,6 +110,27 @@ export class Client extends AggregateRoot implements IClient {
 
   setCompanyPartners(partners: IOwnerAccount[]): Client {
     this.companyPartners = partners;
+    return this;
+  }
+
+  getCompanyPartners() {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getCompanyToPrimitives",
+      );
+    }
+
+    return this.clientData.partners;
+  }
+
+  setCreatedAt(date: Date): Client {
+    this.createdAt = date;
+    return this;
+  }
+
+  setApprovedAt(date: Date): Client {
+    this.approvedAt = date;
     return this;
   }
 
@@ -291,6 +318,74 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  approveSegregated(): void {
+    this.status = AccountStatus.APPROVED;
+    this.setApprovedAt(new Date());
+
+    this.accountId = process.env.PINTTOSOFT_ACCOUNT;
+    this.isSegregated = true;
+  }
+
+  rejectSegregated(): void {
+    this.status = AccountStatus.REJECTED;
+  }
+
+  getKycActions(): KycAction[] {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return this.kycRequestedChanges;
+    }
+
+    const kcys = this.getCompanyPartners().map((partner) => {
+      return partner;
+    });
+  }
+
+  setKycActions(kycActions: KycAction[]): IClient {
+    if (!this.kycRequestedChanges) {
+      this.kycRequestedChanges = [...kycActions];
+    } else {
+      this.kycRequestedChanges.push(...kycActions);
+    }
+
+    return this;
+  }
+
+  setKycActionsToPartner(kycAction: KycAction): IClient {
+    const partners = this.getCompanyPartners().map((partner) => {
+      if (partner.dni === kycAction.dni) {
+        const actions = partner.kycRequestedChanges ?? [];
+
+        return {
+          ...partner,
+          kycRequestedChanges: [...actions, kycAction],
+        };
+      }
+
+      return partner;
+    });
+    this.setClientData({ ...this.clientData, partners });
+
+    return this;
+  }
+
+  deleteKycAction(id: string) {
+    this.kycRequestedChanges = this.kycRequestedChanges.filter(
+      (kyc: KycAction) => kyc.id !== id,
+    );
+  }
+
+  deleteKycActionToPartner(kycAction: KycAction): void {
+    const partners = this.getCompanyPartners().map((partner) => {
+      const partnerActions = partner.kycRequestedChanges.filter(
+        (action) => action.id !== kycAction.id,
+      );
+
+      return { ...partner, kycRequestedChanges: partnerActions };
+    });
+
+    this.setClientData({ ...this.clientData, partners });
+  }
+
   deleteAllDocuemtnsPartners(dni: string) {
     this.companyPartners.forEach((p: IOwnerAccount) => {
       if (p.getIdentifyNumber() === dni) {
@@ -301,15 +396,19 @@ export class Client extends AggregateRoot implements IClient {
 
   toPrimitives(): any {
     return {
+      isSegregated: this.isSegregated,
       clientId: this.clientId,
       ...this.clientData,
       type: this.clientType,
-      accountId: this.account.getAccountId(),
+      accountId: this.accountId,
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
+      createdAt: this.createdAt,
+      approvedAt: this.approvedAt,
+      kycRequestedChanges: this.kycRequestedChanges,
     };
   }
 }

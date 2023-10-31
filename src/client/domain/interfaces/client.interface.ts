@@ -6,6 +6,7 @@ import { FeeSwap, FeeWire } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
 import { IndividualDTO } from "../types/Individual.type";
+import { KycAction } from "../types/kyc-action.type";
 
 export interface IClient {
   getId(): string;
@@ -34,7 +35,14 @@ export interface IClient {
   activeTwoFactorAuth(): void;
   disableTwoFactorAuth(): void;
   updateData(data: IndividualDTO | CompanyDTO): void;
+  approveSegregated(): void;
+  rejectSegregated(): void;
   markAsSendData(): IClient;
   markAsUnderReview(): IClient;
+  getKycActions(): KycAction[];
+  setKycActions(kycActions: KycAction[]): IClient;
+  deleteKycAction(id: string): void;
+  setKycActionsToPartner(kycAction: KycAction): IClient;
+  deleteKycActionToPartner(kycAction: KycAction): void;
   deleteAllDocuemtnsPartners(dni: string);
 }

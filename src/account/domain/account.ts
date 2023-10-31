@@ -73,6 +73,10 @@ export class Account extends AggregateRoot implements IAccount {
     return this.createdAt;
   }
 
+  reject(): void {
+    this.status = AccountStatus.REJECTED;
+  }
+
   toPrimitives(): any {
     return {
       approvalDate: this.approvalDate,
