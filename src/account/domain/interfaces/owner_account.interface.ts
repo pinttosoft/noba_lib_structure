@@ -1,6 +1,5 @@
 import { Address } from "../../../shared";
 import { Documents } from "../../../documents";
-import { KycAction } from "../../../client";
 
 export interface IOwnerAccount {
   toPrimitives(): any;

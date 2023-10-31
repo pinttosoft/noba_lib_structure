@@ -82,10 +82,6 @@ export class ClientFactory {
         return c;
       }
 
-      // company
-      // todo
-      c.setCompanyPartners(data.partners ?? []);
-
       if (data.documents && data.documents.length > 0) {
         c.setDocument(
           data.informationCompany.registerNumber,

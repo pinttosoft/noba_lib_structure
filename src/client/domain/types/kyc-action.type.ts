@@ -1,5 +1,5 @@
 export type KycAction = {
-  id?: string;
+  id: string;
   dni?: string;
   action: string;
   date?: Date;
