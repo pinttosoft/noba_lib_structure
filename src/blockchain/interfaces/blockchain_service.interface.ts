@@ -2,6 +2,7 @@ import { InstructionDepositCrypto, WalletType } from "../../wallet";
 import { IClient } from "../../client";
 import { CounterpartyAsset, WalletInformationDTO } from "../../asset";
 import { DepositInformation } from "../../shared";
+import { WithdrawalPurpose } from "../../withdrawal";
 
 export interface IBlockchainService {
   lookWalletAddress(
@@ -31,7 +32,8 @@ export interface IBlockchainService {
     instructionForDepositId: string,
     amount: number,
     counterparty: CounterpartyAsset,
-    description?: string,
+    description: string,
+    purpose: WithdrawalPurpose,
   ): Promise<string>;
 
   searchBalanceWallet(walletId: string): Promise<{

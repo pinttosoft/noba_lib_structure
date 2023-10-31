@@ -1,10 +1,15 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
-import { WithdrawalType } from "./enums/withdrawal_type";
+import { WithdrawalType } from "./enums/withdrawal_type.enum";
 import { IClient } from "../../client";
 import { Counterparty } from "../../counterparty";
-import { AmountValueObject, WithdrawalStatus } from "../../shared";
+import {
+  AmountValueObject,
+  GenericException,
+  WithdrawalStatus,
+} from "../../shared";
 import { v4 } from "uuid";
+import { WithdrawalPurpose } from "./enums/withdrawal_purpose.enum";
 
 export class WithdrawalRequest extends AggregateRoot {
   private id?: string;
@@ -18,6 +23,7 @@ export class WithdrawalRequest extends AggregateRoot {
   private createdAt: Date;
   private dateWasProcessed?: Date;
   private counterparty: Counterparty;
+  private withdrawalPurpose?: WithdrawalPurpose;
 
   getId(): string {
     return this.id;
@@ -29,6 +35,7 @@ export class WithdrawalRequest extends AggregateRoot {
     amount: AmountValueObject,
     reference: string,
     withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
+    withdrawalPurpose?: WithdrawalPurpose,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
@@ -40,6 +47,15 @@ export class WithdrawalRequest extends AggregateRoot {
     w.status = WithdrawalStatus.PENDING;
     w.createdAt = new Date();
     w.withdrawalType = withdrawalType;
+
+    if (withdrawalType === WithdrawalType.EXTERNAL) {
+      if (!withdrawalPurpose) {
+        throw new GenericException(
+          "The purpose of the external transfer is required.",
+        );
+      }
+      w.withdrawalPurpose = withdrawalPurpose;
+    }
 
     return w;
   }
@@ -61,6 +77,7 @@ export class WithdrawalRequest extends AggregateRoot {
     w.observation = plainData.observation ?? null;
     w.createdAt = plainData.createdAt;
     w.dateWasProcessed = plainData.dateWasProcessed ?? null;
+    w.withdrawalPurpose = plainData.withdrawalPurpose ?? null;
 
     return w;
   }
@@ -110,6 +127,10 @@ export class WithdrawalRequest extends AggregateRoot {
     return this.counterparty;
   }
 
+  getPurpose(): WithdrawalPurpose {
+    return this.withdrawalPurpose;
+  }
+
   toPrimitives(): any {
     return {
       withdrawalId: this.withdrawalId,
@@ -122,6 +143,7 @@ export class WithdrawalRequest extends AggregateRoot {
       observation: this.observation,
       createdAt: this.createdAt,
       processingDate: this.dateWasProcessed,
+      withdrawalPurpose: this.withdrawalPurpose,
     };
   }
 }
