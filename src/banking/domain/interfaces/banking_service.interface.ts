@@ -4,6 +4,7 @@ import { CounterpartyBank } from "../counterparty_bank";
 import { InformationBankDTO } from "../types/information_bank.type";
 import { Address, DepositInformation } from "../../../shared";
 import { InformationIntermediaryBankDTO } from "../types/information_intermediary_bank.type";
+import { WithdrawalPurpose } from "../../../withdrawal";
 
 export interface IBankingService {
   searchDepositInformation(
@@ -38,7 +39,8 @@ export interface IBankingService {
     sourceWalletId: string,
     amount: number,
     counterparty: CounterpartyBank,
-    description?: string,
+    description: string,
+    purpose: WithdrawalPurpose,
   ): Promise<string>;
 
   searchBalanceWallet(walletId: string): Promise<{
