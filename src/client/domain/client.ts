@@ -174,9 +174,6 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getClientType(): AccountType {
-    if (this.clientType === AccountType.COMPANY) {
-      throw new InvalidMethodForClientType(this.clientType, "getClientType");
-    }
     return this.clientType;
   }
 
@@ -191,7 +188,7 @@ export class Client extends AggregateRoot implements IClient {
       );
     }
 
-    return this.clientData.name;
+    return this.clientData.informationCompany.name;
   }
 
   getEmail(): string {
