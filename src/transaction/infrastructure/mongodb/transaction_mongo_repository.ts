@@ -19,6 +19,8 @@ import { Counterparty, CounterpartyType } from "../../../counterparty";
 import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
 import { TransactionDeposit } from "../../domain/transaction_deposit";
+import {User} from "../../../user";
+import {ObjectId} from "mongodb";
 
 export class TransactionMongoRepository
   extends MongoRepository<
@@ -214,5 +216,20 @@ export class TransactionMongoRepository
 
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
     await this.persist(transaction.getId(), transaction);
+  }
+
+  async updateExchangeTransactionWithdrawal(transation: ExchangeTransaction): Promise<void> {
+    const collection = await this.collection();
+
+    const primitives = await transation.toPrimitives();
+
+    const result = await collection.updateOne(
+        { _id: new ObjectId(transation.getId()) },
+        {
+          $set: {
+            status: await WithdrawalStatus.PROCESSED,
+          },
+        },
+    );
   }
 }
