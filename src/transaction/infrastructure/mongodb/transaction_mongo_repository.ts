@@ -218,18 +218,8 @@ export class TransactionMongoRepository
     await this.persist(transaction.getId(), transaction);
   }
 
-  async updateExchangeTransactionWithdrawal(transation: ExchangeTransaction): Promise<void> {
-    const collection = await this.collection();
+  async updateEstatusTransactionWithdrawal(transation: ExchangeTransaction): Promise<void> {
+    await this.execUpdateOne(transation.getId(), {status:WithdrawalStatus.PROCESSED})
 
-    const primitives = await transation.toPrimitives();
-
-    const result = await collection.updateOne(
-        { _id: new ObjectId(transation.getId()) },
-        {
-          $set: {
-            status: await WithdrawalStatus.PROCESSED,
-          },
-        },
-    );
   }
 }
