@@ -1,5 +1,4 @@
 import { Transaction } from "../transaction";
-import { TransactionDTO } from "../types/transaction.type";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 import { ExchangeTransaction } from "../exchange_transaction";
 import { TransactionDeposit } from "../transaction_deposit";
@@ -42,4 +41,9 @@ export interface ITransactionRepository {
   saveExchangeTransaction(transaction: ExchangeTransaction): Promise<void>;
 
   saveDepositTransaction(transaction: TransactionDeposit): Promise<void>;
+
+  findExchangeTransactionByExchangeIdAndStatus(
+    transactionId: string,
+    status: WithdrawalStatus,
+  ): Promise<ExchangeTransaction | undefined>;
 }

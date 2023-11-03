@@ -206,10 +206,33 @@ export class TransactionMongoRepository
     return this.buildPaginate<Transaction>(document);
   }
 
+  /**
+   * Metodo que permite guardar y ACTUALIZAR una transaccion de intercambio
+   * @param transaction
+   */
   async saveExchangeTransaction(
     transaction: ExchangeTransaction,
   ): Promise<void> {
     await this.persist(transaction.getId(), transaction);
+  }
+
+  async findExchangeTransactionByExchangeIdAndStatus(
+    transactionId: string,
+    status: WithdrawalStatus,
+  ): Promise<ExchangeTransaction | undefined> {
+    const filter = {
+      transactionId,
+      status,
+    };
+
+    const collection = await this.collection();
+    const result = await collection.findOne(filter);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return ExchangeTransaction.fromPrimitives(result._id.toString(), result);
   }
 
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {

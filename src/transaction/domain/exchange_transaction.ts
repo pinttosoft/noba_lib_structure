@@ -3,6 +3,7 @@ import { WithdrawalStatus } from "../../shared";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
 export class ExchangeTransaction extends AggregateRoot {
+  private id?: string;
   private transactionId: string;
   private clientId: string;
   private assetId: string;
@@ -37,6 +38,32 @@ export class ExchangeTransaction extends AggregateRoot {
     return t;
   }
 
+  static fromPrimitives(id: string, data: any): ExchangeTransaction {
+    const t = new ExchangeTransaction();
+    t.clientId = data.clientId;
+    t.amount = data.amount;
+    t.reference = data.reference;
+    t.status = data.status;
+    t.transactionType = data.transactionType;
+    t.isInternal = data.isInternal === "S";
+    t.createdAt = data.createdAt;
+    t.assetId = data.assetId;
+    t.transactionId = data.transactionId;
+    t.id = id;
+
+    return t;
+  }
+
+  markAsCompleted(): ExchangeTransaction {
+    this.status = WithdrawalStatus.PROCESSED;
+    return this;
+  }
+
+  cancelTransaction(): ExchangeTransaction {
+    this.status = WithdrawalStatus.CANCELLED;
+    return this;
+  }
+
   toPrimitives(): any {
     return {
       transactionId: this.transactionId,
@@ -52,6 +79,6 @@ export class ExchangeTransaction extends AggregateRoot {
   }
 
   getId(): string | undefined {
-    return undefined;
+    return this.id;
   }
 }
