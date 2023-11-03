@@ -42,4 +42,5 @@ export interface ITransactionRepository {
   saveExchangeTransaction(transaction: ExchangeTransaction): Promise<void>;
 
   saveDepositTransaction(transaction: TransactionDeposit): Promise<void>;
+
 }

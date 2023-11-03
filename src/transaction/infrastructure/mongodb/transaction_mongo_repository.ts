@@ -211,15 +211,10 @@ export class TransactionMongoRepository
   async saveExchangeTransaction(
     transaction: ExchangeTransaction,
   ): Promise<void> {
-    await this.persist(transaction.getId(), transaction);
+    const id = await this.persist(transaction.getId(), transaction);
   }
 
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
     await this.persist(transaction.getId(), transaction);
-  }
-
-  async updateEstatusTransactionWithdrawal(transation: ExchangeTransaction): Promise<void> {
-    await this.execUpdateOne(transation.getId(), {status:WithdrawalStatus.PROCESSED})
-
   }
 }
