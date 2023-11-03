@@ -211,7 +211,7 @@ export class TransactionMongoRepository
   async saveExchangeTransaction(
     transaction: ExchangeTransaction,
   ): Promise<void> {
-    const id = await this.persist(transaction.getId(), transaction);
+    await this.persist(transaction.getId(), transaction);
   }
 
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
