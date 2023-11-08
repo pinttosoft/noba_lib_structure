@@ -1,4 +1,9 @@
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import {
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
 import { IClient } from "../../domain/interfaces/client.interface";
 import { IClientRepository } from "../../domain/interfaces/client_repository.interface";
 import {
@@ -76,5 +81,12 @@ export class ClientMongoRepository
     }
 
     return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  // todo remove
+  async fetchAll(criteria: Criteria): Promise<Paginate<IClient>> {
+    const document = await this.searchByCriteria<IClient>(criteria);
+
+    return this.buildPaginate<IClient>(document);
   }
 }

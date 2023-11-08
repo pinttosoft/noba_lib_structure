@@ -30,6 +30,7 @@ export interface IClient {
   getStatus(): AccountStatus;
   getFeeSwap(): FeeSwap;
   getFeeWire(): FeeWire;
+  getDocuments(): Documents[];
   setDocument(dni: string, document: Documents): IClient;
   setStatus(clientStatus: AccountStatus): IClient;
   activeTwoFactorAuth(): void;

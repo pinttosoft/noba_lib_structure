@@ -394,6 +394,12 @@ export class Client extends AggregateRoot implements IClient {
     });
   }
 
+  getDocuments(): Documents[] {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return this.documents;
+    }
+  }
+
   toPrimitives(): any {
     return {
       isSegregated: this.isSegregated,

@@ -6,6 +6,7 @@ import { DocumentSide } from "./enums/document_side.enum";
 export class Documents {
   private documentId: string;
   private patch: string;
+  private publicUrl: string;
   private clientId: string;
   private documentType: DocumentType;
   private documentSide: DocumentSide;
@@ -55,6 +56,11 @@ export class Documents {
 
   getDocumentSide(): DocumentSide {
     return this.documentSide;
+  }
+
+  setDocumentUrl(url: string): Documents {
+    this.publicUrl = url;
+    return this;
   }
 
   toPrimitives(): any {

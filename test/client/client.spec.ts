@@ -10,6 +10,13 @@ import {
   DocumentSide,
   DocumentType,
   IndividualDTO,
+  StorageAWS,
+  Operator,
+  CounterpartyType,
+  Criteria,
+  Filters,
+  Order,
+  OrderTypes,
 } from "../../src";
 
 describe("Client", () => {
@@ -179,11 +186,11 @@ describe("Client", () => {
     );
 
     client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date() },
+      { action: "cambiar foto de perfil", date: new Date(), id: "" },
     ]);
 
     client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date() },
+      { action: "agregar foto de pasaporte", date: new Date(), id: "" },
     ]);
 
     await clientRepo.upsert(client);
@@ -193,7 +200,7 @@ describe("Client", () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const client = await clientRepo.findByClientId("kbros-XD187263254");
 
-    client.setKycActions([{ action: "agregado ", date: new Date() }]);
+    client.setKycActions([{ action: "agregado ", date: new Date(), id: "" }]);
 
     await clientRepo.upsert(client);
   });
@@ -289,5 +296,29 @@ describe("Client", () => {
     await ClientMongoRepository.instance().upsert(client2);
 
     expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
+  });
+
+  it("Should get client natural person documents", async () => {
+    // const filterCounterpartyType: Map<string, string> = new Map([
+    //   ["field", "counterpartyType"],
+    //   ["operator", Operator.EQUAL],
+    //   ["value", CounterpartyType.CRYPTO],
+    // ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([]),
+      Order.fromValues("createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const s3 = StorageAWS.instance("clients-document");
+    const clients = await ClientMongoRepository.instance().fetchAll(criteria);
+    clients.results = clients.results.map((client) => {
+      const c = client;
+      return c;
+    });
+    console.log("clients", clients.results);
+    // console.log("a ", s3);
   });
 });
