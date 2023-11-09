@@ -183,7 +183,7 @@ describe("Client", () => {
     ]);
 
     client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date() },
+      { action: "agregar foto de pasaporte", date: new Date(), id: "" },
     ]);
 
     await clientRepo.upsert(client);
