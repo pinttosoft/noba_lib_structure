@@ -179,7 +179,7 @@ describe("Client", () => {
     );
 
     client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date() },
+      { action: "cambiar foto de perfil", date: new Date(), id: "" },
     ]);
 
     client.setKycActions([
@@ -193,7 +193,7 @@ describe("Client", () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const client = await clientRepo.findByClientId("kbros-XD187263254");
 
-    client.setKycActions([{ action: "agregado ", date: new Date() }]);
+    client.setKycActions([{ action: "agregado ", date: new Date(), id: "" }]);
 
     await clientRepo.upsert(client);
   });
