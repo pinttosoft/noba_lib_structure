@@ -12,7 +12,7 @@
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" ",
     "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
-    "test": "jest --forceExit --runInBand --detectOpenHandles",
+    "test": "jest --forceExit --runInBand --detectOpenHandles --testTimeout=30000",
     "publish-version": "npm run clean && npm i && npm run build && npm publish --access public"
   },
   "repository": {

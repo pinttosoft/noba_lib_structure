@@ -30,6 +30,7 @@ export class RegisterOrSearchCounterpartyInternal {
         clientDestination.getClientId(),
         asset.getAssetId(),
       );
+
     if (counterparty) {
       logger.info(
         `Se encontro el counterparty ${counterparty.getCounterpartyId()} para el asset ${counterparty.getAssetId()}`,
@@ -46,7 +47,7 @@ export class RegisterOrSearchCounterpartyInternal {
       counterparty = CounterpartyAsset.newCounterparty(
         clientDestination.getClientId(),
         clientOrigin,
-        clientDestination.getName(),
+        this.removeAccents(clientDestination.getName()),
         clientDestination.getAddress().country,
         {
           assetId: wallet.getAsset().getAssetId(),
@@ -76,7 +77,7 @@ export class RegisterOrSearchCounterpartyInternal {
           },
           informationOwner: {
             address: clientDestination.getAddress(),
-            name: clientDestination.getName(),
+            name: this.removeAccents(clientDestination.getName()),
           },
           id: instruction.id,
           assetId: wallet.getAsset().getAssetId(),
@@ -86,6 +87,7 @@ export class RegisterOrSearchCounterpartyInternal {
       );
     }
 
+    console.log("counterparty", counterparty);
     await this.counterpartyRepository.upsert(counterparty);
 
     return counterparty;
@@ -109,5 +111,12 @@ export class RegisterOrSearchCounterpartyInternal {
     }
 
     return wallet;
+  }
+
+  private removeAccents(str: string): string {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\u0300-\u036f;'\W_]/g, " ");
   }
 }
