@@ -61,6 +61,7 @@ export class Client extends AggregateRoot implements IClient {
 
   setAccount(account: IAccount): Client {
     this.account = account;
+    this.accountId = account.getAccountId();
     return this;
   }
 
