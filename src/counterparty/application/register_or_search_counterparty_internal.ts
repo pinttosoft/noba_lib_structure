@@ -87,7 +87,6 @@ export class RegisterOrSearchCounterpartyInternal {
       );
     }
 
-    console.log("counterparty", counterparty);
     await this.counterpartyRepository.upsert(counterparty);
 
     return counterparty;
