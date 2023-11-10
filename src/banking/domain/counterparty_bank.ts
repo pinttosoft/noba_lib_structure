@@ -26,7 +26,7 @@ export class CounterpartyBank extends Counterparty {
     c.assetId = counterpartyBank.assetId;
     c.clientId = counterpartyBank.clientId;
     c.accountId = counterpartyBank.accountId;
-    c.ownerName = this.removeAccents(counterpartyBank.informationOwner.name);
+    c.ownerName = c.removeAccents(counterpartyBank.informationOwner.name);
     c.ownerAddress = counterpartyBank.informationOwner.address;
     c.accountNumber = counterpartyBank.accountNumber;
 
@@ -165,12 +165,5 @@ export class CounterpartyBank extends Counterparty {
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
     };
-  }
-
-  private static removeAccents(str: string) {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[\u0300-\u036f;'\W_]/g, " ");
   }
 }

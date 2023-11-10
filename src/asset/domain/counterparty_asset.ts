@@ -20,7 +20,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.paymentAddress = informationWallet.address;
     counterparty.clientId = client.getClientId();
     counterparty.accountId = client.getAccount().getAccountId();
-    counterparty.ownerName = this.removeAccents(ownerName);
+    counterparty.ownerName = counterparty.removeAccents(ownerName);
     counterparty.ownerCountry = ownerCountry;
     counterparty.counterpartyType = CounterpartyType.CRYPTO;
     counterparty.informationWallet = informationWallet;
@@ -85,12 +85,5 @@ export class CounterpartyAsset extends Counterparty {
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
     };
-  }
-
-  private static removeAccents(str: string) {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[\u0300-\u036f;'\W_]/g, " ");
   }
 }
