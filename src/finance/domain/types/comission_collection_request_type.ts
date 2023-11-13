@@ -1,7 +1,7 @@
-import {TypeFinancialMovement} from "../enums/type_financial_movement.enum";
+import { TypeFinancialMovement } from "../enums/type_financial_movement.enum";
 
 export type ComissionCollectionRequestType = {
-    withdrawalId: string;
-    typeFinancialMovement: TypeFinancialMovement;
-    transactionId: string;
-}
+  withdrawalId: string;
+  typeFinancialMovement: TypeFinancialMovement;
+  transactionId: string;
+};

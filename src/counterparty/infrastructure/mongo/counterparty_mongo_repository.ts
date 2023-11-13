@@ -37,8 +37,8 @@ export class CounterpartyMongoRepository
   }
 
   async delete(counterpartyId: string): Promise<void> {
-       const collection = await this.collection();
-       await collection.deleteMany({counterpartyId});
+    const collection = await this.collection();
+    await collection.deleteMany({ counterpartyId });
   }
 
   collectionName(): string {

@@ -20,7 +20,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.paymentAddress = informationWallet.address;
     counterparty.clientId = client.getClientId();
     counterparty.accountId = client.getAccount().getAccountId();
-    counterparty.ownerName = ownerName;
+    counterparty.ownerName = counterparty.removeAccents(ownerName);
     counterparty.ownerCountry = ownerCountry;
     counterparty.counterpartyType = CounterpartyType.CRYPTO;
     counterparty.informationWallet = informationWallet;
