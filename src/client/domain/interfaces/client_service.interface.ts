@@ -1,7 +1,7 @@
 import { Client } from "../client";
 import { ApplicationUpdateType } from "../types/application_update.type";
 
-export interface IClientServiceInterface {
+export interface IClientBankingServiceInterface {
   accountOpening(client: Client): Promise<void>;
   createApplication(client: Client): Promise<string>;
   retrieveApplication(applicationId: string): Promise<string>;
