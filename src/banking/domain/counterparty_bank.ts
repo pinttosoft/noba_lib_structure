@@ -26,7 +26,7 @@ export class CounterpartyBank extends Counterparty {
     c.assetId = counterpartyBank.assetId;
     c.clientId = counterpartyBank.clientId;
     c.accountId = counterpartyBank.accountId;
-    c.ownerName = c.removeAccents(counterpartyBank.informationOwner.name);
+    c.setOwnerName(counterpartyBank.informationOwner.name);
     c.ownerAddress = counterpartyBank.informationOwner.address;
     c.accountNumber = counterpartyBank.accountNumber;
 
