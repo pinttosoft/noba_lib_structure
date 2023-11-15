@@ -5,6 +5,7 @@ import { InformationBankDTO } from "../types/information_bank.type";
 import { Address, DepositInformation } from "../../../shared";
 import { InformationIntermediaryBankDTO } from "../types/information_intermediary_bank.type";
 import { WithdrawalPurpose } from "../../../withdrawal";
+import { CounterpartyProfileType } from "../../../counterparty";
 
 export interface IBankingService {
   searchDepositInformation(
@@ -25,6 +26,7 @@ export interface IBankingService {
     },
     assetId: string,
     informationBank: InformationBankDTO,
+    profileType: CounterpartyProfileType,
     informationIntermediaryBank?: InformationIntermediaryBankDTO,
   ): Promise<CounterpartyBank>;
 

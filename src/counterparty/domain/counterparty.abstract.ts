@@ -1,6 +1,7 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
 import { removeAccents } from "../../shared";
+import { CounterpartyProfileType } from "./enums/counterparty_profile_type.enum";
 
 export abstract class Counterparty extends AggregateRoot {
   protected id?: string;
@@ -14,6 +15,7 @@ export abstract class Counterparty extends AggregateRoot {
   protected relationshipConsumer: RelationshipConsumer;
   protected createdAt: Date;
   protected isInternal: boolean;
+  protected profileType: CounterpartyProfileType;
 
   getId(): string | undefined {
     return this.id;

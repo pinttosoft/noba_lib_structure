@@ -1,4 +1,8 @@
-import { Counterparty, CounterpartyType } from "../../counterparty";
+import {
+  Counterparty,
+  CounterpartyProfileType,
+  CounterpartyType,
+} from "../../counterparty";
 import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
 
@@ -12,6 +16,7 @@ export class CounterpartyAsset extends Counterparty {
     ownerName: string,
     ownerCountry: string,
     informationWallet: WalletInformationDTO,
+    profileType: CounterpartyProfileType,
     isInternal: boolean = false,
   ): CounterpartyAsset {
     const counterparty: CounterpartyAsset = new CounterpartyAsset();
@@ -28,6 +33,7 @@ export class CounterpartyAsset extends Counterparty {
     counterparty.relationshipConsumer = informationWallet.relationshipConsumer;
     counterparty.createdAt = new Date();
     counterparty.isInternal = isInternal;
+    counterparty.profileType = profileType;
 
     return counterparty;
   }
@@ -50,6 +56,7 @@ export class CounterpartyAsset extends Counterparty {
 
     counterparty.isInternal = data.isInternal === "S";
     counterparty.assetId = data.assetId;
+    counterparty.profileType = data.profileType ?? "";
     return counterparty;
   }
 
