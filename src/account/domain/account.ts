@@ -7,6 +7,7 @@ import { IOwnerAccount } from "./interfaces/owner_account.interface";
 export class Account extends AggregateRoot implements IAccount {
   private id?: string;
   private accountId: string;
+  private applicationId?: string;
   private status: AccountStatus;
   private type: AccountType;
   private owner: IOwnerAccount;
@@ -77,6 +78,14 @@ export class Account extends AggregateRoot implements IAccount {
     this.status = AccountStatus.REJECTED;
   }
 
+  setApplicationId(applicationId: string): void {
+    this.applicationId = applicationId;
+  }
+
+  getApplicationId(): string {
+    return this.applicationId;
+  }
+
   toPrimitives(): any {
     return {
       approvalDate: this.approvalDate,
@@ -85,6 +94,7 @@ export class Account extends AggregateRoot implements IAccount {
       type: this.getType(),
       status: this.status,
       owner: this.owner.toPrimitives(),
+      applicationId: this.applicationId,
     };
   }
 }

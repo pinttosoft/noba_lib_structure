@@ -13,4 +13,6 @@ export interface IAccount {
   getApprovalDate(): Date;
   getCreatedAt(): Date;
   reject(): void;
+  setApplicationId(applicationId: string): void;
+  getApplicationId(): string;
 }
