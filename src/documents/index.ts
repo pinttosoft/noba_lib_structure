@@ -1,6 +1,12 @@
+export { NobaDocumentTypeConverter } from "./helpers/noba_document_type_converter";
+
 export { DocumentType } from "./domain/enums/document_type.enum";
+
 export { DocumentSide } from "./domain/enums/document_side.enum";
+export { Layer2DocumentType } from "./domain/enums/layer2_document_type.enum";
+
 export { IStorageService } from "./domain/interfaces/storage_service.interface";
+
 export { Documents } from "./domain/documents";
 
 export { DocumentMongoRepository } from "./infrastructure/document_mongo_repository";
