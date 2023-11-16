@@ -18,7 +18,7 @@ export class NobaDocumentTypeConverter {
   static convertNobaToThirdParty(
     nobaType: DocumentType,
     side?: DocumentSide,
-  ): string | null {
+  ): Layer2DocumentType | null {
     switch (nobaType) {
       case DocumentType.PASSPORT:
         return Layer2DocumentType.PASSPORT;
