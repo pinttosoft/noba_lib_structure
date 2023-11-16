@@ -6,6 +6,7 @@ export { DocumentSide } from "./domain/enums/document_side.enum";
 export { Layer2DocumentType } from "./domain/enums/layer2_document_type.enum";
 
 export { IStorageService } from "./domain/interfaces/storage_service.interface";
+export { IDocumentBankingServiceInterface } from "./domain/interfaces/document_banking_service.interface";
 
 export { Documents } from "./domain/documents";
 
