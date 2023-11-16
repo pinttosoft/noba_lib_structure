@@ -15,3 +15,5 @@ export { InformationBankDTO } from "./domain/types/information_bank.type";
 export { InformationIntermediaryBankDTO } from "./domain/types/information_intermediary_bank.type";
 
 export { DepositStatus } from "./domain/enums/deposit_status.enum";
+
+export { BankingRails } from "./domain/banking_rails";
