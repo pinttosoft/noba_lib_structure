@@ -6,7 +6,7 @@ export interface IClientBankingServiceInterface {
   accountOpening(client: Client): Promise<void>;
   createApplication(client: IClient): Promise<string>;
   retrieveApplication(applicationId: string): Promise<string>;
-  statusApplication(applicationId: string): Promise<string>;
+  getStatusApplication(applicationId: string): Promise<string>;
   updateApplication(
     applicationId: string,
     applicationUpdates: ApplicationUpdateType[],
