@@ -12,7 +12,7 @@ export type Layer2ApplicationStatusType = {
   application_validation_errors: ValidationError[];
   application_document_errors: ApplicationDocumentError[];
   individual_errors?: IndividualError[];
-  application_individual_errors?: ApplicationIndividualErrors;
+  application_individual_errors?: ApplicationIndividualErrors[];
 };
 
 type ValidationError = {
@@ -22,7 +22,7 @@ type ValidationError = {
 };
 
 export type ApplicationDocumentError = {
-  id: string;
+  document_id: string;
   status: string;
   description?: string;
   document: Layer2Documents;
