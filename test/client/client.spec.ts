@@ -11,6 +11,7 @@ import {
   DocumentType,
   IndividualDTO,
 } from "../../src";
+import { MongoClient, Db } from "mongodb";
 
 describe("Client", () => {
   it("new indivual account", async () => {
@@ -179,11 +180,11 @@ describe("Client", () => {
     );
 
     client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date() },
+      { action: "cambiar foto de perfil", date: new Date(), id: "2" },
     ]);
 
     client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date() },
+      { action: "agregar foto de pasaporte", date: new Date(), id: "2" },
     ]);
 
     await clientRepo.upsert(client);
@@ -193,7 +194,7 @@ describe("Client", () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const client = await clientRepo.findByClientId("kbros-XD187263254");
 
-    client.setKycActions([{ action: "agregado ", date: new Date() }]);
+    client.setKycActions([{ action: "agregado ", date: new Date(), id: "2" }]);
 
     await clientRepo.upsert(client);
   });
@@ -290,4 +291,48 @@ describe("Client", () => {
 
     expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
+
+  // it("test", async () => {
+  //   //
+  //   let MONGO_PASS =
+  //     process.env.NODE_ENV === "prod" ? process.env.MONGO_PASS : "zrfhowt0cguf";
+  //   let MONGO_USER =
+  //     process.env.NODE_ENV === "prod"
+  //       ? process.env.MONGO_USER
+  //       : "noab-dev-mongodb";
+  //   let MONGO_DB =
+  //     process.env.NODE_ENV === "prod" ? process.env.MONGO_DB : "dbnobadev";
+  //   let MONGO_SERVER =
+  //     process.env.NODE_ENV === "prod"
+  //       ? process.env.MONGO_SERVER
+  //       : "cluster0.xdwtnb4.mongodb.net";
+  //   const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}/${MONGO_DB}?retryWrites=true&w=majority`;
+  //
+  //   console.log("uri", uri);
+  //   const client = new MongoClient(uri, {});
+  //
+  //   await client.connect();
+  //   const database: Db = client.db("dbnobadev");
+  //
+  //   const accountsCollection = database.collection("accounts");
+  //   const accounts = accountsCollection.find();
+  //
+  //   const accountIdToPreserve = [
+  //     "DANIELLEE002",
+  //     "DANIELLEE002",
+  //     "AngelVicen-186263254",
+  //     "DANIELLEE002",
+  //     "DANIELLEE002",
+  //     "JOnathanJo-12131548454",
+  //     "PosubePosu-12344321",
+  //   ];
+  //
+  //   console.log("accounts", accounts);
+  //
+  //   await accountsCollection.deleteMany({
+  //     accountId: { $nin: accountIdToPreserve },
+  //   });
+  //
+  //   console.log("Accounts deleted successfully.");
+  // });
 });

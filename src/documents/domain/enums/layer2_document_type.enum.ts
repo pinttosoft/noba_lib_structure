@@ -1,4 +1,4 @@
-export enum Layer2DocumentType {
+export enum Layer2Documents {
   PASSPORT = "PASSPORT",
   DRIVERS_LICENCE_FRONT = "DRIVERS_LICENCE_FRONT",
   DRIVERS_LICENCE_BACK = "DRIVERS_LICENCE_BACK",
