@@ -20,7 +20,6 @@ export interface IBlockchainService {
       country: string;
     },
     informationWallet: WalletInformationDTO,
-    profileType: CounterpartyProfileType,
   ): Promise<CounterpartyAsset>;
 
   internalTransfer(

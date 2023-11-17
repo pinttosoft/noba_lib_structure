@@ -25,6 +25,7 @@ export interface IBankingService {
       address: Address;
     },
     assetId: string,
+    bankingRailCountry: string,
     informationBank: InformationBankDTO,
     profileType: CounterpartyProfileType,
     informationIntermediaryBank?: InformationIntermediaryBankDTO,
