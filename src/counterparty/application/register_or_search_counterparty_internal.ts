@@ -30,6 +30,7 @@ export class RegisterOrSearchCounterpartyInternal {
         clientDestination.getClientId(),
         asset.getAssetId(),
       );
+
     if (counterparty) {
       logger.info(
         `Se encontro el counterparty ${counterparty.getCounterpartyId()} para el asset ${counterparty.getAssetId()}`,

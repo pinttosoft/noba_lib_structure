@@ -32,3 +32,5 @@ export { PubSubMessage } from "./infrastructure/pubsub";
 export { encrypt } from "./helpers/hash";
 
 export { DepositInformation } from "./domain/types/deposit_information.type";
+
+export { removeAccents } from "./helpers/removeAccents";

@@ -1,6 +1,6 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
-import { IClient } from "../../client";
+import { removeAccents } from "../../shared";
 
 export abstract class Counterparty extends AggregateRoot {
   protected id?: string;
@@ -48,4 +48,8 @@ export abstract class Counterparty extends AggregateRoot {
   }
 
   abstract getName(): string;
+
+  setOwnerName(ownerName: string) {
+    this.ownerName = removeAccents(ownerName);
+  }
 }

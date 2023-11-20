@@ -11,7 +11,6 @@ import {
   DocumentType,
   IndividualDTO,
 } from "../../src";
-import { MongoClient, Db } from "mongodb";
 
 describe("Client", () => {
   it("new indivual account", async () => {
@@ -180,11 +179,11 @@ describe("Client", () => {
     );
 
     client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date(), id: "2" },
+      { action: "cambiar foto de perfil", date: new Date(), id: "" },
     ]);
 
     client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date(), id: "2" },
+      { action: "agregar foto de pasaporte", date: new Date(), id: "" },
     ]);
 
     await clientRepo.upsert(client);
@@ -194,7 +193,7 @@ describe("Client", () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const client = await clientRepo.findByClientId("kbros-XD187263254");
 
-    client.setKycActions([{ action: "agregado ", date: new Date(), id: "2" }]);
+    client.setKycActions([{ action: "agregado ", date: new Date(), id: "" }]);
 
     await clientRepo.upsert(client);
   });
