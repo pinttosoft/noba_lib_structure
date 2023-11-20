@@ -77,4 +77,19 @@ export class ClientMongoRepository
 
     return this.buildClient({ ...result }, result._id.toString());
   }
+
+  async findAll(): Promise<string[]> {
+    const collection = await this.collection();
+    const result = await collection.find().toArray();
+    if (!result) {
+      return undefined;
+    }
+
+    const ids: string[] = [];
+    result.map(async (client) => {
+      ids.push(client.clientId);
+    });
+
+    return ids;
+  }
 }

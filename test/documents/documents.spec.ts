@@ -51,7 +51,7 @@ describe("Docs", () => {
       },
     ];
 
-    nobaDocs.map(async (nobaDoc): Promise<void> => {
+    const allDocs = nobaDocs.map(async (nobaDoc): Promise<void> => {
       // console.log("nobaDoc", nobaDoc, nobaDoc.documentSide.toUpperCase());
       const layer2DocConverted: string =
         NobaDocumentTypeConverter.convertNobaToThirdParty(
@@ -60,7 +60,7 @@ describe("Docs", () => {
           // nobaDoc.documentSide.toUpperCase(),
         );
 
-      // console.log("layer2DocConverted", layer2DocConverted);
+      console.log("layer2DocConverted", layer2DocConverted);
 
       // if not null doc does exist in layer2(layer2 needs passport or driver license
       if (layer2DocConverted) {
