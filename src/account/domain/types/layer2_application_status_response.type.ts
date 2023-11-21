@@ -1,9 +1,10 @@
 import { AccountToOpen, ApplicationType } from "./layer2_application.type";
 import { Layer2Documents } from "../../../documents";
+import { Layer2ApplicationStatusEnum } from "../enums/layer2_application_status_enum.enum";
 
 export type Layer2ApplicationStatusResponseType = {
   id: string;
-  status: Layer2ApplicationStatusType;
+  status: Layer2ApplicationStatusEnum;
   application_type: ApplicationType; // Add other application types if needed
   account_to_open: AccountToOpen;
   terms_and_conditions_accepted: boolean;

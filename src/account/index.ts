@@ -19,7 +19,7 @@ export { AccountMongoRepository } from "./infrastructure/mongo/account_mongo_rep
 export { CompanyQuestionnaire } from "./domain/types/company_questionnaire.type";
 export { ApplicationDataIndividual } from "./domain/types/layer2_application.type";
 export { CorporationApplicationData } from "./domain/types/layer2_application.type";
-export { ApplicationDocumentError } from "./domain/types/layer2_application_status.type";
-export { Layer2ApplicationStatusResponseType } from "./domain/types/layer2_application_status.type";
-export { IndividualError } from "./domain/types/layer2_application_status.type";
-export { Layer2ApplicationStatusType } from "./domain/types/layer2_application_status.type";
+export { ApplicationDocumentError } from "./domain/types/layer2_application_status_response.type";
+export { Layer2ApplicationStatusResponseType } from "./domain/types/layer2_application_status_response.type";
+export { IndividualError } from "./domain/types/layer2_application_status_response.type";
+export { Layer2ApplicationStatusType } from "./domain/types/layer2_application_status_response.type";
