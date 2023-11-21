@@ -8,6 +8,8 @@ export { CounterpartyFactoryDTO } from "./domain/types/counterparty_factory.type
 
 export { RelationshipConsumer } from "./domain/enums/relationship_consumer.enum";
 
+export { CounterpartyProfileType } from "./domain/enums/counterparty_profile_type.enum";
+
 export { CounterpartyMongoRepository } from "./infrastructure/mongo/counterparty_mongo_repository";
 
 export { CounterpartyNotFound } from "./domain/exceptions/counterparty_not_found";

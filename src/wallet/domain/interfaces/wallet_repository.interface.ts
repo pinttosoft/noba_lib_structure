@@ -3,7 +3,9 @@ import { Paginate } from "../../../shared";
 import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
 
 export interface IWalletRepository {
-  upsert(wallet: IWallet): Promise<IWallet>;
+  insert(wallet: IWallet): Promise<IWallet>;
+
+  update(wallet: IWallet): Promise<void>;
 
   updateBalance(wallet: IWallet): Promise<void>;
 

@@ -30,6 +30,8 @@ export class CounterpartyBank extends Counterparty {
     c.ownerAddress = counterpartyBank.informationOwner.address;
     c.accountNumber = counterpartyBank.accountNumber;
 
+    c.profileType = counterpartyBank.profileType;
+
     c.counterpartyType = counterpartyBank.counterpartyType;
     c.isInternal = isInternal;
 
@@ -89,6 +91,8 @@ export class CounterpartyBank extends Counterparty {
     counterparty.routingNumber = data.routingNumber ?? undefined;
     counterparty.swiftCode = data.swiftCode ?? undefined;
     counterparty.bankAddress = { ...informationBank.address } as Address;
+
+    counterparty.profileType = data.profileType ?? "";
 
     counterparty.bankName = informationBank.bankName;
     counterparty.accountNumber = informationBank.accountNumber;

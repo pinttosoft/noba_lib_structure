@@ -1,5 +1,6 @@
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { IBankingRepository } from "../../domain/interfaces/banking_repository.interface";
+import { BankingRails } from "../../domain/banking_rails";
 
 export class BankingMongoRepository
   extends MongoRepository<any>
@@ -21,25 +22,18 @@ export class BankingMongoRepository
   }
 
   collectionName(): string {
-    return "";
+    return "supported_rails";
   }
 
-  saveExternalTransfer(
-    originClient: string,
-    amount: number,
-    beneficiaryId: string,
-    reference: string,
-    feeWire?: number,
-  ): Promise<string> {
-    return Promise.resolve("");
-  }
+  async findBankingRailByCountryCode(
+    countryCode: string,
+  ): Promise<BankingRails | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ countryCode });
+    if (!result) {
+      return undefined;
+    }
 
-  saveInternalTransfer(
-    amount: number,
-    clientDestination: string,
-    originClient: string,
-    reference: string,
-  ): Promise<string> {
-    return Promise.resolve("");
+    return new BankingRails().fromPrimitives({ id: result._id, ...result });
   }
 }

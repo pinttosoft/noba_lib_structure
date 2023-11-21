@@ -3,7 +3,6 @@ import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.typ
 import { InstructionDepositFiat } from "../../../banking";
 import { IClient } from "../../../client";
 import { Asset } from "../../../asset";
-import { Wallet } from "../wallet";
 
 export interface IWallet {
   getId(): string;
@@ -23,8 +22,7 @@ export interface IWallet {
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
   updateLookBalance(amount: number): IWallet;
   updateBalance(amount: number): IWallet;
-
   setInstructionForDeposit(
     data: InstructionDepositCrypto | InstructionDepositFiat,
-  ): Wallet;
+  ): IWallet;
 }

@@ -5,4 +5,5 @@ export interface IClientRepository {
   findByClientId(clientId: string): Promise<IClient | undefined>;
   findByEmail(email: string): Promise<IClient | undefined>;
   findByIDNumber(idNumber: string): Promise<IClient | undefined>;
+  findAllActiveClients(): Promise<IClient[]>;
 }

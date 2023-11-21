@@ -12,7 +12,7 @@ import { Asset, CounterpartyAsset, WalletInformationDTO } from "../../asset";
 import { RelationshipConsumer } from "../domain/enums/relationship_consumer.enum";
 import { CounterpartyBank, InstructionDepositFiat } from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
-import { logger } from "../../index";
+import { AccountType, CounterpartyProfileType, logger } from "../../index";
 
 export class RegisterOrSearchCounterpartyInternal {
   constructor(
@@ -57,6 +57,9 @@ export class RegisterOrSearchCounterpartyInternal {
           relationshipConsumer: RelationshipConsumer.FRIEND,
           originWallet: OriginWallet.OTHER,
         } as WalletInformationDTO,
+        clientDestination.getClientType() === AccountType.INDIVIDUAL
+          ? CounterpartyProfileType.INDIVIDUAL
+          : CounterpartyProfileType.CORPORATION,
         true,
       );
     } else {
@@ -65,6 +68,10 @@ export class RegisterOrSearchCounterpartyInternal {
 
       counterparty = CounterpartyBank.newCounterparty(
         {
+          profileType:
+            clientDestination.getClientType() === AccountType.INDIVIDUAL
+              ? CounterpartyProfileType.INDIVIDUAL
+              : CounterpartyProfileType.CORPORATION,
           accountId: clientDestination.getAccount().getAccountId(),
           clientId: clientOrigin.getClientId(),
           counterpartyId: clientDestination.getClientId(),
