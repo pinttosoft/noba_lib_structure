@@ -1,9 +1,9 @@
 import { AccountToOpen, ApplicationType } from "./layer2_application.type";
 import { Layer2Documents } from "../../../documents";
 
-export type Layer2ApplicationStatusType = {
+export type Layer2ApplicationStatusResponseType = {
   id: string;
-  status: string;
+  status: Layer2ApplicationStatusType;
   application_type: ApplicationType; // Add other application types if needed
   account_to_open: AccountToOpen;
   terms_and_conditions_accepted: boolean;
@@ -13,6 +13,15 @@ export type Layer2ApplicationStatusType = {
   application_document_errors: ApplicationDocumentError[];
   individual_errors?: IndividualError[];
   application_individual_errors?: ApplicationIndividualErrors[];
+};
+
+export type Layer2ApplicationStatusType = {
+  INCOMPLETE: "INCOMPLETE";
+  READY_FOR_SUBMISSION: "READY_FOR_SUBMISSION";
+  SUBMITTED: "SUBMITTED";
+  CHANGES_REQUESTED: "CHANGES_REQUESTED";
+  APPROVED: "APPROVED";
+  REJECTED: "REJECTED";
 };
 
 type ValidationError = {

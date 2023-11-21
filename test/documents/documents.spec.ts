@@ -1,4 +1,8 @@
-import { ApplicationDocumentError, NobaDocumentTypeConverter } from "../../src";
+import {
+  ApplicationDocumentError,
+  NobaDocumentTypeConverter,
+  StorageAWS,
+} from "../../src";
 
 describe("Docs", () => {
   it("test ", async () => {
@@ -78,6 +82,21 @@ describe("Docs", () => {
         // console.log("layer2DocResponse", layer2DocResponse);
       }
     });
+  });
+
+  it("Test aws storage download", async () => {
+    //
+    const aws = await StorageAWS.instance("clients-document");
+    try {
+      const url = await aws.downloadFile(
+        "0226e0f4-695e-4232-add8-7e481a724e5b.png",
+      );
+    } catch (e) {
+      console.error("e");
+      console.error(e);
+    }
+
+    // console.log("url", url);
   });
 
   const getLayer2Document = (layer2Documents: any, layer2DocType: string) => {

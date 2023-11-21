@@ -2,6 +2,7 @@ export { Account } from "./domain/account";
 
 export { AccountStatus } from "./domain/enums/account_status.enum";
 export { AccountType } from "./domain/enums/account_type.enum";
+export { Layer2ApplicationStatusEnum } from "./domain/enums/layer2_application_status_enum.enum";
 
 export { AccountHashNoPartners } from "./domain/exceptions/account_has_no_partners";
 export { AccountNotFound } from "./domain/exceptions/account_not_found";
@@ -19,5 +20,6 @@ export { CompanyQuestionnaire } from "./domain/types/company_questionnaire.type"
 export { ApplicationDataIndividual } from "./domain/types/layer2_application.type";
 export { CorporationApplicationData } from "./domain/types/layer2_application.type";
 export { ApplicationDocumentError } from "./domain/types/layer2_application_status.type";
-export { Layer2ApplicationStatusType } from "./domain/types/layer2_application_status.type";
+export { Layer2ApplicationStatusResponseType } from "./domain/types/layer2_application_status.type";
 export { IndividualError } from "./domain/types/layer2_application_status.type";
+export { Layer2ApplicationStatusType } from "./domain/types/layer2_application_status.type";
