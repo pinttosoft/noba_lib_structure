@@ -94,7 +94,7 @@ export class WalletMongoRepository
     );
   }
 
-  async upsert(wallet: IWallet): Promise<IWallet> {
+  async insert(wallet: IWallet): Promise<IWallet> {
     const id: ObjectId = await this.persist(wallet.getId(), wallet);
 
     return WalletFactory.fromPrimitives(
@@ -103,6 +103,10 @@ export class WalletMongoRepository
       wallet.getClient(),
       wallet.getAsset(),
     );
+  }
+
+  async update(wallet: IWallet): Promise<void> {
+    await this.persist(wallet.getId(), wallet);
   }
 
   async findPaymentAddressByClientId(

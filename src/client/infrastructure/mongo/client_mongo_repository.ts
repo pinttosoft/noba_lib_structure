@@ -4,6 +4,7 @@ import { IClientRepository } from "../../domain/interfaces/client_repository.int
 import {
   AccountMongoRepository,
   AccountNotFound,
+  AccountStatus,
   IAccount,
 } from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
@@ -76,5 +77,18 @@ export class ClientMongoRepository
     }
 
     return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findAllActiveClients(): Promise<IClient[]> {
+    const collection = await this.collection();
+    const result = await collection
+      .find({ status: AccountStatus.APPROVED })
+      .toArray();
+
+    return await Promise.all(
+      result.map((client) =>
+        this.buildClient({ ...client }, client._id.toString()),
+      ),
+    );
   }
 }
