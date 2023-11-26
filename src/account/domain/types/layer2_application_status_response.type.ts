@@ -14,6 +14,7 @@ export type Layer2ApplicationStatusResponseType = {
   application_document_errors: ApplicationDocumentError[];
   individual_errors?: IndividualError[];
   application_individual_errors?: ApplicationIndividualErrors[];
+  validation_errors: ValidationError[];
 };
 
 export type Layer2ApplicationStatusType = {
@@ -25,7 +26,7 @@ export type Layer2ApplicationStatusType = {
   REJECTED: "REJECTED";
 };
 
-type ValidationError = {
+export type ValidationError = {
   field_name: string;
   field_status: string;
   description: string;
