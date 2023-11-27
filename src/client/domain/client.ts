@@ -13,7 +13,6 @@ import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_t
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
-import * as process from "process";
 import { KycAction } from "./types/kyc-action.type";
 
 export class Client extends AggregateRoot implements IClient {
@@ -77,6 +76,8 @@ export class Client extends AggregateRoot implements IClient {
 
   setClientData(data: any): Client {
     this.clientData = data;
+    this.createdAt = data.createdAt;
+    this.approvedAt = data.approvedAt;
 
     return this;
   }
@@ -276,6 +277,7 @@ export class Client extends AggregateRoot implements IClient {
 
     return this.clientData.dateBirth;
   }
+
   getResidencyStatus(): ResidencyStatus {
     if (this.clientType === AccountType.COMPANY) {
       throw new InvalidMethodForClientType(
