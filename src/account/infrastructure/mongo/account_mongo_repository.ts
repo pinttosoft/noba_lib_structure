@@ -25,6 +25,16 @@ export class AccountMongoRepository
     super(MongoClientFactory.createClient());
   }
 
+  async findAccountByApplicationId(applicationId: string): Promise<IAccount> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ applicationId });
+    if (!result) {
+      return undefined;
+    }
+
+    return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
+  }
+
   collectionName(): string {
     return "accounts";
   }

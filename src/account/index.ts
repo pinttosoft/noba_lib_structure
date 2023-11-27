@@ -24,3 +24,4 @@ export { Layer2ApplicationStatusResponseType } from "./domain/types/layer2_appli
 export { IndividualError } from "./domain/types/layer2_application_status_response.type";
 export { Layer2ApplicationStatusType } from "./domain/types/layer2_application_status_response.type";
 export { ValidationError } from "./domain/types/layer2_application_status_response.type";
+export { Layer2ApplicationWebhookStatusEnum } from "./domain/enums/layer2_application_webhook_status.enum";
