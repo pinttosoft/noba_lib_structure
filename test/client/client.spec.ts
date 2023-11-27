@@ -46,7 +46,7 @@ describe("Client", () => {
 
   it("should return data of the client", async () => {
     const client = await ClientMongoRepository.instance().findByClientId(
-      "B-LINE TRANSPORTATION",
+      "ABejarano186263254",
     );
     console.log(client);
   });

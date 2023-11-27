@@ -1,8 +1,8 @@
 import {
-  Operator,
-  Filter,
   Criteria,
+  Filter,
   Filters,
+  Operator,
   Order,
 } from "../../domain/criteria";
 
@@ -28,10 +28,6 @@ type MongoFilter =
 type MongoDirection = 1 | -1;
 type MongoSort = { [field: string]: MongoDirection };
 
-export type MongoFilterBetweenDate = {
-  startDate: string;
-  endDate: string;
-};
 export interface MongoQuery {
   filter: MongoFilter;
   sort: MongoSort;
@@ -111,6 +107,7 @@ export class MongoCriteriaConverter {
   private greaterThanFilter(filter: Filter): MongoFilter {
     return { [filter.field.value]: { $gt: filter.value.value } };
   }
+
   private greaterThanOrEqualFilter(filter: Filter): MongoFilter {
     return { [filter.field.value]: { $gte: filter.value.value } };
   }

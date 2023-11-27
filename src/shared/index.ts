@@ -9,6 +9,7 @@ export {
 export { ExceptionError } from "./domain/types/exception_error";
 export { Paginate } from "./domain/types/paginate";
 export { ExceptionResponseData } from "./domain/types/exception_response_data";
+export { FilterBetweenDate } from "./domain/types/filter_between_data.type";
 
 export { DomainException } from "./domain/exceptions/domain_exception";
 export { GenericException } from "./domain/exceptions/generic_exception";
