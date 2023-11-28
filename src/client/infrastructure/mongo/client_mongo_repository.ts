@@ -93,12 +93,12 @@ export class ClientMongoRepository
     );
   }
 
-  async findByDni(dni: string): Promise<Boolean | undefined> {
+  async findByDni(dni: string): Promise<IClient | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne({ dni });
     if(result)
-      return true
+      return undefined;
 
-    return false
+    return this.buildClient({ ...result }, result._id.toString());
   }
 }
