@@ -334,4 +334,11 @@ describe("Client", () => {
   //
   //   console.log("Accounts deleted successfully.");
   // });
+
+  it("should return data of the client", async () => {
+    const client = await ClientMongoRepository.instance().findByAccountId(
+      "PosubePosu-12344321",
+    );
+    console.log(client);
+  });
 });

@@ -33,7 +33,8 @@ export class AccountFactory {
         .setOwner(owner)
         .setStatus(data.status)
         .setAccountType(data.type)
-        .setAccountId(data.accountId);
+        .setAccountId(data.accountId)
+        .setApplicationId(data.applicationId);
 
       return a;
     } catch (e) {

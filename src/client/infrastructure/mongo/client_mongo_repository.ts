@@ -91,4 +91,15 @@ export class ClientMongoRepository
       ),
     );
   }
+
+  async findByAccountId(accountId: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne({ accountId });
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
 }

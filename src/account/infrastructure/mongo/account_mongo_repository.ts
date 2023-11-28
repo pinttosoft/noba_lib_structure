@@ -28,6 +28,7 @@ export class AccountMongoRepository
   async findAccountByApplicationId(applicationId: string): Promise<IAccount> {
     const collection = await this.collection();
     const result = await collection.findOne({ applicationId });
+    console.log("-result", result);
     if (!result) {
       return undefined;
     }
