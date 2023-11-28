@@ -9,6 +9,7 @@ import {
 } from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
 
+
 export class ClientMongoRepository
   extends MongoRepository<IClient>
   implements IClientRepository
@@ -90,5 +91,14 @@ export class ClientMongoRepository
         this.buildClient({ ...client }, client._id.toString()),
       ),
     );
+  }
+
+  async findByDni(dni: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ dni });
+    if(result)
+      return undefined;
+
+    return this.buildClient({ ...result }, result._id.toString());
   }
 }
