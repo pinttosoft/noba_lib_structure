@@ -12,7 +12,6 @@ import {
   OriginWallet,
   RegisterOrSearchCounterpartyInternal,
   RelationshipConsumer,
-  WalletInformationDTO,
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
@@ -21,8 +20,6 @@ describe("Counterparty", () => {
   it("should be create new instance to counterparty", async () => {
     const client =
       await ClientMongoRepository.instance().findByClientId("FSilva187263254");
-
-    console.log(client);
 
     const counterpartyDTO = {
       type: CounterpartyType.CRYPTO,

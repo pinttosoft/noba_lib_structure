@@ -83,13 +83,15 @@ export class ClientFactory {
       }
 
       if (data.documents && data.documents.length > 0) {
-        c.setDocument(
-          data.informationCompany.registerNumber,
-          Documents.fromPrimitives({
-            ...data.documents,
-            clientId: data.clientId,
-          }),
-        );
+        data.documents.forEach((document: any) => {
+          c.setDocument(
+            data.informationCompany.registerNumber,
+            Documents.fromPrimitives({
+              ...document,
+              clientId: data.clientId,
+            }),
+          );
+        });
       }
 
       if (data.partners.length === 0) {
