@@ -1,4 +1,3 @@
-import { v4 } from "uuid";
 import { Address, GenericException } from "../../shared";
 import { NetworkBank } from "./enums/network_bank.enum";
 import { Counterparty } from "../../counterparty";
@@ -35,11 +34,7 @@ export class CounterpartyBank extends Counterparty {
     c.counterpartyType = counterpartyBank.counterpartyType;
     c.isInternal = isInternal;
 
-    if (!c.isInternal) {
-      c.counterpartyId = counterpartyBank.counterpartyId;
-    } else {
-      c.counterpartyId = v4();
-    }
+    c.counterpartyId = counterpartyBank.counterpartyId;
 
     if (
       counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||
