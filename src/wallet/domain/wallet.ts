@@ -96,6 +96,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   getAccountId(): string {
     return this.client.getAccount().getAccountId();
   }
+
   getWalletId(): string {
     return this.walletId;
   }
@@ -128,8 +129,8 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   getBalanceAvailable(): number {
     return this.walletType === WalletType.FIAT
-      ? Number((this.balance - this.lockedBalance).toPrecision(2))
-      : Number((this.balance - this.lockedBalance).toPrecision(6));
+      ? this.truncate(Number(this.balance) - Number(this.lockedBalance), 2)
+      : this.truncate(Number(this.balance) - Number(this.lockedBalance), 6);
   }
 
   updateLookBalance(amount: number): Wallet {
