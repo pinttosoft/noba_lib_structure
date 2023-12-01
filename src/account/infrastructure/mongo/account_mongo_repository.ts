@@ -53,4 +53,16 @@ export class AccountMongoRepository
 
     return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
   }
+
+  async findAccountByApplicationId(
+    applicationId: string,
+  ): Promise<IAccount | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ applicationId });
+    if (!result) {
+      return undefined;
+    }
+
+    return AccountFactory.fromPrimitives(result._id.toString(), { ...result });
+  }
 }

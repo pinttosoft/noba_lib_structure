@@ -1,4 +1,4 @@
 export enum DocumentSide {
-  BACK = "BACK",
-  FRONT = "FRONT",
+  BACK = "back",
+  FRONT = "front",
 }

@@ -3,6 +3,7 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { AccountStatus } from "./enums/account_status.enum";
 import { AccountType } from "./enums/account_type.enum";
 import { IOwnerAccount } from "./interfaces/owner_account.interface";
+import { removeAccents } from "../../shared";
 
 export class Account extends AggregateRoot implements IAccount {
   private id?: string;
@@ -12,6 +13,7 @@ export class Account extends AggregateRoot implements IAccount {
   private owner: IOwnerAccount;
   private createdAt: Date;
   private approvalDate?: Date;
+  private applicationId?: string;
 
   getId() {
     return this.id;
@@ -43,11 +45,21 @@ export class Account extends AggregateRoot implements IAccount {
     return this;
   }
 
+  setApplicationId(applicationId: string): void {
+    this.applicationId = applicationId;
+  }
+
+  getApplicationId(): string {
+    return this.applicationId;
+  }
+
   build(): void {
     this.accountId =
       this.owner.getName().replace(" ", "").substring(0, 10) +
       "-" +
       this.owner.getIdentifyNumber();
+
+    this.accountId = removeAccents(this.accountId).replace(/\s/g, "");
   }
 
   getOwnerAccount(): IOwnerAccount {
@@ -85,6 +97,7 @@ export class Account extends AggregateRoot implements IAccount {
       type: this.getType(),
       status: this.status,
       owner: this.owner.toPrimitives(),
+      applicationId: this.applicationId,
     };
   }
 }

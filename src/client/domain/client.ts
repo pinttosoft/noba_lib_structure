@@ -8,7 +8,12 @@ import {
 } from "../../account";
 import { CompanyDTO } from "./types/company.type";
 import { IndividualDTO } from "./types/Individual.type";
-import { Address, ContactInformation, GenericException } from "../../shared";
+import {
+  Address,
+  ContactInformation,
+  GenericException,
+  removeAccents,
+} from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
 import { FeeSwap, FeeWire } from "../../system_configuration";
@@ -159,6 +164,8 @@ export class Client extends AggregateRoot implements IClient {
         this.clientData.lastName.replace(" ", "-") +
         this.clientData.dni;
     }
+
+    this.clientId = removeAccents(this.clientId).replace(/\s/g, "-");
   }
 
   getCompanyToPrimitives(): CompanyDTO {

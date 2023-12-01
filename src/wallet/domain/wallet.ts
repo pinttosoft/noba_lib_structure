@@ -176,6 +176,10 @@ export class Wallet extends AggregateRoot implements IWallet {
     let s = n.toString();
     let l = s.length;
     let decimalLength = s.indexOf(".") + 1;
+    if (decimalLength === 0) {
+      return Number(n);
+    }
+
     let numStr = s.substr(0, decimalLength + d);
     return Number(numStr);
   }

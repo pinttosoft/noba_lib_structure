@@ -1,4 +1,4 @@
-import { WalletMongoRepository } from "../../src";
+import { IWallet, WalletMongoRepository } from "../../src";
 
 describe("Wallet", () => {
   const clientId = "ABejarano187263254";
@@ -61,10 +61,12 @@ describe("Wallet", () => {
   });
 
   it("should calculate locked balance", async () => {
-    const wallet =
+    const wallet: IWallet =
       await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
         "ABejarano187263254",
-        "BITCOIN_TESTNET_BTC",
+        "FIAT_TESTNET_USD",
       );
+
+    console.log(wallet.getBalanceAvailable());
   });
 });
