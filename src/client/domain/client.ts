@@ -336,6 +336,12 @@ export class Client extends AggregateRoot implements IClient {
     this.isSegregated = true;
   }
 
+  approveOwnAccount() :void {
+    this.isSegregated = false
+    this.setApprovedAt(new Date());
+    this.status = AccountStatus.APPROVED;
+  }
+
   rejectSegregated(): void {
     this.status = AccountStatus.REJECTED;
   }
@@ -345,7 +351,7 @@ export class Client extends AggregateRoot implements IClient {
       return this.kycRequestedChanges;
     }
 
-    const kcys = this.getCompanyPartners().map((partner) => {
+    return this.getCompanyPartners().map((partner) => {
       return partner;
     });
   }
