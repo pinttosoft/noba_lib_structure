@@ -15,6 +15,7 @@ import {
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
+import { CounterpartyStatus } from "../../src/counterparty/domain/enums/counterparty_status.enum";
 
 describe("Counterparty", () => {
   it("should be create new instance to counterparty", async () => {
@@ -101,5 +102,27 @@ describe("Counterparty", () => {
       CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
     expect(counterparty.getCounterpartyId()).toBe("MSerrano181263254");
+  });
+
+  it("Should register a counterparty internal saving new status field", async () => {
+    const clientId = "JHuel6074911244156928";
+    const clientOrigin =
+      await ClientMongoRepository.instance().findByClientId(clientId);
+
+    const clientDestination =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
+
+    const counterparty = await new RegisterOrSearchCounterpartyInternal(
+      WalletMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(clientOrigin, clientDestination, asset);
+
+    expect(counterparty.getCounterpartyStatus()).toBe(
+      CounterpartyStatus.ACTIVE,
+    );
   });
 });

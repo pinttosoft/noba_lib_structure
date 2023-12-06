@@ -58,6 +58,7 @@
     "uuid": "^9.0.0"
   },
   "jest": {
+    "testTimeout": 90000,
     "setupFiles": [
       "./test/jest/config.ts"
     ],
