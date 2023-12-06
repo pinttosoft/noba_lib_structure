@@ -105,7 +105,7 @@ describe("Counterparty", () => {
   });
 
   it("Should register a counterparty internal saving new status field", async () => {
-    const clientId = "JHuel6074911244156928";
+    const clientId = "ABejarano187263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
 
@@ -120,6 +120,8 @@ describe("Counterparty", () => {
       WalletMongoRepository.instance(),
       CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
+
+    console.log("counterparty", counterparty);
 
     expect(counterparty.getCounterpartyStatus()).toBe(
       CounterpartyStatus.ACTIVE,

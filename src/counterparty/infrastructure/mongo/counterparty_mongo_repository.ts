@@ -10,12 +10,7 @@ import {
   ICounterpartyRepository,
 } from "../../index";
 import { CounterpartyBank } from "../../../banking";
-import {
-  Asset,
-  AssetMongoRepository,
-  AssetNotFound,
-  CounterpartyAsset,
-} from "../../../asset";
+import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<CounterpartyBank>
@@ -96,6 +91,10 @@ export class CounterpartyMongoRepository
     counterpartyId: string,
     assetId: string,
   ): Promise<Counterparty | undefined> {
+    console.log("-- findByCounterpartyIdAndAssetId", {
+      counterpartyId,
+      assetId,
+    });
     const collection = await this.collection();
 
     const result = await collection.findOne({
@@ -128,6 +127,7 @@ export class CounterpartyMongoRepository
   }
 
   async upsert(counterparty: CounterpartyBank): Promise<void> {
+    console.log("-- CounterpartyMongoRepository", counterparty);
     await this.persist(counterparty.getId(), counterparty);
   }
 
@@ -139,6 +139,29 @@ export class CounterpartyMongoRepository
     const result = await collection.findOne({
       clientId: clientId,
       "informationWallet.address": addressPayment,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+  }
+
+  async findMyCounterpartyByAssetId(
+    clientId: string,
+    counterpartyId: string,
+    assetId: string,
+  ): Promise<Counterparty | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({
+      clientId: clientId,
+      counterpartyId,
+      assetId,
     });
 
     if (!result) {
