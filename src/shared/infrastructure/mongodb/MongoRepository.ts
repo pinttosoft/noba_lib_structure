@@ -81,7 +81,8 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
     const count = await collection.countDocuments(this.query.filter);
 
-    const hasNextPage: boolean = this.query.skip * this.criteria.limit < count;
+    const hasNextPage: boolean =
+      this.criteria.currentPage * this.criteria.limit < count;
 
     if (documents.length === 0) {
       return {
@@ -93,7 +94,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     }
 
     return {
-      nextPag: hasNextPage ? Number(this.query.skip) + 2 : null,
+      nextPag: hasNextPage ? Number(this.criteria.currentPage) + 1 : null,
       prevPag: null,
       count: count,
       results: documents,
