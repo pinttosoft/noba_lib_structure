@@ -1,16 +1,4 @@
-import {
-  Asset,
-  AssetMongoRepository,
-  ClientMongoRepository,
-  IClient,
-  InstructionDepositCrypto,
-  IWallet,
-  WalletFactory,
-  WalletMongoRepository,
-  WalletType,
-} from "../../src";
-import * as console from "console";
-import { v4 } from "uuid";
+import { IWallet, WalletMongoRepository } from "../../src";
 
 describe("Wallet", () => {
   const clientId = "ABejarano187263254";
@@ -70,17 +58,15 @@ describe("Wallet", () => {
         clientId,
         undefined,
       );
-
-    console.log(paymentAddress);
   });
 
   it("should calculate locked balance", async () => {
-    const wallet =
+    const wallet: IWallet =
       await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
         "ABejarano187263254",
-        "BITCOIN_TESTNET_BTC",
+        "FIAT_TESTNET_USD",
       );
 
-    console.log(wallet.getClient().getFeeSwap().getFeeForBuy());
+    console.log(wallet.getBalanceAvailable());
   });
 });

@@ -5,3 +5,4 @@ export { Documents } from "./domain/documents";
 
 export { DocumentMongoRepository } from "./infrastructure/document_mongo_repository";
 export { StorageAWS } from "./infrastructure/storage_aws";
+export { IDocumentRepository } from "./domain/interfaces/document_repository.interface";

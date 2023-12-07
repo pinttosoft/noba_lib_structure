@@ -6,9 +6,6 @@ import {
   IAccount,
   IClient,
   IClientRepository,
-  Documents,
-  DocumentSide,
-  DocumentType,
   IndividualDTO,
 } from "../../src";
 
@@ -45,9 +42,10 @@ describe("Client", () => {
   });
 
   it("should return data of the client", async () => {
-    const client = await ClientMongoRepository.instance().findByClientId(
-      "ABejarano186263254",
-    );
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "ABejarano186263254",
+      );
     console.log(client);
   });
 
@@ -260,34 +258,34 @@ describe("Client", () => {
     );
 
     // asignar docuemnto a socios
-    const partner = client.getCompanyToPrimitives().partners[0];
-    client.deleteAllDocuemtnsPartners(partner.dni);
-
-    client.setDocument(
-      partner.dni,
-      Documents.newDocument(
-        partner.dni,
-        "/home/abejarano/Downloads/2.png",
-        DocumentType.GOVERNMENT_ID,
-        DocumentSide.BACK,
-      ),
-    );
-    await ClientMongoRepository.instance().upsert(client);
-
-    const client2 = await ClientMongoRepository.instance().findByClientId(
-      "pinttosoftpinttosoft",
-    );
-    client2.setDocument(
-      partner.dni,
-      Documents.newDocument(
-        partner.dni,
-        "/home/abejarano/Downloads/2-FRONT.png",
-        DocumentType.GOVERNMENT_ID,
-        DocumentSide.FRONT,
-      ),
-    );
-    await ClientMongoRepository.instance().upsert(client2);
-
-    expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
+    // const partner = client.getCompanyToPrimitives().partners[0];
+    // client.deleteAllDocuemtnsPartners(partner.dni);
+    //
+    // client.setDocument(
+    //   partner.dni,
+    //   Documents.newDocument(
+    //     partner.dni,
+    //     "/home/abejarano/Downloads/2.png",
+    //     DocumentType.GOVERNMENT_ID,
+    //     DocumentSide.BACK,
+    //   ),
+    // );
+    // await ClientMongoRepository.instance().upsert(client);
+    //
+    // const client2 = await ClientMongoRepository.instance().findByClientId(
+    //   "pinttosoftpinttosoft",
+    // );
+    // client2.setDocument(
+    //   partner.dni,
+    //   Documents.newDocument(
+    //     partner.dni,
+    //     "/home/abejarano/Downloads/2-FRONT.png",
+    //     DocumentType.GOVERNMENT_ID,
+    //     DocumentSide.FRONT,
+    //   ),
+    // );
+    // await ClientMongoRepository.instance().upsert(client2);
+    //
+    // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });

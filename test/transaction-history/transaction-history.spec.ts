@@ -1,12 +1,12 @@
 import {
   Criteria,
+  FilterBetweenDate,
   Filters,
   Operator,
   Order,
   OrderTypes,
   TransactionMongoRepository,
 } from "../../src";
-import { MongoFilterBetweenDate } from "../../src/shared/infrastructure/mongodb/MongoCriteriaConverter";
 
 describe("Transaction History", () => {
   it("list transactions by date between", async () => {
@@ -85,7 +85,7 @@ const prepareFilter = (payload): Array<Map<string, any>> => {
   // filter dates
   if (payload?.startDate && payload?.endDate) {
     filters.push(
-      new Map<string, string | MongoFilterBetweenDate>([
+      new Map<string, string | FilterBetweenDate>([
         ["field", "createdAt"],
         ["operator", Operator.DATE_RANGE],
         [

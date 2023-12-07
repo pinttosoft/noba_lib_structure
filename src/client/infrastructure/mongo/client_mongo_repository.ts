@@ -65,6 +65,17 @@ export class ClientMongoRepository
     return this.buildClient({ ...result }, result._id.toString());
   }
 
+  async findByAccountId(accountId: string): Promise<IClient> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne({ accountId });
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
   async upsert(client: IClient): Promise<void> {
     await this.persist(client.getId(), client);
   }
@@ -95,7 +106,7 @@ export class ClientMongoRepository
   async findByDni(dni: string): Promise<IClient | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne({ dni });
-    if (result) return undefined;
+    if (!result) return undefined;
 
     return this.buildClient({ ...result }, result._id.toString());
   }

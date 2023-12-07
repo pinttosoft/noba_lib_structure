@@ -75,8 +75,6 @@ describe("Swap", () => {
       opportunity,
     );
 
-    console.log(exchange.toPrimitives());
-
     expect(exchange.getFeeNoba()).toBe(2.475);
     expect(exchange.getTotalAmount()).toBe(
       Number(exchangeRequest.amount) + Number(exchange.getFeeNoba()),

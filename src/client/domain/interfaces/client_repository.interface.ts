@@ -7,4 +7,5 @@ export interface IClientRepository {
   findByIDNumber(idNumber: string): Promise<IClient | undefined>;
   findByDni(dni: string): Promise<IClient | undefined>;
   findAllActiveClients(): Promise<IClient[]>;
+  findByAccountId(accountId: string): Promise<IClient>;
 }

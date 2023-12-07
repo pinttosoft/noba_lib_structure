@@ -66,7 +66,9 @@ export class DocumentMongoRepository
       return [];
     }
 
-    return result[0].documents;
+    return result[0].documents.map((document: any) => {
+      return Documents.fromPrimitives({ clientId, ...document });
+    });
   }
 
   async save(document: Documents): Promise<void> {
