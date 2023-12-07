@@ -13,7 +13,7 @@ import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyMongoRepository
-  extends MongoRepository<CounterpartyBank>
+  extends MongoRepository<Counterparty>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
@@ -126,8 +126,7 @@ export class CounterpartyMongoRepository
     return this.buildPaginate<Counterparty>(document);
   }
 
-  async upsert(counterparty: CounterpartyBank): Promise<void> {
-    console.log("-- CounterpartyMongoRepository", counterparty);
+  async upsert(counterparty: Counterparty): Promise<void> {
     await this.persist(counterparty.getId(), counterparty);
   }
 
