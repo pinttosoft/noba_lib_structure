@@ -336,8 +336,8 @@ export class Client extends AggregateRoot implements IClient {
     this.isSegregated = true;
   }
 
-  approveOwnAccount() :void {
-    this.isSegregated = false
+  approveOwnAccount(): void {
+    this.isSegregated = false;
     this.setApprovedAt(new Date());
     this.status = AccountStatus.APPROVED;
   }

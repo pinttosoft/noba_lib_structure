@@ -127,4 +127,8 @@ describe("Counterparty", () => {
       CounterpartyStatus.ACTIVE,
     );
   });
+
+  it("Should create an external counterparty", async () => {
+    //
+  });
 });
