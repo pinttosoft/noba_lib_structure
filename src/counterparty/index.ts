@@ -7,6 +7,7 @@ export { ICounterpartyRepository } from "./domain/interfaces/counterparty_reposi
 export { CounterpartyFactoryDTO } from "./domain/types/counterparty_factory.type";
 
 export { RelationshipConsumer } from "./domain/enums/relationship_consumer.enum";
+export { CounterpartyStatus } from "./domain/enums/counterparty_status.enum";
 
 export { CounterpartyProfileType } from "./domain/enums/counterparty_profile_type.enum";
 
