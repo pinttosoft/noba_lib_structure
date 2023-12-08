@@ -1,6 +1,6 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
-import { removeAccents } from "../../shared";
+import { Address, removeAccents } from "../../shared";
 import { CounterpartyProfileType } from "./enums/counterparty_profile_type.enum";
 import { CounterpartyStatus } from "./enums/counterparty_status.enum";
 
@@ -53,6 +53,23 @@ export abstract class Counterparty extends AggregateRoot {
 
   getCounterpartyStatus(): CounterpartyStatus {
     return this.status;
+  }
+
+  // override
+  getInformationOwner():
+    | { name: string; address: Address }
+    | { name: string; country: string } {
+    return {
+      name: "string",
+      address: {
+        streetOne: "",
+        streetTwo: "",
+        postalCode: "",
+        city: "",
+        region: "",
+        country: "",
+      },
+    };
   }
 
   setCounterpartyStatus(status: CounterpartyStatus): void {
