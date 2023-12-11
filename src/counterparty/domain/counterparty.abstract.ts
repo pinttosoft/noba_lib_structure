@@ -51,7 +51,7 @@ export abstract class Counterparty extends AggregateRoot {
     return this.relationshipConsumer;
   }
 
-  getCounterpartyStatus(): CounterpartyStatus {
+  getStatus(): CounterpartyStatus {
     return this.status;
   }
 
@@ -72,7 +72,7 @@ export abstract class Counterparty extends AggregateRoot {
     };
   }
 
-  setCounterpartyStatus(status: CounterpartyStatus): void {
+  setStatus(status: CounterpartyStatus): void {
     this.status = status;
   }
 

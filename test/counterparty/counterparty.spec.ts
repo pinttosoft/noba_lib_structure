@@ -3,6 +3,7 @@ import {
   ClientMongoRepository,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
+  CounterpartyStatus,
   CounterpartyType,
   Criteria,
   Filters,
@@ -15,7 +16,6 @@ import {
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
-import { CounterpartyStatus } from "../../src/counterparty/domain/enums/counterparty_status.enum";
 
 describe("Counterparty", () => {
   it("should be create new instance to counterparty", async () => {
@@ -123,9 +123,7 @@ describe("Counterparty", () => {
 
     console.log("counterparty", counterparty);
 
-    expect(counterparty.getCounterpartyStatus()).toBe(
-      CounterpartyStatus.ACTIVE,
-    );
+    expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
   });
 
   it("Should create an external counterparty", async () => {
