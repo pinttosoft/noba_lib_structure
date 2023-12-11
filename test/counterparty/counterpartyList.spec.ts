@@ -24,7 +24,7 @@ describe("Counterparty", () => {
         );
 
         const result = await CounterpartyMongoRepository.instance().list(criteria);
-        // console.log(result);
+        console.log(result);
         expect(result.nextPag).toBeNull()
 
 
@@ -48,11 +48,11 @@ describe("Counterparty", () => {
             Filters.fromValues([filterClientId, filterCounterpartyType]),
             Order.fromValues("createdAt", OrderTypes.DESC),
             5,
-            1,
+            2,
         );
 
         const result = await CounterpartyMongoRepository.instance().list(criteria);
-        //console.log(result);
+        console.log(result);
         expect(result.nextPag).toEqual(result.nextPag)
 
     });

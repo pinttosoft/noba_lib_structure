@@ -82,7 +82,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     const count = await collection.countDocuments(this.query.filter);
 
     const hasNextPage: boolean =
-      this.criteria.currentPage * this.criteria.limit < count;
+        count > this.criteria.currentPage * this.criteria.limit;
 
     if (documents.length === 0) {
       return {
