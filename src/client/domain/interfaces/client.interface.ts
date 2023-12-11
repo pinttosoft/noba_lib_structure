@@ -9,40 +9,78 @@ import { KycAction } from "../types/kyc-action.type";
 
 export interface IClient {
   getId(): string;
+
   toPrimitives(): any;
+
   getAccount(): IAccount;
+
   getClientId(): string;
+
   getClientType(): AccountType;
+
   getName(): string;
+
   getEmail(): string;
+
   getIDNumber(): string;
+
   getAddress(): Address;
+
   getTaxId(): string;
+
   getContactInformation(): ContactInformation;
+
   getDateOfBirth(): Date;
+
   getPassportNumber(): string;
+
   getResidencyStatus(): ResidencyStatus;
+
   getNaics(): { code: string; description: string };
+
   getCompanyToPrimitives(): CompanyDTO;
+
   getEstablishedDate(): Date;
+
   getWebSite(): string;
+
   getStatus(): AccountStatus;
+
   getFeeSwap(): FeeSwap;
+
   getFeeWire(): FeeWire;
+
+  getPrincipalDocuments(): Documents[];
+
   setDocument(dni: string, document: Documents): IClient;
+
   setStatus(clientStatus: AccountStatus): IClient;
+
   activeTwoFactorAuth(): void;
+
   disableTwoFactorAuth(): void;
+
   updateData(data: IndividualDTO | CompanyDTO): void;
+
   approveSegregated(): void;
+
   approveOwnAccount(): void;
+
   rejectSegregated(): void;
+
   markAsSendData(): IClient;
+
   markAsUnderReview(): IClient;
+
   getKycActions(): KycAction[];
+
   setKycActions(kycActions: KycAction[]): IClient;
+
   deleteKycAction(id: string): void;
+
   setKycActionsToPartner(kycAction: KycAction): IClient;
+
   deleteKycActionToPartner(kycAction: KycAction): void;
+
   deleteAllDocuemtnsPartners(dni: string);
 }
