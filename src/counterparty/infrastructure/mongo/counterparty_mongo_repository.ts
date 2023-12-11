@@ -6,6 +6,7 @@ import {
 } from "../../../shared";
 import {
   Counterparty,
+  CounterpartyStatus,
   CounterpartyType,
   ICounterpartyRepository,
 } from "../../index";
@@ -172,5 +173,26 @@ export class CounterpartyMongoRepository
     }
 
     return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+  }
+
+  async getPending(): Promise<Counterparty[] | undefined> {
+    const collection = await this.collection();
+    const result = await collection
+      .find({
+        status: CounterpartyStatus.PENDING,
+      })
+      .toArray();
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result.map((r) => {
+      if (r.counterpartyType === CounterpartyType.CRYPTO) {
+        return CounterpartyAsset.fromPrimitives(r._id.toString(), r);
+      } else {
+        return CounterpartyBank.fromPrimitives(r._id.toString(), r);
+      }
+    });
   }
 }

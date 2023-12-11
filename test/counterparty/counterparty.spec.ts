@@ -126,7 +126,9 @@ describe("Counterparty", () => {
     expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
   });
 
-  it("Should create an external counterparty", async () => {
-    //
+  it("Should get all external PENDING counterparies", async () => {
+    const pendings = await CounterpartyMongoRepository.instance().getPending();
+
+    console.log("pendings", pendings);
   });
 });
