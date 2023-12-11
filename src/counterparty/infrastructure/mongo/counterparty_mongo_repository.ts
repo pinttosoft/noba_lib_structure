@@ -92,10 +92,6 @@ export class CounterpartyMongoRepository
     counterpartyId: string,
     assetId: string,
   ): Promise<Counterparty | undefined> {
-    console.log("-- findByCounterpartyIdAndAssetId", {
-      counterpartyId,
-      assetId,
-    });
     const collection = await this.collection();
 
     const result = await collection.findOne({

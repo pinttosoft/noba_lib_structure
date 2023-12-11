@@ -28,18 +28,16 @@ export class RegisterOrSearchCounterpartyInternal {
   ): Promise<Counterparty> {
     // todo check and confirm
     /*let counterparty: Counterparty =
-                      await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
-                        clientDestination.getClientId(),
-                        asset.getAssetId(),
-                      ); */
+                                  await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+                                    clientDestination.getClientId(),
+                                    asset.getAssetId(),
+                                  ); */
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
         clientDestination.getClientId(),
         asset.getAssetId(),
       );
-
-    console.log("-- counterparty", counterparty);
 
     if (counterparty) {
       logger.info(
@@ -54,7 +52,6 @@ export class RegisterOrSearchCounterpartyInternal {
     );
 
     if (asset.getAssetCode() !== "USD") {
-      console.log("--asset");
       counterparty = CounterpartyAsset.newCounterparty(
         clientDestination.getClientId(),
         clientOrigin,
@@ -75,8 +72,6 @@ export class RegisterOrSearchCounterpartyInternal {
         true,
       );
     } else {
-      console.log("--usd ");
-
       const instruction: InstructionDepositFiat =
         wallet.getInstructionForDeposit() as InstructionDepositFiat;
 
