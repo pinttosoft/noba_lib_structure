@@ -3,7 +3,6 @@ import { ExchangeStatus } from "./enums/exchange_status.enum";
 import { AmountValueObject, StringValueObject } from "../../shared";
 import { BusinessOpportunity } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
-import { ExchangeCalculatedAmount } from "./types/exchange_calculated_amount";
 
 export class Exchange extends AggregateRoot {
   private id?: string;
@@ -43,7 +42,6 @@ export class Exchange extends AggregateRoot {
       amountCredit: AmountValueObject;
     },
     opportunity?: BusinessOpportunity,
-    calculateAmount?: ExchangeCalculatedAmount,
   ): Exchange {
     const e: Exchange = new Exchange();
 
@@ -69,27 +67,21 @@ export class Exchange extends AggregateRoot {
       e.feePercentageBusinessAllie = opportunity.getFeeSwap();
     }
 
-    if (!calculateAmount) {
-      if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
-        e.feePercentageNoba = sourceDetails.wallet
-          .getClient()
-          .getFeeSwap()
-          .getFeeForBuy();
-        e.baseAmount = sourceDetails.amountDebit.getValue();
-      } else {
-        e.feePercentageNoba = sourceDetails.wallet
-          .getClient()
-          .getFeeSwap()
-          .getFeeForSell();
-        e.baseAmount = destinationDetails.amountCredit.getValue();
-      }
-      e.calculateFee();
+    if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
+      e.feePercentageNoba = sourceDetails.wallet
+        .getClient()
+        .getFeeSwap()
+        .getFeeForBuy();
+      e.baseAmount = sourceDetails.amountDebit.getValue();
     } else {
-      e.feeNoba = calculateAmount.feeNoba;
-      e.feeAmount = calculateAmount.feeAmount;
-      e.feeBusinessAllie = calculateAmount.feeBusinessAllie;
-      e.totalAmount = calculateAmount.totalAmount;
+      e.feePercentageNoba = sourceDetails.wallet
+        .getClient()
+        .getFeeSwap()
+        .getFeeForSell();
+      e.baseAmount = destinationDetails.amountCredit.getValue();
     }
+
+    e.calculateFee();
 
     return e;
   }
@@ -124,26 +116,37 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    if (this.feeBusinessAllie > 0) {
-      this.feeBusinessAllie =
-        (this.baseAmount * this.feePercentageBusinessAllie) / 100;
-    } else {
-      this.feeBusinessAllie = 0;
-      this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
+    //TODO posteriormente se analizara el caso de uso de aliados comerciales
+    this.feeBusinessAllie = 0;
+
+    const percentageAPIProvider =
+      this.calculatePercentageChargedByAPIProvider();
+
+    const finalPercentageToBeCharged = this.feeNoba - percentageAPIProvider;
+
+    if (finalPercentageToBeCharged <= 0) {
+      console.log(
+        `Exchange ${this.exchangeId} proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feeNoba}`,
+      );
+      this.feeNoba = 0;
+      return;
     }
 
-    this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
+    this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
 
-    this.calculateTotalAmount();
+    this.feeAmount =
+      Number(this.feeBusinessAllie) + Number(finalPercentageToBeCharged);
+
     return this;
   }
 
-  private calculateTotalAmount(): void {
-    if (this.sourceDetails.assetCode === "USD") {
-      this.totalAmount = this.baseAmount + this.feeAmount;
-    } else {
-      this.totalAmount = this.baseAmount - this.feeAmount;
-    }
+  /**
+   * Porcentaje cobrado por el proveedor de la API
+   *
+   */
+  private calculatePercentageChargedByAPIProvider() {
+    const diff = this.baseAmount - this.destinationDetails.amountCredit;
+    return (diff / this.baseAmount) * 100;
   }
 
   accept(): Exchange {
