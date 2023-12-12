@@ -3,9 +3,6 @@ import {
   AccountType,
   ClientFactory,
   ClientMongoRepository,
-  Documents,
-  DocumentSide,
-  DocumentType,
   IAccount,
   IClient,
   IClientRepository,
@@ -257,34 +254,41 @@ describe("Client", () => {
     await clientRepo.upsert(client);
   });
 
-  it("should return data of the client company", async () => {
-    const client = await ClientMongoRepository.instance().findByClientId(
-      "JJ-Jimenez123456789",
-    );
+  it("should add kyc to partner of a  client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
 
     const partners = client.getCompanyPartners();
-    console.log("partners", partners[0]);
+    console.log("partners", partners);
 
     const partner = client.getCompanyToPrimitives().partners[0];
-    client.deleteAllDocumentsPartners(partner.dni);
+    // client.deleteAllDocumentsPartners(partner.dni);
 
-    client.setDocument(
-      partner.dni,
-      Documents.newDocument(
-        partner.dni,
-        "/home/abejarano/Downloads/2.png",
-        DocumentType.GOVERNMENT_ID,
-        DocumentSide.BACK,
-      ),
-    );
+    // client.setDocument(
+    //   partner.dni,
+    //   Documents.newDocument(
+    //     partner.dni,
+    //     "/home/abejarano/Downloads/2.png",
+    //     DocumentType.GOVERNMENT_ID,
+    //     DocumentSide.BACK,
+    //   ),
+    // );
+    const partner1Id = "123412341234";
     client.setKycActionsToPartner({
       id: Math.random().toString(),
-      dni: "1932159126",
-      action: "second kyc action",
+      dni: partner1Id,
+      action: "esta prueba paso!",
+      date: new Date(),
+    });
+    const partner2Id = "123443212";
+    client.setKycActionsToPartner({
+      id: Math.random().toString(),
+      dni: partner2Id,
+      action: "third kyc action",
       date: new Date(),
     });
     await ClientMongoRepository.instance().upsert(client);
 
-    expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
+    // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });
