@@ -4,7 +4,7 @@ import { ResidencyStatus } from "../enums/residency_status";
 import { FeeSwap, FeeWire } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
-import { IndividualDTO } from "../types/Individual.type";
+import { IndividualDTO, individualType } from "../types/Individual.type";
 import { KycAction } from "../types/kyc-action.type";
 
 export interface IClient {
@@ -82,5 +82,7 @@ export interface IClient {
 
   deleteKycActionToPartner(kycAction: KycAction): void;
 
-  deleteAllDocuemtnsPartners(dni: string);
+  deleteAllDocumentsPartners(dni: string);
+
+  getCompanyPartners(): individualType[] | undefined;
 }

@@ -7,7 +7,7 @@ import {
   IOwnerAccount,
 } from "../../account";
 import { CompanyDTO } from "./types/company.type";
-import { IndividualDTO } from "./types/Individual.type";
+import { IndividualDTO, individualType } from "./types/Individual.type";
 import {
   Address,
   ContactInformation,
@@ -120,7 +120,7 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
-  getCompanyPartners() {
+  getCompanyPartners(): individualType[] | undefined {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(
         this.clientType,
@@ -351,9 +351,12 @@ export class Client extends AggregateRoot implements IClient {
       return this.kycRequestedChanges;
     }
 
-    return this.getCompanyPartners().map((partner) => {
-      return partner;
+    const actions: KycAction[] = [];
+    this.getCompanyPartners().map((partner: individualType) => {
+      actions.push(...partner.kycRequestedChanges);
     });
+
+    return actions;
   }
 
   setKycActions(kycActions: KycAction[]): IClient {
@@ -391,18 +394,20 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   deleteKycActionToPartner(kycAction: KycAction): void {
-    const partners = this.getCompanyPartners().map((partner) => {
-      const partnerActions = partner.kycRequestedChanges.filter(
-        (action) => action.id !== kycAction.id,
-      );
+    const partners: individualType[] = this.getCompanyPartners().map(
+      (partner) => {
+        const partnerActions: KycAction[] = partner.kycRequestedChanges.filter(
+          (action: KycAction): boolean => action.id !== kycAction.id,
+        );
 
-      return { ...partner, kycRequestedChanges: partnerActions };
-    });
+        return { ...partner, kycRequestedChanges: partnerActions };
+      },
+    );
 
     this.setClientData({ ...this.clientData, partners });
   }
 
-  deleteAllDocuemtnsPartners(dni: string) {
+  deleteAllDocumentsPartners(dni: string) {
     this.companyPartners.forEach((p: IOwnerAccount) => {
       if (p.getIdentifyNumber() === dni) {
         p.deleteAllDocs();

@@ -3,6 +3,9 @@ import {
   AccountType,
   ClientFactory,
   ClientMongoRepository,
+  Documents,
+  DocumentSide,
+  DocumentType,
   IAccount,
   IClient,
   IClientRepository,
@@ -39,6 +42,8 @@ describe("Client", () => {
       AccountType.INDIVIDUAL,
       account,
     );
+
+    console.log("client", client);
   });
 
   it("should return data of the client", async () => {
@@ -144,7 +149,7 @@ describe("Client", () => {
     await clientRepo.upsert(client);
   });
 
-  it("Add kyc requested changes to client", async () => {
+  it("Add kyc requested changes to client NATURAL", async () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const email: string = "sonic_kyc@pc.com";
     const payload = {
@@ -254,38 +259,32 @@ describe("Client", () => {
 
   it("should return data of the client company", async () => {
     const client = await ClientMongoRepository.instance().findByClientId(
-      "pinttosoftpinttosoft",
+      "JJ-Jimenez123456789",
     );
 
-    // asignar docuemnto a socios
-    // const partner = client.getCompanyToPrimitives().partners[0];
-    // client.deleteAllDocuemtnsPartners(partner.dni);
-    //
-    // client.setDocument(
-    //   partner.dni,
-    //   Documents.newDocument(
-    //     partner.dni,
-    //     "/home/abejarano/Downloads/2.png",
-    //     DocumentType.GOVERNMENT_ID,
-    //     DocumentSide.BACK,
-    //   ),
-    // );
-    // await ClientMongoRepository.instance().upsert(client);
-    //
-    // const client2 = await ClientMongoRepository.instance().findByClientId(
-    //   "pinttosoftpinttosoft",
-    // );
-    // client2.setDocument(
-    //   partner.dni,
-    //   Documents.newDocument(
-    //     partner.dni,
-    //     "/home/abejarano/Downloads/2-FRONT.png",
-    //     DocumentType.GOVERNMENT_ID,
-    //     DocumentSide.FRONT,
-    //   ),
-    // );
-    // await ClientMongoRepository.instance().upsert(client2);
-    //
-    // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
+    const partners = client.getCompanyPartners();
+    console.log("partners", partners[0]);
+
+    const partner = client.getCompanyToPrimitives().partners[0];
+    client.deleteAllDocumentsPartners(partner.dni);
+
+    client.setDocument(
+      partner.dni,
+      Documents.newDocument(
+        partner.dni,
+        "/home/abejarano/Downloads/2.png",
+        DocumentType.GOVERNMENT_ID,
+        DocumentSide.BACK,
+      ),
+    );
+    client.setKycActionsToPartner({
+      id: Math.random().toString(),
+      dni: "1932159126",
+      action: "second kyc action",
+      date: new Date(),
+    });
+    await ClientMongoRepository.instance().upsert(client);
+
+    expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });
