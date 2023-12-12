@@ -7,7 +7,7 @@ import {
   IOwnerAccount,
 } from "../../account";
 import { CompanyDTO } from "./types/company.type";
-import { IndividualDTO, individualType } from "./types/Individual.type";
+import { IndividualDTO } from "./types/Individual.type";
 import {
   Address,
   ContactInformation,
@@ -120,7 +120,7 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
-  getCompanyPartners(): individualType[] | undefined {
+  getCompanyPartners(): IndividualDTO[] | undefined {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(
         this.clientType,
@@ -352,7 +352,7 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     const actions: KycAction[] = [];
-    this.getCompanyPartners().map((partner: individualType) => {
+    this.getCompanyPartners().map((partner: IndividualDTO) => {
       actions.push(...partner.kycRequestedChanges);
     });
 
@@ -394,7 +394,7 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   deleteKycActionToPartner(kycAction: KycAction): void {
-    const partners: individualType[] = this.getCompanyPartners().map(
+    const partners: IndividualDTO[] = this.getCompanyPartners().map(
       (partner) => {
         const partnerActions: KycAction[] = partner.kycRequestedChanges.filter(
           (action: KycAction): boolean => action.id !== kycAction.id,

@@ -277,18 +277,19 @@ describe("Client", () => {
     client.setKycActionsToPartner({
       id: Math.random().toString(),
       dni: partner1Id,
-      action: "esta prueba paso!",
+      action: "individual dto test!",
       date: new Date(),
     });
     const partner2Id = "123443212";
     client.setKycActionsToPartner({
       id: Math.random().toString(),
       dni: partner2Id,
-      action: "third kyc action",
+      action: "fourth kyc action",
       date: new Date(),
     });
     await ClientMongoRepository.instance().upsert(client);
 
+    console.log("client", client.getCompanyPartners());
     // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
 });
