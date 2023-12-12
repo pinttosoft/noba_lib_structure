@@ -82,7 +82,7 @@ export interface IClient {
 
   deleteKycActionToPartner(kycAction: KycAction): void;
 
-  deleteAllDocumentsPartners(dni: string);
+  deleteAllDocumentsPartners(dni: string): void;
 
   getCompanyPartners(): individualType[] | undefined;
 }

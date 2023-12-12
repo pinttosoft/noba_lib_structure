@@ -407,7 +407,7 @@ export class Client extends AggregateRoot implements IClient {
     this.setClientData({ ...this.clientData, partners });
   }
 
-  deleteAllDocumentsPartners(dni: string) {
+  deleteAllDocumentsPartners(dni: string): void {
     this.companyPartners.forEach((p: IOwnerAccount) => {
       if (p.getIdentifyNumber() === dni) {
         p.deleteAllDocs();
