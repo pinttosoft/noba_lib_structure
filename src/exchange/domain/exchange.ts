@@ -119,6 +119,11 @@ export class Exchange extends AggregateRoot {
     //TODO posteriormente se analizara el caso de uso de aliados comerciales
     this.feeBusinessAllie = 0;
 
+    if (this.sourceDetails.assetCode !== "USD") {
+      this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
+      return this;
+    }
+
     const percentageAPIProvider =
       this.calculatePercentageChargedByAPIProvider();
 
