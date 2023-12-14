@@ -119,8 +119,12 @@ export class Exchange extends AggregateRoot {
     //TODO posteriormente se analizara el caso de uso de aliados comerciales
     this.feeBusinessAllie = 0;
 
-    if (this.sourceDetails.assetCode !== "USD") {
-      this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
+    if (
+      this.destinationDetails.assetCode !== "USDT" &&
+      this.sourceDetails.assetCode !== "USDT"
+    ) {
+      this.feeNoba =
+        (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
       return this;
     }
 
@@ -130,10 +134,6 @@ export class Exchange extends AggregateRoot {
     const finalPercentageToBeCharged =
       this.feePercentageNoba - percentageAPIProvider;
 
-    console.log(
-      `Porcentaje que cobra el proveedor de API ${finalPercentageToBeCharged}`,
-    );
-
     if (finalPercentageToBeCharged <= 0) {
       console.log(
         `Exchange ${this.exchangeId} proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
@@ -141,6 +141,10 @@ export class Exchange extends AggregateRoot {
       this.feeNoba = 0;
       return;
     }
+
+    console.log(
+      `Porcentaje final que se va a cobrar al cliente ${finalPercentageToBeCharged}`,
+    );
 
     this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
 
