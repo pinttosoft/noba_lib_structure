@@ -2,7 +2,6 @@ import { MongoClientFactory, MongoRepository } from "../../../shared";
 import { ValidateUserContact } from "../../domain/validate_user_contact";
 import { IContactValidationUserRepository } from "../../domain/interfaces/contact_validation_user.interface_repository";
 import { ContactValidationType } from "../../domain/enums/contact_validation_type";
-import { ObjectId } from "mongodb";
 
 export class ContactValidationUserMongoRepository
   extends MongoRepository<ValidateUserContact>
@@ -55,6 +54,6 @@ export class ContactValidationUserMongoRepository
     validationType: ContactValidationType,
   ): Promise<void> {
     const collection = await this.collection();
-    await collection.deleteOne({ userId: userId, type: validationType });
+    await collection.deleteMany({ userId: userId, type: validationType });
   }
 }
