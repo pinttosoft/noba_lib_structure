@@ -134,10 +134,11 @@ export class Exchange extends AggregateRoot {
     const finalPercentageToBeCharged =
       this.feePercentageNoba - percentageAPIProvider;
 
+    console.log(
+      `Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
+    );
+
     if (finalPercentageToBeCharged <= 0) {
-      console.log(
-        `Exchange ${this.exchangeId} proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
-      );
       this.feeNoba = 0;
       return;
     }
