@@ -149,8 +149,7 @@ export class Exchange extends AggregateRoot {
 
     this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
 
-    this.feeAmount =
-      Number(this.feeBusinessAllie) + Number(finalPercentageToBeCharged);
+    this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
 
     return this;
   }
