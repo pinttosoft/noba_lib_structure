@@ -1,5 +1,5 @@
 import { IWalletRepository } from "../domain/interfaces/wallet_repository.interface";
-import { InsufficientBalance, IWallet, logger } from "../../index";
+import { InsufficientBalance, IWallet } from "../../index";
 
 export class ValidateBalance {
   constructor(private readonly walletRepository: IWalletRepository) {}
@@ -8,19 +8,21 @@ export class ValidateBalance {
     clientId: string,
     amount: number,
     assetId: string,
+    fee: number = 0,
   ): Promise<number> {
-    logger.info(`Validando saldos ${clientId} ${assetId}`);
+    console.log(`Validando saldos ${clientId} ${assetId}`);
     const wallet: IWallet =
       await this.walletRepository.findWalletsByClientIdAndAssetId(
         clientId,
         assetId,
       );
 
-    logger.info(
-      `[TRANSFER] Saldos disponible ${wallet.getBalanceAvailable()} monto de la transaccion ${amount}`,
+    const totalAmount = Number(amount) + Number(fee);
+    console.log(
+      `Saldos disponible ${wallet.getBalanceAvailable()} monto de la transaccion ${totalAmount}`,
     );
 
-    if (wallet.getBalanceAvailable() < amount) {
+    if (wallet.getBalanceAvailable() < totalAmount) {
       throw new InsufficientBalance();
     }
 
