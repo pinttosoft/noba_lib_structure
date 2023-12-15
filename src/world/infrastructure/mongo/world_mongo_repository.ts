@@ -57,4 +57,12 @@ export class WorldMongoRepository
       .sort("name", -1)
       .toArray();
   }
+
+  /*async addCountry(country: CountryType) {
+      this.collectName = "countries";
+      const collection = await this.collection();
+      const res = await collection.insertOne(country);
+  
+      console.log("--res", res);
+    }*/
 }
