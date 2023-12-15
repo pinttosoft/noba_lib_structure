@@ -59,10 +59,24 @@ export class WorldMongoRepository
   }
 
   /*async addCountry(country: CountryType) {
+            this.collectName = "countries";
+            const collection = await this.collection();
+            const res = await collection.insertOne(country);
+        
+            console.log("--res", res);
+          }*/
+
+  /*async editCountry(
+      countryCode: string,
+      updatedCountry: CountryType,
+    ): Promise<void> {
       this.collectName = "countries";
       const collection = await this.collection();
-      const res = await collection.insertOne(country);
+      const filter = { country_code: countryCode };
+      const update = {
+        $set: updatedCountry,
+      };
   
-      console.log("--res", res);
+      await collection.updateOne(filter, update);
     }*/
 }
