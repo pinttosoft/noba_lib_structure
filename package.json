@@ -1,6 +1,6 @@
 {
   "name": "@pinttosoft/noba_structure",
-  "version": "1.3.18",
+  "version": "1.3.25",
   "description": "Libreria de dominio e infraestructura para la estrcutura de cuentas segregadas",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -58,7 +58,7 @@
     "uuid": "^9.0.0"
   },
   "jest": {
-    "testTimeout": 90000,
+    "testTimeout": 40000,
     "setupFiles": [
       "./test/jest/config.ts"
     ],

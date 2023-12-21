@@ -410,6 +410,13 @@ export class Client extends AggregateRoot implements IClient {
     });
   }
 
+  // retorna los documento del cliente de la cuenta, es decir
+  // si es un cliente individual retorna sus documentos
+  // si es una empresa retorna los documentos de la empresa
+  getPrincipalDocuments(): Documents[] {
+    return this.documents;
+  }
+
   toPrimitives(): any {
     return {
       isSegregated: this.isSegregated,
