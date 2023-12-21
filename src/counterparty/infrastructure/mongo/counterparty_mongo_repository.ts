@@ -6,19 +6,15 @@ import {
 } from "../../../shared";
 import {
   Counterparty,
+  CounterpartyStatus,
   CounterpartyType,
   ICounterpartyRepository,
 } from "../../index";
 import { CounterpartyBank } from "../../../banking";
-import {
-  Asset,
-  AssetMongoRepository,
-  AssetNotFound,
-  CounterpartyAsset,
-} from "../../../asset";
+import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyMongoRepository
-  extends MongoRepository<CounterpartyBank>
+  extends MongoRepository<Counterparty>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
@@ -127,7 +123,7 @@ export class CounterpartyMongoRepository
     return this.buildPaginate<Counterparty>(document);
   }
 
-  async upsert(counterparty: CounterpartyBank): Promise<void> {
+  async upsert(counterparty: Counterparty): Promise<void> {
     await this.persist(counterparty.getId(), counterparty);
   }
 
@@ -150,5 +146,49 @@ export class CounterpartyMongoRepository
     }
 
     return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+  }
+
+  async findMyCounterpartyByAssetId(
+    clientId: string,
+    counterpartyId: string,
+    assetId: string,
+  ): Promise<Counterparty | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({
+      clientId: clientId,
+      counterpartyId,
+      assetId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+  }
+
+  async getPending(): Promise<Counterparty[] | undefined> {
+    const collection = await this.collection();
+    const result = await collection
+      .find({
+        status: CounterpartyStatus.PENDING,
+      })
+      .toArray();
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result.map((r) => {
+      if (r.counterpartyType === CounterpartyType.CRYPTO) {
+        return CounterpartyAsset.fromPrimitives(r._id.toString(), r);
+      } else {
+        return CounterpartyBank.fromPrimitives(r._id.toString(), r);
+      }
+    });
   }
 }

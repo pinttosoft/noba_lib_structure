@@ -3,6 +3,7 @@ import { NetworkBank } from "./enums/network_bank.enum";
 import { Counterparty } from "../../counterparty";
 import { CounterpartyBankDTO } from "./types/counterparty_bank.type";
 import { InformationIntermediaryBankDTO } from "./types/information_intermediary_bank.type";
+import { CounterpartyStatus } from "../../counterparty/domain/enums/counterparty_status.enum";
 
 export class CounterpartyBank extends Counterparty {
   private ownerAddress: Address;
@@ -18,6 +19,7 @@ export class CounterpartyBank extends Counterparty {
 
   static newCounterparty(
     counterpartyBank: CounterpartyBankDTO,
+    status: CounterpartyStatus,
     isInternal: boolean = false,
   ): CounterpartyBank {
     const c: CounterpartyBank = new CounterpartyBank();
@@ -35,6 +37,8 @@ export class CounterpartyBank extends Counterparty {
     c.isInternal = isInternal;
 
     c.counterpartyId = counterpartyBank.counterpartyId;
+
+    c.status = status;
 
     if (
       counterpartyBank.informationBank.networkBank === NetworkBank.WIRE ||
@@ -98,6 +102,9 @@ export class CounterpartyBank extends Counterparty {
     counterparty.counterpartyType = data.counterpartyType;
     counterparty.createdAt = data.createdAt;
     counterparty.isInternal = data.isInternal === "S";
+
+    counterparty.status = data.status;
+
     return counterparty;
   }
 
@@ -163,6 +170,7 @@ export class CounterpartyBank extends Counterparty {
       informationIntermediaryBank: this.getInformationIntermediaryBank(),
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
+      status: this.status,
     };
   }
 }
