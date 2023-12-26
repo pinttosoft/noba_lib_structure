@@ -76,7 +76,7 @@ export class StorageAWS implements IStorageService {
     try {
       await this.s3.deleteObject(params).promise();
     } catch (e) {
-      console.error("Error al eliminar el archivo de S3:", e);
+      logger.error("Error al eliminar el archivo de S3:", e);
       throw new GenericException("Error al eliminar el archivo de S3:");
     }
   }
