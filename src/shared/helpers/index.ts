@@ -19,9 +19,9 @@ export const removeUndefined = (arr: any) => {
 };
 
 export const exceptionResponse = (e, res: Response) => {
-  logger.info(`[lib NOBA_LIB_DI exceptionResponse] e: `, e);
-
   if (e instanceof DomainException || e instanceof RequestException) {
+    logger.info(`[lib NOBA_LIB_DI exceptionResponse] e: `, e.getMessage());
+
     if (e.getData()?.length > 0) {
       res.status(HttpStatus.BAD_REQUEST).json({
         code: e.getErrorCode(),
@@ -37,6 +37,8 @@ export const exceptionResponse = (e, res: Response) => {
       .json({ code: e.getErrorCode(), message: e.getMessage() });
     return;
   }
+
+  logger.info(`[lib NOBA_LIB_DI exceptionResponse] e: `, e);
 
   res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: e.message });
 };
