@@ -62,7 +62,7 @@ export class ClientFactory {
         .setClientId(data.clientId);
 
       // natural
-      if (data.type !== AccountType.COMPANY) {
+      if (data.type === AccountType.INDIVIDUAL) {
         c.setKycActions(data.kycRequestedChanges ?? []);
 
         if (!data.documents || data.documents.length === 0) {
