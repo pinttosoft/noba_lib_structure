@@ -105,13 +105,13 @@ const prepare = (reqFilters: any): Criteria => {
     );
   }
 
-  filters.push(
-    new Map<string, any>([
-      ["field", "clientId"],
-      ["operator", Operator.EQUAL],
-      ["value", null],
-    ]),
-  );
+  /*filters.push(
+      new Map<string, any>([
+        ["field", "clientId"],
+        ["operator", Operator.EQUAL],
+        ["value", null],
+      ]),
+    );*/
 
   return new Criteria(
     Filters.fromValues(filters),
