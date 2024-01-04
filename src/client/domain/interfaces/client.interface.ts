@@ -76,6 +76,10 @@ export interface IClient {
 
   setKycActions(kycActions: KycAction[]): IClient;
 
+  setFeeSwap(feeSwap: FeeSwap): IClient;
+
+  setFeeWire(feeWire: FeeWire): IClient;
+
   deleteKycAction(id: string): void;
 
   setKycActionsToPartner(kycAction: KycAction): IClient;

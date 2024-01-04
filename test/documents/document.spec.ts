@@ -1,5 +1,4 @@
 import { DocumentMongoRepository } from "../../src";
-import * as console from "console";
 
 describe("Document", () => {
   it("should Document", async () => {

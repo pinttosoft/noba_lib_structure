@@ -13,6 +13,7 @@ import { RelationshipConsumer } from "../domain/enums/relationship_consumer.enum
 import { CounterpartyBank, InstructionDepositFiat } from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
 import { AccountType, CounterpartyProfileType, logger } from "../../index";
+import { CounterpartyStatus } from "../domain/enums/counterparty_status.enum";
 
 export class RegisterOrSearchCounterpartyInternal {
   constructor(
@@ -25,8 +26,15 @@ export class RegisterOrSearchCounterpartyInternal {
     clientDestination: IClient,
     asset: Asset,
   ): Promise<Counterparty> {
+    // todo check and confirm
+    /*let counterparty: Counterparty =
+                                  await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+                                    clientDestination.getClientId(),
+                                    asset.getAssetId(),
+                                  ); */
     let counterparty: Counterparty =
-      await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+      await this.counterpartyRepository.findMyCounterpartyByAssetId(
+        clientOrigin.getClientId(),
         clientDestination.getClientId(),
         asset.getAssetId(),
       );
@@ -60,6 +68,7 @@ export class RegisterOrSearchCounterpartyInternal {
         clientDestination.getClientType() === AccountType.INDIVIDUAL
           ? CounterpartyProfileType.INDIVIDUAL
           : CounterpartyProfileType.CORPORATION,
+        CounterpartyStatus.ACTIVE,
         true,
       );
     } else {
@@ -90,6 +99,7 @@ export class RegisterOrSearchCounterpartyInternal {
           assetId: wallet.getAsset().getAssetId(),
           accountNumber: instruction.WIRE.accountNumber,
         },
+        CounterpartyStatus.ACTIVE,
         true,
       );
     }

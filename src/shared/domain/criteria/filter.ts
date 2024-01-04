@@ -23,7 +23,7 @@ export class Filter {
     const operator = values.get("operator");
     const value = values.get("value");
 
-    if (!field || !operator || !value) {
+    if (!field || !operator || value === undefined) {
       throw new InvalidArgumentError(`The filter is invalid`);
     }
 

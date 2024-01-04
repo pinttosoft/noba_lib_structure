@@ -18,7 +18,7 @@ type MongoFilterOperator =
 type MongoFilterBetween = {
   [p: string]: { $gte: Date; $lte: Date };
 };
-type MongoFilterValue = boolean | string | number;
+type MongoFilterValue = boolean | string | number | Date;
 type MongoFilterOperation = {
   [operator in MongoFilterOperator]?: MongoFilterValue;
 };

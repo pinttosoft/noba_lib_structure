@@ -3,6 +3,7 @@ import {
   ClientMongoRepository,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
+  CounterpartyStatus,
   CounterpartyType,
   Criteria,
   Filters,
@@ -101,5 +102,33 @@ describe("Counterparty", () => {
       CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
     expect(counterparty.getCounterpartyId()).toBe("MSerrano181263254");
+  });
+
+  it("Should register a counterparty internal saving new status field", async () => {
+    const clientId = "ABejarano187263254";
+    const clientOrigin =
+      await ClientMongoRepository.instance().findByClientId(clientId);
+
+    const clientDestination =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
+
+    const counterparty = await new RegisterOrSearchCounterpartyInternal(
+      WalletMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(clientOrigin, clientDestination, asset);
+
+    console.log("counterparty", counterparty);
+
+    expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
+  });
+
+  it("Should get all external PENDING counterparies", async () => {
+    const pendings = await CounterpartyMongoRepository.instance().getPending();
+
+    console.log("pendings", pendings);
   });
 });

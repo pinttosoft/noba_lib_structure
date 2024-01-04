@@ -1,4 +1,4 @@
-import { IWallet, WalletMongoRepository } from "../../src";
+import { IWallet, logger, WalletMongoRepository } from "../../src";
 
 describe("Wallet", () => {
   const clientId = "ABejarano187263254";
@@ -53,6 +53,7 @@ describe("Wallet", () => {
   // });
 
   it("should paginate payment address by clientId", async () => {
+    logger.info("should paginate payment address by clientId");
     const paymentAddress =
       await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
         clientId,

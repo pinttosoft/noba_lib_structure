@@ -5,9 +5,27 @@ export class CustomLogger {
   private logger: Logger;
   private codeHash: string;
 
-  constructor(options?: pino.LoggerOptions) {
-    this.logger = pino(options);
+  constructor() {
+    this.logger = pino({
+      transport: {
+        target: "pino-pretty",
+        options: {
+          translateTime: "yyyy-mm-dd HH:MM:ss",
+          ignore: "pid,hostname",
+          colorize: true,
+        },
+      },
+      serializers: {
+        req: (req) => ({ raw: req }),
+        res: (res) => ({ raw: res }),
+      },
+    });
     this.codeHash = process.env.requestId ?? v4();
+
+    this.logger.info(
+      { environment: process.env.NODE_ENV },
+      "Logger inicializado",
+    );
   }
 
   setCode(code: string) {
@@ -15,12 +33,12 @@ export class CustomLogger {
   }
 
   info(message: any, ...args: any[]): void {
-    const modifiedMessage = `[${this.codeHash}] ${message}`;
+    const modifiedMessage = { requestId: this.codeHash, message };
     this.logger.info(modifiedMessage, ...args);
   }
 
   error(message: any, ...args: any[]): void {
-    const modifiedMessage = `[${this.codeHash}] ${message}`;
+    const modifiedMessage = { requestId: this.codeHash, message };
     this.logger.error(modifiedMessage, ...args);
   }
 }

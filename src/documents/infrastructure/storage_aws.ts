@@ -67,4 +67,17 @@ export class StorageAWS implements IStorageService {
       throw new GenericException("Error al subir el archivo a S3:");
     }
   }
+
+  async deleteFile(path: string) {
+    const params = {
+      Bucket: this.bucketName,
+      Key: path,
+    };
+    try {
+      await this.s3.deleteObject(params).promise();
+    } catch (e) {
+      logger.error("Error al eliminar el archivo de S3:", e);
+      throw new GenericException("Error al eliminar el archivo de S3:");
+    }
+  }
 }
