@@ -360,6 +360,11 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   setKycAction(kycAction: KycAction): IClient {
+    console.log(
+      "setKycAction his.kycRequestedChanges",
+      this.kycRequestedChanges,
+    );
+    console.log("setKycAction", kycAction);
     if (!this.kycRequestedChanges) {
       this.kycRequestedChanges = [kycAction];
     } else {

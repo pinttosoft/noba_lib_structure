@@ -296,4 +296,24 @@ describe("Client", () => {
     console.log("client", client.getCompanyPartners());
     // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
   });
+
+  it("should add general kyc to Company, client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
+
+    client.setKycAction({
+      id: Math.random().toString(),
+      action: "second kyc action",
+      date: new Date(),
+    });
+    await ClientMongoRepository.instance().upsert(client);
+  });
+
+  it("should delete general kyc to Company, client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
+
+    client.deleteKycAction("0.34443428785307506");
+    await ClientMongoRepository.instance().upsert(client);
+  });
 });

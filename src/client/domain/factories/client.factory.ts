@@ -61,14 +61,15 @@ export class ClientFactory {
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
 
+      // general kyc for COMPANY, and for kyc INDIVIDUAL
+      if (data.kycRequestedChanges) {
+        data.kycRequestedChanges.map((kycAction) => {
+          c.setKycAction(kycAction);
+        });
+      }
+
       // natural
       if (data.type === AccountType.INDIVIDUAL) {
-        if (data.kycRequestedChanges) {
-          data.kycRequestedChanges.map((kycAction) => {
-            c.setKycAction(kycAction);
-          });
-        }
-
         if (!data.documents || data.documents.length === 0) {
           return c;
         }
