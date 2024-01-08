@@ -61,7 +61,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     console.log("-- 0 this.query.filter", this.query.filter);
 
     // this.query.filter = { ...this.query.filter, clientId: { $exists: false } };
-    console.log("-- 1 this.query.filter", this.query.filter);
+    console.log("-- 0 this.customFilters", this.customFilters);
 
     const collection = await this.collection();
     return await collection
@@ -86,6 +86,10 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   }
 
   public async buildPaginate<T>(documents: T[]): Promise<Paginate<T>> {
+    console.log("-- 1 this.query.filter", this.query.filter);
+
+    console.log("-- 1 this.customFilters", this.customFilters);
+
     const collection = await this.collection();
 
     const count = await collection.countDocuments({
