@@ -178,13 +178,17 @@ describe("Client", () => {
       account,
     );
 
-    client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date(), id: "" },
-    ]);
+    client.setKycAction({
+      action: "cambiar foto de perfil",
+      date: new Date(),
+      id: "",
+    });
 
-    client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date(), id: "" },
-    ]);
+    client.setKycAction({
+      action: "agregar foto de pasaporte",
+      date: new Date(),
+      id: "",
+    });
 
     await clientRepo.upsert(client);
   });
@@ -193,7 +197,7 @@ describe("Client", () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
     const client = await clientRepo.findByClientId("kbros-XD187263254");
 
-    client.setKycActions([{ action: "agregado ", date: new Date(), id: "" }]);
+    client.setKycAction({ action: "agregado ", date: new Date(), id: "" });
 
     await clientRepo.upsert(client);
   });
@@ -214,21 +218,21 @@ describe("Client", () => {
       "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
     );
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "rk",
       date: new Date(),
       dni: "11111",
       id: "555",
     });
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "2 test",
       date: new Date(),
       dni: "187263254",
       id: "2",
     });
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "final test",
       date: new Date(),
       dni: "11111",
@@ -274,14 +278,14 @@ describe("Client", () => {
     //   ),
     // );
     const partner1Id = "123412341234";
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       id: Math.random().toString(),
       dni: partner1Id,
       action: "individual dto test!",
       date: new Date(),
     });
     const partner2Id = "123443212";
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       id: Math.random().toString(),
       dni: partner2Id,
       action: "fourth kyc action",

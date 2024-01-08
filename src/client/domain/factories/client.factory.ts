@@ -63,7 +63,9 @@ export class ClientFactory {
 
       // natural
       if (data.type === AccountType.INDIVIDUAL) {
-        c.setKycActions(data.kycRequestedChanges ?? []);
+        data.kycRequestedChanges.map((kycAction) => {
+          c.setKycAction(kycAction);
+        });
 
         if (!data.documents || data.documents.length === 0) {
           return c;

@@ -359,17 +359,17 @@ export class Client extends AggregateRoot implements IClient {
     return actions;
   }
 
-  setKycActions(kycActions: KycAction[]): IClient {
+  setKycAction(kycAction: KycAction): IClient {
     if (!this.kycRequestedChanges) {
-      this.kycRequestedChanges = [...kycActions];
+      this.kycRequestedChanges = [kycAction];
     } else {
-      this.kycRequestedChanges.push(...kycActions);
+      this.kycRequestedChanges.push(kycAction);
     }
 
     return this;
   }
 
-  setKycActionsToPartner(kycAction: KycAction): IClient {
+  setKycActionToPartner(kycAction: KycAction): IClient {
     const partners = this.getCompanyPartners().map((partner) => {
       if (partner.dni === kycAction.dni) {
         const actions = partner.kycRequestedChanges ?? [];
