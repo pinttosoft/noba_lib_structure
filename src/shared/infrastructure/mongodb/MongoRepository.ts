@@ -8,6 +8,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   private criteriaConverter: MongoCriteriaConverter;
   private query: MongoQuery;
   private criteria: Criteria;
+  private customFilters: any;
 
   constructor(private _client: Promise<MongoClient>) {
     this.criteriaConverter = new MongoCriteriaConverter();
@@ -50,13 +51,21 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     return result.upsertedId;
   }
 
-  protected async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {
+  protected async searchByCriteria<D>(
+    criteria: Criteria,
+    customFilters?: any,
+  ): Promise<D[]> {
     this.criteria = criteria;
     this.query = this.criteriaConverter.convert(criteria);
+    this.customFilters = customFilters;
+    console.log("-- 0 this.query.filter", this.query.filter);
+
+    // this.query.filter = { ...this.query.filter, clientId: { $exists: false } };
+    console.log("-- 1 this.query.filter", this.query.filter);
 
     const collection = await this.collection();
     return await collection
-      .find<D>(this.query.filter, {})
+      .find<D>({ ...this.query.filter, ...this.customFilters }, {})
       .sort(this.query.sort)
       .skip(this.query.skip)
       .limit(this.query.limit)
@@ -79,7 +88,10 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   public async buildPaginate<T>(documents: T[]): Promise<Paginate<T>> {
     const collection = await this.collection();
 
-    const count = await collection.countDocuments(this.query.filter);
+    const count = await collection.countDocuments({
+      ...this.query.filter,
+      ...this.customFilters,
+    });
 
     const hasNextPage: boolean =
       this.criteria.currentPage * this.criteria.limit < count;

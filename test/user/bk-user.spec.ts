@@ -79,7 +79,7 @@ const prepare = (reqFilters: any): Criteria => {
     filters.push(
       new Map<string, string | boolean>([
         ["field", "active"],
-        ["operator", Operator.EQUAL],
+        ["operator", Operator.NOT_EQUAL],
         ["value", reqFilters.active],
       ]),
     );
@@ -88,7 +88,7 @@ const prepare = (reqFilters: any): Criteria => {
   if (reqFilters.email) {
     filters.push(
       new Map<string, string | boolean>([
-        ["field", "firstName"],
+        ["field", "email"],
         ["operator", Operator.CONTAINS],
         ["value", reqFilters.email],
       ]),
@@ -106,12 +106,12 @@ const prepare = (reqFilters: any): Criteria => {
   }
 
   /*filters.push(
-      new Map<string, any>([
-        ["field", "clientId"],
-        ["operator", Operator.EQUAL],
-        ["value", null],
-      ]),
-    );*/
+                                new Map<string, any>([
+                                  ["field", "clientId"],
+                                  ["operator", Operator.EQUAL],
+                                  ["value", null],
+                                ]),
+                              );*/
 
   return new Criteria(
     Filters.fromValues(filters),
@@ -122,11 +122,10 @@ const prepare = (reqFilters: any): Criteria => {
 };
 describe("Bakcoffice User", () => {
   it("Search by criteria", async () => {
-    //
-    const criteria = prepare({});
+    const criteria = prepare({ active: true });
     const users =
       await BkUserMongoRepository.instance().fetchCriteria(criteria);
 
-    console.log("users", users);
+    console.log("users", users.count);
   });
 });
