@@ -87,7 +87,12 @@ export class ClientFactory {
         return c;
       }
 
-      if (data.documents && data.documents.length > 0) {
+      // company
+      if (
+        data.documents &&
+        Array.isArray(data.documents) &&
+        data.documents.length > 0
+      ) {
         data.documents.forEach((document: any) => {
           c.setDocument(
             data.informationCompany.registerNumber,
@@ -99,15 +104,17 @@ export class ClientFactory {
         });
       }
 
-      if (data.partners.length === 0) {
+      if (data.partners && data.partners.length === 0) {
         return c;
       }
 
-      c.setCompanyPartners(
-        data.partners.map((p) =>
-          OwnerAccountFactory.factoryOwnerAccount(p, AccountType.INDIVIDUAL),
-        ),
-      );
+      if (data.partners && Array.isArray(data.partners)) {
+        c.setCompanyPartners(
+          data.partners.map((p) =>
+            OwnerAccountFactory.factoryOwnerAccount(p, AccountType.INDIVIDUAL),
+          ),
+        );
+      }
 
       return c;
     } catch (e) {
