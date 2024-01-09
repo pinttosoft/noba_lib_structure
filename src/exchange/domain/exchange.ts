@@ -159,7 +159,13 @@ export class Exchange extends AggregateRoot {
    *
    */
   private calculatePercentageChargedByAPIProvider() {
-    const diff = this.baseAmount - this.destinationDetails.amountCredit;
+    let diff = 0;
+    if (this.destinationDetails.assetCode === "USD") {
+      diff = this.sourceDetails.amountDebit - this.baseAmount;
+    } else {
+      diff = this.baseAmount - this.destinationDetails.amountCredit;
+    }
+
     return (diff / this.baseAmount) * 100;
   }
 
