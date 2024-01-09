@@ -30,8 +30,11 @@ export class BkUserMongoRepository extends MongoRepository<User> {
     super(MongoClientFactory.createClient());
   }
 
-  async fetchCriteria(criteria: Criteria): Promise<Paginate<User>> {
-    const users: User[] = await this.searchByCriteria(criteria);
+  async fetchCriteria(
+    criteria: Criteria,
+    customFilters?: any,
+  ): Promise<Paginate<User>> {
+    const users: User[] = await this.searchByCriteria(criteria, customFilters);
 
     return this.buildPaginate<User>(users);
   }
@@ -105,14 +108,6 @@ const prepare = (reqFilters: any): Criteria => {
     );
   }
 
-  /*filters.push(
-                                new Map<string, any>([
-                                  ["field", "clientId"],
-                                  ["operator", Operator.EQUAL],
-                                  ["value", null],
-                                ]),
-                              );*/
-
   return new Criteria(
     Filters.fromValues(filters),
     Order.fromValues("createdAt", OrderTypes.DESC),
@@ -123,8 +118,13 @@ const prepare = (reqFilters: any): Criteria => {
 describe("Bakcoffice User", () => {
   it("Search by criteria", async () => {
     const criteria = prepare({ active: true });
-    const users =
-      await BkUserMongoRepository.instance().fetchCriteria(criteria);
+    const customFilters: any = {
+      $or: [{ clientId: { $exists: false } }, { clientId: null }],
+    };
+    const users = await BkUserMongoRepository.instance().fetchCriteria(
+      criteria,
+      customFilters,
+    );
 
     console.log("users", users.count);
   });

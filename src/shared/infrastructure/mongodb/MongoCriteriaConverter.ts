@@ -29,7 +29,6 @@ type MongoDirection = 1 | -1;
 type MongoSort = { [field: string]: MongoDirection };
 
 export interface MongoQuery {
-  // todo check, this is to allow custom filter in mongo repository
   filter: MongoFilter;
   sort: MongoSort;
   skip: number;
