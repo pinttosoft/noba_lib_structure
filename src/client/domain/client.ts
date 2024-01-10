@@ -388,6 +388,10 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   deleteKycAction(id: string) {
+    if (!this.kycRequestedChanges || this.kycRequestedChanges.length === 0) {
+      throw new GenericException("Action not found");
+    }
+
     this.kycRequestedChanges = this.kycRequestedChanges.filter(
       (kyc: KycAction) => kyc.id !== id,
     );
@@ -396,6 +400,13 @@ export class Client extends AggregateRoot implements IClient {
   deleteKycActionToPartner(kycAction: KycAction): void {
     const partners: IndividualDTO[] = this.getCompanyPartners().map(
       (partner) => {
+        if (
+          !partner.kycRequestedChanges ||
+          partner.kycRequestedChanges.length === 0
+        ) {
+          throw new GenericException("Action not found");
+        }
+
         const partnerActions: KycAction[] = partner.kycRequestedChanges.filter(
           (action: KycAction): boolean => action.id !== kycAction.id,
         );
