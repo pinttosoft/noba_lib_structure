@@ -178,30 +178,52 @@ describe("Client", () => {
       account,
     );
 
-    client.setKycActions([
-      { action: "cambiar foto de perfil", date: new Date(), id: "" },
-    ]);
+    client.setKycAction({
+      action: "cambiar foto de perfil",
+      date: new Date(),
+      id: "",
+    });
 
-    client.setKycActions([
-      { action: "agregar foto de pasaporte", date: new Date(), id: "" },
-    ]);
-
-    await clientRepo.upsert(client);
-  });
-
-  it("Get kyc actions", async () => {
-    const clientRepo: IClientRepository = ClientMongoRepository.instance();
-    const client = await clientRepo.findByClientId("kbros-XD187263254");
-
-    client.setKycActions([{ action: "agregado ", date: new Date(), id: "" }]);
+    client.setKycAction({
+      action: "agregar foto de pasaporte",
+      date: new Date(),
+      id: "",
+    });
 
     await clientRepo.upsert(client);
   });
 
-  it("Delete kyc action", async () => {
+  it("Add kyc requested changes to client NATURAL", async () => {
     const clientRepo: IClientRepository = ClientMongoRepository.instance();
-    const client: IClient =
-      await clientRepo.findByClientId("kbros-XD187263254");
+    const client = await clientRepo.findByClientId("MMainbeneficiary789975243");
+
+    client.setKycAction({
+      action: "cambiar foto de perfil",
+      date: new Date(),
+      id: "",
+    });
+
+    client.setKycAction({
+      action: "agregar foto de pasaporte",
+      date: new Date(),
+      id: "",
+    });
+
+    await clientRepo.upsert(client);
+  });
+
+  it("Get kyc actions client NATURAL", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client = await clientRepo.findByClientId("MMainbeneficiary789975243");
+
+    console.log("actions", client.getKycActions());
+  });
+
+  it("Delete kyc action client NATURAL", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client: IClient = await clientRepo.findByClientId(
+      "MMainbeneficiary789975243",
+    );
 
     client.deleteKycAction("kyc-0.18776280337277518");
 
@@ -214,21 +236,21 @@ describe("Client", () => {
       "DE-PRUEBA PARA PRUEBA (XXXX)66.716.343/0001-82",
     );
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "rk",
       date: new Date(),
       dni: "11111",
       id: "555",
     });
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "2 test",
       date: new Date(),
       dni: "187263254",
       id: "2",
     });
 
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       action: "final test",
       date: new Date(),
       dni: "11111",
@@ -254,7 +276,7 @@ describe("Client", () => {
     await clientRepo.upsert(client);
   });
 
-  it("should add kyc to partner of a  client company", async () => {
+  it("should add kyc to partner of a client company", async () => {
     const client =
       await ClientMongoRepository.instance().findByClientId("semodo12344321");
 
@@ -274,14 +296,14 @@ describe("Client", () => {
     //   ),
     // );
     const partner1Id = "123412341234";
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       id: Math.random().toString(),
       dni: partner1Id,
       action: "individual dto test!",
       date: new Date(),
     });
     const partner2Id = "123443212";
-    client.setKycActionsToPartner({
+    client.setKycActionToPartner({
       id: Math.random().toString(),
       dni: partner2Id,
       action: "fourth kyc action",
@@ -291,5 +313,32 @@ describe("Client", () => {
 
     console.log("client", client.getCompanyPartners());
     // expect(client.toPrimitives().partners[0].documents.length === 1).toBe(true);
+  });
+
+  it("should add general kyc to Company, client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
+
+    client.setKycAction({
+      id: Math.random().toString(),
+      action: "second kyc action",
+      date: new Date(),
+    });
+    await ClientMongoRepository.instance().upsert(client);
+  });
+
+  it("should get general kyc Company actions, client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
+
+    console.log("actions", client.getKycActions());
+  });
+
+  it("should delete general kyc to Company, client company", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("semodo12344321");
+
+    client.deleteKycAction("0.34443428785307506");
+    await ClientMongoRepository.instance().upsert(client);
   });
 });
