@@ -12,7 +12,7 @@ export class StringValueObject extends ValueObject<string> {
   }
 
   private ensureStringIsNotEmpty(): void {
-    if (this.value.length < 1) {
+    if (typeof this.value !== "object" && this.value.length < 1) {
       throw new InvalidArgumentError("String should have a length");
     }
   }
