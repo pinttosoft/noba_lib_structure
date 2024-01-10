@@ -8,7 +8,6 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   private criteriaConverter: MongoCriteriaConverter;
   private query: MongoQuery;
   private criteria: Criteria;
-  private customFilters: any;
 
   constructor(private _client: Promise<MongoClient>) {
     this.criteriaConverter = new MongoCriteriaConverter();
@@ -51,17 +50,13 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     return result.upsertedId;
   }
 
-  protected async searchByCriteria<D>(
-    criteria: Criteria,
-    customFilters?: any,
-  ): Promise<D[]> {
+  protected async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {
     this.criteria = criteria;
     this.query = this.criteriaConverter.convert(criteria);
-    this.customFilters = customFilters;
 
     const collection = await this.collection();
     return await collection
-      .find<D>({ ...this.query.filter, ...this.customFilters }, {})
+      .find<D>(this.query.filter, {})
       .sort(this.query.sort)
       .skip(this.query.skip)
       .limit(this.query.limit)
@@ -84,10 +79,7 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   public async buildPaginate<T>(documents: T[]): Promise<Paginate<T>> {
     const collection = await this.collection();
 
-    const count = await collection.countDocuments({
-      ...this.query.filter,
-      ...this.customFilters,
-    });
+    const count = await collection.countDocuments(this.query.filter);
 
     const hasNextPage: boolean =
       this.criteria.currentPage * this.criteria.limit < count;

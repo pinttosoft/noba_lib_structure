@@ -30,11 +30,8 @@ export class BkUserMongoRepository extends MongoRepository<User> {
     super(MongoClientFactory.createClient());
   }
 
-  async fetchCriteria(
-    criteria: Criteria,
-    customFilters?: any,
-  ): Promise<Paginate<User>> {
-    const users: User[] = await this.searchByCriteria(criteria, customFilters);
+  async fetchCriteria(criteria: Criteria): Promise<Paginate<User>> {
+    const users: User[] = await this.searchByCriteria(criteria);
 
     return this.buildPaginate<User>(users);
   }
@@ -78,11 +75,11 @@ const prepare = (reqFilters: any): Criteria => {
     );
   }
 
-  if (reqFilters.active) {
+  if (reqFilters.active !== undefined) {
     filters.push(
       new Map<string, string | boolean>([
         ["field", "active"],
-        ["operator", Operator.NOT_EQUAL],
+        ["operator", Operator.EQUAL],
         ["value", reqFilters.active],
       ]),
     );
@@ -92,8 +89,8 @@ const prepare = (reqFilters: any): Criteria => {
     filters.push(
       new Map<string, string | boolean>([
         ["field", "email"],
-        ["operator", Operator.CONTAINS],
-        ["value", reqFilters.email],
+        ["operator", Operator.EQUAL],
+        ["value", null],
       ]),
     );
   }
@@ -108,6 +105,14 @@ const prepare = (reqFilters: any): Criteria => {
     );
   }
 
+  filters.push(
+    new Map<string, any>([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", null],
+    ]),
+  );
+
   return new Criteria(
     Filters.fromValues(filters),
     Order.fromValues("createdAt", OrderTypes.DESC),
@@ -117,14 +122,9 @@ const prepare = (reqFilters: any): Criteria => {
 };
 describe("Bakcoffice User", () => {
   it("Search by criteria", async () => {
-    const criteria = prepare({ active: true });
-    const customFilters: any = {
-      $or: [{ clientId: { $exists: false } }, { clientId: null }],
-    };
-    const users = await BkUserMongoRepository.instance().fetchCriteria(
-      criteria,
-      customFilters,
-    );
+    const criteria = prepare({ active: false });
+    const users =
+      await BkUserMongoRepository.instance().fetchCriteria(criteria);
 
     console.log("users", users.count);
   });

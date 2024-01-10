@@ -10,7 +10,7 @@ export class User extends AggregateRoot {
   private password: PasswordValueObject;
   private country: string;
   private token?: string;
-  private clientId?: string;
+  private clientId: string = null;
   private createdAt?: Date;
   private active: boolean;
   private referredByAccountId?: string;
@@ -26,6 +26,7 @@ export class User extends AggregateRoot {
     u.country = country;
     u.createdAt = new Date();
     u.active = false;
+    u.clientId = null;
     u.userId = v4();
 
     return u;
