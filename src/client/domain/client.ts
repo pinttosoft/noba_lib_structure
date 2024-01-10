@@ -392,19 +392,49 @@ export class Client extends AggregateRoot implements IClient {
       throw new GenericException("Action not found");
     }
 
+    const foundActionIndex = this.kycRequestedChanges.findIndex(
+      (action: KycAction): boolean => action.id === id,
+    );
+
+    if (foundActionIndex === -1) {
+      throw new GenericException("No action found");
+    }
+
     this.kycRequestedChanges = this.kycRequestedChanges.filter(
       (kyc: KycAction) => kyc.id !== id,
     );
   }
 
   deleteKycActionToPartner(kycAction: KycAction): void {
-    const partners: IndividualDTO[] = this.getCompanyPartners().map(
+    const partners = this.getCompanyPartners();
+
+    if (!partners || partners.length === 0) {
+      throw new GenericException("No partners for the company");
+    }
+
+    const foundActionIndex = partners.findIndex(
+      (partner): boolean => partner.dni === kycAction.dni,
+    );
+
+    if (foundActionIndex === -1) {
+      throw new GenericException("Partner not found");
+    }
+
+    const partnersPayload: IndividualDTO[] = this.getCompanyPartners().map(
       (partner) => {
         if (
           !partner.kycRequestedChanges ||
           partner.kycRequestedChanges.length === 0
         ) {
-          throw new GenericException("Action not found");
+          throw new GenericException("No action found for the partner");
+        }
+
+        const foundActionIndex = partner.kycRequestedChanges.findIndex(
+          (action: KycAction): boolean => action.id === kycAction.id,
+        );
+
+        if (foundActionIndex === -1) {
+          throw new GenericException("Action not found for the partner");
         }
 
         const partnerActions: KycAction[] = partner.kycRequestedChanges.filter(
@@ -415,7 +445,7 @@ export class Client extends AggregateRoot implements IClient {
       },
     );
 
-    this.setClientData({ ...this.clientData, partners });
+    this.setClientData({ ...this.clientData, partnersPayload });
   }
 
   deleteAllDocumentsPartners(dni: string): void {
