@@ -445,7 +445,7 @@ export class Client extends AggregateRoot implements IClient {
       },
     );
 
-    this.setClientData({ ...this.clientData, partnersPayload });
+    this.setClientData({ ...this.clientData, partners: partnersPayload });
   }
 
   deleteAllDocumentsPartners(dni: string): void {
