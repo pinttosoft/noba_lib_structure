@@ -114,7 +114,9 @@ export class Exchange extends AggregateRoot {
   getAssetCode(): string {
     return this.sourceDetails.assetCode;
   }
-
+  getBaseAmount(): number {
+    return this.baseAmount;
+  }
   calculateFee(): Exchange {
     //TODO posteriormente se analizara el caso de uso de aliados comerciales
     this.feeBusinessAllie = 0;

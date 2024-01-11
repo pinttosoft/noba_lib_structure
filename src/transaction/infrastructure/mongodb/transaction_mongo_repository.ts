@@ -219,6 +219,7 @@ export class TransactionMongoRepository
   async findExchangeTransactionByExchangeIdAndStatus(
     transactionId: string,
     status: WithdrawalStatus,
+    TransactionType: TransactionType
   ): Promise<ExchangeTransaction | undefined> {
     const filter = {
       transactionId,

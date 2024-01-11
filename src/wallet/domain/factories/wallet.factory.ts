@@ -42,6 +42,7 @@ export class WalletFactory {
         .setAsset(asset)
         .setClient(client)
         .setBalance(data.balance)
+        .setCreditBalance(data.creditBalance)
         .setInstructionForDeposit(data.instructionForDeposit)
         .setLockedBalance(data.lockedBalance);
     } catch (e) {

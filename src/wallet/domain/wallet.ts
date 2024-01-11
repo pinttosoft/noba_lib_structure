@@ -14,6 +14,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   private clientId: string;
   private balance: number;
   private lockedBalance: number;
+  private creditBalance: number;
   private label: string;
   private client: IClient;
   private instructForDeposit: InstructionDepositFiat | InstructionDepositCrypto;
@@ -40,6 +41,11 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   setBalance(balance: number): Wallet {
     this.balance = balance;
+    return this;
+  }
+
+  setCreditBalance(creditBalance: number): Wallet {
+    this.creditBalance = creditBalance;
     return this;
   }
 
@@ -108,7 +114,9 @@ export class Wallet extends AggregateRoot implements IWallet {
   getLockedBalance(): number {
     return this.lockedBalance;
   }
-
+  getCreditBalance():number{
+    return this.creditBalance;
+  }
   calculateNewBalance(balance: number, lockedBalance: number): Wallet {
     this.balance = balance;
     this.lockedBalance = lockedBalance;
@@ -166,9 +174,10 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  setNewBalance(balance: number, lockedBalance: number): Wallet {
+  setNewBalance(balance: number, lockedBalance: number, creditBalance:number): Wallet {
     this.balance = balance;
     this.lockedBalance = lockedBalance;
+    this.creditBalance=creditBalance;
     return this;
   }
 

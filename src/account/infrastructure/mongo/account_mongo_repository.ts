@@ -5,6 +5,7 @@ import {
   IAccountRepository,
 } from "../../index";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
+import * as console from "console";
 
 export class AccountMongoRepository
   extends MongoRepository<Account>
@@ -32,6 +33,7 @@ export class AccountMongoRepository
   async findByAccountId(accountId: string): Promise<IAccount | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne({ accountId });
+    console.log('result', result)
     if (!result) {
       return undefined;
     }

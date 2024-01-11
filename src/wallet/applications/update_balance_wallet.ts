@@ -34,7 +34,7 @@ export class UpdateBalanceWallet {
     wallet.setNewBalance(
       balance.available_balance,
       Number(balance.current_balance) - Number(balance.available_balance),
-    );
+    0);
 
     await this.walletRepository.updateBalance(wallet);
     console.log("Actualizacion de balance finalizado");

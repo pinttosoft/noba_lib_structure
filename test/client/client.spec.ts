@@ -34,11 +34,11 @@ describe("Client", () => {
     const account =
       await AccountMongoRepository.instance().findByAccountId("DANIELLEE002");
 
-    const client = await ClientFactory.createNewClient(
+    /*const client = await ClientFactory.createNewClient(
       payload,
       AccountType.INDIVIDUAL,
       account,
-    );
+    );*/
 
     console.log("client", client);
   });

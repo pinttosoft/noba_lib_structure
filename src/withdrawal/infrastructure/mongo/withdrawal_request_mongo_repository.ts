@@ -96,4 +96,24 @@ export class WithdrawalRequestMongoRepository
       counterparty,
     );
   }
+
+  async findByWithdrawalIsProcessed(ClientId:string, status: string, isProccessed: boolean): Promise<WithdrawalRequest | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({ ClientId, status, isProccessed });
+    if (!result) {
+      return undefined;
+    }
+
+    const counterparty: Counterparty =
+        await CounterpartyMongoRepository.instance().findByCounterpartyIdAndAssetId(
+            result.counterparty.counterpartyId,
+            result.counterparty.assetId,
+        );
+
+    return WithdrawalRequest.fromPrimitives(
+        result._id.toString(),
+        result,
+        counterparty,
+    );
+  }
 }

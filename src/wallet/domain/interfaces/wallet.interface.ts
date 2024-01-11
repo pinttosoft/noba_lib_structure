@@ -13,12 +13,14 @@ export interface IWallet {
   getBalanceAvailable(): number;
   getBalance(): number;
   getLockedBalance(): number;
+  getCreditBalance(): number;
   getAsset(): Asset;
   getWalletType(): WalletType;
   getAccountId(): string;
   getIdentifierForInstructionOfDeposit(label: string): string;
   getInstructionForDeposit(): InstructionDepositCrypto | InstructionDepositFiat;
-  setNewBalance(balance: number, lockedBalance: number): IWallet;
+  setNewBalance(balance: number, lockedBalance: number, creditBalance:number): IWallet;
+  setCreditBalance(creditBalance: number): IWallet
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
   updateLookBalance(amount: number): IWallet;
   updateBalance(amount: number): IWallet;

@@ -42,7 +42,6 @@ export class ClientMongoRepository
 
     return this.buildClient({ ...result }, result._id.toString());
   }
-
   private async buildClient(client: any, resultId: string): Promise<IClient> {
     const account: IAccount =
       await new AccountMongoRepository().findByAccountId(client.accountId);

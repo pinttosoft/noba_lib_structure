@@ -24,6 +24,7 @@ export class WithdrawalRequest extends AggregateRoot {
   private dateWasProcessed?: Date;
   private counterparty: Counterparty;
   private withdrawalPurpose?: WithdrawalPurpose;
+  private isProcessed:boolean;
 
   getId(): string {
     return this.id;
@@ -36,6 +37,7 @@ export class WithdrawalRequest extends AggregateRoot {
     reference: string,
     withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
     withdrawalPurpose?: WithdrawalPurpose,
+    isProcessed?,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
@@ -47,6 +49,7 @@ export class WithdrawalRequest extends AggregateRoot {
     w.status = WithdrawalStatus.PENDING;
     w.createdAt = new Date();
     w.withdrawalType = withdrawalType;
+    w.isProcessed = isProcessed ? isProcessed : false;
 
     if (withdrawalType === WithdrawalType.EXTERNAL) {
       if (!withdrawalPurpose) {
@@ -93,7 +96,9 @@ export class WithdrawalRequest extends AggregateRoot {
   getClientId(): string {
     return this.clientId;
   }
-
+  getisProcessed(): boolean {
+    return this.isProcessed;
+  }
   markAsProcessed(): WithdrawalRequest {
     this.status = WithdrawalStatus.PROCESSED;
     this.dateWasProcessed = new Date();
@@ -108,6 +113,10 @@ export class WithdrawalRequest extends AggregateRoot {
 
   setUpdateStatus(status: WithdrawalStatus): WithdrawalRequest {
     this.status = status;
+    return this;
+  }
+  setIsProcessed(isProcessed: boolean): WithdrawalRequest {
+    this.isProcessed = isProcessed;
     return this;
   }
 
@@ -144,6 +153,7 @@ export class WithdrawalRequest extends AggregateRoot {
       createdAt: this.createdAt,
       processingDate: this.dateWasProcessed,
       withdrawalPurpose: this.withdrawalPurpose,
+      isProcessed: this.isProcessed,
     };
   }
 }

@@ -12,6 +12,10 @@ export interface IWithdrawalRequestRepository {
   findByWithdrawalId(
     withdrawalId: string,
   ): Promise<WithdrawalRequest | undefined>;
+  findByWithdrawalIsProcessed(
+      ClientId:string,
+      status: string, isProccessed:boolean
+  ): Promise<WithdrawalRequest | undefined>;
 
   list(criteria: Criteria): Promise<Paginate<WithdrawalRequest>>;
 }

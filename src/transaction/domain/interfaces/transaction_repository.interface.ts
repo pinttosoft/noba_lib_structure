@@ -2,7 +2,7 @@ import { Transaction } from "../transaction";
 import { Criteria, Paginate, WithdrawalStatus } from "../../../shared";
 import { ExchangeTransaction } from "../exchange_transaction";
 import { TransactionDeposit } from "../transaction_deposit";
-
+import {TransactionType} from "../enums/transaction_type.enum";
 export interface ITransactionRepository {
   historyTransactionByAssetIdAndClientId(
     clientId: string,
@@ -45,5 +45,6 @@ export interface ITransactionRepository {
   findExchangeTransactionByExchangeIdAndStatus(
     transactionId: string,
     status: WithdrawalStatus,
+    TransactionType: TransactionType
   ): Promise<ExchangeTransaction | undefined>;
 }
