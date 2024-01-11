@@ -400,9 +400,7 @@ export class Client extends AggregateRoot implements IClient {
       throw new GenericException("No action found");
     }
 
-    this.kycRequestedChanges = this.kycRequestedChanges.filter(
-      (kyc: KycAction) => kyc.id !== id,
-    );
+    this.kycRequestedChanges.splice(foundActionIndex, 1);
   }
 
   deleteKycActionToPartner(kycAction: KycAction): void {
@@ -412,40 +410,27 @@ export class Client extends AggregateRoot implements IClient {
       throw new GenericException("No partners for the company");
     }
 
-    const foundActionIndex = partners.findIndex(
+    const foundPartnerIndex = partners.findIndex(
       (partner): boolean => partner.dni === kycAction.dni,
     );
 
-    if (foundActionIndex === -1) {
+    if (foundPartnerIndex === -1) {
       throw new GenericException("Partner not found");
     }
 
-    const partnersPayload: IndividualDTO[] = this.getCompanyPartners().map(
-      (partner) => {
-        if (
-          !partner.kycRequestedChanges ||
-          partner.kycRequestedChanges.length === 0
-        ) {
-          throw new GenericException("No action found for the partner");
-        }
-
-        const foundActionIndex = partner.kycRequestedChanges.findIndex(
-          (action: KycAction): boolean => action.id === kycAction.id,
-        );
-
-        if (foundActionIndex === -1) {
-          throw new GenericException("Action not found for the partner");
-        }
-
-        const partnerActions: KycAction[] = partner.kycRequestedChanges.filter(
-          (action: KycAction): boolean => action.id !== kycAction.id,
-        );
-
-        return { ...partner, kycRequestedChanges: partnerActions };
-      },
+    const foundActionIndex = partners[
+      foundPartnerIndex
+    ].kycRequestedChanges.findIndex(
+      (action): boolean => action.id === kycAction.id,
     );
 
-    this.setClientData({ ...this.clientData, partners: partnersPayload });
+    if (foundActionIndex === -1) {
+      throw new GenericException("No action found for the partner");
+    }
+
+    partners[foundPartnerIndex].kycRequestedChanges.splice(foundActionIndex, 1);
+
+    this.setClientData({ ...this.clientData, partners });
   }
 
   deleteAllDocumentsPartners(dni: string): void {
