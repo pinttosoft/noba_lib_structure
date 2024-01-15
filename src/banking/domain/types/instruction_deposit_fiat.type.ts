@@ -1,7 +1,8 @@
 export type InstructionDepositFiat = {
   id: string;
   label: string;
-  WIRE: {
+  // todo check with angel
+  WIRE?: {
     holderName: string;
     accountNumber: string;
     accountRoutingNumber: string;
@@ -23,9 +24,15 @@ export type InstructionDepositFiat = {
       country_code: string;
     };
   };
-  ACH: {
+  ACH?: {
     holderName: string;
     accountNumber: string;
+    accountRoutingNumber: string;
+    memo: string;
+  };
+  ACH_PAB?: {
+    holderName: string;
+    accountDestinationNumber: string;
     accountRoutingNumber: string;
     memo: string;
   };

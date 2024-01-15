@@ -131,4 +131,24 @@ describe("Counterparty", () => {
 
     console.log("pendings", pendings);
   });
+
+  it("Should register a pab counterparty internal ", async () => {
+    const clientId = "MSerrano181263254";
+    const clientOrigin =
+      await ClientMongoRepository.instance().findByClientId(clientId);
+
+    const clientDestination =
+      await ClientMongoRepository.instance().findByClientId("FSilva187263254");
+
+    const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+
+    const counterparty = await new RegisterOrSearchCounterpartyInternal(
+      WalletMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(clientOrigin, clientDestination, asset);
+
+    console.log("counterparty", counterparty);
+
+    expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
+  });
 });

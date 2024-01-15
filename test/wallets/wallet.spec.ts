@@ -82,11 +82,12 @@ describe("Wallet", () => {
 
   it("should create ACH_PAB wallet", async () => {
     const clientId = "MSerrano181263254";
-    const wallet: IWallet =
-      await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
-        "ABejarano187263254",
-        "FIAT_TESTNET_USD",
-      );
+    const assetId = "FIAT_TESTNET_PAB";
+    const walletRepo = WalletMongoRepository.instance();
+    const wallet: IWallet = await walletRepo.findWalletsByClientIdAndAssetId(
+      "ABejarano187263254",
+      "FIAT_TESTNET_USD",
+    );
 
     //
     const assetRepo = AssetMongoRepository.instance();
@@ -99,8 +100,12 @@ describe("Wallet", () => {
     const instructionForDeposits: InstructionDepositFiat = {
       id: "",
       label: "",
-      ACH: {},
-      WIRE: {},
+      ACH_PAB: {
+        accountDestinationNumber: "",
+        memo: "",
+        accountRoutingNumber: "",
+        holderName: client.getName(),
+      },
     };
 
     const walletPayload: IWallet = WalletFactory.createNewWallet(
@@ -110,6 +115,16 @@ describe("Wallet", () => {
       instructionForDeposits,
     );
 
-    console.log(wallet.getBalanceAvailable());
+    await walletRepo.insert(walletPayload);
+
+    const res = await walletRepo.findPaymentAddressesByClientIdAndByAssetId(
+      clientId,
+      assetId,
+    );
+
+    console.log("res", res);
+
+    //console.log(wallet.getBalanceAvailable());
+    //console.log("walletPayload", walletPayload);
   });
 });
