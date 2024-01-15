@@ -84,12 +84,7 @@ describe("Wallet", () => {
     const clientId = "MSerrano181263254";
     const assetId = "FIAT_TESTNET_PAB";
     const walletRepo = WalletMongoRepository.instance();
-    const wallet: IWallet = await walletRepo.findWalletsByClientIdAndAssetId(
-      "ABejarano187263254",
-      "FIAT_TESTNET_USD",
-    );
 
-    //
     const assetRepo = AssetMongoRepository.instance();
     const pab = await assetRepo.findAssetByCode("PAB");
     console.log("pab", pab);
@@ -105,6 +100,7 @@ describe("Wallet", () => {
         memo: "",
         accountRoutingNumber: "",
         holderName: client.getName(),
+        bankName: "",
       },
     };
 

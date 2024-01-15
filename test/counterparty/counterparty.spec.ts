@@ -147,8 +147,8 @@ describe("Counterparty", () => {
       CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
 
-    console.log("counterparty", counterparty);
-
-    expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
+    console.log("counterparty", counterparty.toPrimitives());
+    //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
+    //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
   });
 });

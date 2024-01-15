@@ -31,6 +31,7 @@ export type InstructionDepositFiat = {
     memo: string;
   };
   ACH_PAB?: {
+    bankName: string;
     holderName: string;
     accountDestinationNumber: string;
     accountRoutingNumber: string;
