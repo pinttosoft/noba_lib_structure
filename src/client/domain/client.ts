@@ -241,6 +241,20 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.informationCompany.name;
   }
 
+  getPhoneNumber() {
+    if (this.clientType === AccountType.INDIVIDUAL)
+      return this.clientData.phoneNumber;
+
+    return this.clientData.informationCompany.phoneNumber;
+  }
+
+  getCountryPhone() {
+    if (this.clientType === AccountType.INDIVIDUAL)
+      return this.clientData.phoneCountry;
+
+    return this.clientData.informationCompany.phoneCountry;
+  }
+
   getEmail(): string {
     return this.clientData.email;
   }
