@@ -18,6 +18,10 @@ export interface IClient {
 
   getClientType(): AccountType;
 
+  getFirstName(): string;
+
+  getLastName(): string;
+
   getName(): string;
 
   getEmail(): string;

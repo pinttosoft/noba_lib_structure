@@ -43,6 +43,20 @@ export class Client extends AggregateRoot implements IClient {
     return this.id;
   }
 
+  getFirstName(): string {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType, "getFirstName");
+    }
+    return this.clientData.firstName;
+  }
+
+  getLastName(): string {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType, "getLastName");
+    }
+    return this.clientData.lastName;
+  }
+
   setStatus(clientStatus: AccountStatus): Client {
     this.status = clientStatus;
     return this;

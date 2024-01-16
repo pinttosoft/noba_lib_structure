@@ -6,7 +6,6 @@ import {
   logger,
   RequestException,
 } from "../../index";
-import { Response } from "express";
 
 export const removeUndefined = (arr: any) => {
   for (const key in arr) {
@@ -18,12 +17,12 @@ export const removeUndefined = (arr: any) => {
   return arr;
 };
 
-export const exceptionResponse = (e, res: Response) => {
+export const exceptionResponse = (e, res: any) => {
   if (e instanceof DomainException || e instanceof RequestException) {
     logger.info(`[lib NOBA_LIB_DI exceptionResponse] e: `, e.getMessage());
 
     if (e.getData()?.length > 0) {
-      res.status(HttpStatus.BAD_REQUEST).json({
+      res.status(HttpStatus.BAD_REQUEST).send({
         code: e.getErrorCode(),
         message: e.getMessage(),
         data:
@@ -34,7 +33,7 @@ export const exceptionResponse = (e, res: Response) => {
 
     res
       .status(HttpStatus.BAD_REQUEST)
-      .json({ code: e.getErrorCode(), message: e.getMessage() });
+      .send({ code: e.getErrorCode(), message: e.getMessage() });
     return;
   }
 
