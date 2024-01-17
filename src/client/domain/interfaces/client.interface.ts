@@ -10,6 +10,8 @@ import { KycAction } from "../types/kyc-action.type";
 export interface IClient {
   getId(): string;
 
+  getAddressShipping(): Address;
+
   toPrimitives(): any;
 
   getAccount(): IAccount;
@@ -23,6 +25,10 @@ export interface IClient {
   getLastName(): string;
 
   getName(): string;
+
+  getPhoneNumber(): string;
+
+  getCountryPhone(): string;
 
   getEmail(): string;
 

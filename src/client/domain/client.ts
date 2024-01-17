@@ -38,6 +38,16 @@ export class Client extends AggregateRoot implements IClient {
   private twoFactorActive: boolean = false;
   private createdAt: Date;
   private approvedAt: Date;
+  private addressShipping: Address;
+
+  setAddressShipping(address: Address): Client {
+    this.addressShipping = { ...address, isBilling: true };
+    return this;
+  }
+
+  getAddressShipping(): Address {
+    return this.addressShipping;
+  }
 
   getId(): string {
     return this.id;
