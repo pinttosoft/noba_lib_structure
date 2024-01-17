@@ -7,15 +7,15 @@ export type CounterpartyBankDTO = {
   id?: string;
   assetId: string;
   accountNumber: string;
-  counterpartyId: string;
+  counterpartyId?: string;
   counterpartyType: string;
   clientId: string;
-  accountId: string;
+  accountId?: string;
   routingNumber?: string;
   swiftCode?: string;
   profileType: CounterpartyProfileType;
   iban?: string;
-  informationOwner: { name: string; address: Address };
+  informationOwner?: { name: string; address: Address };
   informationBank: {
     bankName: string;
     networkBank: NetworkBank;

@@ -33,10 +33,10 @@ export class RegisterOrSearchCounterpartyInternal {
   ): Promise<Counterparty> {
     // todo check and confirm
     /*let counterparty: Counterparty =
-                                                                                                          await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
-                                                                                                            clientDestination.getClientId(),
-                                                                                                            asset.getAssetId(),
-                                                                                                          ); */
+          await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+            clientDestination.getClientId(),
+            asset.getAssetId(),
+          ); */
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),

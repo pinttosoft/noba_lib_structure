@@ -1,5 +1,4 @@
 import {
-  AccountType,
   AssetMongoRepository,
   ClientMongoRepository,
   CounterpartyBank,
@@ -22,6 +21,7 @@ import {
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
+import { v4 } from "uuid";
 
 describe("Counterparty", () => {
   it("should be create new instance to counterparty", async () => {
@@ -138,13 +138,16 @@ describe("Counterparty", () => {
     console.log("pendings", pendings);
   });
 
-  it("Should register a pab counterparty internal ", async () => {
+  it("Should register an ach pab counterparty internal ", async () => {
     const clientId = "MSerrano181263254";
+    const clientDestinationId = "FSilva187263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
 
     const clientDestination =
-      await ClientMongoRepository.instance().findByClientId("FSilva187263254");
+      await ClientMongoRepository.instance().findByClientId(
+        clientDestinationId,
+      );
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
 
@@ -164,15 +167,12 @@ describe("Counterparty", () => {
       clientDestinationId: "FSilva187263254",
     };
     const assetCode = "PAB";
+    // todo
+    const profileType = CounterpartyProfileType.CORPORATION;
 
     const clientOrigin = await ClientMongoRepository.instance().findByClientId(
       webPayload.clientId,
     );
-
-    const clientDestination =
-      await ClientMongoRepository.instance().findByClientId(
-        webPayload.clientDestinationId,
-      );
 
     const asset =
       await AssetMongoRepository.instance().findAssetByCode(assetCode);
@@ -181,7 +181,7 @@ describe("Counterparty", () => {
       id: "",
       label: "",
       ACH_PAB: {
-        holderEmail: "panamian email",
+        holderEmail: "panama email",
         accountDestinationNumber: "panama account",
         bankName: "panama bank",
         productType: "panama type",
@@ -194,18 +194,21 @@ describe("Counterparty", () => {
     const counterpartyBank: CounterpartyBankDTO = {
       assetId: asset.getAssetId(),
       clientId: clientOrigin.getClientId(),
-      counterpartyId: clientDestination.getClientId(),
+      counterpartyId: v4(),
       accountNumber: instructions.ACH_PAB.accountDestinationNumber,
       counterpartyType: CounterpartyType.FIAT,
-      accountId: clientDestination.getAccount().getAccountId(),
       informationOwner: {
-        address: clientDestination.getAddress(),
-        name: clientDestination.getName(),
+        name: "",
+        address: {
+          country: "BR",
+          streetOne: "",
+          streetTwo: "",
+          postalCode: "",
+          city: "",
+          region: "",
+        },
       },
-      profileType:
-        clientDestination.getClientType() === AccountType.INDIVIDUAL
-          ? CounterpartyProfileType.INDIVIDUAL
-          : CounterpartyProfileType.CORPORATION,
+      profileType,
       informationBank: {
         address: undefined,
         bankName: instructions.ACH_PAB.bankName,
@@ -225,5 +228,9 @@ describe("Counterparty", () => {
     console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
     //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
+  });
+
+  it("Delete an ach counterparty", async () => {
+    //await CounterpartyMongoRepository.instance().delete();
   });
 });
