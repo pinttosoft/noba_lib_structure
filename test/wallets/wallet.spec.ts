@@ -97,10 +97,12 @@ describe("Wallet", () => {
       label: "",
       ACH_PAB: {
         accountDestinationNumber: "",
-        memo: "",
-        accountRoutingNumber: "",
+        holderEmail: "",
+        holderId: "",
         holderName: client.getName(),
         bankName: "",
+        productType: "",
+        concept: "",
       },
     };
 

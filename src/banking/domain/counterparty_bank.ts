@@ -4,6 +4,7 @@ import { Counterparty } from "../../counterparty";
 import { CounterpartyBankDTO } from "./types/counterparty_bank.type";
 import { InformationIntermediaryBankDTO } from "./types/information_intermediary_bank.type";
 import { CounterpartyStatus } from "../../counterparty/domain/enums/counterparty_status.enum";
+import { InstructionsAchPabType } from "./types/instructions_ach_pab.type";
 
 export class CounterpartyBank extends Counterparty {
   private ownerAddress: Address;
@@ -16,6 +17,7 @@ export class CounterpartyBank extends Counterparty {
   private bankAddress: Address;
   private networkBank: NetworkBank;
   private informationIntermediaryBank?: InformationIntermediaryBankDTO;
+  private achInstructions: InstructionsAchPabType;
 
   static newCounterparty(
     counterpartyBank: CounterpartyBankDTO,
@@ -48,6 +50,10 @@ export class CounterpartyBank extends Counterparty {
       if (counterpartyBank.routingNumber === undefined) {
         throw new GenericException("The field routing Number is mandatory");
       }
+    } else if (
+      counterpartyBank.informationBank.networkBank === NetworkBank.ACH_PAB
+    ) {
+      c.achInstructions = counterpartyBank.informationACHPAB;
     } else {
       if (
         counterpartyBank.swiftCode === undefined &&
@@ -168,6 +174,7 @@ export class CounterpartyBank extends Counterparty {
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
       informationIntermediaryBank: this.getInformationIntermediaryBank(),
+      achInstructions: this.achInstructions,
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
       status: this.status,

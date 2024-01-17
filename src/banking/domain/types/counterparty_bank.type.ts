@@ -21,5 +21,14 @@ export type CounterpartyBankDTO = {
     networkBank: NetworkBank;
     address: Address;
   };
+  informationACHPAB?: {
+    holderEmail: string;
+    accountDestinationNumber: string;
+    bankName: string;
+    productType: string;
+    holderId: string;
+    holderName: string;
+    concept: string;
+  };
   informationIntermediaryBank?: InformationIntermediaryBankDTO;
 };

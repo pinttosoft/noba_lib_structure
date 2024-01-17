@@ -1,12 +1,18 @@
 import {
+  AccountType,
   AssetMongoRepository,
   ClientMongoRepository,
+  CounterpartyBank,
+  CounterpartyBankDTO,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
+  CounterpartyProfileType,
   CounterpartyStatus,
   CounterpartyType,
   Criteria,
   Filters,
+  InstructionDepositFiat,
+  NetworkBank,
   Operator,
   Order,
   OrderTypes,
@@ -147,7 +153,76 @@ describe("Counterparty", () => {
       CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
 
-    console.log("counterparty", counterparty.toPrimitives());
+    console.log("-counterparty", counterparty.toPrimitives());
+    //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
+    //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
+  });
+
+  it("Should register a pab counterparty external ", async () => {
+    const webPayload = {
+      clientId: "MSerrano181263254",
+      clientDestinationId: "FSilva187263254",
+    };
+    const assetCode = "PAB";
+
+    const clientOrigin = await ClientMongoRepository.instance().findByClientId(
+      webPayload.clientId,
+    );
+
+    const clientDestination =
+      await ClientMongoRepository.instance().findByClientId(
+        webPayload.clientDestinationId,
+      );
+
+    const asset =
+      await AssetMongoRepository.instance().findAssetByCode(assetCode);
+
+    const instructions: InstructionDepositFiat = {
+      id: "",
+      label: "",
+      ACH_PAB: {
+        holderEmail: "panamian email",
+        accountDestinationNumber: "panama account",
+        bankName: "panama bank",
+        productType: "panama type",
+        holderId: "panama holder id",
+        holderName: "panama name",
+        concept: "panama concept",
+      },
+    };
+
+    const counterpartyBank: CounterpartyBankDTO = {
+      assetId: asset.getAssetId(),
+      clientId: clientOrigin.getClientId(),
+      counterpartyId: clientDestination.getClientId(),
+      accountNumber: instructions.ACH_PAB.accountDestinationNumber,
+      counterpartyType: CounterpartyType.FIAT,
+      accountId: clientDestination.getAccount().getAccountId(),
+      informationOwner: {
+        address: clientDestination.getAddress(),
+        name: clientDestination.getName(),
+      },
+      profileType:
+        clientDestination.getClientType() === AccountType.INDIVIDUAL
+          ? CounterpartyProfileType.INDIVIDUAL
+          : CounterpartyProfileType.CORPORATION,
+      informationBank: {
+        address: undefined,
+        bankName: instructions.ACH_PAB.bankName,
+        networkBank: NetworkBank.ACH_PAB,
+      },
+      informationACHPAB: instructions.ACH_PAB,
+    };
+
+    const counterparty = CounterpartyBank.newCounterparty(
+      counterpartyBank,
+      CounterpartyStatus.ACTIVE,
+      false,
+    );
+
+    await CounterpartyMongoRepository.instance().upsert(counterparty);
+
+    console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
     //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
   });

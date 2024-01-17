@@ -14,6 +14,7 @@ import {
   CounterpartyBank,
   CounterpartyBankDTO,
   InstructionDepositFiat,
+  NetworkBank,
 } from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
 import { AccountType, CounterpartyProfileType, logger } from "../../index";
@@ -32,10 +33,10 @@ export class RegisterOrSearchCounterpartyInternal {
   ): Promise<Counterparty> {
     // todo check and confirm
     /*let counterparty: Counterparty =
-                                                                                                      await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
-                                                                                                        clientDestination.getClientId(),
-                                                                                                        asset.getAssetId(),
-                                                                                                      ); */
+                                                                                                          await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+                                                                                                            clientDestination.getClientId(),
+                                                                                                            asset.getAssetId(),
+                                                                                                          ); */
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
@@ -78,7 +79,7 @@ export class RegisterOrSearchCounterpartyInternal {
         informationBank: {
           address: undefined,
           bankName: instructions.ACH_PAB.bankName,
-          networkBank: undefined,
+          networkBank: NetworkBank.ACH_PAB,
         },
       };
 
