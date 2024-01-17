@@ -2,6 +2,7 @@ import { Address } from "../../../shared";
 import { NetworkBank } from "../enums/network_bank.enum";
 import { InformationIntermediaryBankDTO } from "./information_intermediary_bank.type";
 import { CounterpartyProfileType } from "../../../counterparty";
+import { InstructionsAchPabType } from "./instructions_ach_pab.type";
 
 export type CounterpartyBankDTO = {
   id?: string;
@@ -21,14 +22,6 @@ export type CounterpartyBankDTO = {
     networkBank: NetworkBank;
     address: Address;
   };
-  informationACHPAB?: {
-    holderEmail: string;
-    accountDestinationNumber: string;
-    bankName: string;
-    productType: string;
-    holderId: string;
-    holderName: string;
-    concept: string;
-  };
+  informationACHPAB?: InstructionsAchPabType;
   informationIntermediaryBank?: InformationIntermediaryBankDTO;
 };
