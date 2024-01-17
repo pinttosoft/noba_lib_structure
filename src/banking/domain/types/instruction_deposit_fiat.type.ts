@@ -1,3 +1,5 @@
+import { InstructionsAchPabType } from "./instructions_ach_pab.type";
+
 export type InstructionDepositFiat = {
   id: string;
   label: string;
@@ -30,13 +32,5 @@ export type InstructionDepositFiat = {
     accountRoutingNumber: string;
     memo: string;
   };
-  ACH_PAB?: {
-    accountDestinationNumber: string;
-    bankName: string;
-    productType: string;
-    holderId: string;
-    holderName: string;
-    holderEmail: string;
-    concept: string;
-  };
+  ACH_PAB?: InstructionsAchPabType;
 };
