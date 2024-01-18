@@ -10,6 +10,7 @@ import {
 } from "../../shared";
 import { v4 } from "uuid";
 import { WithdrawalPurpose } from "./enums/withdrawal_purpose.enum";
+import { CounterpartyAchPab } from "../../banking";
 
 export class WithdrawalRequest extends AggregateRoot {
   private id?: string;
@@ -22,7 +23,7 @@ export class WithdrawalRequest extends AggregateRoot {
   private observation?: string;
   private createdAt: Date;
   private dateWasProcessed?: Date;
-  private counterparty: Counterparty;
+  private counterparty: Counterparty | CounterpartyAchPab;
   private withdrawalPurpose?: WithdrawalPurpose;
 
   getId(): string {
@@ -31,7 +32,7 @@ export class WithdrawalRequest extends AggregateRoot {
 
   static createNewWithdrawalRequest(
     client: IClient,
-    counterparty: Counterparty,
+    counterparty: Counterparty | CounterpartyAchPab,
     amount: AmountValueObject,
     reference: string,
     withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
@@ -63,7 +64,7 @@ export class WithdrawalRequest extends AggregateRoot {
   static fromPrimitives(
     id: string,
     plainData: any,
-    counterparty: Counterparty,
+    counterparty: Counterparty | CounterpartyAchPab,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
@@ -123,7 +124,7 @@ export class WithdrawalRequest extends AggregateRoot {
     return this.amount;
   }
 
-  getCounterparty(): Counterparty {
+  getCounterparty(): Counterparty | CounterpartyAchPab {
     return this.counterparty;
   }
 

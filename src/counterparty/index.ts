@@ -1,3 +1,7 @@
+export { CounterpartyAchPabMongoRepository } from "./infrastructure/mongo/counterparty_achpab_mongorepository";
+
+export { CounterpartyAchPabRepositoryInterface } from "./domain/interfaces/counterparty_achpab_repository.interface";
+
 export { CounterpartyType } from "../counterparty/domain/enums/counterparty_type.enum";
 
 export { Counterparty } from "./domain/counterparty.abstract";

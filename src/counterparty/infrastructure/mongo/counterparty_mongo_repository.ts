@@ -10,12 +10,11 @@ import {
   CounterpartyType,
   ICounterpartyRepository,
 } from "../../index";
-import { CounterpartyBank } from "../../../banking";
+import { CounterpartyAchPab, CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
-import { CounterpartyAchPab } from "../../../banking/domain/counterparty_ach_pab";
 
 export class CounterpartyMongoRepository
-  extends MongoRepository<Counterparty | CounterpartyAchPab>
+  extends MongoRepository<Counterparty>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
@@ -124,7 +123,7 @@ export class CounterpartyMongoRepository
     return this.buildPaginate<Counterparty>(document);
   }
 
-  async upsert(counterparty: Counterparty | CounterpartyAchPab): Promise<void> {
+  async upsert(counterparty: Counterparty): Promise<void> {
     console.log("counterparty.getId()", counterparty.getId());
     await this.persist(counterparty.getId(), counterparty);
   }
@@ -166,6 +165,7 @@ export class CounterpartyMongoRepository
       return undefined;
     }
 
+    console.log("result", result instanceof CounterpartyAchPab);
     if (result.counterpartyType === CounterpartyType.CRYPTO) {
       return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
     }

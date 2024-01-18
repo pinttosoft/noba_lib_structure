@@ -1,6 +1,8 @@
 import {
   AssetMongoRepository,
   ClientMongoRepository,
+  CounterpartyAchPab,
+  CounterpartyAchPabMongoRepository,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
   CounterpartyProfileType,
@@ -18,7 +20,6 @@ import {
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
-import { CounterpartyAchPab } from "../../src/banking/domain/counterparty_ach_pab";
 import { CounterpartyAchPabDtoType } from "../../src/banking/domain/types/counterparty_ach_pab_dto.type";
 import { v4 } from "uuid";
 
@@ -147,7 +148,6 @@ describe("Counterparty", () => {
       await ClientMongoRepository.instance().findByClientId(
         clientDestinationId,
       );
-    const profileType = CounterpartyProfileType.CORPORATION;
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
     const instructions: InstructionsAchPabType = {
@@ -171,15 +171,15 @@ describe("Counterparty", () => {
       assetId: asset.getAssetId(),
     };
     /*const counterparty = await new RegisterOrSearchCounterpartyInternal(
-                                      WalletMongoRepository.instance(),
-                                      CounterpartyMongoRepository.instance(),
-                                    ).run(clientOrigin, clientDestination, asset);
-                                */
+                                              WalletMongoRepository.instance(),
+                                              CounterpartyMongoRepository.instance(),
+                                            ).run(clientOrigin, clientDestination, asset);
+                                        */
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
       payload,
       true,
     );
-    await CounterpartyMongoRepository.instance().upsert(counterparty);
+    await CounterpartyAchPabMongoRepository.instance().upsert(counterparty);
 
     console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
@@ -228,7 +228,7 @@ describe("Counterparty", () => {
       false,
     );
 
-    await CounterpartyMongoRepository.instance().upsert(counterparty);
+    await CounterpartyAchPabMongoRepository.instance().upsert(counterparty);
 
     console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);

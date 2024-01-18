@@ -70,8 +70,9 @@ export class CounterpartyAchPab extends AggregateRoot {
     return this.achInstructions;
   }
 
-  fromPrimitives(id: string, data: any): CounterpartyAchPab {
+  static fromPrimitives(id: string, data: any): CounterpartyAchPab {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
+    c.id = id;
     c.isInternal = data.isInternal;
     c.clientId = data.clientId;
     c.accountId = data.accountId;
