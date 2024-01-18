@@ -19,3 +19,4 @@ export { InformationIntermediaryBankDTO } from "./domain/types/information_inter
 export { DepositStatus } from "./domain/enums/deposit_status.enum";
 
 export { BankingRails } from "./domain/banking_rails";
+export { CounterpartyAchPab } from "./domain/counterparty_ach_pab";
