@@ -5,6 +5,7 @@ import {
 } from "../../counterparty";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { InstructionsAchPabType } from "./types/instructions_ach_pab.type";
+import { CounterpartyAchPabDtoType } from "./types/counterparty_ach_pab_dto.type";
 
 export class CounterpartyAchPab extends AggregateRoot {
   private id?: string;
@@ -20,7 +21,25 @@ export class CounterpartyAchPab extends AggregateRoot {
   private status: CounterpartyStatus;
   private achInstructions: InstructionsAchPabType;
 
-  static newCounterparty(isInternal: boolean = false) {}
+  static newCounterparty(
+    data: CounterpartyAchPabDtoType,
+    isInternal: boolean = false,
+  ): CounterpartyAchPab {
+    const c: CounterpartyAchPab = new CounterpartyAchPab();
+    c.isInternal = isInternal;
+    c.clientId = data.clientId;
+    c.counterpartyType = data.counterpartyType;
+    c.counterpartyId = data.counterpartyId;
+    c.counterpartyType = data.counterpartyType;
+    c.assetId = data.assetId;
+    c.relationshipConsumer = data.relationshipConsumer;
+    c.createdAt = new Date();
+    c.profileType = data.profileType;
+    c.status = data.status;
+    c.achInstructions = data.achInstructions;
+
+    return c;
+  }
 
   getId(): string {
     return "";

@@ -1,9 +1,10 @@
 import { Criteria, Paginate } from "../../../shared";
 import { Counterparty } from "../counterparty.abstract";
 import { CounterpartyType } from "../enums/counterparty_type.enum";
+import { CounterpartyAchPab } from "../../../banking/domain/counterparty_ach_pab";
 
 export interface ICounterpartyRepository {
-  upsert(counterparty: Counterparty): Promise<void>;
+  upsert(counterparty: Counterparty | CounterpartyAchPab): Promise<void>;
 
   findByClientIdAndCounterpartyType(
     clientId: string,

@@ -12,9 +12,10 @@ import {
 } from "../../index";
 import { CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
+import { CounterpartyAchPab } from "../../../banking/domain/counterparty_ach_pab";
 
 export class CounterpartyMongoRepository
-  extends MongoRepository<Counterparty>
+  extends MongoRepository<Counterparty | CounterpartyAchPab>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
@@ -123,7 +124,7 @@ export class CounterpartyMongoRepository
     return this.buildPaginate<Counterparty>(document);
   }
 
-  async upsert(counterparty: Counterparty): Promise<void> {
+  async upsert(counterparty: Counterparty | CounterpartyAchPab): Promise<void> {
     await this.persist(counterparty.getId(), counterparty);
   }
 

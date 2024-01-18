@@ -1,5 +1,5 @@
 export type InstructionsAchPabType = {
-  id: string;
+  id?: string;
   label: string;
   holderEmail: string;
   accountDestinationNumber: string;
