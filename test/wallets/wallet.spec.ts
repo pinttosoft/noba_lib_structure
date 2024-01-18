@@ -1,13 +1,13 @@
 import {
   AssetMongoRepository,
   ClientMongoRepository,
-  InstructionDepositFiat,
   IWallet,
   logger,
   WalletFactory,
   WalletMongoRepository,
   WalletType,
 } from "../../src";
+import { InstructionsAchPabType } from "../../src/banking/domain/types/instructions_ach_pab.type";
 
 describe("Wallet", () => {
   const clientId = "ABejarano187263254";
@@ -92,18 +92,16 @@ describe("Wallet", () => {
     const client =
       await ClientMongoRepository.instance().findByClientId(clientId);
 
-    const instructionForDeposits: InstructionDepositFiat = {
+    const instructionForDeposits: InstructionsAchPabType = {
       id: "",
       label: "",
-      ACH_PAB: {
-        accountDestinationNumber: "",
-        holderEmail: "",
-        holderId: "",
-        holderName: client.getName(),
-        bankName: "",
-        productType: "",
-        concept: "",
-      },
+      accountDestinationNumber: "",
+      holderEmail: "",
+      holderId: "",
+      holderName: client.getName(),
+      bankName: "",
+      productType: "",
+      concept: "",
     };
 
     const walletPayload: IWallet = WalletFactory.createNewWallet(

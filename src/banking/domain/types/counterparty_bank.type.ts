@@ -2,26 +2,24 @@ import { Address } from "../../../shared";
 import { NetworkBank } from "../enums/network_bank.enum";
 import { InformationIntermediaryBankDTO } from "./information_intermediary_bank.type";
 import { CounterpartyProfileType } from "../../../counterparty";
-import { InstructionsAchPabType } from "./instructions_ach_pab.type";
 
 export type CounterpartyBankDTO = {
   id?: string;
   assetId: string;
   accountNumber: string;
-  counterpartyId?: string;
+  counterpartyId: string;
   counterpartyType: string;
   clientId: string;
-  accountId?: string;
+  accountId: string;
   routingNumber?: string;
   swiftCode?: string;
   profileType: CounterpartyProfileType;
   iban?: string;
-  informationOwner?: { name: string; address: Address };
+  informationOwner: { name: string; address: Address };
   informationBank: {
     bankName: string;
     networkBank: NetworkBank;
     address: Address;
   };
-  informationACHPAB?: InstructionsAchPabType;
   informationIntermediaryBank?: InformationIntermediaryBankDTO;
 };

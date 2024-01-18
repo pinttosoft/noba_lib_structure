@@ -3,7 +3,7 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { IWallet, WalletType } from "../../wallet";
 import { InstructionDepositCrypto } from "./type/instruction_deposit_crypto.type";
 import { v4 } from "uuid";
-import { InstructionDepositFiat } from "../../banking";
+import { InstructionDepositFiat, InstructionsAchPabType } from "../../banking";
 import { Asset } from "../../asset";
 
 export class Wallet extends AggregateRoot implements IWallet {
@@ -16,7 +16,10 @@ export class Wallet extends AggregateRoot implements IWallet {
   private lockedBalance: number;
   private label: string;
   private client: IClient;
-  private instructForDeposit: InstructionDepositFiat | InstructionDepositCrypto;
+  private instructForDeposit:
+    | InstructionDepositFiat
+    | InstructionDepositCrypto
+    | InstructionsAchPabType;
 
   setId(id: string): Wallet {
     this.id = id;
@@ -59,7 +62,10 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   setInstructionForDeposit(
-    data: InstructionDepositCrypto | InstructionDepositFiat,
+    data:
+      | InstructionDepositCrypto
+      | InstructionDepositFiat
+      | InstructionsAchPabType,
   ): Wallet {
     this.instructForDeposit = data;
     return this;
@@ -89,7 +95,8 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   getInstructionForDeposit():
     | InstructionDepositFiat
-    | InstructionDepositCrypto {
+    | InstructionDepositCrypto
+    | InstructionsAchPabType {
     return this.instructForDeposit;
   }
 

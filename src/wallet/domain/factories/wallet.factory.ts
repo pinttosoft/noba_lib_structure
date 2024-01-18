@@ -1,20 +1,24 @@
 import { IClient } from "../../../client";
 import {
-  IWallet,
-  WalletType,
-  Wallet,
   InstructionDepositCrypto,
+  IWallet,
+  Wallet,
+  WalletType,
 } from "../../../wallet";
 import { GenericException } from "../../../shared";
 import { Asset } from "../../../asset";
 import { InstructionDepositFiat } from "../../../banking";
+import { InstructionsAchPabType } from "../../../banking/domain/types/instructions_ach_pab.type";
 
 export class WalletFactory {
   static createNewWallet(
     asset: Asset,
     client: IClient,
     type: WalletType,
-    instructionForDeposit: InstructionDepositCrypto | InstructionDepositFiat,
+    instructionForDeposit:
+      | InstructionDepositCrypto
+      | InstructionDepositFiat
+      | InstructionsAchPabType,
   ): IWallet {
     const w: Wallet = new Wallet();
 

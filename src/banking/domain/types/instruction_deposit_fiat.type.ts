@@ -1,10 +1,8 @@
-import { InstructionsAchPabType } from "./instructions_ach_pab.type";
-
 export type InstructionDepositFiat = {
   id: string;
   label: string;
   // todo check with angel
-  WIRE?: {
+  WIRE: {
     holderName: string;
     accountNumber: string;
     accountRoutingNumber: string;
@@ -26,11 +24,10 @@ export type InstructionDepositFiat = {
       country_code: string;
     };
   };
-  ACH?: {
+  ACH: {
     holderName: string;
     accountNumber: string;
     accountRoutingNumber: string;
     memo: string;
   };
-  ACH_PAB?: InstructionsAchPabType;
 };

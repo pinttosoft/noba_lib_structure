@@ -50,10 +50,6 @@ export class CounterpartyBank extends Counterparty {
       if (counterpartyBank.routingNumber === undefined) {
         throw new GenericException("The field routing Number is mandatory");
       }
-    } else if (
-      counterpartyBank.informationBank.networkBank === NetworkBank.ACH_PAB
-    ) {
-      c.achInstructions = counterpartyBank.informationACHPAB;
     } else {
       if (
         counterpartyBank.swiftCode === undefined &&

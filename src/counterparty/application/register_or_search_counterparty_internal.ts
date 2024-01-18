@@ -10,12 +10,7 @@ import { Counterparty } from "../domain/counterparty.abstract";
 import { IClient } from "../../client";
 import { Asset, CounterpartyAsset, WalletInformationDTO } from "../../asset";
 import { RelationshipConsumer } from "../domain/enums/relationship_consumer.enum";
-import {
-  CounterpartyBank,
-  CounterpartyBankDTO,
-  InstructionDepositFiat,
-  NetworkBank,
-} from "../../banking";
+import { CounterpartyBank, InstructionDepositFiat } from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
 import { AccountType, CounterpartyProfileType, logger } from "../../index";
 import { CounterpartyStatus } from "../domain/enums/counterparty_status.enum";
@@ -33,10 +28,10 @@ export class RegisterOrSearchCounterpartyInternal {
   ): Promise<Counterparty> {
     // todo check and confirm
     /*let counterparty: Counterparty =
-          await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
-            clientDestination.getClientId(),
-            asset.getAssetId(),
-          ); */
+              await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
+                clientDestination.getClientId(),
+                asset.getAssetId(),
+              ); */
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
@@ -56,39 +51,7 @@ export class RegisterOrSearchCounterpartyInternal {
       clientDestination,
     );
 
-    // PAB
-    if (asset.getAssetCode() === "PAB") {
-      const instructions: InstructionDepositFiat =
-        wallet.getInstructionForDeposit() as InstructionDepositFiat;
-
-      const counterpartyBank: CounterpartyBankDTO = {
-        assetId: asset.getAssetId(),
-        clientId: clientOrigin.getClientId(),
-        counterpartyId: clientDestination.getClientId(),
-        accountNumber: instructions.ACH_PAB.accountDestinationNumber,
-        counterpartyType: CounterpartyType.FIAT,
-        accountId: clientDestination.getAccount().getAccountId(),
-        informationOwner: {
-          address: clientDestination.getAddress(),
-          name: clientDestination.getName(),
-        },
-        profileType:
-          clientDestination.getClientType() === AccountType.INDIVIDUAL
-            ? CounterpartyProfileType.INDIVIDUAL
-            : CounterpartyProfileType.CORPORATION,
-        informationBank: {
-          address: undefined,
-          bankName: instructions.ACH_PAB.bankName,
-          networkBank: NetworkBank.ACH_PAB,
-        },
-      };
-
-      counterparty = CounterpartyBank.newCounterparty(
-        counterpartyBank,
-        CounterpartyStatus.ACTIVE,
-        true,
-      );
-    } else if (asset.getAssetCode() !== "USD") {
+    if (asset.getAssetCode() !== "USD") {
       // crypto
       counterparty = CounterpartyAsset.newCounterparty(
         clientDestination.getClientId(),
