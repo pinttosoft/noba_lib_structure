@@ -74,6 +74,12 @@ export class BkClientMongoRepository
         const account = await accountRepository.findByAccountId(
           client.accountId,
         );
+
+        if (!account) {
+          console.log("_-client", client.clientId, client.accountId);
+
+          console.log("account", account);
+        }
         return ClientFactory.fromPrimitives(
           client._id.toString(),
           client,

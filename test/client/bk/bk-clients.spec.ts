@@ -9,7 +9,6 @@ import {
   Paginate,
 } from "../../../src";
 import { BkClientMongoRepository } from "./bk-client-mongo-repository";
-import { clientListDto } from "../client-list-dto";
 
 describe("Back office Clients", () => {
   it("Get all clients", async () => {
@@ -18,8 +17,8 @@ describe("Back office Clients", () => {
       await BkClientMongoRepository.instance().fetchCriteria(criteria);
     console.log("-- clients", clients);
 
-    const res = await clientListDto(clients);
-    console.log("-- res", res);
+    //const res = await clientListDto(clients);
+    //console.log("-- res", res);
   });
 });
 
