@@ -171,10 +171,10 @@ describe("Counterparty", () => {
       assetId: asset.getAssetId(),
     };
     /*const counterparty = await new RegisterOrSearchCounterpartyInternal(
-                          WalletMongoRepository.instance(),
-                          CounterpartyMongoRepository.instance(),
-                        ).run(clientOrigin, clientDestination, asset);
-                    */
+                                      WalletMongoRepository.instance(),
+                                      CounterpartyMongoRepository.instance(),
+                                    ).run(clientOrigin, clientDestination, asset);
+                                */
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
       payload,
       true,
@@ -214,7 +214,7 @@ describe("Counterparty", () => {
     };
 
     const payload: CounterpartyAchPabDtoType = {
-      accountId: "",
+      accountId: null,
       achInstructions: instructions,
       clientId: clientOrigin.getClientId(),
       counterpartyId: v4(),

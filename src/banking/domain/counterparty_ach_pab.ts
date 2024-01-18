@@ -22,6 +22,7 @@ export class CounterpartyAchPab extends AggregateRoot {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
     c.isInternal = isInternal;
     c.clientId = data.clientId;
+    c.accountId = data.accountId;
     c.counterpartyType = data.counterpartyType;
     c.counterpartyId = data.counterpartyId;
     c.counterpartyType = data.counterpartyType;
@@ -73,6 +74,7 @@ export class CounterpartyAchPab extends AggregateRoot {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
     c.isInternal = data.isInternal;
     c.clientId = data.clientId;
+    c.accountId = data.accountId;
     c.counterpartyType = data.counterpartyType;
     c.counterpartyId = data.counterpartyId;
     c.counterpartyType = data.counterpartyType;
