@@ -125,6 +125,7 @@ export class CounterpartyMongoRepository
   }
 
   async upsert(counterparty: Counterparty | CounterpartyAchPab): Promise<void> {
+    console.log("counterparty.getId()", counterparty.getId());
     await this.persist(counterparty.getId(), counterparty);
   }
 

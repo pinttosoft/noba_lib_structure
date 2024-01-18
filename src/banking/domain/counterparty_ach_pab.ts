@@ -41,8 +41,8 @@ export class CounterpartyAchPab extends AggregateRoot {
     return c;
   }
 
-  getId(): string {
-    return "";
+  getId(): string | undefined {
+    return this.id;
   }
 
   getAssetId() {

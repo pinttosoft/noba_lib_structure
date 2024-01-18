@@ -204,7 +204,7 @@ describe("Counterparty", () => {
       false,
     );
 
-    //await CounterpartyMongoRepository.instance().upsert(counterparty);
+    await CounterpartyMongoRepository.instance().upsert(counterparty);
 
     console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
