@@ -147,13 +147,39 @@ describe("Counterparty", () => {
       await ClientMongoRepository.instance().findByClientId(
         clientDestinationId,
       );
+    const profileType = CounterpartyProfileType.CORPORATION;
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+    const instructions: InstructionsAchPabType = {
+      label: "",
+      holderEmail: "panama email",
+      accountDestinationNumber: "panama account",
+      bankName: "panama bank",
+      productType: "panama type",
+      holderId: "panama holder id",
+      holderName: "panama name",
+      concept: "panama concept",
+    };
 
-    const counterparty = await new RegisterOrSearchCounterpartyInternal(
-      WalletMongoRepository.instance(),
-      CounterpartyMongoRepository.instance(),
-    ).run(clientOrigin, clientDestination, asset);
+    const payload: CounterpartyAchPabDtoType = {
+      accountId: clientDestination.getAccount().getAccountId(),
+      achInstructions: instructions,
+      clientId: clientOrigin.getClientId(),
+      counterpartyId: clientDestination.getClientId(),
+      counterpartyType: CounterpartyType.FIAT,
+      status: CounterpartyStatus.ACTIVE,
+      assetId: asset.getAssetId(),
+    };
+    /*const counterparty = await new RegisterOrSearchCounterpartyInternal(
+                          WalletMongoRepository.instance(),
+                          CounterpartyMongoRepository.instance(),
+                        ).run(clientOrigin, clientDestination, asset);
+                    */
+    const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
+      payload,
+      true,
+    );
+    await CounterpartyMongoRepository.instance().upsert(counterparty);
 
     console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
@@ -193,8 +219,6 @@ describe("Counterparty", () => {
       clientId: clientOrigin.getClientId(),
       counterpartyId: v4(),
       counterpartyType: CounterpartyType.FIAT,
-      profileType: profileType,
-      relationshipConsumer: RelationshipConsumer.CHILDREN,
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
     };

@@ -1,8 +1,4 @@
-import {
-  CounterpartyProfileType,
-  CounterpartyStatus,
-  RelationshipConsumer,
-} from "../../counterparty";
+import { CounterpartyStatus } from "../../counterparty";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { InstructionsAchPabType } from "./types/instructions_ach_pab.type";
 import { CounterpartyAchPabDtoType } from "./types/counterparty_ach_pab_dto.type";
@@ -14,10 +10,8 @@ export class CounterpartyAchPab extends AggregateRoot {
   private clientId: string;
   private accountId: string;
   private assetId: string;
-  private relationshipConsumer: RelationshipConsumer;
   private createdAt: Date;
   private isInternal: boolean;
-  private profileType: CounterpartyProfileType;
   private status: CounterpartyStatus;
   private achInstructions: InstructionsAchPabType;
 
@@ -32,9 +26,7 @@ export class CounterpartyAchPab extends AggregateRoot {
     c.counterpartyId = data.counterpartyId;
     c.counterpartyType = data.counterpartyType;
     c.assetId = data.assetId;
-    c.relationshipConsumer = data.relationshipConsumer;
     c.createdAt = new Date();
-    c.profileType = data.profileType;
     c.status = data.status;
     c.achInstructions = data.achInstructions;
 
@@ -69,10 +61,6 @@ export class CounterpartyAchPab extends AggregateRoot {
     return this.isInternal;
   }
 
-  getRelationConsumer(): RelationshipConsumer {
-    return this.relationshipConsumer;
-  }
-
   getStatus(): CounterpartyStatus {
     return this.status;
   }
@@ -81,23 +69,19 @@ export class CounterpartyAchPab extends AggregateRoot {
     return this.achInstructions;
   }
 
-  fromPrimitive(id: string, data: any): CounterpartyAchPab {
-    const counterparty: CounterpartyAchPab = new CounterpartyAchPab();
-    counterparty.id = id;
+  fromPrimitives(id: string, data: any): CounterpartyAchPab {
+    const c: CounterpartyAchPab = new CounterpartyAchPab();
+    c.isInternal = data.isInternal;
+    c.clientId = data.clientId;
+    c.counterpartyType = data.counterpartyType;
+    c.counterpartyId = data.counterpartyId;
+    c.counterpartyType = data.counterpartyType;
+    c.assetId = data.assetId;
+    c.createdAt = new Date();
+    c.status = data.status;
+    c.achInstructions = data.achInstructions;
 
-    counterparty.counterpartyId = data.counterpartyId;
-
-    counterparty.profileType = data.profileType ?? "";
-
-    counterparty.clientId = data.clientId;
-    counterparty.accountId = data.accountId;
-    counterparty.counterpartyType = data.counterpartyType;
-    counterparty.createdAt = data.createdAt;
-    counterparty.isInternal = data.isInternal === "S";
-
-    counterparty.status = data.status;
-
-    return counterparty;
+    return c;
   }
 
   toPrimitives(): any {
