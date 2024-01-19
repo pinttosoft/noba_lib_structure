@@ -1,11 +1,11 @@
 import {
   Counterparty,
   CounterpartyProfileType,
+  CounterpartyStatus,
   CounterpartyType,
 } from "../../counterparty";
 import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
-import { CounterpartyStatus } from "../../counterparty/domain/enums/counterparty_status.enum";
 
 export class CounterpartyAsset extends Counterparty {
   private informationWallet: WalletInformationDTO;

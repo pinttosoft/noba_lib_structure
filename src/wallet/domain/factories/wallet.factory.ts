@@ -7,8 +7,10 @@ import {
 } from "../../../wallet";
 import { GenericException } from "../../../shared";
 import { Asset } from "../../../asset";
-import { InstructionDepositFiat } from "../../../banking";
-import { InstructionsAchPabType } from "../../../banking/domain/types/instructions_ach_pab.type";
+import {
+  InstructionDepositFiat,
+  InstructionsAchPabType,
+} from "../../../banking";
 
 export class WalletFactory {
   static createNewWallet(
