@@ -1,4 +1,13 @@
-import { IWallet, logger, WalletMongoRepository } from "../../src";
+import {
+  AssetMongoRepository,
+  ClientMongoRepository,
+  InstructionsAchPabType,
+  IWallet,
+  logger,
+  WalletFactory,
+  WalletMongoRepository,
+  WalletType,
+} from "../../src";
 
 describe("Wallet", () => {
   const clientId = "ABejarano187263254";
@@ -69,5 +78,49 @@ describe("Wallet", () => {
       );
 
     console.log(wallet.getBalanceAvailable());
+  });
+
+  it("should create ACH_PAB wallet", async () => {
+    const clientId = "MSerrano181263254";
+    const assetId = "FIAT_TESTNET_PAB";
+    const walletRepo = WalletMongoRepository.instance();
+
+    const assetRepo = AssetMongoRepository.instance();
+    const pab = await assetRepo.findAssetByCode("PAB");
+    console.log("pab", pab);
+
+    const client =
+      await ClientMongoRepository.instance().findByClientId(clientId);
+
+    const instructionForDeposits: InstructionsAchPabType = {
+      id: "",
+      label: "",
+      accountDestinationNumber: "",
+      holderEmail: "",
+      holderId: "",
+      holderName: client.getName(),
+      bankName: "",
+      productType: "",
+      concept: "",
+    };
+
+    const walletPayload: IWallet = WalletFactory.createNewWallet(
+      pab,
+      client,
+      WalletType.FIAT,
+      instructionForDeposits,
+    );
+
+    await walletRepo.insert(walletPayload);
+
+    const res = await walletRepo.findPaymentAddressesByClientIdAndByAssetId(
+      clientId,
+      assetId,
+    );
+
+    console.log("res", res);
+
+    //console.log(wallet.getBalanceAvailable());
+    //console.log("walletPayload", walletPayload);
   });
 });
