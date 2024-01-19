@@ -10,7 +10,7 @@ import {
   CounterpartyType,
   ICounterpartyRepository,
 } from "../../index";
-import { CounterpartyBank } from "../../../banking";
+import { CounterpartyAchPab, CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
 
 export class CounterpartyMongoRepository
@@ -162,6 +162,12 @@ export class CounterpartyMongoRepository
 
     if (!result) {
       return undefined;
+    }
+
+    // todo improve
+    if (result.achInstructions) {
+      console.log("achInstructions", result.achInstructions);
+      return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
     }
 
     if (result.counterpartyType === CounterpartyType.CRYPTO) {

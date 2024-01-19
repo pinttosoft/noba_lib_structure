@@ -32,6 +32,23 @@ export class CounterpartyAchPab extends Counterparty {
     return c;
   }
 
+  static fromPrimitives(id: string, data: any): CounterpartyAchPab {
+    const c: CounterpartyAchPab = new CounterpartyAchPab();
+    c.id = id;
+    c.isInternal = data.isInternal;
+    c.clientId = data.clientId;
+    c.accountId = data.accountId;
+    c.counterpartyType = data.counterpartyType;
+    c.counterpartyId = data.counterpartyId;
+    c.counterpartyType = data.counterpartyType;
+    c.assetId = data.assetId;
+    c.createdAt = new Date();
+    c.status = data.status;
+    c.achInstructions = data.achInstructions;
+
+    return c;
+  }
+
   toPrimitives(): any {
     return {
       id: this.id,
