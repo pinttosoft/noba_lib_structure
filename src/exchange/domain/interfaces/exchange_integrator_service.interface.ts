@@ -10,4 +10,9 @@ export interface IExchangeIntegratorService {
   acceptExchange(exchange: Exchange): Promise<ExchangeRequestResponse>;
 
   searchExchangeData(exchangeId: string): Promise<ExchangeRequestResponse>;
+
+  searchBalanceWallet(walletId: string): Promise<{
+    current_balance: number;
+    available_balance: number;
+  }>;
 }

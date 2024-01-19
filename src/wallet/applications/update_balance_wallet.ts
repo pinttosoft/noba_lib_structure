@@ -3,20 +3,25 @@ import { IBankingService } from "../../banking";
 import { IWalletRepository } from "../domain/interfaces/wallet_repository.interface";
 import { IWallet } from "../domain/interfaces/wallet.interface";
 import { WalletNotFound } from "../domain/exceptions/wallet_not_found";
+import { IExchangeIntegratorService } from "../../exchange";
+import { logger } from "../../index";
 
 export class UpdateBalanceWallet {
   constructor(
-    private readonly service: IBlockchainService | IBankingService,
+    private readonly service:
+      | IBlockchainService
+      | IBankingService
+      | IExchangeIntegratorService,
     private readonly walletRepository: IWalletRepository,
   ) {}
 
   async run(walletId: string): Promise<void> {
-    console.log(`Iniciando actualizacion de balance ${walletId}`);
+    logger.info(`Iniciando actualizacion de balance ${walletId}`);
 
     const wallet: IWallet =
       await this.walletRepository.findByWalletId(walletId);
     if (!wallet) {
-      console.log(`Wallet no existe`);
+      logger.info(`Wallet no existe`);
       throw new WalletNotFound();
     }
 
@@ -27,9 +32,9 @@ export class UpdateBalanceWallet {
     const balance = await this.service.searchBalanceWallet(
       wallet.getInstructionForDeposit().id,
     );
-    console.log(`Balance recuperado ${JSON.stringify(balance)}`);
+    logger.info(`Balance recuperado`, balance);
 
-    console.log(`wallet ${JSON.stringify(wallet)}`);
+    logger.info(`wallet`, wallet);
 
     wallet.setNewBalance(
       balance.available_balance,
@@ -37,6 +42,6 @@ export class UpdateBalanceWallet {
     );
 
     await this.walletRepository.updateBalance(wallet);
-    console.log("Actualizacion de balance finalizado");
+    logger.info("Actualizacion de balance finalizado");
   }
 }
