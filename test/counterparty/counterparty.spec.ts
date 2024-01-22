@@ -137,6 +137,48 @@ describe("Counterparty", () => {
     console.log("pendings", pendings);
   });
 
+  it("should fetch all internal ACH PAB counterparties for a given client id", async () => {
+    //
+    const clientId = "MSerrano181263254";
+    const assetCode = "PAB";
+
+    const asset =
+      await AssetMongoRepository.instance().findAssetByCode(assetCode);
+
+    const assetId = asset.getAssetId();
+    const criteria = prepare({
+      isInternal: "S",
+      clientId,
+      page: 1,
+      assetId,
+    });
+    const counterparties =
+      await CounterpartyMongoRepository.instance().list(criteria);
+
+    console.log("counterparties", counterparties);
+  });
+
+  it("should fetch all external ACH PAB counterparties for a given client id", async () => {
+    //
+    const clientId = "MSerrano181263254";
+    const assetCode = "PAB";
+
+    const asset =
+      await AssetMongoRepository.instance().findAssetByCode(assetCode);
+
+    const assetId = asset.getAssetId();
+    const criteria = prepare({
+      isInternal: "N",
+      clientId,
+      page: 1,
+      assetId,
+    });
+    const counterparties =
+      await CounterpartyMongoRepository.instance().list(criteria);
+
+    console.log("counterparties", counterparties);
+  });
+
   it("Should register an ach pab counterparty internal ", async () => {
     const clientId = "MSerrano181263254";
     const clientDestinationId = "FSilva187263254";
@@ -169,11 +211,7 @@ describe("Counterparty", () => {
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
     };
-    /*const counterparty = await new RegisterOrSearchCounterpartyInternal(
-                                                              WalletMongoRepository.instance(),
-                                                              CounterpartyMongoRepository.instance(),
-                                                            ).run(clientOrigin, clientDestination, asset);
-                                                        */
+
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
       payload,
       true,
@@ -238,3 +276,33 @@ describe("Counterparty", () => {
     //await CounterpartyMongoRepository.instance().delete();
   });
 });
+
+const prepare = (payload: any) => {
+  let filterBeneficiaryType: Map<string, string>;
+  let filterCounterpartyType: Map<string, string>;
+
+  filterBeneficiaryType = new Map([
+    ["field", "isInternal"],
+    ["operator", Operator.EQUAL],
+    ["value", payload.isInternal],
+  ]);
+
+  const filterClientId: Map<string, any> = new Map([
+    ["field", "clientId"],
+    ["operator", Operator.EQUAL],
+    ["value", payload.clientId],
+  ]);
+
+  const filterAssetId: Map<string, any> = new Map([
+    ["field", "assetId"],
+    ["operator", Operator.EQUAL],
+    ["value", payload.assetId],
+  ]);
+
+  return new Criteria(
+    Filters.fromValues([filterBeneficiaryType, filterClientId, filterAssetId]),
+    Order.fromValues("createdAt", OrderTypes.DESC),
+    20,
+    payload.page,
+  );
+};

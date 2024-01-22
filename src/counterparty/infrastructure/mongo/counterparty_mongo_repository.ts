@@ -117,6 +117,11 @@ export class CounterpartyMongoRepository
       if (d.counterpartyType === CounterpartyType.CRYPTO) {
         return CounterpartyAsset.fromPrimitives(d._id.toString(), d);
       }
+
+      if (d.achInstructions) {
+        return CounterpartyAchPab.fromPrimitives(d._id.toString(), d);
+      }
+
       return CounterpartyBank.fromPrimitives(d._id.toString(), d);
     });
 
