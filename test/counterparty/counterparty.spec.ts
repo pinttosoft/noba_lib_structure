@@ -278,10 +278,7 @@ describe("Counterparty", () => {
 });
 
 const prepare = (payload: any) => {
-  let filterBeneficiaryType: Map<string, string>;
-  let filterCounterpartyType: Map<string, string>;
-
-  filterBeneficiaryType = new Map([
+  const filterBeneficiaryType = new Map([
     ["field", "isInternal"],
     ["operator", Operator.EQUAL],
     ["value", payload.isInternal],
