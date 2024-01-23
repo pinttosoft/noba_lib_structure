@@ -1,12 +1,15 @@
 import {
   AssetMongoRepository,
   ClientMongoRepository,
+  CounterpartyMongoRepository,
   InstructionsAchPabType,
   IWallet,
   logger,
+  MakeRequestInternalTransfer,
   WalletFactory,
   WalletMongoRepository,
   WalletType,
+  WithdrawalRequestMongoRepository,
 } from "../../src";
 
 describe("Wallet", () => {
@@ -82,11 +85,11 @@ describe("Wallet", () => {
 
   it("should create ACH_PAB wallet", async () => {
     const clientId = "MSerrano181263254";
-    const assetId = "FIAT_TESTNET_PAB";
     const walletRepo = WalletMongoRepository.instance();
 
+    const assetCode = "PAB";
     const assetRepo = AssetMongoRepository.instance();
-    const pab = await assetRepo.findAssetByCode("PAB");
+    const pab = await assetRepo.findAssetByCode(assetCode);
     console.log("pab", pab);
 
     const client =
@@ -115,7 +118,7 @@ describe("Wallet", () => {
 
     const res = await walletRepo.findPaymentAddressesByClientIdAndByAssetId(
       clientId,
-      assetId,
+      pab.getAssetId(),
     );
 
     console.log("res", res);
@@ -123,4 +126,95 @@ describe("Wallet", () => {
     //console.log(wallet.getBalanceAvailable());
     //console.log("walletPayload", walletPayload);
   });
+
+  it("Should update ACH PAB balances", async () => {
+    const walletRepo = WalletMongoRepository.instance();
+    const clientOriginId = "MSerrano181263254";
+    const clientDestinationId = "FSilva187263254";
+
+    const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+    const amount = 123;
+
+    const originWallet: IWallet =
+      await walletRepo.findWalletsByClientIdAndAssetId(
+        clientOriginId,
+        asset.getAssetId(),
+      );
+
+    console.log(
+      "originWallet",
+      originWallet.getBalance(),
+      originWallet.getBalanceAvailable(),
+      originWallet.getLockedBalance(),
+    );
+
+    const destinationWallet: IWallet =
+      await walletRepo.findWalletsByClientIdAndAssetId(
+        clientDestinationId,
+        asset.getAssetId(),
+      );
+
+    console.log(
+      "destinationWallet",
+      destinationWallet.getBalance(),
+      destinationWallet.getBalanceAvailable(),
+      destinationWallet.getLockedBalance(),
+    );
+
+    const withdrawalId = await new MakeRequestInternalTransfer(
+      ClientMongoRepository.instance(),
+      WalletMongoRepository.instance(),
+      AssetMongoRepository.instance(),
+      WithdrawalRequestMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(clientOriginId, clientDestinationId, amount, "PAB", "1st test");
+
+    console.log("withdrawalId", withdrawalId);
+
+    await updateACHWallet(originWallet, amount, false);
+
+    const originWalletUpdated: IWallet =
+      await walletRepo.findWalletsByClientIdAndAssetId(
+        clientOriginId,
+        asset.getAssetId(),
+      );
+
+    console.log(
+      "originWalletUpdated",
+      originWalletUpdated.getBalanceAvailable(),
+      originWalletUpdated.getBalance(),
+      originWalletUpdated.getLockedBalance(),
+    );
+
+    const destinationWalletUpdated: IWallet =
+      await walletRepo.findWalletsByClientIdAndAssetId(
+        clientDestinationId,
+        asset.getAssetId(),
+      );
+
+    console.log(
+      "destinationWalletUpdated",
+      destinationWalletUpdated.getBalance(),
+      destinationWalletUpdated.getBalanceAvailable(),
+      destinationWalletUpdated.getLockedBalance(),
+    );
+  });
 });
+
+const updateACHWallet = async (
+  wallet: IWallet,
+  amount: number,
+  isCredit = true,
+) => {
+  const walletRepo = WalletMongoRepository.instance();
+
+  if (isCredit) {
+    wallet.setNewBalance(wallet.getBalanceAvailable() - amount, amount);
+  } else {
+    wallet.setNewBalance(wallet.getBalanceAvailable() - amount, amount);
+  }
+
+  console.log("wallet", wallet);
+
+  await walletRepo.updateBalance(wallet);
+};

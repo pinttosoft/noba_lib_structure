@@ -143,7 +143,10 @@ export class Wallet extends AggregateRoot implements IWallet {
   updateLookBalance(amount: number): Wallet {
     let d = 3;
 
-    if (this.getAsset().getAssetCode() !== "USD") {
+    if (
+      this.getAsset().getAssetCode() !== "USD" &&
+      this.getAsset().getAssetCode() !== "PAB"
+    ) {
       d = 8;
     }
 

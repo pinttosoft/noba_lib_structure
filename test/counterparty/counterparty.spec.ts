@@ -4,7 +4,6 @@ import {
   CounterpartyAchPab,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
-  CounterpartyProfileType,
   CounterpartyStatus,
   CounterpartyType,
   Criteria,
@@ -229,9 +228,6 @@ describe("Counterparty", () => {
       clientDestinationId: "FSilva187263254",
     };
     const assetCode = "PAB";
-    // todo
-    const profileType = CounterpartyProfileType.CORPORATION;
-
     const clientOrigin = await ClientMongoRepository.instance().findByClientId(
       webPayload.clientId,
     );
