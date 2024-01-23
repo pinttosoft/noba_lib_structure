@@ -133,7 +133,7 @@ describe("Wallet", () => {
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-    const amount = 123;
+    const amount = 1.1;
 
     const originWallet: IWallet =
       await walletRepo.findWalletsByClientIdAndAssetId(
@@ -142,7 +142,7 @@ describe("Wallet", () => {
       );
 
     console.log(
-      "originWallet",
+      "--originWallet",
       originWallet.getBalance(),
       originWallet.getBalanceAvailable(),
       originWallet.getLockedBalance(),
@@ -155,7 +155,7 @@ describe("Wallet", () => {
       );
 
     console.log(
-      "destinationWallet",
+      "--destinationWallet",
       destinationWallet.getBalance(),
       destinationWallet.getBalanceAvailable(),
       destinationWallet.getLockedBalance(),
@@ -169,36 +169,35 @@ describe("Wallet", () => {
       CounterpartyMongoRepository.instance(),
     ).run(clientOriginId, clientDestinationId, amount, "PAB", "1st test");
 
-    console.log("withdrawalId", withdrawalId);
-
-    await updateACHWallet(originWallet, amount, false);
-
-    const originWalletUpdated: IWallet =
-      await walletRepo.findWalletsByClientIdAndAssetId(
-        clientOriginId,
-        asset.getAssetId(),
-      );
-
-    console.log(
-      "originWalletUpdated",
-      originWalletUpdated.getBalanceAvailable(),
-      originWalletUpdated.getBalance(),
-      originWalletUpdated.getLockedBalance(),
-    );
-
-    const destinationWalletUpdated: IWallet =
-      await walletRepo.findWalletsByClientIdAndAssetId(
-        clientDestinationId,
-        asset.getAssetId(),
-      );
-
-    console.log(
-      "destinationWalletUpdated",
-      destinationWalletUpdated.getBalance(),
-      destinationWalletUpdated.getBalanceAvailable(),
-      destinationWalletUpdated.getLockedBalance(),
-    );
+    console.log("===== withdrawalId", withdrawalId);
   });
+});
+
+it("Should finish a withdrawal request and create a transaction", async () => {
+  const walletRepo = WalletMongoRepository.instance();
+  const withdrawalRepo = WithdrawalRequestMongoRepository.instance();
+  const clientOriginId = "MSerrano181263254";
+  const clientDestinationId = "FSilva187263254";
+
+  const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+  const withdrawalId = "242cbd3d-8137-49fd-a275-4f4ec3b8bdf9";
+  const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
+  const amount = withdrawal.getAmount();
+
+  const originWallet: IWallet =
+    await walletRepo.findWalletsByClientIdAndAssetId(
+      clientOriginId,
+      asset.getAssetId(),
+    );
+
+  const destinationWallet: IWallet =
+    await walletRepo.findWalletsByClientIdAndAssetId(
+      clientDestinationId,
+      asset.getAssetId(),
+    );
+
+  await updateACHWallet(originWallet, amount, false);
+  await updateACHWallet(destinationWallet, amount, true);
 });
 
 const updateACHWallet = async (
@@ -209,12 +208,16 @@ const updateACHWallet = async (
   const walletRepo = WalletMongoRepository.instance();
 
   if (isCredit) {
-    wallet.setNewBalance(wallet.getBalanceAvailable() - amount, amount);
+    wallet.setNewBalance(
+      wallet.getBalanceAvailable() + amount,
+      wallet.getLockedBalance(),
+    );
   } else {
-    wallet.setNewBalance(wallet.getBalanceAvailable() - amount, amount);
+    wallet.setNewBalance(
+      wallet.getBalanceAvailable() - amount,
+      (wallet.getLockedBalance() - amount) * -1,
+    );
   }
-
-  console.log("wallet", wallet);
 
   await walletRepo.updateBalance(wallet);
 };
