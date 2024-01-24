@@ -127,39 +127,13 @@ describe("Wallet", () => {
     //console.log("walletPayload", walletPayload);
   });
 
+  // 1st step
   it("Should update ACH PAB balances", async () => {
-    const walletRepo = WalletMongoRepository.instance();
     const clientOriginId = "MSerrano181263254";
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
     const amount = 1.1;
-
-    const originWallet: IWallet =
-      await walletRepo.findWalletsByClientIdAndAssetId(
-        clientOriginId,
-        asset.getAssetId(),
-      );
-
-    console.log(
-      "--originWallet",
-      originWallet.getBalance(),
-      originWallet.getBalanceAvailable(),
-      originWallet.getLockedBalance(),
-    );
-
-    const destinationWallet: IWallet =
-      await walletRepo.findWalletsByClientIdAndAssetId(
-        clientDestinationId,
-        asset.getAssetId(),
-      );
-
-    console.log(
-      "--destinationWallet",
-      destinationWallet.getBalance(),
-      destinationWallet.getBalanceAvailable(),
-      destinationWallet.getLockedBalance(),
-    );
 
     const withdrawalId = await new MakeRequestInternalTransfer(
       ClientMongoRepository.instance(),
@@ -167,12 +141,19 @@ describe("Wallet", () => {
       AssetMongoRepository.instance(),
       WithdrawalRequestMongoRepository.instance(),
       CounterpartyMongoRepository.instance(),
-    ).run(clientOriginId, clientDestinationId, amount, "PAB", "1st test");
+    ).run(
+      clientOriginId,
+      clientDestinationId,
+      amount,
+      asset.getAssetCode(),
+      "1st test",
+    );
 
     console.log("===== withdrawalId", withdrawalId);
   });
 });
 
+// 2nd step
 it("Should finish a withdrawal request and create a transaction", async () => {
   const walletRepo = WalletMongoRepository.instance();
   const withdrawalRepo = WithdrawalRequestMongoRepository.instance();
@@ -180,8 +161,11 @@ it("Should finish a withdrawal request and create a transaction", async () => {
   const clientDestinationId = "FSilva187263254";
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-  const withdrawalId = "242cbd3d-8137-49fd-a275-4f4ec3b8bdf9";
+
+  const withdrawalId = "5496c1f1-f795-4750-bb54-2ab4cc759768";
+
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
+
   const amount = withdrawal.getAmount();
 
   const originWallet: IWallet =
@@ -215,7 +199,7 @@ const updateACHWallet = async (
   } else {
     wallet.setNewBalance(
       wallet.getBalanceAvailable() - amount,
-      (wallet.getLockedBalance() - amount) * -1,
+      wallet.getLockedBalance() - amount,
     );
   }
 

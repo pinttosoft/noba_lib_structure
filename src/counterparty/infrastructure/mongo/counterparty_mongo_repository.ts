@@ -107,6 +107,10 @@ export class CounterpartyMongoRepository
       return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
     }
 
+    if (result.achInstructions) {
+      return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
+    }
+
     return CounterpartyBank.fromPrimitives(result._id.toString(), result);
   }
 
