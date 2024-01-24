@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import {
   AssetMongoRepository,
   ClientMongoRepository,
@@ -6,10 +7,14 @@ import {
   IWallet,
   logger,
   MakeRequestInternalTransfer,
+  Transaction,
+  TransactionMongoRepository,
+  TransactionType,
   WalletFactory,
   WalletMongoRepository,
   WalletType,
   WithdrawalRequestMongoRepository,
+  WithdrawalStatus,
 } from "../../src";
 
 describe("Wallet", () => {
@@ -133,7 +138,7 @@ describe("Wallet", () => {
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-    const amount = 10.6;
+    const amount = 23.99;
 
     const withdrawalId = await new MakeRequestInternalTransfer(
       ClientMongoRepository.instance(),
@@ -153,18 +158,38 @@ describe("Wallet", () => {
   });
 });
 
-// 2nd step
+// 2nd step create withdrawal request, transaction and updating balance
 it("Should finish a withdrawal request and create a transaction", async () => {
   const walletRepo = WalletMongoRepository.instance();
   const withdrawalRepo = WithdrawalRequestMongoRepository.instance();
+  const transactionRepo = TransactionMongoRepository.instance();
+
   const clientOriginId = "MSerrano181263254";
   const clientDestinationId = "FSilva187263254";
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
 
-  const withdrawalId = "d402f0d0-951c-4c3a-a04f-e78b7c6d1791";
+  const withdrawalId = "26fbeefc-8a4d-4cf8-adf0-0e5118e1d690";
 
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
+
+  withdrawal.markAsProcessed();
+  await withdrawalRepo.upsert(withdrawal);
+
+  const transactionId: string = v4();
+
+  const transaction: Transaction = Transaction.newTransaction(
+    transactionId,
+    withdrawal.getAmount() * -1,
+    withdrawal.getReference(),
+    withdrawal.getClientId(),
+    true,
+    withdrawal.getCounterparty(),
+    TransactionType.WITHDRAW,
+    WithdrawalStatus.PROCESSED,
+  );
+
+  await transactionRepo.upsert(transaction);
 
   const amount = withdrawal.getAmount();
 
@@ -182,11 +207,6 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 
   await updateACHWallet(originWallet, amount, false);
   await updateACHWallet(destinationWallet, amount, true);
-});
-
-// 3rd step transaction
-it("Should create the transaction", async () => {
-  //
 });
 
 const updateACHWallet = async (
