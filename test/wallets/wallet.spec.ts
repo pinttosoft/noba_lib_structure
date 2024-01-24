@@ -133,7 +133,7 @@ describe("Wallet", () => {
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-    const amount = 1.1;
+    const amount = 10.6;
 
     const withdrawalId = await new MakeRequestInternalTransfer(
       ClientMongoRepository.instance(),
@@ -162,7 +162,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
 
-  const withdrawalId = "5496c1f1-f795-4750-bb54-2ab4cc759768";
+  const withdrawalId = "d402f0d0-951c-4c3a-a04f-e78b7c6d1791";
 
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
 
@@ -184,6 +184,11 @@ it("Should finish a withdrawal request and create a transaction", async () => {
   await updateACHWallet(destinationWallet, amount, true);
 });
 
+// 3rd step transaction
+it("Should create the transaction", async () => {
+  //
+});
+
 const updateACHWallet = async (
   wallet: IWallet,
   amount: number,
@@ -193,13 +198,13 @@ const updateACHWallet = async (
 
   if (isCredit) {
     wallet.setNewBalance(
-      wallet.getBalanceAvailable() + amount,
+      wallet.getBalance() + amount,
       wallet.getLockedBalance(),
     );
   } else {
     wallet.setNewBalance(
-      wallet.getBalanceAvailable() - amount,
-      wallet.getLockedBalance() - amount,
+      wallet.getBalance() - amount,
+      -wallet.getLockedBalance() - amount,
     );
   }
 
