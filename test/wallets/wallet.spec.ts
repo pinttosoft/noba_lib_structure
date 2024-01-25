@@ -169,7 +169,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
 
-  const withdrawalId = "26fbeefc-8a4d-4cf8-adf0-0e5118e1d690";
+  const withdrawalId = "1d9f5b56-e905-46e9-8a85-b50ae4cb4318";
 
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
 

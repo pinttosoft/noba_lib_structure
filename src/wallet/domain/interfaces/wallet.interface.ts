@@ -41,7 +41,7 @@ export interface IWallet {
 
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 
-  updateLookBalance(amount: number): IWallet;
+  updateLockedBalance(amount: number): IWallet;
 
   updateBalance(amount: number): IWallet;
 
