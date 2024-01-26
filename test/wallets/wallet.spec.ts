@@ -138,7 +138,7 @@ describe("Wallet", () => {
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-    const amount = 23.99;
+    const amount = 1.3;
 
     const withdrawalId = await new MakeRequestInternalTransfer(
       ClientMongoRepository.instance(),

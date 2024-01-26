@@ -341,4 +341,11 @@ describe("Client", () => {
     client.deleteKycAction("0.34443428785307506");
     await ClientMongoRepository.instance().upsert(client);
   });
+
+  it("Should set FeeACHPanama", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+  });
 });

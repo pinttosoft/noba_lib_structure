@@ -20,8 +20,10 @@ describe("Withdrawals", () => {
       await ClientMongoRepository.instance().findByClientId(
         clientDestinationId,
       );
-    const amount = 123;
+
+    const amount = 1.3;
     const reference = "first withdrawal request test";
+
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
 
     const counterparty =
