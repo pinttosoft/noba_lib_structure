@@ -1,3 +1,5 @@
+export { IPanamaBankingRepository } from "./domain/interfaces/panama_banking_repository.interface";
+
 export { InstructionsAchPabType } from "./domain/types/instructions_ach_pab.type";
 
 export { InstructionDepositFiat } from "./domain/types/instruction_deposit_fiat.type";
@@ -20,3 +22,4 @@ export { DepositStatus } from "./domain/enums/deposit_status.enum";
 
 export { BankingRails } from "./domain/banking_rails";
 export { CounterpartyAchPab } from "./domain/counterparty_ach_pab";
+export { PanamaBankingRails } from "./domain/panama_banking_rails";
