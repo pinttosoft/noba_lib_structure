@@ -172,7 +172,4 @@ export class CounterpartyBank extends Counterparty {
       status: this.status,
     };
   }
-
-  w;
 }
-
