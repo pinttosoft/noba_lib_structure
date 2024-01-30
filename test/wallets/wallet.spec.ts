@@ -89,7 +89,7 @@ describe("Wallet", () => {
   });
 
   it("should create ACH_PAB wallet", async () => {
-    const clientId = "MSerrano181263254";
+    const clientId = "JJimenez-Sequea12131548454";
     const walletRepo = WalletMongoRepository.instance();
 
     const assetCode = "PAB";
@@ -101,7 +101,7 @@ describe("Wallet", () => {
       await ClientMongoRepository.instance().findByClientId(clientId);
 
     const instructionForDeposits: InstructionsAchPabType = {
-      id: "",
+      id: `${client.getClientId()}-pab-${Math.random()}`,
       label: "",
       accountDestinationNumber: "",
       holderEmail: "",
@@ -138,7 +138,7 @@ describe("Wallet", () => {
     const clientDestinationId = "FSilva187263254";
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
-    const amount = 1.3;
+    const amount = 1.25;
 
     const withdrawalId = await new MakeRequestInternalTransfer(
       ClientMongoRepository.instance(),
