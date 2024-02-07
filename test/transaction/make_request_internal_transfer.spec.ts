@@ -55,11 +55,12 @@ describe("Make request internal transfer", () => {
           "FIAT_TESTNET_PAB",
           -7,
           WithdrawalStatus.IN_PROCESS,
-          "External ACH",
+          "External ACH old",
         );
       //transaction.markAsCompleted();
 
-      console.log("transaction", transaction);
+      //console.log("transaction", transaction);
+      console.log("transaction", transaction.getTransactionId());
     });
   });
 });

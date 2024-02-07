@@ -90,7 +90,6 @@ export class TransactionMongoRepository
     };
 
     const result = await collection.findOne(filter);
-
     if (!result) {
       return null;
     }
