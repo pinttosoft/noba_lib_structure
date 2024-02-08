@@ -89,7 +89,8 @@ describe("Wallet", () => {
   });
 
   it("should create ACH_PAB wallet", async () => {
-    const clientId = "JJimenez-Sequea12131548454";
+    //const clientId = "JJimenez-Sequea12131548454";
+    const clientId = "DANIELLEE002";
     const walletRepo = WalletMongoRepository.instance();
 
     const assetCode = "PAB";
