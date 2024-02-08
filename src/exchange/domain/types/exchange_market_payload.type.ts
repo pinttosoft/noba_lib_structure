@@ -7,4 +7,5 @@ export type ExchangeMarketPayload = {
   amount: number;
   description: string;
   action?: ExchangeMarketActionType;
+  sourceAssetCode?:string;
 };
