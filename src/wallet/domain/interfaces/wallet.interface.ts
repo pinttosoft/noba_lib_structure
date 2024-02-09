@@ -6,22 +6,41 @@ import { Asset } from "../../../asset";
 
 export interface IWallet {
   getId(): string;
+
   getClient(): IClient;
+
   getClientId(): string;
+
   getWalletId(): string;
+
   toPrimitives(): any;
+
   getBalanceAvailable(): number;
+
   getBalance(): number;
+
   getLockedBalance(): number;
+
   getAsset(): Asset;
+
   getWalletType(): WalletType;
+
   getAccountId(): string;
+
   getIdentifierForInstructionOfDeposit(label: string): string;
+
   getInstructionForDeposit(): InstructionDepositCrypto | InstructionDepositFiat;
+
   setNewBalance(balance: number, lockedBalance: number): IWallet;
+
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
+
   updateLookBalance(amount: number): IWallet;
+
+  releaseBlockedBalance(amount: number): IWallet;
+
   updateBalance(amount: number): IWallet;
+
   setInstructionForDeposit(
     data: InstructionDepositCrypto | InstructionDepositFiat,
   ): IWallet;

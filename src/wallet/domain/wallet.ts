@@ -154,6 +154,20 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
+  releaseBlockedBalance(amount: number): Wallet {
+    let d = 3;
+
+    if (this.getAsset().getAssetCode() !== "USD") {
+      d = 8;
+    }
+
+    this.lockedBalance = this.truncate(
+      Number(this.lockedBalance) + Number(amount),
+      d,
+    );
+    return this;
+  }
+
   updateBalance(amount: number): Wallet {
     let d = 3;
 
