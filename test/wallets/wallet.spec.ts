@@ -81,11 +81,16 @@ describe("Wallet", () => {
   it("should calculate locked balance", async () => {
     const wallet: IWallet =
       await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
-        "ABejarano187263254",
-        "FIAT_TESTNET_USD",
+        "FSilva187263254",
+        "BITCOIN_TESTNET_BTC",
       );
 
-    console.log(wallet.getBalanceAvailable());
+    wallet.updateLookBalance(0.000056);
+    console.log(wallet.toPrimitives());
+
+    wallet.releaseBlockedBalance(0.000056);
+    //
+    console.log(wallet.toPrimitives());
   });
 
   it("should create ACH_PAB wallet", async () => {

@@ -26,12 +26,6 @@ export class RegisterOrSearchCounterpartyInternal {
     clientDestination: IClient,
     asset: Asset,
   ): Promise<Counterparty> {
-    // todo check and confirm
-    /*let counterparty: Counterparty =
-                                  await this.counterpartyRepository.findByCounterpartyIdAndAssetId(
-                                    clientDestination.getClientId(),
-                                    asset.getAssetId(),
-                                  ); */
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),

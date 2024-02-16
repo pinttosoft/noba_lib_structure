@@ -38,13 +38,13 @@ export interface IWallet {
     | InstructionsAchPabType;
 
   setNewBalance(balance: number, lockedBalance: number): IWallet;
-
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 
-  updateLockedBalance(amount: number): IWallet;
+  updateLookBalance(amount: number): IWallet;
+
+  releaseBlockedBalance(amount: number): IWallet;
 
   updateBalance(amount: number): IWallet;
-
   setInstructionForDeposit(
     data:
       | InstructionDepositCrypto
