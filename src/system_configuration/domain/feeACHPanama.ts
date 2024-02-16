@@ -2,14 +2,8 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
 export class FeeACHPanama extends AggregateRoot {
   private id?: string;
-  private domestic: {
-    in: number;
-    out: number;
-  };
-  private international: {
-    in: number;
-    out: number;
-  };
+  in: number;
+  out: number;
 
   getId(): string {
     return this.id;
@@ -18,36 +12,24 @@ export class FeeACHPanama extends AggregateRoot {
   static fromPrimitives(data: any): FeeACHPanama {
     const f: FeeACHPanama = new FeeACHPanama();
 
-    f.domestic = data.domestic;
-    f.international = data.international;
+    f.in = data.in;
+    f.out = data.out;
 
     return f;
   }
 
-  getFeeDomestic(): {
-    in: number;
-    out: number;
-  } {
-    return this.domestic;
+  getFeeIn(): number {
+    return this.in;
   }
 
-  getFeeInternational(): {
-    in: number;
-    out: number;
-  } {
-    return this.international;
+  getFeeOut(): number {
+    return this.out;
   }
 
   toPrimitives(): any {
     return {
-      domestic: {
-        in: this.domestic.in,
-        out: this.domestic.out,
-      },
-      international: {
-        in: this.international.in,
-        out: this.international.out,
-      },
+      in: this.in,
+      out: this.out,
     };
   }
 }
