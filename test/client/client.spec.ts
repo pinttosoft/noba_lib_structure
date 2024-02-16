@@ -358,9 +358,10 @@ describe("Client", () => {
   });
 
   it("Should search client by company name, type company", async () => {
-    const naics = "2165954156";
+    const registerNumber = "2165954156";
 
-    const client = await ClientMongoRepository.instance().findByDni(naics);
+    const client =
+      await ClientMongoRepository.instance().findByDni(registerNumber);
 
     expect(client).not.toBe(undefined);
   });

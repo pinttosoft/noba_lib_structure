@@ -109,7 +109,7 @@ export class ClientMongoRepository
 
     if (!result) {
       result = await collection.findOne({
-        "informationCompany.naics": dni,
+        "informationCompany.registerNumber": dni,
       });
     }
 
