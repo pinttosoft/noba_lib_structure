@@ -38,17 +38,21 @@ export interface IWallet {
     | InstructionsAchPabType;
 
   setNewBalance(balance: number, lockedBalance: number): IWallet;
+
   calculateNewBalance(balance: number, lockedBalance: number): IWallet;
 
-  updateLookBalance(amount: number): IWallet;
+  updateLockedBalance(amount: number): IWallet;
 
   releaseBlockedBalance(amount: number): IWallet;
 
   updateBalance(amount: number): IWallet;
+
   setInstructionForDeposit(
     data:
       | InstructionDepositCrypto
       | InstructionDepositFiat
       | InstructionsAchPabType,
   ): IWallet;
+
+  setLockedBalance(lockedBalance: number): void;
 }
