@@ -16,7 +16,7 @@ import {
 } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
-import { FeeSwap, FeeWire } from "../../system_configuration";
+import { FeeACHPanama, FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 
@@ -33,6 +33,7 @@ export class Client extends AggregateRoot implements IClient {
   private status: AccountStatus;
   private feeSwap?: FeeSwap;
   private feeWire?: FeeWire;
+  private feeACHPanama?: FeeACHPanama;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
@@ -76,6 +77,11 @@ export class Client extends AggregateRoot implements IClient {
 
   setFeeSwap(fee: FeeSwap): Client {
     this.feeSwap = fee;
+    return this;
+  }
+
+  setFeeACHPanama(fee: FeeACHPanama) {
+    this.feeACHPanama = fee;
     return this;
   }
 
@@ -304,6 +310,10 @@ export class Client extends AggregateRoot implements IClient {
     return this.feeWire;
   }
 
+  getFeeACHPanama(): FeeACHPanama {
+    return this.feeACHPanama;
+  }
+
   activeTwoFactorAuth(): void {
     this.twoFactorActive = true;
   }
@@ -458,6 +468,7 @@ export class Client extends AggregateRoot implements IClient {
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
+      FeeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
       createdAt: this.createdAt,

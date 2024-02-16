@@ -1,7 +1,7 @@
 import { AccountStatus, AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
 import { ResidencyStatus } from "../enums/residency_status";
-import { FeeSwap, FeeWire } from "../../../system_configuration";
+import { FeeACHPanama, FeeSwap, FeeWire } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
 import { IndividualDTO, individualType } from "../types/Individual.type";
@@ -50,6 +50,8 @@ export interface IClient {
 
   getFeeWire(): FeeWire;
 
+  getFeeACHPanama(): FeeACHPanama;
+
   getPrincipalDocuments(): Documents[];
 
   setDocument(dni: string, document: Documents): IClient;
@@ -79,6 +81,8 @@ export interface IClient {
   setFeeSwap(feeSwap: FeeSwap): IClient;
 
   setFeeWire(feeWire: FeeWire): IClient;
+
+  setFeeACHPanama(feeACHPanama: FeeACHPanama): IClient;
 
   deleteKycAction(id: string): void;
 
