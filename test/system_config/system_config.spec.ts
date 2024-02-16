@@ -12,6 +12,7 @@ describe("System config", () => {
     const feeACHPAB =
       await SystemConfigurationMongoRepository.instance().getDefaultFeeACHPAB();
 
-    console.log("feeACHPAB", feeACHPAB);
+    console.log("feeACHPAB", feeACHPAB.out);
+    console.log("feeACHPAB", feeACHPAB.getFeeOut());
   });
 });
