@@ -51,7 +51,7 @@ describe("Withdrawals", () => {
     const clientId = "MSerrano181263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
-    const counterpartyId = "de776990-dda0-4c17-983b-56ef95631fdb";
+    const counterpartyId = "35e68682-8212-49a0-af95-e56e3e3aa92b";
 
     const amount = 2.6;
     const reference = "first external withdrawal request test";

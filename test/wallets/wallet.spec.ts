@@ -216,6 +216,49 @@ it("Should finish an internal withdrawal request and create a transaction", asyn
   await updateACHWallet(destinationWallet, amount, true);
 });
 
+it("Should finish an external withdrawal request and create a transaction", async () => {
+  const walletRepo = WalletMongoRepository.instance();
+  const withdrawalRepo = WithdrawalRequestMongoRepository.instance();
+  const transactionRepo = TransactionMongoRepository.instance();
+
+  const clientOriginId = "MSerrano181263254";
+  const clientDestinationId = "FSilva187263254";
+
+  const asset = await AssetMongoRepository.instance().findAssetByCode("USD_PA");
+
+  const withdrawalId = "dccae0ef-3850-4668-9e1b-5c7c76869751";
+
+  const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
+
+  withdrawal.markAsProcessed();
+  await withdrawalRepo.upsert(withdrawal);
+
+  const transactionId: string = v4();
+
+  const transaction: Transaction = Transaction.newTransaction(
+    transactionId,
+    withdrawal.getAmount() * -1,
+    withdrawal.getReference(),
+    withdrawal.getClientId(),
+    false,
+    withdrawal.getCounterparty(),
+    TransactionType.WITHDRAW,
+    WithdrawalStatus.PROCESSED,
+  );
+
+  await transactionRepo.upsert(transaction);
+
+  const amount = withdrawal.getAmount();
+
+  const originWallet: IWallet =
+    await walletRepo.findWalletsByClientIdAndAssetId(
+      clientOriginId,
+      asset.getAssetId(),
+    );
+
+  await updateACHWallet(originWallet, amount, false);
+});
+
 const updateACHWallet = async (
   wallet: IWallet,
   amount: number,
@@ -225,9 +268,9 @@ const updateACHWallet = async (
 
   if (isCredit) {
     /*wallet.setNewBalance(
-              wallet.getBalance() + amount,
-              wallet.getLockedBalance(),
-            );*/
+                  wallet.getBalance() + amount,
+                  wallet.getLockedBalance(),
+                );*/
     wallet.releaseFunds(amount);
   } else {
     wallet.setNewBalance(
