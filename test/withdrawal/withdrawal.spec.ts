@@ -18,7 +18,7 @@ describe("Withdrawals", () => {
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        clientDestinationId
+        clientDestinationId,
       );
 
     const amount = 1.3;
@@ -31,7 +31,7 @@ describe("Withdrawals", () => {
       await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
         clientDestination.getClientId(),
-        asset.getAssetId()
+        asset.getAssetId(),
       );
 
     const withdrawalRequest: WithdrawalRequest =
@@ -41,7 +41,7 @@ describe("Withdrawals", () => {
         AmountValueObject.create(amount),
         reference,
         WithdrawalType.INTERNAL,
-        WithdrawalPurpose.LOAN
+        WithdrawalPurpose.LOAN,
       );
 
     await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
@@ -62,7 +62,7 @@ describe("Withdrawals", () => {
       await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
         counterpartyId,
-        asset.getAssetId()
+        asset.getAssetId(),
       );
 
     console.log("counterparty", counterparty);
@@ -74,7 +74,7 @@ describe("Withdrawals", () => {
         AmountValueObject.create(amount),
         reference,
         WithdrawalType.EXTERNAL,
-        WithdrawalPurpose.LOAN
+        WithdrawalPurpose.LOAN,
       );
 
     await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
