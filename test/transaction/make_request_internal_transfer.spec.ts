@@ -48,5 +48,19 @@ describe("Make request internal transfer", () => {
 
       console.log(transaction);
     });
+
+    it("should search transaction", async () => {
+      const transaction =
+        await TransactionMongoRepository.instance().findWithdrawByAssetIdAndAmountAndStatusAndReference(
+          "FIAT_TESTNET_PAB",
+          -7,
+          WithdrawalStatus.IN_PROCESS,
+          "External ACH old",
+        );
+      //transaction.markAsCompleted();
+
+      //console.log("transaction", transaction);
+      console.log("transaction", transaction.getTransactionId());
+    });
   });
 });
