@@ -74,7 +74,7 @@ describe("Wallet", () => {
     const paymentAddress =
       await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
         clientId,
-        undefined
+        undefined,
       );
   });
 
@@ -82,10 +82,10 @@ describe("Wallet", () => {
     const wallet: IWallet =
       await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
         "FSilva187263254",
-        "BITCOIN_TESTNET_BTC"
+        "BITCOIN_TESTNET_BTC",
       );
 
-    wallet.updateLookBalance(0.000056);
+    wallet.updateLockedBalance(0.000056);
     console.log(wallet.toPrimitives());
 
     wallet.releaseBlockedBalance(0.000056);
@@ -122,14 +122,14 @@ describe("Wallet", () => {
       pab,
       client,
       WalletType.FIAT,
-      instructionForDeposits
+      instructionForDeposits,
     );
 
     await walletRepo.insert(walletPayload);
 
     const res = await walletRepo.findPaymentAddressesByClientIdAndByAssetId(
       clientId,
-      pab.getAssetId()
+      pab.getAssetId(),
     );
 
     console.log("res", res);
@@ -152,13 +152,13 @@ describe("Wallet", () => {
       WalletMongoRepository.instance(),
       AssetMongoRepository.instance(),
       WithdrawalRequestMongoRepository.instance(),
-      CounterpartyMongoRepository.instance()
+      CounterpartyMongoRepository.instance(),
     ).run(
       clientOriginId,
       clientDestinationId,
       amount,
       asset.getAssetCode(),
-      "1st test"
+      "1st test",
     );
 
     console.log("===== withdrawalId", withdrawalId);
@@ -166,7 +166,7 @@ describe("Wallet", () => {
 });
 
 // 2nd step create withdrawal request, transaction and updating balance
-it("Should finish a withdrawal request and create a transaction", async () => {
+it("Should finish an internal withdrawal request and create a transaction", async () => {
   const walletRepo = WalletMongoRepository.instance();
   const withdrawalRepo = WithdrawalRequestMongoRepository.instance();
   const transactionRepo = TransactionMongoRepository.instance();
@@ -176,7 +176,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("USD_PA");
 
-  const withdrawalId = "1d9f5b56-e905-46e9-8a85-b50ae4cb4318";
+  const withdrawalId = "8dfad6d3-d546-49bb-8b34-0d8759297dc0";
 
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
 
@@ -193,7 +193,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
     true,
     withdrawal.getCounterparty(),
     TransactionType.WITHDRAW,
-    WithdrawalStatus.PROCESSED
+    WithdrawalStatus.PROCESSED,
   );
 
   await transactionRepo.upsert(transaction);
@@ -203,13 +203,13 @@ it("Should finish a withdrawal request and create a transaction", async () => {
   const originWallet: IWallet =
     await walletRepo.findWalletsByClientIdAndAssetId(
       clientOriginId,
-      asset.getAssetId()
+      asset.getAssetId(),
     );
 
   const destinationWallet: IWallet =
     await walletRepo.findWalletsByClientIdAndAssetId(
       clientDestinationId,
-      asset.getAssetId()
+      asset.getAssetId(),
     );
 
   await updateACHWallet(originWallet, amount, false);
@@ -219,19 +219,20 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 const updateACHWallet = async (
   wallet: IWallet,
   amount: number,
-  isCredit = true
+  isCredit = true,
 ) => {
   const walletRepo = WalletMongoRepository.instance();
 
   if (isCredit) {
-    wallet.setNewBalance(
-      wallet.getBalance() + amount,
-      wallet.getLockedBalance()
-    );
+    /*wallet.setNewBalance(
+              wallet.getBalance() + amount,
+              wallet.getLockedBalance(),
+            );*/
+    wallet.releaseFunds(amount);
   } else {
     wallet.setNewBalance(
       wallet.getBalance() - amount,
-      -wallet.getLockedBalance() - amount
+      -wallet.getLockedBalance() - amount,
     );
   }
 

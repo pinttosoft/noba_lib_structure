@@ -18,11 +18,11 @@ describe("Withdrawals", () => {
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        clientDestinationId
+        clientDestinationId,
       );
 
     const amount = 1.3;
-    const reference = "first withdrawal request test";
+    const reference = "-- release funds";
 
     const asset =
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
@@ -31,7 +31,7 @@ describe("Withdrawals", () => {
       await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
         clientDestination.getClientId(),
-        asset.getAssetId()
+        asset.getAssetId(),
       );
 
     const withdrawalRequest: WithdrawalRequest =
@@ -41,7 +41,7 @@ describe("Withdrawals", () => {
         AmountValueObject.create(amount),
         reference,
         WithdrawalType.INTERNAL,
-        WithdrawalPurpose.LOAN
+        WithdrawalPurpose.LOAN,
       );
 
     await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
@@ -53,7 +53,7 @@ describe("Withdrawals", () => {
       await ClientMongoRepository.instance().findByClientId(clientId);
     const counterpartyId = "de776990-dda0-4c17-983b-56ef95631fdb";
 
-    const amount = 989;
+    const amount = 2.6;
     const reference = "first external withdrawal request test";
     const asset =
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
@@ -62,7 +62,7 @@ describe("Withdrawals", () => {
       await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId(
         clientOrigin.getClientId(),
         counterpartyId,
-        asset.getAssetId()
+        asset.getAssetId(),
       );
 
     console.log("counterparty", counterparty);
@@ -74,7 +74,7 @@ describe("Withdrawals", () => {
         AmountValueObject.create(amount),
         reference,
         WithdrawalType.EXTERNAL,
-        WithdrawalPurpose.LOAN
+        WithdrawalPurpose.LOAN,
       );
 
     await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
