@@ -74,7 +74,7 @@ describe("Wallet", () => {
     const paymentAddress =
       await WalletMongoRepository.instance().findPaymentAddressesByClientIdAndByAssetId(
         clientId,
-        undefined,
+        undefined
       );
   });
 
@@ -82,7 +82,7 @@ describe("Wallet", () => {
     const wallet: IWallet =
       await WalletMongoRepository.instance().findWalletsByClientIdAndAssetId(
         "FSilva187263254",
-        "BITCOIN_TESTNET_BTC",
+        "BITCOIN_TESTNET_BTC"
       );
 
     wallet.updateLookBalance(0.000056);
@@ -98,10 +98,10 @@ describe("Wallet", () => {
     const clientId = "DANIELLEE002";
     const walletRepo = WalletMongoRepository.instance();
 
-    const assetCode = "PAB";
+    const assetCode = "USD_PA";
     const assetRepo = AssetMongoRepository.instance();
     const pab = await assetRepo.findAssetByCode(assetCode);
-    console.log("pab", pab);
+    console.log("USD_PA", pab);
 
     const client =
       await ClientMongoRepository.instance().findByClientId(clientId);
@@ -122,14 +122,14 @@ describe("Wallet", () => {
       pab,
       client,
       WalletType.FIAT,
-      instructionForDeposits,
+      instructionForDeposits
     );
 
     await walletRepo.insert(walletPayload);
 
     const res = await walletRepo.findPaymentAddressesByClientIdAndByAssetId(
       clientId,
-      pab.getAssetId(),
+      pab.getAssetId()
     );
 
     console.log("res", res);
@@ -143,7 +143,8 @@ describe("Wallet", () => {
     const clientOriginId = "MSerrano181263254";
     const clientDestinationId = "FSilva187263254";
 
-    const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+    const asset =
+      await AssetMongoRepository.instance().findAssetByCode("USD_PA");
     const amount = 1.25;
 
     const withdrawalId = await new MakeRequestInternalTransfer(
@@ -151,13 +152,13 @@ describe("Wallet", () => {
       WalletMongoRepository.instance(),
       AssetMongoRepository.instance(),
       WithdrawalRequestMongoRepository.instance(),
-      CounterpartyMongoRepository.instance(),
+      CounterpartyMongoRepository.instance()
     ).run(
       clientOriginId,
       clientDestinationId,
       amount,
       asset.getAssetCode(),
-      "1st test",
+      "1st test"
     );
 
     console.log("===== withdrawalId", withdrawalId);
@@ -173,7 +174,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
   const clientOriginId = "MSerrano181263254";
   const clientDestinationId = "FSilva187263254";
 
-  const asset = await AssetMongoRepository.instance().findAssetByCode("PAB");
+  const asset = await AssetMongoRepository.instance().findAssetByCode("USD_PA");
 
   const withdrawalId = "1d9f5b56-e905-46e9-8a85-b50ae4cb4318";
 
@@ -192,7 +193,7 @@ it("Should finish a withdrawal request and create a transaction", async () => {
     true,
     withdrawal.getCounterparty(),
     TransactionType.WITHDRAW,
-    WithdrawalStatus.PROCESSED,
+    WithdrawalStatus.PROCESSED
   );
 
   await transactionRepo.upsert(transaction);
@@ -202,13 +203,13 @@ it("Should finish a withdrawal request and create a transaction", async () => {
   const originWallet: IWallet =
     await walletRepo.findWalletsByClientIdAndAssetId(
       clientOriginId,
-      asset.getAssetId(),
+      asset.getAssetId()
     );
 
   const destinationWallet: IWallet =
     await walletRepo.findWalletsByClientIdAndAssetId(
       clientDestinationId,
-      asset.getAssetId(),
+      asset.getAssetId()
     );
 
   await updateACHWallet(originWallet, amount, false);
@@ -218,19 +219,19 @@ it("Should finish a withdrawal request and create a transaction", async () => {
 const updateACHWallet = async (
   wallet: IWallet,
   amount: number,
-  isCredit = true,
+  isCredit = true
 ) => {
   const walletRepo = WalletMongoRepository.instance();
 
   if (isCredit) {
     wallet.setNewBalance(
       wallet.getBalance() + amount,
-      wallet.getLockedBalance(),
+      wallet.getLockedBalance()
     );
   } else {
     wallet.setNewBalance(
       wallet.getBalance() - amount,
-      -wallet.getLockedBalance() - amount,
+      -wallet.getLockedBalance() - amount
     );
   }
 
