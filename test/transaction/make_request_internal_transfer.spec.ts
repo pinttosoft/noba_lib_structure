@@ -50,12 +50,13 @@ describe("Make request internal transfer", () => {
     });
 
     it("should search transaction", async () => {
+      const clientId = "";
       const transaction =
-        await TransactionMongoRepository.instance().findWithdrawByAssetIdAndAmountAndStatusAndReference(
+        await TransactionMongoRepository.instance().findTransactionByAssetIdAmountStatusClientId(
           "FIAT_TESTNET_PAB",
           -7,
           WithdrawalStatus.IN_PROCESS,
-          "External ACH old",
+          clientId,
         );
       //transaction.markAsCompleted();
 

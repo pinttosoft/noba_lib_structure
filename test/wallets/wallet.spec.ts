@@ -222,11 +222,10 @@ it("Should finish an external withdrawal request and create a transaction", asyn
   const transactionRepo = TransactionMongoRepository.instance();
 
   const clientOriginId = "MSerrano181263254";
-  const clientDestinationId = "FSilva187263254";
 
   const asset = await AssetMongoRepository.instance().findAssetByCode("USD_PA");
 
-  const withdrawalId = "dccae0ef-3850-4668-9e1b-5c7c76869751";
+  const withdrawalId = "b14432d2-f1d7-4479-a507-9697362b9c18";
 
   const withdrawal = await withdrawalRepo.findByWithdrawalId(withdrawalId);
 
@@ -268,9 +267,9 @@ const updateACHWallet = async (
 
   if (isCredit) {
     /*wallet.setNewBalance(
-                  wallet.getBalance() + amount,
-                  wallet.getLockedBalance(),
-                );*/
+                      wallet.getBalance() + amount,
+                      wallet.getLockedBalance(),
+                    );*/
     wallet.releaseFunds(amount);
   } else {
     wallet.setNewBalance(
