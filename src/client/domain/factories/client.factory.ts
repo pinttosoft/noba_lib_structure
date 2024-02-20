@@ -35,6 +35,8 @@ export class ClientFactory {
       .setClientData(clientData)
       .setFeeWire(await systemConfig.getDefaultFeeWire())
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
+      .setFeeRechargingCard(await systemConfig.getDefaultFeeRechargingCard())
+      .setFeeACHPanama(await systemConfig.getDefaultFeeACHPAB())
 
       .build();
 

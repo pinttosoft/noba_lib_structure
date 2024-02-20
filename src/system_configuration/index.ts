@@ -6,9 +6,11 @@ export { FeeSwapDTO } from "./domain/types/fee_swap.type";
 
 export { FeeWireDTO } from "./domain/types/fee_wire.type";
 export { FeeACHPAB } from "./domain/types/fee_ach_pab.type";
+export { FeeRechargingCard } from "./domain/types/fee_recharging_card.type";
 
 export { FeeSwapForProgramReferralsDTO } from "./domain/types/fee_swap_for_program_referrals.type";
 export { FeeSwap } from "./domain/fee_swap";
 export { FeeWire } from "./domain/fee_wire";
 export { FeeSwapForProgramReferrals } from "./domain/fee_swap_for_program_referrals";
 export { FeeACHPanama } from "./domain/feeACHPanama";
+export { CommissionForRechargingCard } from "./domain/commission_for_recharging_card";
