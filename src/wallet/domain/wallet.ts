@@ -202,7 +202,19 @@ export class Wallet extends AggregateRoot implements IWallet {
   }
 
   releaseFunds(amount: number): IWallet {
-    this.setNewBalance(this.getBalance() + amount, this.getLockedBalance());
+    let d = 3;
+
+    if (
+      this.getAsset().getAssetCode() !== "USD" &&
+      this.getAsset().getAssetCode() !== "USD_PA"
+    ) {
+      d = 8;
+    }
+
+    this.setNewBalance(
+      Number((Number(this.getBalance()) + Number(amount)).toFixed(d)),
+      this.getLockedBalance(),
+    );
 
     return this;
   }
