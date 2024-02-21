@@ -6,6 +6,7 @@ export class BankingRails extends AggregateRoot {
   private countryName: string;
   private assetCountry: string;
   private rails: Array<string>;
+  private provider: string;
 
   getId(): string {
     return this.id;
@@ -26,6 +27,7 @@ export class BankingRails extends AggregateRoot {
     rail.countryName = data.countryName;
     rail.assetCountry = data.assetCountry;
     rail.rails = data.rails;
+    rail.provider = data.provider;
 
     return rail;
   }
@@ -36,6 +38,7 @@ export class BankingRails extends AggregateRoot {
       countryName: this.countryName,
       assetCountry: this.assetCountry,
       rails: this.rails,
+      provider: this.provider,
     };
   }
 }
