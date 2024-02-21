@@ -351,6 +351,10 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.residencyStatus;
   }
 
+  getFeeRechargingCard(): CommissionForRechargingCard {
+    return this.feeRechargingCard;
+  }
+
   getFeeSwap(): FeeSwap {
     return this.feeSwap;
   }
