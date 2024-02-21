@@ -144,7 +144,7 @@ export class Wallet extends AggregateRoot implements IWallet {
 
     if (
       this.getAsset().getAssetCode() !== "USD" &&
-      this.getAsset().getAssetCode() !== "PAB"
+      this.getAsset().getAssetCode() !== "USD_PA"
     ) {
       d = 8;
     }
