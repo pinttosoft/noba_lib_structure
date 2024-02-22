@@ -71,6 +71,7 @@ export class RegisterOrSearchCounterpartyInternal {
 
       counterparty = CounterpartyBank.newCounterparty(
         {
+          assetId: asset.getAssetId(),
           profileType:
             clientDestination.getClientType() === AccountType.INDIVIDUAL
               ? CounterpartyProfileType.INDIVIDUAL
@@ -90,7 +91,6 @@ export class RegisterOrSearchCounterpartyInternal {
             name: clientDestination.getName(),
           },
           id: instruction.id,
-          assetId: wallet.getAsset().getAssetId(),
           accountNumber: instruction.WIRE.accountNumber,
         },
         CounterpartyStatus.ACTIVE,
