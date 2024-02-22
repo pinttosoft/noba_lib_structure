@@ -11,4 +11,10 @@ export interface IWorldRepository {
   ): Promise<CityType[]>;
 
   findCountries(): Promise<CountryType[]>;
+
+  createCountry(country: CountryType): Promise<void>;
+
+  deleteCountry(countryId: string): Promise<void>;
+
+  editCountry(updatedCountry: CountryType): Promise<void>;
 }

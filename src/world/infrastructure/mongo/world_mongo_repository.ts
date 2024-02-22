@@ -57,4 +57,28 @@ export class WorldMongoRepository
       .sort("name", -1)
       .toArray();
   }
+
+  async createCountry(country: CountryType): Promise<void> {
+    this.collectName = "countries";
+    const collection = await this.collection();
+
+    await collection.insertOne(country);
+  }
+
+  async deleteCountry(countryId: string): Promise<void> {
+    this.collectName = "countries";
+    const collection = await this.collection();
+
+    await collection.deleteOne({ country_id: countryId });
+  }
+
+  async editCountry(updatedCountry: CountryType): Promise<void> {
+    this.collectName = "countries";
+    const collection = await this.collection();
+
+    await collection.updateOne(
+      { country_id: updatedCountry.country_id },
+      { $set: updatedCountry },
+    );
+  }
 }
