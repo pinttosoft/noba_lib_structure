@@ -16,8 +16,24 @@ export class BankingRails extends AggregateRoot {
     return this.countryCode;
   }
 
+  setCountryCode(countryCode: string) {
+    this.countryCode = countryCode;
+  }
+
+  getCountryName() {
+    return this.countryName;
+  }
+
+  setCountryName(countryName: string) {
+    this.countryName = countryName;
+  }
+
   getAssetCountry(): string {
     return this.assetCountry;
+  }
+
+  setAssetCountry(assetCountry: string) {
+    this.assetCountry = assetCountry;
   }
 
   fromPrimitives(data: any): BankingRails {
