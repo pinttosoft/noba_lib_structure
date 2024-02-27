@@ -183,10 +183,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   updateBalance(amount: number): IWallet {
     let d = 3;
 
-    if (
-      this.getAsset().getAssetCode() !== "USD" &&
-      this.getAsset().getAssetCode() !== "USD_PA"
-    ) {
+    if (this.getAsset().isCryptoAsset()) {
       d = 8;
     }
 
