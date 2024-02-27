@@ -142,10 +142,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   updateLockedBalance(amount: number): IWallet {
     let d = 3;
 
-    if (
-      this.getAsset().getAssetCode() !== "USD" &&
-      this.getAsset().getAssetCode() !== "USD_PA"
-    ) {
+    if (this.getAsset().isCryptoAsset()) {
       d = 8;
     }
 
@@ -166,10 +163,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   releaseBlockedBalance(amount: number): IWallet {
     let d = 3;
 
-    if (
-      this.getAsset().getAssetCode() !== "USD" &&
-      this.getAsset().getAssetCode() !== "USD_PA"
-    ) {
+    if (this.getAsset().isCryptoAsset()) {
       d = 8;
     }
 
@@ -201,10 +195,7 @@ export class Wallet extends AggregateRoot implements IWallet {
   releaseFunds(amount: number): IWallet {
     let d = 3;
 
-    if (
-      this.getAsset().getAssetCode() !== "USD" &&
-      this.getAsset().getAssetCode() !== "USD_PA"
-    ) {
+    if (this.getAsset().isCryptoAsset()) {
       d = 8;
     }
 
