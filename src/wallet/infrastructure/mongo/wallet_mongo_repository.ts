@@ -227,6 +227,29 @@ export class WalletMongoRepository
     );
   }
 
+  async findWalletsByClientIdAndAssetCode(
+    clientId: string,
+    assetCode: string,
+  ): Promise<IWallet | undefined> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<WalletDocument>({
+      clientId,
+      assetCode,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return WalletFactory.fromPrimitives(
+      result._id.toString(),
+      result,
+      await ClientMongoRepository.instance().findByClientId(clientId),
+      await AssetMongoRepository.instance().findById(result.assetId),
+    );
+  }
+
   async findWalletByClientIdAndWalletId(
     clientId: string,
     walletId: string,
