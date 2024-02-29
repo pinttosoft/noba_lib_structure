@@ -1,4 +1,5 @@
 export enum DocumentType {
+  SELFIE = "selfie",
   PASSPORT = "passport",
   DRIVERS_LICENSE = "drivers_license",
   GOVERNMENT_ID = "government_id",

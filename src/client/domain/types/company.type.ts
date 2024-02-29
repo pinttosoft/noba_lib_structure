@@ -14,6 +14,8 @@ type companyType = {
     webSite: string;
     registeredAddress: Address;
     physicalAddress: Address;
+    phoneCountry: string;
+    phoneNumber: string;
   };
   documents: {
     patch: string;

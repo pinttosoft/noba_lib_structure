@@ -200,7 +200,7 @@ export class WalletMongoRepository
       result._id.toString(),
       result,
       await ClientMongoRepository.instance().findByClientId(clientId),
-      await AssetMongoRepository.instance().findById(result.assetId),
+      await AssetMongoRepository.instance().findById(assetId),
     );
   }
 
