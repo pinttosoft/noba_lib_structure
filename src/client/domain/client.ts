@@ -48,7 +48,8 @@ export class Client extends AggregateRoot implements IClient {
   private addressShipping: Address;
 
   setAddressShipping(address: Address): Client {
-    this.addressShipping = { ...address, isBilling: true };
+    this.addressShipping = { ...address, isShipping: true };
+    this.clientData.addressShipping = this.addressShipping;
     return this;
   }
 

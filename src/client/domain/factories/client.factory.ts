@@ -61,6 +61,7 @@ export class ClientFactory {
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
+        .setAddressShipping(data.addressShipping ?? {})
         .setClientId(data.clientId);
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL

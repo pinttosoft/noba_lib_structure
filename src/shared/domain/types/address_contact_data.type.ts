@@ -7,7 +7,7 @@ export type Address = {
   country: string;
   number?: string;
   apartmentNumber?: string;
-  isBilling?: boolean;
+  isShipping?: boolean;
 };
 
 export type ContactInformation = {
