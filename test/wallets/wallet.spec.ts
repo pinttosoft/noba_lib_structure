@@ -267,10 +267,10 @@ const updateACHWallet = async (
 
   if (isCredit) {
     /*wallet.setNewBalance(
-                      wallet.getBalance() + amount,
-                      wallet.getLockedBalance(),
-                    );*/
-    wallet.releaseFunds(amount);
+                          wallet.getBalance() + amount,
+                          wallet.getLockedBalance(),
+                        );*/
+    wallet.addFunds(amount);
   } else {
     wallet.setNewBalance(
       wallet.getBalance() - amount,
