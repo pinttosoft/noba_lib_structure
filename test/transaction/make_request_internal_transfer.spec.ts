@@ -62,6 +62,7 @@ describe("Make request internal transfer", () => {
 
       //console.log("transaction", transaction);
       console.log("transaction", transaction.getTransactionId());
+      expect(transaction.getTransactionId()).not.toBe(null);
     });
   });
 });
