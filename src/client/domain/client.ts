@@ -19,6 +19,8 @@ import { ResidencyStatus } from "./enums/residency_status";
 import { FeeACHPanama, FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
+import { InvestmentProfile } from "./types/investment-profile.type";
+import { KycProfileType } from "./types/kyc-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -456,6 +458,33 @@ export class Client extends AggregateRoot implements IClient {
   // si es una empresa retorna los documentos de la empresa
   getPrincipalDocuments(): Documents[] {
     return this.documents;
+  }
+
+  getInvestmentProfile(): InvestmentProfile {
+    return {
+      monthlyCryptoDeposits: this.clientData.monthlyCryptoDeposits ?? "",
+      monthlyCryptoInvestmentDeposit:
+        this.clientData.monthlyCryptoInvestmentDeposit ?? "",
+      monthlyCryptoInvestmentWithdrawal:
+        this.clientData.monthlyCryptoInvestmentWithdrawal ?? "",
+      monthlyCryptoWithdrawals: this.clientData.monthlyCryptoWithdrawals ?? "",
+      monthlyDeposits: this.clientData.monthlyDeposits ?? "",
+      monthlyInvestmentDeposit: this.clientData.monthlyInvestmentDeposit ?? "",
+      monthlyInvestmentWithdrawal:
+        this.clientData.monthlyInvestmentWithdrawal ?? "",
+      monthlyWithdrawals: this.clientData.monthlyWithdrawals ?? "",
+      primarySourceOfFunds: this.clientData.primarySourceOfFunds ?? "",
+      usdValueOfCrypto: this.clientData.usdValueOfCrypto ?? "",
+      usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
+    };
+  }
+
+  getKYCProfile(): KycProfileType {
+    return {
+      fundsSendReceiveJurisdictions:
+        this.clientData.fundsSendReceiveJurisdictions ?? "",
+      engageInActivities: this.clientData.engageInActivities ?? "",
+    };
   }
 
   toPrimitives(): any {
