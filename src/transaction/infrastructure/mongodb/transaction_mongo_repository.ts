@@ -107,7 +107,7 @@ export class TransactionMongoRepository
     initDoc: number,
   ): Promise<Paginate<Transaction>> {
     const filterAccountId: Map<string, string> = new Map([
-      ["field", "accountId"],
+      ["field", "clientId"],
       ["operator", Operator.EQUAL],
       ["value", accountId],
     ]);
