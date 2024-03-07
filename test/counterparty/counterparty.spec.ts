@@ -64,7 +64,7 @@ describe("Counterparty", () => {
       Filters.fromValues([filterClientId, filterCounterpartyType]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       20,
-      1
+      1,
     );
 
     const result = await CounterpartyMongoRepository.instance().list(criteria);
@@ -77,14 +77,14 @@ describe("Counterparty", () => {
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        "ABejarano187263254"
+        "ABejarano187263254",
       );
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
 
     const counterparty = await new RegisterOrSearchCounterpartyInternal(
       WalletMongoRepository.instance(),
-      CounterpartyMongoRepository.instance()
+      CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
     console.log(counterparty);
     expect(counterparty.getCounterpartyId()).toBe("ABejarano187263254");
@@ -96,14 +96,14 @@ describe("Counterparty", () => {
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        "MSerrano181263254"
+        "MSerrano181263254",
       );
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
 
     const counterparty = await new RegisterOrSearchCounterpartyInternal(
       WalletMongoRepository.instance(),
-      CounterpartyMongoRepository.instance()
+      CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
     expect(counterparty.getCounterpartyId()).toBe("MSerrano181263254");
   });
@@ -115,14 +115,14 @@ describe("Counterparty", () => {
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        "MSerrano181263254"
+        "MSerrano181263254",
       );
 
     const asset = await AssetMongoRepository.instance().findAssetByCode("USD");
 
     const counterparty = await new RegisterOrSearchCounterpartyInternal(
       WalletMongoRepository.instance(),
-      CounterpartyMongoRepository.instance()
+      CounterpartyMongoRepository.instance(),
     ).run(clientOrigin, clientDestination, asset);
 
     console.log("counterparty", counterparty);
@@ -180,13 +180,14 @@ describe("Counterparty", () => {
 
   it("Should register an ach pab counterparty internal ", async () => {
     const clientId = "MSerrano181263254";
-    const clientDestinationId = "FSilva187263254";
+    const clientDestinationId2 = "FSilva187263254";
+    const clientDestinationId = "ABejarano187263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
 
     const clientDestination =
       await ClientMongoRepository.instance().findByClientId(
-        clientDestinationId
+        clientDestinationId,
       );
 
     const asset =
@@ -210,15 +211,26 @@ describe("Counterparty", () => {
       counterpartyType: CounterpartyType.FIAT,
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
+      informationOwner: {
+        name: clientDestination.getName(),
+        address: {
+          country: "BR",
+          streetOne: "",
+          streetTwo: "",
+          postalCode: "",
+          city: "",
+          region: "",
+        },
+      },
     };
 
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
       payload,
-      true
+      true,
     );
     await CounterpartyMongoRepository.instance().upsert(counterparty);
 
-    console.log("-counterparty", counterparty.toPrimitives());
+    //console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
     //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
   });
@@ -226,11 +238,11 @@ describe("Counterparty", () => {
   it("Should register a pab counterparty external ", async () => {
     const webPayload = {
       clientId: "MSerrano181263254",
-      clientDestinationId: "FSilva187263254",
+      clientDestinationId: "ABejarano187263254",
     };
     const assetCode = "USD_PA";
     const clientOrigin = await ClientMongoRepository.instance().findByClientId(
-      webPayload.clientId
+      webPayload.clientId,
     );
 
     const asset =
@@ -255,11 +267,22 @@ describe("Counterparty", () => {
       counterpartyType: CounterpartyType.FIAT,
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
+      informationOwner: {
+        name: "Jose",
+        address: {
+          country: "BR",
+          streetOne: "",
+          streetTwo: "",
+          postalCode: "",
+          city: "",
+          region: "",
+        },
+      },
     };
 
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
       payload,
-      false
+      false,
     );
 
     await CounterpartyMongoRepository.instance().upsert(counterparty);
@@ -297,6 +320,6 @@ const prepare = (payload: any) => {
     Filters.fromValues([filterBeneficiaryType, filterClientId, filterAssetId]),
     Order.fromValues("createdAt", OrderTypes.DESC),
     20,
-    payload.page
+    payload.page,
   );
 };
