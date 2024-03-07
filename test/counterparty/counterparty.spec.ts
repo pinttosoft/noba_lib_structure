@@ -2,6 +2,7 @@ import {
   AssetMongoRepository,
   ClientMongoRepository,
   CounterpartyAchPab,
+  CounterpartyAchPabDtoType,
   CounterpartyFactoryDTO,
   CounterpartyMongoRepository,
   CounterpartyStatus,
@@ -18,7 +19,6 @@ import {
   WalletMongoRepository,
 } from "../../src";
 import * as console from "console";
-import { CounterpartyAchPabDtoType } from "../../src/banking/domain/types/counterparty_ach_pab_dto.type";
 import { v4 } from "uuid";
 
 describe("Counterparty", () => {

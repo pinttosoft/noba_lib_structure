@@ -19,6 +19,8 @@ import { ResidencyStatus } from "./enums/residency_status";
 import { FeeACHPanama, FeeSwap, FeeWire } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
+import { InvestmentProfile } from "./types/investment-profile.type";
+import { KycProfileType } from "./types/kyc-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -189,8 +191,8 @@ export class Client extends AggregateRoot implements IClient {
       throw new InvalidMethodForClientType(this.clientType, "getNaics");
     }
     return {
-      code: this.clientData.naics,
-      description: this.clientData.naicsDescription,
+      code: this.clientData.informationCompany.naics,
+      description: this.clientData.informationCompany.naicsDescription,
     };
   }
 
@@ -201,14 +203,31 @@ export class Client extends AggregateRoot implements IClient {
         "getEstablishedDate",
       );
     }
-    return this.clientData.established_date;
+    return this.clientData.informationCompany.establishedDate;
   }
 
   getWebSite(): string {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(this.clientType, "getWebSite");
     }
-    return this.clientData.webSite;
+    return this.clientData.informationCompany.webSite;
+  }
+
+  getEmploymentStatus() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getEmploymentStatus",
+      );
+    }
+    return this.clientData.employmentStatus;
+  }
+
+  getOccupation() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType, "getOccupation");
+    }
+    return this.clientData.occupation;
   }
 
   getClientId(): string {
@@ -456,6 +475,33 @@ export class Client extends AggregateRoot implements IClient {
   // si es una empresa retorna los documentos de la empresa
   getPrincipalDocuments(): Documents[] {
     return this.documents;
+  }
+
+  getInvestmentProfile(): InvestmentProfile {
+    return {
+      monthlyCryptoDeposits: this.clientData.monthlyCryptoDeposits ?? "",
+      monthlyCryptoInvestmentDeposit:
+        this.clientData.monthlyCryptoInvestmentDeposit ?? "",
+      monthlyCryptoInvestmentWithdrawal:
+        this.clientData.monthlyCryptoInvestmentWithdrawal ?? "",
+      monthlyCryptoWithdrawals: this.clientData.monthlyCryptoWithdrawals ?? "",
+      monthlyDeposits: this.clientData.monthlyDeposits ?? "",
+      monthlyInvestmentDeposit: this.clientData.monthlyInvestmentDeposit ?? "",
+      monthlyInvestmentWithdrawal:
+        this.clientData.monthlyInvestmentWithdrawal ?? "",
+      monthlyWithdrawals: this.clientData.monthlyWithdrawals ?? "",
+      primarySourceOfFunds: this.clientData.primarySourceOfFunds ?? "",
+      usdValueOfCrypto: this.clientData.usdValueOfCrypto ?? "",
+      usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
+    };
+  }
+
+  getKYCProfile(): KycProfileType {
+    return {
+      fundsSendReceiveJurisdictions:
+        this.clientData.fundsSendReceiveJurisdictions ?? "",
+      engageInActivities: this.clientData.engageInActivities ?? "",
+    };
   }
 
   toPrimitives(): any {

@@ -177,7 +177,6 @@ export class CounterpartyMongoRepository
       return undefined;
     }
 
-    // todo improve
     if (result.achInstructions) {
       console.log("achInstructions", result.achInstructions);
       return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
