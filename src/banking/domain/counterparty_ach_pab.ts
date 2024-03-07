@@ -1,9 +1,11 @@
 import { Counterparty } from "../../counterparty";
 import { InstructionsAchPabType } from "./types/instructions_ach_pab.type";
 import { CounterpartyAchPabDtoType } from "./types/counterparty_ach_pab_dto.type";
+import { Address } from "../../shared";
 
 export class CounterpartyAchPab extends Counterparty {
   private achInstructions: InstructionsAchPabType;
+  private ownerAddress: Address;
 
   getName(): string {
     return "";
@@ -29,11 +31,23 @@ export class CounterpartyAchPab extends Counterparty {
     c.status = data.status;
     c.achInstructions = data.achInstructions;
 
+    c.setOwnerName(data.informationOwner.name);
+    c.ownerAddress = data.informationOwner.address;
+
     return c;
+  }
+
+  getInformationOwner(): { name: string; address: Address } {
+    return {
+      name: this.ownerName,
+      address: this.ownerAddress,
+    };
   }
 
   static fromPrimitives(id: string, data: any): CounterpartyAchPab {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
+    const informationOwner = data.informationOwner;
+
     c.id = id;
     c.isInternal = data.isInternal;
     c.clientId = data.clientId;
@@ -45,6 +59,9 @@ export class CounterpartyAchPab extends Counterparty {
     c.createdAt = new Date();
     c.status = data.status;
     c.achInstructions = data.achInstructions;
+
+    c.ownerName = informationOwner.name;
+    c.ownerAddress = { ...informationOwner.address } as Address;
 
     return c;
   }
@@ -58,6 +75,7 @@ export class CounterpartyAchPab extends Counterparty {
       counterpartyType: this.counterpartyType,
       accountId: this.accountId,
       achInstructions: this.achInstructions,
+      informationOwner: this.getInformationOwner(),
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
       status: this.status,
