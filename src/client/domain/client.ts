@@ -191,8 +191,8 @@ export class Client extends AggregateRoot implements IClient {
       throw new InvalidMethodForClientType(this.clientType, "getNaics");
     }
     return {
-      code: this.clientData.naics,
-      description: this.clientData.naicsDescription,
+      code: this.clientData.informationCompany.naics,
+      description: this.clientData.informationCompany.naicsDescription,
     };
   }
 
@@ -203,14 +203,24 @@ export class Client extends AggregateRoot implements IClient {
         "getEstablishedDate",
       );
     }
-    return this.clientData.established_date;
+    return this.clientData.informationCompany.establishedDate;
   }
 
   getWebSite(): string {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(this.clientType, "getWebSite");
     }
-    return this.clientData.webSite;
+    return this.clientData.informationCompany.webSite;
+  }
+
+  getEmploymentStatus() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getEmploymentStatus",
+      );
+    }
+    return this.clientData.employmentStatus;
   }
 
   getClientId(): string {
