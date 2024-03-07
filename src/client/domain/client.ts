@@ -223,6 +223,13 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.employmentStatus;
   }
 
+  getOccupation() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType, "getOccupation");
+    }
+    return this.clientData.occupation;
+  }
+
   getClientId(): string {
     return this.clientId;
   }
