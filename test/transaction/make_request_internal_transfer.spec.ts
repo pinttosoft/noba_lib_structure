@@ -65,4 +65,30 @@ describe("Make request internal transfer", () => {
       expect(transaction.getTransactionId()).not.toBe(null);
     });
   });
+
+  it("should create wallet for receiver and create make request internal transfer of the USD", async () => {
+    const payload = {
+      amount: 123,
+      clientIdOrign: "MSerrano181263254",
+      clientIdDestination: "PPitamawi45677654",
+      reference: "Teste",
+    };
+
+    const withdrawId = await new MakeRequestInternalTransfer(
+      ClientMongoRepository.instance(),
+      WalletMongoRepository.instance(),
+      AssetMongoRepository.instance(),
+      WithdrawalRequestMongoRepository.instance(),
+      CounterpartyMongoRepository.instance(),
+    ).run(
+      payload.clientIdOrign,
+      payload.clientIdDestination,
+      payload.amount,
+      "USD",
+      payload.reference,
+    );
+
+    console.log("withdrawId", withdrawId);
+    expect(withdrawId).not.toBe(undefined);
+  });
 });
