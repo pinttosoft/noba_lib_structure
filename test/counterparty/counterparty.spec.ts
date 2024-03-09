@@ -22,6 +22,11 @@ import * as console from "console";
 import { v4 } from "uuid";
 
 describe("Counterparty", () => {
+  process.env.MONGO_PASS = "zrfhowt0cguf";
+  process.env.MONGO_USER = "noab-dev-mongodb";
+  process.env.MONGO_DB = "dbnobadev";
+  process.env.MONGO_SERVER = "cluster0.xdwtnb4.mongodb.net";
+
   it("should be create new instance to counterparty", async () => {
     const client =
       await ClientMongoRepository.instance().findByClientId("FSilva187263254");
@@ -180,7 +185,8 @@ describe("Counterparty", () => {
 
   it("Should register an ach pab counterparty internal ", async () => {
     const clientId = "MSerrano181263254";
-    const clientDestinationId = "FSilva187263254";
+    const clientDestinationId2 = "FSilva187263254";
+    const clientDestinationId = "ABejarano187263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
 
@@ -192,24 +198,26 @@ describe("Counterparty", () => {
     const asset =
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
     const instructions: InstructionsAchPabType = {
-      label: "",
-      holderEmail: "panama email",
+      label: "UN TGEST",
+      holderEmail: clientDestination.getEmail(),
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
       productType: "panama type",
-      holderId: "panama holder id",
-      holderName: "panama name",
-      concept: "panama concept",
+      holderId: clientDestination.getIDNumber(),
+      holderName: clientDestination.getName(),
     };
 
     const payload: CounterpartyAchPabDtoType = {
-      accountId: clientDestination.getAccount().getAccountId(),
       achInstructions: instructions,
       clientId: clientOrigin.getClientId(),
       counterpartyId: clientDestination.getClientId(),
       counterpartyType: CounterpartyType.FIAT,
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
+      informationOwner: {
+        name: clientDestination.getName(),
+        address: undefined,
+      },
     };
 
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(
@@ -218,7 +226,7 @@ describe("Counterparty", () => {
     );
     await CounterpartyMongoRepository.instance().upsert(counterparty);
 
-    console.log("-counterparty", counterparty.toPrimitives());
+    //console.log("-counterparty", counterparty.toPrimitives());
     //expect(counterparty.getStatus()).toBe(CounterpartyStatus.ACTIVE);
     //const currecntCOunter = await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId()
   });
@@ -226,7 +234,7 @@ describe("Counterparty", () => {
   it("Should register a pab counterparty external ", async () => {
     const webPayload = {
       clientId: "MSerrano181263254",
-      clientDestinationId: "FSilva187263254",
+      clientDestinationId: "ABejarano187263254",
     };
     const assetCode = "USD_PA";
     const clientOrigin = await ClientMongoRepository.instance().findByClientId(
@@ -237,24 +245,33 @@ describe("Counterparty", () => {
       await AssetMongoRepository.instance().findAssetByCode(assetCode);
 
     const instructions: InstructionsAchPabType = {
-      label: "",
+      label: "PANAMA LABEL",
       holderEmail: "panama email",
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
       productType: "panama type",
       holderId: "panama holder id",
       holderName: "panama name",
-      concept: "panama concept",
     };
 
     const payload: CounterpartyAchPabDtoType = {
-      accountId: null,
       achInstructions: instructions,
       clientId: clientOrigin.getClientId(),
       counterpartyId: v4(),
       counterpartyType: CounterpartyType.FIAT,
       status: CounterpartyStatus.ACTIVE,
       assetId: asset.getAssetId(),
+      informationOwner: {
+        name: "Jose",
+        address: {
+          country: "BR",
+          streetOne: "",
+          streetTwo: "",
+          postalCode: "",
+          city: "",
+          region: "",
+        },
+      },
     };
 
     const counterparty: CounterpartyAchPab = CounterpartyAchPab.newCounterparty(

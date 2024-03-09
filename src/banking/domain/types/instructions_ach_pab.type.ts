@@ -7,5 +7,4 @@ export type InstructionsAchPabType = {
   productType: string;
   holderId: string;
   holderName: string;
-  concept: string;
 };
