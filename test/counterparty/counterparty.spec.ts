@@ -198,14 +198,13 @@ describe("Counterparty", () => {
     const asset =
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
     const instructions: InstructionsAchPabType = {
-      label: "",
+      label: "UN TGEST",
       holderEmail: clientDestination.getEmail(),
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
       productType: "panama type",
       holderId: clientDestination.getIDNumber(),
       holderName: clientDestination.getName(),
-      concept: "panama concept",
     };
 
     const payload: CounterpartyAchPabDtoType = {
@@ -217,14 +216,7 @@ describe("Counterparty", () => {
       assetId: asset.getAssetId(),
       informationOwner: {
         name: clientDestination.getName(),
-        address: {
-          country: "BR",
-          streetOne: "",
-          streetTwo: "",
-          postalCode: "",
-          city: "",
-          region: "",
-        },
+        address: undefined,
       },
     };
 
@@ -260,7 +252,6 @@ describe("Counterparty", () => {
       productType: "panama type",
       holderId: "panama holder id",
       holderName: "panama name",
-      concept: "panama concept",
     };
 
     const payload: CounterpartyAchPabDtoType = {

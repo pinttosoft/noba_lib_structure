@@ -42,7 +42,9 @@ export class CounterpartyAchPab extends Counterparty {
     c.holderName = data.achInstructions.holderName;
 
     c.setOwnerName(data.informationOwner.name);
-    c.ownerCountry = data.informationOwner.address.country;
+    c.ownerCountry = data.informationOwner.address
+      ? data.informationOwner.address.country
+      : undefined;
 
     return c;
   }

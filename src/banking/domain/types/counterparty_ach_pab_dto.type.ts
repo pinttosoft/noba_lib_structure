@@ -10,5 +10,5 @@ export type CounterpartyAchPabDtoType = {
   clientId: string;
   status: CounterpartyStatus;
   achInstructions: InstructionsAchPabType;
-  informationOwner: { name: string; address: Address };
+  informationOwner: { name: string; address?: Address };
 };
