@@ -22,6 +22,11 @@ import * as console from "console";
 import { v4 } from "uuid";
 
 describe("Counterparty", () => {
+  process.env.MONGO_PASS = "zrfhowt0cguf";
+  process.env.MONGO_USER = "noab-dev-mongodb";
+  process.env.MONGO_DB = "dbnobadev";
+  process.env.MONGO_SERVER = "cluster0.xdwtnb4.mongodb.net";
+
   it("should be create new instance to counterparty", async () => {
     const client =
       await ClientMongoRepository.instance().findByClientId("FSilva187263254");
@@ -194,17 +199,16 @@ describe("Counterparty", () => {
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
     const instructions: InstructionsAchPabType = {
       label: "",
-      holderEmail: "panama email",
+      holderEmail: clientDestination.getEmail(),
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
       productType: "panama type",
-      holderId: "panama holder id",
-      holderName: "panama name",
+      holderId: clientDestination.getIDNumber(),
+      holderName: clientDestination.getName(),
       concept: "panama concept",
     };
 
     const payload: CounterpartyAchPabDtoType = {
-      accountId: clientDestination.getAccount().getAccountId(),
       achInstructions: instructions,
       clientId: clientOrigin.getClientId(),
       counterpartyId: clientDestination.getClientId(),
@@ -249,7 +253,7 @@ describe("Counterparty", () => {
       await AssetMongoRepository.instance().findAssetByCode(assetCode);
 
     const instructions: InstructionsAchPabType = {
-      label: "",
+      label: "PANAMA LABEL",
       holderEmail: "panama email",
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
@@ -260,7 +264,6 @@ describe("Counterparty", () => {
     };
 
     const payload: CounterpartyAchPabDtoType = {
-      accountId: null,
       achInstructions: instructions,
       clientId: clientOrigin.getClientId(),
       counterpartyId: v4(),
