@@ -514,7 +514,7 @@ export class Client extends AggregateRoot implements IClient {
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
-      FeeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
+      feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
       createdAt: this.createdAt,
