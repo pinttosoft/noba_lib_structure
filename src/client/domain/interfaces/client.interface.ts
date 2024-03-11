@@ -12,6 +12,8 @@ import { KycProfileType } from "../types/kyc-profile.type";
 export interface IClient {
   getId(): string;
 
+  setAccount(account: IAccount): IClient;
+
   toPrimitives(): any;
 
   getAccount(): IAccount;

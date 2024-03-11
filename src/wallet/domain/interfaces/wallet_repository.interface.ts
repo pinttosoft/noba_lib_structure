@@ -42,4 +42,6 @@ export interface IWalletRepository {
   findByInstructionForDepositId(
     instructionDepositId: string,
   ): Promise<IWallet | undefined>;
+
+  deleteByWalletId(walletId: string): Promise<void>;
 }
