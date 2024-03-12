@@ -17,7 +17,7 @@ export interface IBankingService {
   searchBankInstructionForDeposit(
     client: IClient,
     assetId: string,
-    walletLabel?: string
+    walletLabel?: string,
   ): Promise<InstructionDepositFiat>;
 
   registerCounterpartyBank(
