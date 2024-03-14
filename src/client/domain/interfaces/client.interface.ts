@@ -14,6 +14,8 @@ export interface IClient {
 
   setAccount(account: IAccount): IClient;
 
+  setAccountId(accountId: string): IClient;
+
   toPrimitives(): any;
 
   getAccount(): IAccount;
