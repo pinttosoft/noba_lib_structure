@@ -483,22 +483,26 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getInvestmentProfile(): InvestmentProfile {
-    return {
-      monthlyCryptoDeposits: this.clientData.monthlyCryptoDeposits ?? "",
-      monthlyCryptoInvestmentDeposit:
-        this.clientData.monthlyCryptoInvestmentDeposit ?? "",
-      monthlyCryptoInvestmentWithdrawal:
-        this.clientData.monthlyCryptoInvestmentWithdrawal ?? "",
-      monthlyCryptoWithdrawals: this.clientData.monthlyCryptoWithdrawals ?? "",
-      monthlyDeposits: this.clientData.monthlyDeposits ?? "",
-      monthlyInvestmentDeposit: this.clientData.monthlyInvestmentDeposit ?? "",
-      monthlyInvestmentWithdrawal:
-        this.clientData.monthlyInvestmentWithdrawal ?? "",
-      monthlyWithdrawals: this.clientData.monthlyWithdrawals ?? "",
-      primarySourceOfFunds: this.clientData.primarySourceOfFunds ?? "",
-      usdValueOfCrypto: this.clientData.usdValueOfCrypto ?? "",
-      usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
-    };
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return {
+        monthlyCryptoDeposits: this.clientData.monthlyCryptoDeposits ?? "",
+        monthlyCryptoInvestmentDeposit:
+          this.clientData.monthlyCryptoInvestmentDeposit ?? "",
+        monthlyCryptoInvestmentWithdrawal:
+          this.clientData.monthlyCryptoInvestmentWithdrawal ?? "",
+        monthlyCryptoWithdrawals:
+          this.clientData.monthlyCryptoWithdrawals ?? "",
+        monthlyDeposits: this.clientData.monthlyDeposits ?? "",
+        monthlyInvestmentDeposit:
+          this.clientData.monthlyInvestmentDeposit ?? "",
+        monthlyInvestmentWithdrawal:
+          this.clientData.monthlyInvestmentWithdrawal ?? "",
+        monthlyWithdrawals: this.clientData.monthlyWithdrawals ?? "",
+        primarySourceOfFunds: this.clientData.primarySourceOfFunds ?? "",
+        usdValueOfCrypto: this.clientData.usdValueOfCrypto ?? "",
+        usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
+      };
+    }
   }
 
   getKYCProfile(): KycProfileType {
