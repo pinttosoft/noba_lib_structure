@@ -96,6 +96,7 @@ export class CounterpartyBank extends Counterparty {
         ...data.informationIntermediaryBank,
       };
     }
+    counterparty.iban = data.iban ?? "";
 
     counterparty.profileType = data.profileType ?? "";
 
@@ -175,6 +176,7 @@ export class CounterpartyBank extends Counterparty {
       informationBank: this.getInformationBank(),
       informationIntermediaryBank: this.getInformationIntermediaryBank(),
       isInternal: this.isInternal === true ? "S" : "N",
+      profileType: this.profileType,
       createdAt: this.createdAt,
       status: this.status,
     };
