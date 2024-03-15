@@ -108,7 +108,6 @@ describe("Wallet", () => {
       holderName: client.getName(),
       bankName: "",
       productType: "",
-      concept: "",
     };
 
     const walletPayload: IWallet = WalletFactory.createNewWallet(
