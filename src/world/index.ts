@@ -7,4 +7,6 @@ export { IWorldRepository } from "./domain/interfaces/world_repository";
 export { StateNotFound } from "./domain/exceptions/state_not_found";
 export { CityNotFound } from "./domain/exceptions/city_not_found";
 
+export { Country } from "./domain/country";
+
 export { WorldMongoRepository } from "./infrastructure/mongo/world_mongo_repository";
