@@ -28,7 +28,19 @@ export class BankingRails extends AggregateRoot {
     return this.countryName;
   }
 
-  fromPrimitives(data: any): BankingRails {
+  static newBankingRail(data: any): BankingRails {
+    const rail = new BankingRails();
+    rail.id = data.id;
+    rail.countryCode = data.countryCode;
+    rail.countryName = data.countryName;
+    rail.assetCountry = data.assetCountry;
+    rail.rails = data.rails ?? data.rail;
+    rail.counterpartyType = data.counterpartyType;
+
+    return rail;
+  }
+
+  static fromPrimitives(data: any): BankingRails {
     const rail = new BankingRails();
     rail.id = data.id;
     rail.countryCode = data.countryCode;

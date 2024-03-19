@@ -11,7 +11,18 @@ export class Country extends AggregateRoot {
     return this.id;
   }
 
-  fromPrimitives(data: any): Country {
+  static newCountry(data: any): Country {
+    const country: Country = new Country();
+    country.id = data.id;
+    country.country_id = data.id;
+    country.country_code = data.country_code;
+    country.name = data.name;
+    country.calling_code = data.calling_code;
+
+    return country;
+  }
+
+  static fromPrimitives(data: any): Country {
     const country: Country = new Country();
     country.id = data.id;
     country.country_id = data.id;
