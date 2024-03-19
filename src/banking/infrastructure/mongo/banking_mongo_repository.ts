@@ -34,7 +34,7 @@ export class BankingMongoRepository
       return undefined;
     }
 
-    return new BankingRails().fromPrimitives({ id: result._id, ...result });
+    return BankingRails.newBankingRail({ id: result._id, ...result });
   }
 
   async findAllBankingRails(): Promise<BankingRails[]> {
@@ -44,8 +44,6 @@ export class BankingMongoRepository
       return [];
     }
 
-    return result.map((r) =>
-      new BankingRails().fromPrimitives({ id: r._id, ...r }),
-    );
+    return result.map((r) => BankingRails.newBankingRail({ id: r._id, ...r }));
   }
 }
