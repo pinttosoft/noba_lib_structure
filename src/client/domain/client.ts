@@ -503,6 +503,8 @@ export class Client extends AggregateRoot implements IClient {
         usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
       };
     }
+
+    return this.clientData.investmentProfile;
   }
 
   getKYCProfile(): KycProfileType {
