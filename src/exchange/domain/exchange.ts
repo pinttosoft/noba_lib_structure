@@ -165,7 +165,6 @@ export class Exchange extends AggregateRoot {
     } else {
       diff = this.baseAmount - this.destinationDetails.amountCredit;
     }
-
     return (diff / this.baseAmount) * 100;
   }
 

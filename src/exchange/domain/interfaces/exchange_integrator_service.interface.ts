@@ -1,6 +1,6 @@
 import { ExchangeMarketPayload } from "../types/exchange_market_payload.type";
 import { Exchange } from "../exchange";
-import { ExchangeRequestResponse } from "../types/exchange_response.type";
+import { ExchangeRequestResponse } from "../types/ExchangeResponse.type";
 
 export interface IExchangeIntegratorService {
   createExchange(

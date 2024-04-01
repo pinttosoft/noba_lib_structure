@@ -5,16 +5,16 @@ export type ExchangeRequestResponse = {
   id?: string;
   status: ExchangeStatus;
   createdAt: Date;
-  exchange_type: string;
+  exchangeType: string;
   action: ExchangeMarketActionType;
-  source_details: {
-    source_account_id: string;
-    asset_type_id: string;
-    amount_to_debit: number;
+  sourceDetails: {
+    sourceAccountId: string;
+    assetTypeId: string;
+    amountToDebit: number;
   };
-  destination_details: {
-    destination_account_id: string;
-    asset_type_id: string;
-    amount_to_credit: number;
+  destinationDetails: {
+    destinationAccountId: string;
+    assetTypeId: string;
+    amountToCredit: number;
   };
 };
