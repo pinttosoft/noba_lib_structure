@@ -30,6 +30,11 @@ export class WalletMongoRepository
     super(MongoClientFactory.createClient());
   }
 
+  async deleteByWalletId(walletId: string): Promise<void> {
+    const collection = await this.collection();
+    await collection.deleteOne({ walletId });
+  }
+
   static instance() {
     if (this._instance) {
       return this._instance;

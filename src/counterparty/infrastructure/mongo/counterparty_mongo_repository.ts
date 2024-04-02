@@ -118,7 +118,10 @@ export class CounterpartyMongoRepository
     return CounterpartyBank.fromPrimitives(result._id.toString(), result);
   }
 
-  async list(criteria: Criteria): Promise<Paginate<Counterparty> | undefined> {
+  async list(
+    criteria: Criteria,
+    assetCode?: string,
+  ): Promise<Paginate<Counterparty> | undefined> {
     let document: any[] = await this.searchByCriteria<any>(criteria);
 
     document = document.map((d): Counterparty => {
@@ -126,7 +129,7 @@ export class CounterpartyMongoRepository
         return CounterpartyAsset.fromPrimitives(d._id.toString(), d);
       }
 
-      if (d.achInstructions) {
+      if (assetCode && assetCode === "USD_PA") {
         return CounterpartyAchPab.fromPrimitives(d._id.toString(), d);
       }
 
@@ -177,7 +180,6 @@ export class CounterpartyMongoRepository
       return undefined;
     }
 
-    // todo improve
     if (result.achInstructions) {
       console.log("achInstructions", result.achInstructions);
       return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);

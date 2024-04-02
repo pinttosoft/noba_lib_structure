@@ -9,11 +9,17 @@ import {
 } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
-import { IndividualDTO, individualType } from "../types/Individual.type";
+import { IndividualDTO } from "../types/Individual.type";
 import { KycAction } from "../types/kyc-action.type";
+import { InvestmentProfile } from "../types/investment-profile.type";
+import { KycProfileType } from "../types/kyc-profile.type";
 
 export interface IClient {
   getId(): string;
+
+  setAccount(account: IAccount): IClient;
+
+  setAccountId(accountId: string): IClient;
 
   getAddressShipping(): Address;
 
@@ -109,5 +115,18 @@ export interface IClient {
 
   deleteAllDocumentsPartners(dni: string): void;
 
-  getCompanyPartners(): individualType[] | undefined;
+  getCompanyPartners(): IndividualDTO[] | undefined;
+
+  getInvestmentProfile(): InvestmentProfile;
+
+  getKYCProfile(): KycProfileType;
+
+  getOccupation(): string;
+
+  getEmploymentStatus(): string;
+
+  setCustomerIdentifierInServiceProvider(
+    partnerIdProviderService: string,
+    partnerDNI: string,
+  ): void;
 }

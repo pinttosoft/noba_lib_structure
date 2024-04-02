@@ -24,6 +24,8 @@ import {
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
+import { InvestmentProfile } from "./types/investment-profile.type";
+import { KycProfileType } from "./types/kyc-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -98,6 +100,11 @@ export class Client extends AggregateRoot implements IClient {
   setAccount(account: IAccount): Client {
     this.account = account;
     this.accountId = account.getAccountId();
+    return this;
+  }
+
+  setAccountId(accountId: string): Client {
+    this.accountId = accountId;
     return this;
   }
 
@@ -225,8 +232,8 @@ export class Client extends AggregateRoot implements IClient {
       throw new InvalidMethodForClientType(this.clientType, "getNaics");
     }
     return {
-      code: this.clientData.naics,
-      description: this.clientData.naicsDescription,
+      code: this.clientData.informationCompany.naics,
+      description: this.clientData.informationCompany.naicsDescription,
     };
   }
 
@@ -237,14 +244,31 @@ export class Client extends AggregateRoot implements IClient {
         "getEstablishedDate",
       );
     }
-    return this.clientData.established_date;
+    return this.clientData.informationCompany.establishedDate;
   }
 
   getWebSite(): string {
     if (this.clientType === AccountType.INDIVIDUAL) {
       throw new InvalidMethodForClientType(this.clientType, "getWebSite");
     }
-    return this.clientData.webSite;
+    return this.clientData.informationCompany.webSite;
+  }
+
+  getEmploymentStatus() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(
+        this.clientType,
+        "getEmploymentStatus",
+      );
+    }
+    return this.clientData.employmentStatus;
+  }
+
+  getOccupation() {
+    if (this.clientType !== AccountType.INDIVIDUAL) {
+      throw new InvalidMethodForClientType(this.clientType, "getOccupation");
+    }
+    return this.clientData.occupation;
   }
 
   getClientId(): string {
@@ -512,6 +536,70 @@ export class Client extends AggregateRoot implements IClient {
     return this.documents;
   }
 
+  getInvestmentProfile(): InvestmentProfile {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return {
+        monthlyCryptoDeposits: this.clientData.monthlyCryptoDeposits ?? "",
+        monthlyCryptoInvestmentDeposit:
+          this.clientData.monthlyCryptoInvestmentDeposit ?? "",
+        monthlyCryptoInvestmentWithdrawal:
+          this.clientData.monthlyCryptoInvestmentWithdrawal ?? "",
+        monthlyCryptoWithdrawals:
+          this.clientData.monthlyCryptoWithdrawals ?? "",
+        monthlyDeposits: this.clientData.monthlyDeposits ?? "",
+        monthlyInvestmentDeposit:
+          this.clientData.monthlyInvestmentDeposit ?? "",
+        monthlyInvestmentWithdrawal:
+          this.clientData.monthlyInvestmentWithdrawal ?? "",
+        monthlyWithdrawals: this.clientData.monthlyWithdrawals ?? "",
+        primarySourceOfFunds: this.clientData.primarySourceOfFunds ?? "",
+        usdValueOfCrypto: this.clientData.usdValueOfCrypto ?? "",
+        usdValueOfFiat: this.clientData.usdValueOfFiat ?? "",
+      };
+    }
+
+    return this.clientData.investmentProfile;
+  }
+
+  getKYCProfile(): KycProfileType {
+    if (this.clientType === AccountType.INDIVIDUAL) {
+      return {
+        businessJurisdictions: [],
+        fundsSendReceiveJurisdictions:
+          this.clientData.fundsSendReceiveJurisdictions ?? "",
+        engageInActivities: this.clientData.engageInActivities ?? "",
+        regulatedStatus: "",
+        descriptionBusinessNature: "",
+      };
+    }
+    return {
+      businessJurisdictions:
+        this.clientData.kycProfile.fundsSendReceiveJurisdictions ?? "",
+      fundsSendReceiveJurisdictions:
+        this.clientData.kycProfile.fundsSendReceiveJurisdictions ?? "",
+      engageInActivities: this.clientData.kycProfile.engageInActivities ?? "",
+      regulatedStatus: this.clientData.kycProfile.regulatedStatus,
+      descriptionBusinessNature:
+        this.clientData.kycProfile.descriptionBusinessNature ?? "",
+    };
+  }
+
+  setCustomerIdentifierInServiceProvider(
+    serviceProviderId: string,
+    partnerDNI: string,
+  ): void {
+    const partnerIndex = this.clientData.partners.findIndex(
+      (partner: IndividualDTO) => partner.dni === partnerDNI,
+    );
+
+    if (partnerIndex === -1) {
+      throw new GenericException("Partner not found");
+    }
+
+    this.clientData.partners[partnerIndex].serviceProviderId =
+      serviceProviderId;
+  }
+
   toPrimitives(): any {
     return {
       isSegregated: this.isSegregated,
@@ -522,7 +610,7 @@ export class Client extends AggregateRoot implements IClient {
       status: this.status,
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
-      FeeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
+      feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       feeRechargingCard: this.feeRechargingCard.toPrimitives(),
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,

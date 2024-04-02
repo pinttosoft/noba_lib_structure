@@ -8,9 +8,20 @@ import {
 import { ICounterpartyRepository } from "../domain/interfaces/counterparty_repository.interface";
 import { Counterparty } from "../domain/counterparty.abstract";
 import { IClient } from "../../client";
-import { Asset, CounterpartyAsset, WalletInformationDTO } from "../../asset";
+import {
+  Asset,
+  AssetClassification,
+  CounterpartyAsset,
+  WalletInformationDTO,
+} from "../../asset";
 import { RelationshipConsumer } from "../domain/enums/relationship_consumer.enum";
-import { CounterpartyBank, InstructionDepositFiat } from "../../banking";
+import {
+  CounterpartyAchPab,
+  CounterpartyAchPabDtoType,
+  CounterpartyBank,
+  InstructionDepositFiat,
+  InstructionsAchPabType,
+} from "../../banking";
 import { CounterpartyType } from "../domain/enums/counterparty_type.enum";
 import { AccountType, CounterpartyProfileType, logger } from "../../index";
 import { CounterpartyStatus } from "../domain/enums/counterparty_status.enum";
@@ -45,7 +56,7 @@ export class RegisterOrSearchCounterpartyInternal {
       clientDestination,
     );
 
-    if (asset.getAssetCode() !== "USD") {
+    if (asset.getAssetClassification() !== AssetClassification.FIAT) {
       counterparty = CounterpartyAsset.newCounterparty(
         clientDestination.getClientId(),
         clientOrigin,
@@ -65,7 +76,9 @@ export class RegisterOrSearchCounterpartyInternal {
         CounterpartyStatus.ACTIVE,
         true,
       );
-    } else {
+    }
+
+    if (asset.getAssetCode() === "USD") {
       const instruction: InstructionDepositFiat =
         wallet.getInstructionForDeposit() as InstructionDepositFiat;
 
@@ -96,6 +109,32 @@ export class RegisterOrSearchCounterpartyInternal {
         CounterpartyStatus.ACTIVE,
         true,
       );
+    }
+
+    if (asset.getAssetCode() === "USD_PA") {
+      const instructions: InstructionsAchPabType = {
+        label: "AHC PANAMA",
+        holderEmail: clientDestination.getEmail(),
+        accountDestinationNumber: "",
+        bankName: "",
+        productType: "",
+        holderId: clientDestination.getIDNumber(),
+        holderName: clientDestination.getName(),
+      };
+      const payload: CounterpartyAchPabDtoType = {
+        achInstructions: instructions,
+        clientId: clientOrigin.getClientId(),
+        counterpartyId: clientDestination.getClientId(),
+        counterpartyType: CounterpartyType.FIAT,
+        status: CounterpartyStatus.ACTIVE,
+        assetId: asset.getAssetId(),
+        informationOwner: {
+          name: clientDestination.getName(),
+          address: undefined,
+        },
+      };
+
+      counterparty = CounterpartyAchPab.newCounterparty(payload, true);
     }
 
     await this.counterpartyRepository.upsert(counterparty);

@@ -48,6 +48,10 @@ export class Asset extends AggregateRoot {
     return a;
   }
 
+  getAssetClassification() {
+    return this.assetClassification;
+  }
+
   getId(): string {
     return this.id;
   }
@@ -73,7 +77,7 @@ export class Asset extends AggregateRoot {
   }
 
   isCryptoAsset(): boolean {
-    return this.code !== "USD";
+    return this.assetClassification === AssetClassification.CRYPTO;
   }
 
   toPrimitives(): any {
