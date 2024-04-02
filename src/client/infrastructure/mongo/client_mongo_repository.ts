@@ -51,7 +51,7 @@ export class ClientMongoRepository
       throw new AccountNotFound(client.accountId);
     }
 
-    return ClientFactory.fromPrimitives(resultId, client, account);
+    return await ClientFactory.fromPrimitives(resultId, client, account);
   }
 
   async findByClientId(clientId: string): Promise<IClient | undefined> {
