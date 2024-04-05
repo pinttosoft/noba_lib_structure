@@ -28,6 +28,26 @@ export class BankingRails extends AggregateRoot {
     return this.countryName;
   }
 
+  setRails(rails: Array<string>) {
+    this.rails = rails;
+  }
+
+  setAssetCountry(assetCountry: string) {
+    this.assetCountry = assetCountry;
+  }
+
+  setCountryCode(countryCode: string) {
+    this.countryCode = countryCode;
+  }
+
+  setCountryName(countryName: string) {
+    this.countryName = countryName;
+  }
+
+  setCounterpartyType(counterpartyType?: string) {
+    this.counterpartyType = counterpartyType;
+  }
+
   static newBankingRail(data: any): BankingRails {
     const rail = new BankingRails();
     rail.id = data.id;
