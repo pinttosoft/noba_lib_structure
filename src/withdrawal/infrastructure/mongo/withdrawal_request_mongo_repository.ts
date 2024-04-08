@@ -76,7 +76,7 @@ export class WithdrawalRequestMongoRepository
 
   async findByWithdrawalId(withdrawalId: string): Promise<WithdrawalRequest> {
     const collection = await this.collection();
-    const result = await collection.findOne({ withdrawalId });
+    const result = await collection.findOne<any>({ withdrawalId });
     if (!result) {
       return undefined;
     }

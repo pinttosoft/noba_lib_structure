@@ -47,7 +47,7 @@ export class CounterpartyMongoRepository
   ): Promise<Paginate<Counterparty> | undefined> {
     const collection = await this.collection();
     const result = await collection
-      .find({
+      .find<any>({
         clientId,
         counterpartyType,
       })
@@ -73,7 +73,7 @@ export class CounterpartyMongoRepository
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
 
-    const result = await collection.findOne({
+    const result = await collection.findOne<any>({
       counterpartyId,
     });
 
@@ -98,7 +98,7 @@ export class CounterpartyMongoRepository
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
 
-    const result = await collection.findOne({
+    const result = await collection.findOne<any>({
       counterpartyId,
       assetId,
     });
@@ -148,7 +148,7 @@ export class CounterpartyMongoRepository
     addressPayment: string,
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({
+    const result = await collection.findOne<any>({
       clientId: clientId,
       "informationWallet.address": addressPayment,
     });
@@ -170,7 +170,7 @@ export class CounterpartyMongoRepository
     assetId: string,
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({
+    const result = await collection.findOne<any>({
       clientId: clientId,
       counterpartyId,
       assetId,
@@ -195,7 +195,7 @@ export class CounterpartyMongoRepository
   async getPending(): Promise<Counterparty[] | undefined> {
     const collection = await this.collection();
     const result = await collection
-      .find({
+      .find<any>({
         status: CounterpartyStatus.PENDING,
       })
       .toArray();

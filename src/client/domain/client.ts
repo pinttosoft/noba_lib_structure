@@ -48,6 +48,8 @@ export class Client extends AggregateRoot implements IClient {
   private createdAt: Date;
   private approvedAt: Date;
   private addressShipping: Address;
+  private nationality?: string;
+  private documentExpirationDate?: string;
 
   setAddressShipping(address: Address): Client {
     this.addressShipping = { ...address, isShipping: true };
@@ -132,6 +134,8 @@ export class Client extends AggregateRoot implements IClient {
     this.clientData = data;
     this.createdAt = data.createdAt;
     this.approvedAt = data.approvedAt;
+    this.nationality = data.nationality;
+    this.documentExpirationDate = data.documentExpirationDate;
 
     return this;
   }
@@ -598,6 +602,14 @@ export class Client extends AggregateRoot implements IClient {
 
     this.clientData.partners[partnerIndex].serviceProviderId =
       serviceProviderId;
+  }
+
+  getNationality(): string {
+    return this.nationality;
+  }
+
+  getDocumentExpirationDate(): string {
+    return this.documentExpirationDate;
   }
 
   toPrimitives(): any {

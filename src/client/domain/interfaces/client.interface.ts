@@ -129,4 +129,8 @@ export interface IClient {
     partnerIdProviderService: string,
     partnerDNI: string,
   ): void;
+
+  getNationality(): string;
+
+  getDocumentExpirationDate(): string;
 }

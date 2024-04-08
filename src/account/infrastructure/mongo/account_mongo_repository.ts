@@ -31,7 +31,7 @@ export class AccountMongoRepository
 
   async findByAccountId(accountId: string): Promise<IAccount | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ accountId });
+    const result = await collection.findOne<any>({ accountId });
     if (!result) {
       return undefined;
     }
@@ -45,7 +45,7 @@ export class AccountMongoRepository
 
   async findAccountByOwnerEmail(email: string): Promise<IAccount | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ "owner.email": email });
+    const result = await collection.findOne<any>({ "owner.email": email });
 
     if (!result) {
       return undefined;
@@ -58,7 +58,7 @@ export class AccountMongoRepository
     applicationId: string,
   ): Promise<IAccount | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ applicationId });
+    const result = await collection.findOne<any>({ applicationId });
     if (!result) {
       return undefined;
     }

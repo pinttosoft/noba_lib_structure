@@ -29,7 +29,7 @@ export class BankingMongoRepository
     countryCode: string,
   ): Promise<BankingRails | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ countryCode });
+    const result = await collection.findOne<any>({ countryCode });
     if (!result) {
       return undefined;
     }
@@ -39,7 +39,10 @@ export class BankingMongoRepository
 
   async findAllBankingRails(): Promise<BankingRails[]> {
     const collection = await this.collection();
-    const result = await collection.find().sort("countryName", 1).toArray();
+    const result = await collection
+      .find<any>({})
+      .sort("countryName", 1)
+      .toArray();
     if (!result) {
       return [];
     }

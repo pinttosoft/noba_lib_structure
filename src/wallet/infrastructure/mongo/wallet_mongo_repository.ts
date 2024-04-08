@@ -150,7 +150,7 @@ export class WalletMongoRepository
     const collection = await this.collection();
 
     const result = await collection
-      .find(filter)
+      .find<any>(filter)
       .project({
         instructForDeposit: {
           $slice: [(page - 1) * rowPerPage, rowPerPage],
@@ -159,7 +159,7 @@ export class WalletMongoRepository
       .toArray();
 
     const instructForDepositCount = await collection
-      .find(filter)
+      .find<any>(filter)
       .project({
         instructForDeposit: 1,
       })

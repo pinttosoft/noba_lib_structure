@@ -2,7 +2,7 @@ import { AssetClassification, AssetMongoRepository } from "../../src";
 
 describe("Assets", () => {
   it("Get all assets", async () => {
-    const assets = await AssetMongoRepository.instance().find(
+    const assets = await AssetMongoRepository.instance().find<any>(
       true,
       AssetClassification.STABLE,
     );

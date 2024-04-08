@@ -35,7 +35,7 @@ export class ClientMongoRepository
   async findByEmail(email: string): Promise<IClient> {
     const collection = await this.collection();
 
-    const result = await collection.findOne({ email });
+    const result = await collection.findOne<any>({ email });
     if (!result) {
       return undefined;
     }
@@ -57,7 +57,7 @@ export class ClientMongoRepository
   async findByClientId(clientId: string): Promise<IClient | undefined> {
     const collection = await this.collection();
 
-    const result = await collection.findOne({ clientId });
+    const result = await collection.findOne<any>({ clientId });
     if (!result) {
       return undefined;
     }
@@ -68,7 +68,7 @@ export class ClientMongoRepository
   async findByAccountId(accountId: string): Promise<IClient> {
     const collection = await this.collection();
 
-    const result = await collection.findOne({ accountId });
+    const result = await collection.findOne<any>({ accountId });
     if (!result) {
       return undefined;
     }
@@ -82,7 +82,7 @@ export class ClientMongoRepository
 
   async findByIDNumber(idNumber: string): Promise<IClient> {
     const collection = await this.collection();
-    const result = await collection.findOne({ idNumber });
+    const result = await collection.findOne<any>({ idNumber });
     if (!result) {
       return undefined;
     }
@@ -93,7 +93,7 @@ export class ClientMongoRepository
   async findAllActiveClients(): Promise<IClient[]> {
     const collection = await this.collection();
     const result = await collection
-      .find({ status: AccountStatus.APPROVED })
+      .find<any>({ status: AccountStatus.APPROVED })
       .toArray();
 
     return await Promise.all(
@@ -105,10 +105,10 @@ export class ClientMongoRepository
 
   async findByDni(dni: string): Promise<IClient | undefined> {
     const collection = await this.collection();
-    let result = await collection.findOne({ dni });
+    let result = await collection.findOne<any>({ dni });
 
     if (!result) {
-      result = await collection.findOne({
+      result = await collection.findOne<any>({
         "informationCompany.registerNumber": dni,
       });
     }
