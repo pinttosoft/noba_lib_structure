@@ -2,9 +2,11 @@ import {
   AmountValueObject,
   AssetMongoRepository,
   ClientMongoRepository,
+  Counterparty,
   CounterpartyMongoRepository,
   WithdrawalPurpose,
   WithdrawalRequest,
+  WithdrawalRequestMongoRepository,
   WithdrawalType,
 } from "../../src";
 
@@ -53,18 +55,16 @@ describe("Withdrawals", () => {
     const clientId = "MSerrano181263254";
     const clientOrigin =
       await ClientMongoRepository.instance().findByClientId(clientId);
-    const counterpartyId = "35e68682-8212-49a0-af95-e56e3e3aa92b";
+    const counterpartyId = "c3aa5738-793e-4b75-b785-5be0d2e673f8";
 
     const amount = 2.6;
     const reference = "first external withdrawal request test";
     const asset =
       await AssetMongoRepository.instance().findAssetByCode("USD_PA");
 
-    const counterparty =
-      await CounterpartyMongoRepository.instance().findMyCounterpartyByAssetId(
-        clientOrigin.getClientId(),
+    const counterparty: Counterparty =
+      await CounterpartyMongoRepository.instance().findByCounterpartyId(
         counterpartyId,
-        asset.getAssetId(),
       );
 
     console.log("counterparty", counterparty);
@@ -81,7 +81,9 @@ describe("Withdrawals", () => {
         WithdrawalPurpose.LOAN,
       );
 
+    await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
+    console.log(`withdrawalRequest ID`, withdrawalRequest.getWithdrawalId());
+
     expect(withdrawalRequest).not.toBe(undefined);
-    //await WithdrawalRequestMongoRepository.instance().upsert(withdrawalRequest);
   });
 });
