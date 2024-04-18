@@ -1,4 +1,10 @@
 export type FeeACHPAB = {
-  in: number;
-  out: number;
+  domestic: {
+    in: number;
+    out: number;
+  };
+  international: {
+    in: number;
+    out: number;
+  };
 };
