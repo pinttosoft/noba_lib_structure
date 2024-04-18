@@ -1,4 +1,5 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import {FeeACHPAB} from "./types/fee_ach_pab.type";
 
 export class FeeACHPanama extends AggregateRoot {
   private id?: string;
@@ -26,7 +27,7 @@ export class FeeACHPanama extends AggregateRoot {
     return this.out;
   }
 
-  toPrimitives(): any {
+  toPrimitives(): FeeACHPAB {
     return {
       in: this.in,
       out: this.out,
