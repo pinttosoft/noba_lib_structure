@@ -154,7 +154,7 @@ export class RegisterOrSearchCounterpartyInternal {
 
     if (!wallet) {
       logger.info(
-        `Wallet not found for client ${clientDestination.getClientId()} and asset ${assetId}`,
+        `Wallet not found for client ${clientDestination.getName()} and asset ${assetId}`,
       );
       throw new WalletNotFound();
     }
