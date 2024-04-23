@@ -289,6 +289,25 @@ describe("Counterparty", () => {
   it("Delete an ach counterparty", async () => {
     //await CounterpartyMongoRepository.instance().delete();
   });
+
+  it("findByCounterpartyId", async () => {
+    //findByCounterpartyId
+    const counterpartyACH =
+      await CounterpartyMongoRepository.instance().findByCounterpartyId(
+        "185a6fcd-b482-4bf7-b459-fd7bb7a9c310",
+      );
+
+    console.log("counterpartyACH", counterpartyACH);
+
+    // falta
+
+    // const counterpartyBank =
+    //   await CounterpartyMongoRepository.instance().findByCounterpartyId(
+    //     "eab60afc-469b-49fc-b16f-d01aa2dd3227",
+    //   );
+    //
+    // console.log("counterpartyBank", counterpartyBank);
+  });
 });
 
 const prepare = (payload: any) => {
