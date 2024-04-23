@@ -11,7 +11,10 @@ export class StorageAWS implements IStorageService {
 
   constructor(private readonly bucketName: string) {
     this.s3 = new AWS.S3({
-      region: process.env.AWS_REGION,
+      region:
+        process.env.REGION_S3 === undefined
+          ? process.env.AWS_REGION
+          : process.env.REGION_S3,
       apiVersion: "latest",
     });
   }
