@@ -22,6 +22,22 @@ export class Country extends AggregateRoot {
     return country;
   }
 
+  setName(name: string) {
+    this.name = name;
+  }
+
+  setCountryId(countryId: string) {
+    this.country_id = countryId;
+  }
+
+  setCountryCode(countryCode: string) {
+    this.country_code = countryCode;
+  }
+
+  setCallingCode(callingCode: string) {
+    this.calling_code = callingCode;
+  }
+
   static fromPrimitives(data: any): Country {
     const country: Country = new Country();
     country.id = data.id;
