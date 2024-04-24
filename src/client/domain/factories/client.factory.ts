@@ -11,6 +11,7 @@ import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
+  FeeACHPanama,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -59,6 +60,7 @@ export class ClientFactory {
         .setClientType(data.type)
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
+        .setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama))
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
 

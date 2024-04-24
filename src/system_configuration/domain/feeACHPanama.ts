@@ -39,7 +39,7 @@ export class FeeACHPanama extends AggregateRoot {
     return this.international;
   }
 
-  toPrimitives(): FeeACHPAB {
+  toPrimitives(): any {
     return {
       domestic: {
         in: this.domestic.in,

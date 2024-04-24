@@ -375,4 +375,18 @@ describe("Client", () => {
 
     await ClientMongoRepository.instance().upsert(client);
   });
+
+  it("Should get FeeACHPanama", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    console.log(client.getFeeACHPanama().getFeeDomestic());
+    console.log(client.getFeeACHPanama().getFeeInternational());
+    console.log(client.getFeeACHPanama().getFeeDomestic().in);
+    console.log(client.getFeeACHPanama().getFeeDomestic().out);
+    console.log(client.getFeeACHPanama().getFeeInternational().in);
+    console.log(client.getFeeACHPanama().getFeeInternational().out);
+  });
 });
