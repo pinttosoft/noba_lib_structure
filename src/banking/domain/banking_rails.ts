@@ -54,7 +54,7 @@ export class BankingRails extends AggregateRoot {
     rail.countryCode = data.countryCode;
     rail.countryName = data.countryName;
     rail.assetCountry = data.assetCountry;
-    rail.rail = data.rail;
+    rail.rail = data.rails;
     rail.counterpartyType = data.counterpartyType;
 
     return rail;
