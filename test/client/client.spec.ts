@@ -378,11 +378,9 @@ describe("Client", () => {
 
   it("Should get FeeACHPanama", async () => {
     const client =
-      await ClientMongoRepository.instance().findByClientId(
-        "MSerrano181263254",
-      );
+      await ClientMongoRepository.instance().findByClientId("DANIELLEE002");
 
-    console.log(client.getFeeACHPanama().getFeeDomestic());
+    console.log(client.getFeeACHPanama()?.getFeeDomestic());
     console.log(client.getFeeACHPanama().getFeeInternational());
     console.log(client.getFeeACHPanama().getFeeDomestic().in);
     console.log(client.getFeeACHPanama().getFeeDomestic().out);

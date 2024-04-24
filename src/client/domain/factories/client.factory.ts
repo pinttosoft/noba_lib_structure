@@ -60,9 +60,12 @@ export class ClientFactory {
         .setClientType(data.type)
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
-        .setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama))
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
+
+      if (data.feeACHPanama) {
+        c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
+      }
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL
       if (data.kycRequestedChanges) {
