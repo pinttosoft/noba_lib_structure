@@ -96,6 +96,7 @@ export class Client extends AggregateRoot implements IClient {
     this.clientData = data;
     this.createdAt = data.createdAt;
     this.approvedAt = data.approvedAt;
+    this.twoFactorActive = data.twoFactorActive ?? false;
 
     return this;
   }
