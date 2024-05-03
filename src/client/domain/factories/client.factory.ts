@@ -11,6 +11,7 @@ import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
+  FeeACHPanama,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -61,6 +62,10 @@ export class ClientFactory {
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
+
+      if (data.feeACHPanama) {
+        c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
+      }
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL
       if (data.kycRequestedChanges) {

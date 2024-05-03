@@ -8,11 +8,19 @@ describe("System config", () => {
     console.log("feeWire", feeWire);
   });
 
-  it("Should get fees for ACH Panama", async () => {
+  it("Should get old fees for ACH Panama", async () => {
     const feeACHPAB =
       await SystemConfigurationMongoRepository.instance().getDefaultFeeACHPAB();
 
-    console.log("feeACHPAB", feeACHPAB.out);
-    console.log("feeACHPAB", feeACHPAB.getFeeOut());
+    //console.log("feeACHPAB", feeACHPAB.out);
+    //console.log("feeACHPAB", feeACHPAB.getFeeOut());
+  });
+
+  it("Should get new fees for ACH Panama", async () => {
+    const feeACHPAB =
+      await SystemConfigurationMongoRepository.instance().getDefaultFeeACHPAB();
+
+    console.log("feeACHPAB", feeACHPAB.getFeeDomestic());
+    console.log("feeACHPAB", feeACHPAB.getFeeInternational());
   });
 });

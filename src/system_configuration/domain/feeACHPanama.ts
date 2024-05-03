@@ -1,35 +1,54 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { FeeACHPAB } from "./types/fee_ach_pab.type";
 
 export class FeeACHPanama extends AggregateRoot {
   private id?: string;
-  in: number;
-  out: number;
+  private domestic: {
+    in: number;
+    out: number;
+  };
+  private international: {
+    in: number;
+    out: number;
+  };
 
   getId(): string {
     return this.id;
   }
 
-  static fromPrimitives(data: any): FeeACHPanama {
+  static fromPrimitives(data: FeeACHPAB): FeeACHPanama {
     const f: FeeACHPanama = new FeeACHPanama();
 
-    f.in = data.in;
-    f.out = data.out;
+    f.domestic = data.domestic;
+    f.international = data.international;
 
     return f;
   }
 
-  getFeeIn(): number {
-    return this.in;
+  getFeeDomestic(): {
+    in: number;
+    out: number;
+  } {
+    return this.domestic;
   }
 
-  getFeeOut(): number {
-    return this.out;
+  getFeeInternational(): {
+    in: number;
+    out: number;
+  } {
+    return this.international;
   }
 
   toPrimitives(): any {
     return {
-      in: this.in,
-      out: this.out,
+      domestic: {
+        in: this.domestic.in,
+        out: this.domestic.out,
+      },
+      international: {
+        in: this.international.in,
+        out: this.international.out,
+      },
     };
   }
 }
