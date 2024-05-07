@@ -88,6 +88,10 @@ export class Transaction extends AggregateRoot {
     return this.amount;
   }
 
+  getStatus(): string {
+    return this.status;
+  }
+
   getReference(): string {
     return this.reference;
   }
