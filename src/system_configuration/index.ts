@@ -6,6 +6,7 @@ export { FeeSwapDTO } from "./domain/types/fee_swap.type";
 
 export { FeeWireDTO } from "./domain/types/fee_wire.type";
 export { FeeACHPAB } from "./domain/types/fee_ach_pab.type";
+export { FeeAchUsd } from "./domain/types/fee_ach_usd.type";
 
 export { FeeSwapForProgramReferralsDTO } from "./domain/types/fee_swap_for_program_referrals.type";
 export { FeeSwap } from "./domain/fee_swap";
