@@ -17,6 +17,7 @@ type SystemConfig = {
   feeWire: FeeWireDTO;
   feeACHPanama: FeeACHPAB;
   FeeSwapForProgramReferrals: FeeSwapForProgramReferralsDTO;
+  feeAchUsd: FeeAchUsd;
 };
 
 export class SystemConfigurationMongoRepository
