@@ -16,7 +16,12 @@ import {
 } from "../../shared";
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
-import { FeeACHPanama, FeeSwap, FeeWire } from "../../system_configuration";
+import {
+  FeeACHPanama,
+  FeeAchUsd,
+  FeeSwap,
+  FeeWire,
+} from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
@@ -36,6 +41,7 @@ export class Client extends AggregateRoot implements IClient {
   private feeSwap?: FeeSwap;
   private feeWire?: FeeWire;
   private feeACHPanama?: FeeACHPanama;
+  private feeAchUsd?: FeeAchUsd;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
@@ -89,6 +95,11 @@ export class Client extends AggregateRoot implements IClient {
 
   setFeeACHPanama(fee: FeeACHPanama) {
     this.feeACHPanama = fee;
+    return this;
+  }
+
+  setFeeAchUsd(feeAchUsd: FeeAchUsd): IClient {
+    this.feeAchUsd = feeAchUsd;
     return this;
   }
 
