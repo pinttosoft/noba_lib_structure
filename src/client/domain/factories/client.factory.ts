@@ -12,6 +12,7 @@ import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
   FeeACHPanama,
+  FeeAchUsd,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -37,6 +38,8 @@ export class ClientFactory {
       .setFeeWire(await systemConfig.getDefaultFeeWire())
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
       .setFeeACHPanama(await systemConfig.getDefaultFeeACHPAB())
+      //todo
+      //.setFeeAchUsd(await systemConfig.getDefaultFeeAchUsd())
 
       .build();
 
@@ -65,6 +68,10 @@ export class ClientFactory {
 
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
+      }
+
+      if (data.feeAchUsd) {
+        c.setFeeAchUsd(FeeAchUsd.fromPrimitives(data.feeAchUsd));
       }
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL
