@@ -4,6 +4,7 @@ import {
   ClientFactory,
   ClientMongoRepository,
   FeeACHPanama,
+  FeeAchUsd,
   IAccount,
   IClient,
   IClientRepository,
@@ -386,5 +387,33 @@ describe("Client", () => {
     console.log(client.getFeeACHPanama().getFeeDomestic().out);
     console.log(client.getFeeACHPanama().getFeeInternational().in);
     console.log(client.getFeeACHPanama().getFeeInternational().out);
+  });
+
+  it("Should set FeeAchUsd", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    const feeAchUsd: FeeAchUsd = FeeAchUsd.fromPrimitives({
+      in: 1.1,
+      out: 2.2,
+    });
+
+    client.setFeeAchUsd(feeAchUsd);
+
+    console.log("-- client", client.toPrimitives());
+
+    await ClientMongoRepository.instance().upsert(client);
+  });
+
+  it("Should get FeeAchUsd", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    console.log(client.getFeeAchUsd().getIn());
+    console.log(client.getFeeAchUsd().getOut());
   });
 });
