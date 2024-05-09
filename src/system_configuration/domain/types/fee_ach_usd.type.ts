@@ -1,4 +1,4 @@
-export type FeeAchUsd = {
+export type FeeAchUsdDTO = {
   in: number;
   out: number;
 };

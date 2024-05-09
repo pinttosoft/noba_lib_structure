@@ -9,6 +9,7 @@ import { FeeWire } from "../domain/fee_wire";
 import { ObjectId } from "mongodb";
 import { FeeACHPanama } from "../domain/feeACHPanama";
 import { FeeACHPAB } from "../domain/types/fee_ach_pab.type";
+import { FeeAchUsd } from "../domain/fee_ach_usd";
 
 type SystemConfig = {
   _id: ObjectId;
@@ -24,6 +25,10 @@ export class SystemConfigurationMongoRepository
 {
   private static _instance: SystemConfigurationMongoRepository;
 
+  constructor() {
+    super(MongoClientFactory.createClient());
+  }
+
   static instance(): ISystemConfigurationRepository {
     if (this._instance) {
       return this._instance;
@@ -31,10 +36,6 @@ export class SystemConfigurationMongoRepository
 
     this._instance = new SystemConfigurationMongoRepository();
     return this._instance;
-  }
-
-  constructor() {
-    super(MongoClientFactory.createClient());
   }
 
   collectionName(): string {
@@ -88,5 +89,17 @@ export class SystemConfigurationMongoRepository
 
   getNobaFee(): Promise<FeeSwap> {
     return Promise.resolve(undefined);
+  }
+
+  async getDefaultFeeAchUsd(): Promise<FeeAchUsd> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<SystemConfig>();
+
+    if (!result) {
+      return undefined;
+    }
+
+    return FeeAchUsd.fromPrimitives(result.feeAchUsd);
   }
 }

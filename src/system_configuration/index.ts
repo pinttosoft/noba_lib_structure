@@ -1,3 +1,5 @@
+export { FeeAchUsd } from "./domain/fee_ach_usd";
+
 export { SystemConfigurationMongoRepository } from "./infrastructure/system_configuration_mongo_repository";
 
 export { ISystemConfigurationRepository } from "./domain/interfaces/system_configuration_repository.interface";
@@ -6,7 +8,7 @@ export { FeeSwapDTO } from "./domain/types/fee_swap.type";
 
 export { FeeWireDTO } from "./domain/types/fee_wire.type";
 export { FeeACHPAB } from "./domain/types/fee_ach_pab.type";
-export { FeeAchUsd } from "./domain/types/fee_ach_usd.type";
+export { FeeAchUsdDTO } from "./domain/types/fee_ach_usd.type";
 
 export { FeeSwapForProgramReferralsDTO } from "./domain/types/fee_swap_for_program_referrals.type";
 export { FeeSwap } from "./domain/fee_swap";
