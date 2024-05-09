@@ -2,14 +2,13 @@ import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
 export class FeeAchUsd extends AggregateRoot {
   private id?: string;
-  private achUsd: {
-    in: number;
-    out: number;
-  };
+  private in: number;
+  private out: number;
 
   static fromPrimitives(data: any): FeeAchUsd {
     const f = new FeeAchUsd();
-    f.achUsd = data.achUsd;
+    f.in = data.in;
+    f.out = data.out;
     f.id = data.id;
 
     return f;
@@ -19,19 +18,18 @@ export class FeeAchUsd extends AggregateRoot {
     return this.id;
   }
 
-  getFeeAchUsd(): {
-    in: number;
-    out: number;
-  } {
-    return this.achUsd;
+  getIn() {
+    return this.in;
+  }
+
+  getOut() {
+    return this.out;
   }
 
   toPrimitives(): any {
     return {
-      achUsd: {
-        in: this.achUsd.in,
-        out: this.achUsd.out,
-      },
+      in: this.in,
+      out: this.out,
     };
   }
 }
