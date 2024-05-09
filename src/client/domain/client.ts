@@ -350,6 +350,10 @@ export class Client extends AggregateRoot implements IClient {
     return this.feeACHPanama;
   }
 
+  getFeeAchUsd(): FeeAchUsd {
+    return this.feeAchUsd;
+  }
+
   activeTwoFactorAuth(): void {
     this.twoFactorActive = true;
   }

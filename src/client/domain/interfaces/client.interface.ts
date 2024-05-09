@@ -63,6 +63,8 @@ export interface IClient {
 
   getFeeACHPanama(): FeeACHPanama;
 
+  getFeeAchUsd(): FeeAchUsd;
+
   getPrincipalDocuments(): Documents[];
 
   setDocument(dni: string, document: Documents): IClient;
