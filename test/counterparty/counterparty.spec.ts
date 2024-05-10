@@ -246,11 +246,9 @@ describe("Counterparty", () => {
 
     const instructions: InstructionsAchPabType = {
       label: "PANAMA LABEL",
-      holderEmail: "panama email",
       accountDestinationNumber: "panama account",
       bankName: "panama bank",
       productType: "panama type",
-      holderId: "panama holder id",
       holderName: "panama name",
     };
 
