@@ -1,10 +1,10 @@
 export type InstructionsAchPabType = {
   id?: string;
   label: string;
-  holderEmail: string;
+  holderEmail?: string;
   accountDestinationNumber: string;
   bankName: string;
   productType: string;
-  holderId: string;
+  holderId?: string;
   holderName: string;
 };
