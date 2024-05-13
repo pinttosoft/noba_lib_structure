@@ -1,7 +1,12 @@
 import { AccountStatus, AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
 import { ResidencyStatus } from "../enums/residency_status";
-import { FeeACHPanama, FeeSwap, FeeWire } from "../../../system_configuration";
+import {
+  CommissionForRechargingCard,
+  FeeACHPanama,
+  FeeSwap,
+  FeeWire,
+} from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
 import { Documents } from "../../../documents";
 import { IndividualDTO } from "../types/Individual.type";
@@ -16,6 +21,8 @@ export interface IClient {
 
   setAccountId(accountId: string): IClient;
 
+  getAddressShipping(): Address;
+
   toPrimitives(): any;
 
   getAccount(): IAccount;
@@ -24,7 +31,15 @@ export interface IClient {
 
   getClientType(): AccountType;
 
+  getFirstName(): string;
+
+  getLastName(): string;
+
   getName(): string;
+
+  getPhoneNumber(): string;
+
+  getCountryPhone(): string;
 
   getEmail(): string;
 
@@ -57,6 +72,8 @@ export interface IClient {
   getFeeWire(): FeeWire;
 
   getFeeACHPanama(): FeeACHPanama;
+
+  getFeeRechargingCard(): CommissionForRechargingCard;
 
   getPrincipalDocuments(): Documents[];
 
@@ -112,4 +129,8 @@ export interface IClient {
     partnerIdProviderService: string,
     partnerDNI: string,
   ): void;
+
+  getNationality(): string;
+
+  getDocumentExpirationDate(): string;
 }

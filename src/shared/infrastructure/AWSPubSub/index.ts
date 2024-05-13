@@ -30,9 +30,10 @@ export class SNSMessage implements MessageBus {
     }
   }
 
-  subscribe(subscriptionName: string, callback: Function): void {
+  subscribe(topic: string, callback: Function): void {
+    const SQSUrl = `https://sqs.${process.env.AWS_REGION}.amazonaws.com/837217772820/${topic}-sqs`;
     const params = {
-      QueueUrl: subscriptionName,
+      QueueUrl: SQSUrl,
       WaitTimeSeconds: 20,
       MaxNumberOfMessages: 1,
     };
@@ -54,7 +55,7 @@ export class SNSMessage implements MessageBus {
           // Elimina el mensaje de la cola después de procesarlo
           await this.sqs
             .deleteMessage({
-              QueueUrl: subscriptionName,
+              QueueUrl: SQSUrl,
               ReceiptHandle: message.ReceiptHandle,
             })
             .promise();

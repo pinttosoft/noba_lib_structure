@@ -60,7 +60,7 @@ export class TransactionMongoRepository
       transactionType: TransactionType.DEPOSIT,
     };
 
-    const result = await collection.findOne(filter);
+    const result = await collection.findOne<any>(filter);
 
     if (!result) {
       return null;
@@ -89,7 +89,7 @@ export class TransactionMongoRepository
       transactionType: TransactionType.WITHDRAW,
     };
 
-    const result = await collection.findOne(filter);
+    const result = await collection.findOne<any>(filter);
     if (!result) {
       return null;
     }
@@ -131,7 +131,7 @@ export class TransactionMongoRepository
       transactionId,
     };
     const collection = await this.collection();
-    const result = await collection.findOne(filter);
+    const result = await collection.findOne<any>(filter);
 
     if (!result) {
       return undefined;
@@ -181,7 +181,7 @@ export class TransactionMongoRepository
       transactionType: TransactionType.WITHDRAW,
     };
     const collection = await this.collection();
-    const result = await collection.findOne(filter);
+    const result = await collection.findOne<any>(filter);
 
     if (!result) {
       return undefined;
@@ -261,7 +261,7 @@ export class TransactionMongoRepository
     };
 
     const collection = await this.collection();
-    const result = await collection.findOne(filter);
+    const result = await collection.findOne<any>(filter);
 
     if (!result) {
       return undefined;

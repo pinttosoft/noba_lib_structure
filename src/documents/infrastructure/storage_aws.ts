@@ -8,8 +8,9 @@ import { v4 } from "uuid";
 export class StorageAWS implements IStorageService {
   private static _instance: StorageAWS;
   private s3: AWS.S3;
+  private bucketName: string;
 
-  constructor(private readonly bucketName: string) {
+  constructor(bucketName?: string) {
     this.s3 = new AWS.S3({
       region:
         process.env.REGION_S3 === undefined
@@ -17,6 +18,14 @@ export class StorageAWS implements IStorageService {
           : process.env.REGION_S3,
       apiVersion: "latest",
     });
+
+    if (bucketName) {
+      this.bucketName = bucketName;
+    }
+  }
+
+  setBucketName(bucketName: string): void {
+    this.bucketName = bucketName;
   }
 
   static instance(bucketName: string): StorageAWS {

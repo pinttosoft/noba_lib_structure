@@ -25,10 +25,11 @@ export class MongoCache
   collectionName(): string {
     return "caches";
   }
+
   async get(key: string): Promise<Cache> {
     const collection = await this.collection();
 
-    const document = await collection.findOne({ key });
+    const document = await collection.findOne<any>({ key });
 
     if (!document) {
       return undefined;

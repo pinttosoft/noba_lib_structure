@@ -5,6 +5,9 @@ export type Address = {
   city: string;
   region: string;
   country: string;
+  number?: string;
+  apartmentNumber?: string;
+  isShipping?: boolean;
 };
 
 export type ContactInformation = {

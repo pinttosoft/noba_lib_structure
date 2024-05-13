@@ -12,6 +12,7 @@ export class UserMongoRepository
   constructor() {
     super(MongoClientFactory.createClient());
   }
+
   public static instance() {
     if (this._instance) {
       return this._instance;
@@ -27,7 +28,7 @@ export class UserMongoRepository
 
   async findByEmail(email: string): Promise<User | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ email });
+    const result = await collection.findOne<any>({ email });
     if (!result) {
       return undefined;
     }
@@ -37,7 +38,7 @@ export class UserMongoRepository
 
   async findByToken(token: string): Promise<User | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ token });
+    const result = await collection.findOne<any>({ token });
     if (!result) {
       return undefined;
     }

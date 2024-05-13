@@ -1,6 +1,5 @@
 import { MongoClientFactory, MongoRepository } from "../../shared";
 import { IDocumentRepository } from "../domain/interfaces/document_repository.interface";
-import { MongoClient } from "mongodb";
 import { Documents } from "../domain/documents";
 
 export class DocumentMongoRepository

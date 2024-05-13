@@ -18,7 +18,6 @@ export { InvalidArgumentError } from "./domain/exceptions/invalid_argument_error
 export { StringValueObject } from "./domain/value_object/string_value_object";
 export { AmountValueObject } from "./domain/value_object/amount_value_object";
 
-export { server } from "./infrastructure/server";
 export * from "./infrastructure/mongodb";
 
 export * from "./infrastructure/AWSPubSub";

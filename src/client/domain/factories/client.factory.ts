@@ -12,6 +12,7 @@ import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
   FeeACHPanama,
+  CommissionForRechargingCard,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -36,6 +37,7 @@ export class ClientFactory {
       .setClientData(clientData)
       .setFeeWire(await systemConfig.getDefaultFeeWire())
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
+      .setFeeRechargingCard(await systemConfig.getDefaultFeeRechargingCard())
       .setFeeACHPanama(await systemConfig.getDefaultFeeACHPAB())
 
       .build();
@@ -49,7 +51,11 @@ export class ClientFactory {
     return c;
   }
 
-  static fromPrimitives(id: string, data: any, account: IAccount): IClient {
+  static async fromPrimitives(
+    id: string,
+    data: any,
+    account: IAccount,
+  ): Promise<IClient> {
     const c: Client = new Client();
 
     try {
@@ -60,7 +66,13 @@ export class ClientFactory {
         .setClientType(data.type)
         .setFeeSwap(FeeSwap.fromPrimitives(data.feeSwap))
         .setFeeWire(FeeWire.fromPrimitives(data.feeWire))
+        .setFeeRechargingCard(
+          "feeRechargingCard" in data
+            ? CommissionForRechargingCard.fromPrimitives(data.feeRechargingCard)
+            : await SystemConfigurationMongoRepository.instance().getDefaultFeeRechargingCard(),
+        )
         .setTaxId(data.taxId ?? null)
+        .setAddressShipping(data.addressShipping ?? {})
         .setClientId(data.clientId);
 
       if (data.feeACHPanama) {

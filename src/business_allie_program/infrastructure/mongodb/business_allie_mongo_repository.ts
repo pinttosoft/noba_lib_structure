@@ -12,9 +12,11 @@ export class BusinessAllieMongoRepository
   constructor() {
     super(MongoClientFactory.createClient());
   }
+
   collectionName(): string {
     return "business_allie";
   }
+
   private static _instance: BusinessAllieMongoRepository;
 
   static instance() {
@@ -25,11 +27,12 @@ export class BusinessAllieMongoRepository
     this._instance = new BusinessAllieMongoRepository();
     return this._instance;
   }
+
   async getBusinessAllie(
     clientId: string,
   ): Promise<BusinessAllieDTO | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ clientId });
+    const result = await collection.findOne<any>({ clientId });
 
     if (!result) {
       return undefined;
@@ -54,7 +57,7 @@ export class BusinessAllieMongoRepository
       { upsert: true },
     );
 
-    return (await collection.findOne({
+    return (await collection.findOne<any>({
       clientId,
     })) as unknown as BusinessAllieDTO;
   }
@@ -85,7 +88,7 @@ export class BusinessAllieMongoRepository
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
-    return (await collection.findOne({
+    return (await collection.findOne<any>({
       "businessOpportunities.taxId": taxId,
     })) as unknown as BusinessAllieDTO;
   }
@@ -95,7 +98,7 @@ export class BusinessAllieMongoRepository
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
-    return (await collection.findOne({
+    return (await collection.findOne<any>({
       "businessOpportunities.clientId": clientId,
     })) as unknown as BusinessAllieDTO;
   }
@@ -104,7 +107,7 @@ export class BusinessAllieMongoRepository
     clientId: string,
   ): Promise<BusinessAllieDTO[] | null> {
     const collection = await this.collection();
-    const result = await collection.findOne({ clientId });
+    const result = await collection.findOne<any>({ clientId });
     if (!result) {
       return null;
     }
@@ -116,7 +119,7 @@ export class BusinessAllieMongoRepository
     taxId: string,
   ): Promise<BusinessOpportunity | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne(
+    const result = await collection.findOne<any>(
       { "businessOpportunities.taxId": taxId },
       { projection: { "businessOpportunities.$": 1 } },
     );
@@ -134,7 +137,7 @@ export class BusinessAllieMongoRepository
     clientId: string,
   ): Promise<BusinessOpportunity | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne(
+    const result = await collection.findOne<any>(
       { "businessOpportunities.clientId": clientId },
       { projection: { "businessOpportunities.$": 1 } },
     );
