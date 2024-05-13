@@ -3,6 +3,7 @@ import {
   AccountType,
   ClientFactory,
   ClientMongoRepository,
+  FeeACHPanama,
   IAccount,
   IClient,
   IClientRepository,
@@ -346,13 +347,6 @@ describe("Client", () => {
     await ClientMongoRepository.instance().upsert(client);
   });
 
-  it("Should set FeeACHPanama", async () => {
-    const client =
-      await ClientMongoRepository.instance().findByClientId(
-        "MSerrano181263254",
-      );
-  });
-
   it("Should search client by dni, type natural person", async () => {
     const dni = "181263254";
 
@@ -368,5 +362,33 @@ describe("Client", () => {
       await ClientMongoRepository.instance().findByDni(registerNumber);
 
     expect(client).not.toBe(undefined);
+  });
+
+  it("Should set FeeACHPanama", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId(
+        "MSerrano181263254",
+      );
+
+    const feePab: FeeACHPanama = FeeACHPanama.fromPrimitives({
+      domestic: { in: 1, out: 2 },
+      international: { in: 3, out: 20 },
+    });
+
+    client.setFeeACHPanama(feePab);
+
+    await ClientMongoRepository.instance().upsert(client);
+  });
+
+  it("Should get FeeACHPanama", async () => {
+    const client =
+      await ClientMongoRepository.instance().findByClientId("DANIELLEE002");
+
+    console.log(client.getFeeACHPanama()?.getFeeDomestic());
+    console.log(client.getFeeACHPanama().getFeeInternational());
+    console.log(client.getFeeACHPanama().getFeeDomestic().in);
+    console.log(client.getFeeACHPanama().getFeeDomestic().out);
+    console.log(client.getFeeACHPanama().getFeeInternational().in);
+    console.log(client.getFeeACHPanama().getFeeInternational().out);
   });
 });
