@@ -31,7 +31,7 @@ export class ContactValidationUserMongoRepository
     userId: string,
   ): Promise<ValidateUserContact | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({
+    const result = await collection.findOne<any>({
       type: typeValidation,
       userId: userId,
     });

@@ -46,10 +46,14 @@ describe("Client", () => {
   });
 
   it("should return data of the client", async () => {
-    const client =
-      await ClientMongoRepository.instance().findByClientId(
-        "ABejarano186263254",
-      );
+    process.env.MONGO_PASS = "zrfhowt0cguf";
+    process.env.MONGO_USER = "noab-dev-mongodb";
+    process.env.MONGO_DB = "dbnobadev";
+    process.env.MONGO_SERVER = "cluster0.xdwtnb4.mongodb.net";
+
+    const client = await ClientMongoRepository.instance().findByClientId(
+      "TGreen580889127944192",
+    );
     console.log(client);
   });
 

@@ -36,7 +36,7 @@ export class ExchangeMongoRepository
 
   async getExchangeById(exchangeId: string): Promise<Exchange | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ exchangeId });
+    const result = await collection.findOne<any>({ exchangeId });
     if (!result) {
       return undefined;
     }

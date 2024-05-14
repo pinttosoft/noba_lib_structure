@@ -10,6 +10,7 @@ import { ObjectId } from "mongodb";
 import { FeeACHPanama } from "../domain/feeACHPanama";
 import { FeeACHPAB } from "../domain/types/fee_ach_pab.type";
 import { FeeAchUsd } from "../domain/fee_ach_usd";
+import { CommissionForRechargingCard } from "../domain/commission_for_recharging_card";
 
 type SystemConfig = {
   _id: ObjectId;
@@ -17,6 +18,7 @@ type SystemConfig = {
   feeWire: FeeWireDTO;
   feeACHPanama: FeeACHPAB;
   FeeSwapForProgramReferrals: FeeSwapForProgramReferralsDTO;
+  feeRechargingCard: CommissionForRechargingCard;
   feeAchUsd: FeeAchUsd;
 };
 
@@ -74,6 +76,14 @@ export class SystemConfigurationMongoRepository
     }
 
     return FeeACHPanama.fromPrimitives(result.feeACHPanama);
+  }
+
+  async getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<SystemConfig>();
+
+    return CommissionForRechargingCard.fromPrimitives(result.feeRechargingCard);
   }
 
   getFeeNobaForSwapOfBusinessOpportunities(): Promise<number> {

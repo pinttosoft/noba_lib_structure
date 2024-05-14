@@ -5,6 +5,7 @@ import {
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
+    CommissionForRechargingCard,
   FeeWire,
 } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
@@ -21,6 +22,8 @@ export interface IClient {
 
   setAccountId(accountId: string): IClient;
 
+  getAddressShipping(): Address;
+
   toPrimitives(): any;
 
   getAccount(): IAccount;
@@ -29,7 +32,15 @@ export interface IClient {
 
   getClientType(): AccountType;
 
+  getFirstName(): string;
+
+  getLastName(): string;
+
   getName(): string;
+
+  getPhoneNumber(): string;
+
+  getCountryPhone(): string;
 
   getEmail(): string;
 
@@ -64,6 +75,8 @@ export interface IClient {
   getFeeACHPanama(): FeeACHPanama;
 
   getFeeAchUsd(): FeeAchUsd;
+
+  getFeeRechargingCard(): CommissionForRechargingCard;
 
   getPrincipalDocuments(): Documents[];
 
@@ -121,4 +134,8 @@ export interface IClient {
     partnerIdProviderService: string,
     partnerDNI: string,
   ): void;
+
+  getNationality(): string;
+
+  getDocumentExpirationDate(): string;
 }

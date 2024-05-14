@@ -20,7 +20,7 @@ import {
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
-  FeeWire,
+  FeeWire,CommissionForRechargingCard
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
@@ -41,15 +41,43 @@ export class Client extends AggregateRoot implements IClient {
   private feeSwap?: FeeSwap;
   private feeWire?: FeeWire;
   private feeACHPanama?: FeeACHPanama;
+  private feeRechargingCard: CommissionForRechargingCard;
   private feeAchUsd?: FeeAchUsd;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
   private createdAt: Date;
   private approvedAt: Date;
+  private addressShipping: Address;
+  private nationality?: string;
+  private documentExpirationDate?: string;
+
+  setAddressShipping(address: Address): Client {
+    this.addressShipping = { ...address, isShipping: true };
+    this.clientData.addressShipping = this.addressShipping;
+    return this;
+  }
+
+  getAddressShipping(): Address {
+    return this.addressShipping;
+  }
 
   getId(): string {
     return this.id;
+  }
+
+  getFirstName(): string {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType, "getFirstName");
+    }
+    return this.clientData.firstName;
+  }
+
+  getLastName(): string {
+    if (this.clientType === AccountType.COMPANY) {
+      throw new InvalidMethodForClientType(this.clientType, "getLastName");
+    }
+    return this.clientData.lastName;
   }
 
   setStatus(clientStatus: AccountStatus): Client {
@@ -93,6 +121,11 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  setFeeRechargingCard(fee: CommissionForRechargingCard): Client {
+    this.feeRechargingCard = fee;
+    return this;
+  }
+
   setFeeACHPanama(fee: FeeACHPanama) {
     this.feeACHPanama = fee;
     return this;
@@ -107,6 +140,8 @@ export class Client extends AggregateRoot implements IClient {
     this.clientData = data;
     this.createdAt = data.createdAt;
     this.approvedAt = data.approvedAt;
+    this.nationality = data.nationality;
+    this.documentExpirationDate = data.documentExpirationDate;
     this.twoFactorActive = data.twoFactorActive ?? false;
 
     return this;
@@ -269,6 +304,20 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.informationCompany.name;
   }
 
+  getPhoneNumber() {
+    if (this.clientType === AccountType.INDIVIDUAL)
+      return this.clientData.phoneNumber;
+
+    return this.clientData.informationCompany.phoneNumber;
+  }
+
+  getCountryPhone() {
+    if (this.clientType === AccountType.INDIVIDUAL)
+      return this.clientData.phoneCountry;
+
+    return this.clientData.informationCompany.phoneCountry;
+  }
+
   getEmail(): string {
     return this.clientData.email;
   }
@@ -336,6 +385,10 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     return this.clientData.residencyStatus;
+  }
+
+  getFeeRechargingCard(): CommissionForRechargingCard {
+    return this.feeRechargingCard;
   }
 
   getFeeSwap(): FeeSwap {
@@ -562,6 +615,14 @@ export class Client extends AggregateRoot implements IClient {
       serviceProviderId;
   }
 
+  getNationality(): string {
+    return this.nationality;
+  }
+
+  getDocumentExpirationDate(): string {
+    return this.documentExpirationDate;
+  }
+
   toPrimitives(): any {
     return {
       isSegregated: this.isSegregated,
@@ -573,6 +634,7 @@ export class Client extends AggregateRoot implements IClient {
       feeSwap: this.feeSwap.toPrimitives(),
       feeWire: this.feeWire.toPrimitives(),
       feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
+      feeRechargingCard: this.feeRechargingCard.toPrimitives(),
       feeAchUsd: this.feeAchUsd.toPrimitives() ?? null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,

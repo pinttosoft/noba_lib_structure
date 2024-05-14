@@ -4,4 +4,6 @@ export interface IStorageService {
   downloadFile(fileName: string): Promise<string>;
 
   deleteFile(path: string): Promise<void>;
+
+  setBucketName(bucketName: string): void;
 }

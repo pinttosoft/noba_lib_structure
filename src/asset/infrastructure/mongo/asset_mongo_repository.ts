@@ -28,14 +28,14 @@ export class AssetMongoRepository
 
   async all(): Promise<Asset[] | undefined> {
     const collection = await this.collection();
-    const result = await collection.find().toArray();
+    const result = await collection.find<any>({}).toArray();
 
     return result.map((r) => Asset.fromPrimitives(r._id.toString(), r));
   }
 
   async findAssetByCode(code: string): Promise<Asset | undefined> {
     const collection = await this.collection();
-    const r = await collection.findOne({ code });
+    const r = await collection.findOne<any>({ code });
     if (!r) {
       return undefined;
     }
@@ -45,7 +45,7 @@ export class AssetMongoRepository
 
   async findById(assetId: string): Promise<Asset | undefined> {
     const collection = await this.collection();
-    const r = await collection.findOne({ assetId });
+    const r = await collection.findOne<any>({ assetId });
     if (!r) {
       return undefined;
     }
@@ -69,7 +69,7 @@ export class AssetMongoRepository
       filters.assetClassification = assetClassification;
     }
 
-    const result = await collection.find(filters).toArray();
+    const result = await collection.find<any>(filters).toArray();
 
     return result.map((r) => Asset.fromPrimitives(r._id.toString(), r));
   }

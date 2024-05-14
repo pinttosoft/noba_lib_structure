@@ -1,4 +1,4 @@
-import { FinancialMovement, IFinanceRepository, Finance } from "../../index";
+import { Finance, FinancialMovement, IFinanceRepository } from "../../index";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 export class FinanceMongoRepository
@@ -19,13 +19,14 @@ export class FinanceMongoRepository
     this._instance = new FinanceMongoRepository();
     return this._instance;
   }
+
   collectionName(): string {
     return "finance";
   }
 
   async getByReferenceId(referenceId: string): Promise<Finance | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne({ referenceId });
+    const result = await collection.findOne<any>({ referenceId });
     if (!result) {
       return undefined;
     }
