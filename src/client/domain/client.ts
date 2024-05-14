@@ -20,7 +20,8 @@ import {
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
-  FeeWire,CommissionForRechargingCard
+  FeeWire,
+  CommissionForRechargingCard,
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";

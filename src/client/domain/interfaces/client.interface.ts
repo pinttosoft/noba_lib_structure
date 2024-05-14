@@ -5,7 +5,7 @@ import {
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
-    CommissionForRechargingCard,
+  CommissionForRechargingCard,
   FeeWire,
 } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
