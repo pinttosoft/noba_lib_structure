@@ -3,6 +3,7 @@ import { FeeSwap } from "../fee_swap";
 import { FeeWire } from "../fee_wire";
 import { FeeACHPanama } from "../feeACHPanama";
 import { CommissionForRechargingCard } from "../commission_for_recharging_card";
+import { CommissionForIssuingCard } from "../CommissionForIssuingCard ";
 
 export interface ISystemConfigurationRepository {
   getIntegratorSwapFee(): Promise<FeeSwap>;
@@ -20,4 +21,6 @@ export interface ISystemConfigurationRepository {
   getDefaultFeeACHPAB(): Promise<FeeACHPanama>;
 
   getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard>;
+
+  getFeeIssuingCard(): Promise<CommissionForIssuingCard>;
 }

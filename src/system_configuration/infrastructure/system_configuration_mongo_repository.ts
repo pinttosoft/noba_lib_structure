@@ -10,6 +10,7 @@ import { ObjectId } from "mongodb";
 import { FeeACHPanama } from "../domain/feeACHPanama";
 import { FeeACHPAB } from "../domain/types/fee_ach_pab.type";
 import { CommissionForRechargingCard } from "../domain/commission_for_recharging_card";
+import { CommissionForIssuingCard } from "../domain/CommissionForIssuingCard ";
 
 type SystemConfig = {
   _id: ObjectId;
@@ -18,6 +19,13 @@ type SystemConfig = {
   feeACHPanama: FeeACHPAB;
   FeeSwapForProgramReferrals: FeeSwapForProgramReferralsDTO;
   feeRechargingCard: CommissionForRechargingCard;
+    feeIssuingCard: {
+        issuingVirtual: number;
+        issuingPhysical: {
+            issuingFee: number;
+            deliveryFee: number;
+        };
+    };
 };
 
 export class SystemConfigurationMongoRepository
@@ -74,6 +82,14 @@ export class SystemConfigurationMongoRepository
     }
 
     return FeeACHPanama.fromPrimitives(result.feeACHPanama);
+  }
+
+  async getFeeIssuingCard(): Promise<CommissionForIssuingCard> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<SystemConfig>();
+
+    return CommissionForIssuingCard.fromPrimitives(result.feeIssuingCard);
   }
 
   async getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard> {
