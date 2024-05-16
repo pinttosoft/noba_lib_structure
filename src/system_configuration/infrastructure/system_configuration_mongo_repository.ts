@@ -10,7 +10,7 @@ import { ObjectId } from "mongodb";
 import { FeeACHPanama } from "../domain/feeACHPanama";
 import { FeeACHPAB } from "../domain/types/fee_ach_pab.type";
 import { CommissionForRechargingCard } from "../domain/commission_for_recharging_card";
-import { CommissionForIssuingCard } from "../domain/CommissionForIssuingCard ";
+import { CommissionForIssuingCard } from "../domain/commission_for_issuing_card";
 
 type SystemConfig = {
   _id: ObjectId;
@@ -19,13 +19,13 @@ type SystemConfig = {
   feeACHPanama: FeeACHPAB;
   FeeSwapForProgramReferrals: FeeSwapForProgramReferralsDTO;
   feeRechargingCard: CommissionForRechargingCard;
-    feeIssuingCard: {
-        issuingVirtual: number;
-        issuingPhysical: {
-            issuingFee: number;
-            deliveryFee: number;
-        };
+  feeIssuingCard: {
+    issuingVirtual: number;
+    issuingPhysical: {
+      issuingFee: number;
+      deliveryFee: number;
     };
+  };
 };
 
 export class SystemConfigurationMongoRepository
