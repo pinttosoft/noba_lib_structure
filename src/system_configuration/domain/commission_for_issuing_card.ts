@@ -1,10 +1,7 @@
 export class CommissionForIssuingCard {
   private id?: string;
   private issuingVirtual: number;
-  private issuingPhysical: {
-    issuingFee: number;
-    deliveryFee: number;
-  };
+  private issuingPhysical: number;
 
   getId(): string {
     return this.id;
@@ -14,10 +11,7 @@ export class CommissionForIssuingCard {
     const c: CommissionForIssuingCard = new CommissionForIssuingCard();
 
     c.issuingVirtual = data.issuingVirtual;
-    c.issuingPhysical = {
-      issuingFee: data.issuingPhysical.issuingFee,
-      deliveryFee: data.issuingPhysical.deliveryFee,
-    };
+    c.issuingPhysical = data.issuingPhysical;
 
     return c;
   }
@@ -26,7 +20,7 @@ export class CommissionForIssuingCard {
     return this.issuingVirtual;
   }
 
-  getFeeIssuingPhysical(): { issuingFee: number; deliveryFee: number } {
+  getFeeIssuingPhysical(): number {
     return this.issuingPhysical;
   }
 
