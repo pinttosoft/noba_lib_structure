@@ -7,5 +7,4 @@ export type DepositInformation = {
   status: DepositStatus;
   networkBank?: NetworkBank;
   amount: number;
-  description: string;
 };
