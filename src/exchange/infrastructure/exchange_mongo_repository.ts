@@ -10,6 +10,7 @@ import {
 } from "../../shared";
 import { IExchangeRepository } from "../domain/interfaces/exchange_repository.interface";
 import { Exchange } from "../domain/exchange";
+import { ExchangeStatus } from "../domain/enums/exchange_status.enum";
 
 export class ExchangeMongoRepository
   extends MongoRepository<Exchange>
@@ -69,5 +70,24 @@ export class ExchangeMongoRepository
 
   async upsert(exchange: Exchange): Promise<void> {
     await this.persist(exchange.getId(), exchange);
+  }
+
+  async getExchangeByIdAssetCodeClientIdAmounStatus(
+    assetCode: string,
+    clientId: string,
+    amount: number,
+    status: ExchangeStatus,
+  ): Promise<Exchange | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne({
+      "destinationDetails.assetCode": assetCode,
+      clientId,
+      "destinationDetails.amountCredit": amount,
+      status,
+    });
+    if (!result) {
+      return undefined;
+    }
+    return Exchange.fromPrimitives(result._id.toString(), result);
   }
 }
