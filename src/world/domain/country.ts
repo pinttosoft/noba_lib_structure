@@ -1,23 +1,34 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 
+type country = {
+  id: string;
+  country_id: string;
+  country_code: string;
+  name: string;
+  calling_code: string;
+  fee_shipping?: number;
+};
+
 export class Country extends AggregateRoot {
   private id?: string;
   private country_id: string;
   private country_code: string;
   private name: string;
   private calling_code: string;
+  private fee_shipping?: number;
 
   getId(): string {
     return this.id;
   }
 
-  static newCountry(data: any): Country {
+  static newCountry(data: country): Country {
     const country: Country = new Country();
     country.id = data.id;
     country.country_id = data.country_id;
     country.country_code = data.country_code;
     country.name = data.name;
     country.calling_code = data.calling_code;
+    country.fee_shipping = data.fee_shipping ?? 0;
 
     return country;
   }
@@ -38,13 +49,18 @@ export class Country extends AggregateRoot {
     this.calling_code = callingCode;
   }
 
-  static fromPrimitives(data: any): Country {
+  getFeeShipping(): number {
+    return this.fee_shipping ?? 0;
+  }
+
+  static fromPrimitives(data: country): Country {
     const country: Country = new Country();
     country.id = data.id;
     country.country_id = data.country_id;
     country.country_code = data.country_code;
     country.name = data.name;
     country.calling_code = data.calling_code;
+    country.fee_shipping = data.fee_shipping ?? 0;
 
     return country;
   }
@@ -55,6 +71,7 @@ export class Country extends AggregateRoot {
       country_code: this.country_code,
       name: this.name,
       calling_code: this.calling_code,
+      fee_shipping: this.fee_shipping ?? 0,
     };
   }
 }
