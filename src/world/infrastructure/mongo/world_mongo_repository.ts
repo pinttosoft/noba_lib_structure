@@ -57,4 +57,11 @@ export class WorldMongoRepository
       .sort("name", -1)
       .toArray();
   }
+
+  async findCountryByCountryCode(countryCode: string): Promise<CountryType> {
+    this.collectName = "countries";
+    const collection = await this.collection();
+
+    return await collection.findOne<CountryType>({ country_code: countryCode });
+  }
 }

@@ -3,4 +3,5 @@ export type CountryType = {
   country_code: string;
   name: string;
   calling_code: string;
+  fee_shipping?: number;
 };

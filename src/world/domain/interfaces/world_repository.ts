@@ -11,4 +11,6 @@ export interface IWorldRepository {
   ): Promise<CityType[]>;
 
   findCountries(): Promise<CountryType[]>;
+
+  findCountryByCountryCode(countryCode: string): Promise<CountryType>;
 }
