@@ -2,8 +2,9 @@ import { FeeSwapForProgramReferrals } from "../fee_swap_for_program_referrals";
 import { FeeSwap } from "../fee_swap";
 import { FeeWire } from "../fee_wire";
 import { FeeACHPanama } from "../feeACHPanama";
-import { FeeAchUsd } from "../fee_ach_usd";
 import { CommissionForRechargingCard } from "../commission_for_recharging_card";
+import {FeeAchUsd} from "../fee_ach_usd";
+import {CommissionForIssuingCard} from "../commission_for_issuing_card";
 
 export interface ISystemConfigurationRepository {
   getIntegratorSwapFee(): Promise<FeeSwap>;
@@ -23,4 +24,6 @@ export interface ISystemConfigurationRepository {
   getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard>;
 
   getDefaultFeeAchUsd(): Promise<FeeAchUsd>;
+
+  getFeeIssuingCard(): Promise<CommissionForIssuingCard>;
 }

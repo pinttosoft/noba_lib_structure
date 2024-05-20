@@ -17,3 +17,4 @@ export { FeeWire } from "./domain/fee_wire";
 export { FeeSwapForProgramReferrals } from "./domain/fee_swap_for_program_referrals";
 export { FeeACHPanama } from "./domain/feeACHPanama";
 export { CommissionForRechargingCard } from "./domain/commission_for_recharging_card";
+export { CommissionForIssuingCard } from "./domain/commission_for_issuing_card";
