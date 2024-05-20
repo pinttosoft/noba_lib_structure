@@ -17,11 +17,11 @@ import {
 import { InvalidMethodForClientType } from "./exceptions/invalid_method_client_type";
 import { ResidencyStatus } from "./enums/residency_status";
 import {
+  CommissionForRechargingCard,
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
   FeeWire,
-  CommissionForRechargingCard,
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
@@ -636,7 +636,7 @@ export class Client extends AggregateRoot implements IClient {
       feeWire: this.feeWire.toPrimitives(),
       feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       feeRechargingCard: this.feeRechargingCard.toPrimitives(),
-      feeAchUsd: this.feeAchUsd.toPrimitives() ?? null,
+      feeAchUsd: this.feeAchUsd ? this.feeAchUsd.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
       createdAt: this.createdAt,
