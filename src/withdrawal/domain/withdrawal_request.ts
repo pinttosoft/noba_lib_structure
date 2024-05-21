@@ -111,6 +111,10 @@ export class WithdrawalRequest extends AggregateRoot {
     return this;
   }
 
+  getStatus(): WithdrawalStatus {
+    return this.status;
+  }
+
   getWithdrawalId(): string {
     return this.withdrawalId;
   }
