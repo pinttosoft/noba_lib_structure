@@ -273,4 +273,32 @@ export class TransactionMongoRepository
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
     await this.persist(transaction.getId(), transaction);
   }
+
+  async findTransactionDepositByAssetIdAmountStatusClientId(
+    assetId: string,
+    amount: number,
+    status: WithdrawalStatus,
+    clientId: string,
+  ): Promise<Transaction | undefined> {
+    const collection = await this.collection();
+    const filter = {
+      assetId,
+      status,
+      amount,
+      clientId,
+      transactionType: TransactionType.DEPOSIT,
+    };
+
+    const result = await collection.findOne<any>(filter);
+    if (!result) {
+      return null;
+    }
+
+    const counterparty: Counterparty = this.buildCounterparty(result);
+    return Transaction.fromPrimitives(
+      result._id.toString(),
+      result,
+      counterparty,
+    );
+  }
 }
