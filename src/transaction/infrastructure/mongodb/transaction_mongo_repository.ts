@@ -279,7 +279,7 @@ export class TransactionMongoRepository
     amount: number,
     status: WithdrawalStatus,
     clientId: string,
-  ): Promise<Transaction | undefined> {
+  ): Promise<ExchangeTransaction | undefined> {
     const collection = await this.collection();
     const filter = {
       assetId,
@@ -294,11 +294,6 @@ export class TransactionMongoRepository
       return null;
     }
 
-    const counterparty: Counterparty = this.buildCounterparty(result);
-    return Transaction.fromPrimitives(
-      result._id.toString(),
-      result,
-      counterparty,
-    );
+    return ExchangeTransaction.fromPrimitives(result._id.toString(), result);
   }
 }

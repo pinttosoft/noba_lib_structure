@@ -59,5 +59,5 @@ export interface ITransactionRepository {
     amount: number,
     status: WithdrawalStatus,
     clientId: string,
-  ): Promise<Transaction | undefined>;
+  ): Promise<ExchangeTransaction | undefined>;
 }
