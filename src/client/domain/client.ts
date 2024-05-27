@@ -19,6 +19,7 @@ import { ResidencyStatus } from "./enums/residency_status";
 import {
   CommissionForRechargingCard,
   FeeACHPanama,
+  FeeAchUsd,
   FeeSwap,
   FeeWire,
 } from "../../system_configuration";
@@ -42,6 +43,7 @@ export class Client extends AggregateRoot implements IClient {
   private feeWire?: FeeWire;
   private feeACHPanama?: FeeACHPanama;
   private feeRechargingCard: CommissionForRechargingCard;
+  private feeAchUsd?: FeeAchUsd;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
@@ -127,6 +129,11 @@ export class Client extends AggregateRoot implements IClient {
 
   setFeeACHPanama(fee: FeeACHPanama) {
     this.feeACHPanama = fee;
+    return this;
+  }
+
+  setFeeAchUsd(feeAchUsd: FeeAchUsd): IClient {
+    this.feeAchUsd = feeAchUsd;
     return this;
   }
 
@@ -397,6 +404,10 @@ export class Client extends AggregateRoot implements IClient {
     return this.feeACHPanama;
   }
 
+  getFeeAchUsd(): FeeAchUsd {
+    return this.feeAchUsd;
+  }
+
   activeTwoFactorAuth(): void {
     this.twoFactorActive = true;
   }
@@ -625,6 +636,7 @@ export class Client extends AggregateRoot implements IClient {
       feeWire: this.feeWire.toPrimitives(),
       feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       feeRechargingCard: this.feeRechargingCard.toPrimitives(),
+      feeAchUsd: this.feeAchUsd ? this.feeAchUsd.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,
       createdAt: this.createdAt,
