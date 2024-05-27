@@ -11,6 +11,8 @@ export enum Operator {
   GTE = ">=",
   LTE = "<=",
   DATE_RANGE = "DATE_RANGE",
+  IN = "IN",
+  NOT_IN = "NOT_IN",
 }
 
 export class FilterOperator extends EnumValueObject<Operator> {
