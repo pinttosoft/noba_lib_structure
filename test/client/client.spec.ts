@@ -400,8 +400,8 @@ describe("Client", () => {
       );
 
     const feeAchUsd: FeeAchUsd = FeeAchUsd.fromPrimitives({
-      in: 1.1,
-      out: 2.2,
+      in: 1.3,
+      out: 2.3,
     });
 
     client.setFeeAchUsd(feeAchUsd);

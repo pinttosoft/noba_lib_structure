@@ -2,10 +2,10 @@ import { AccountStatus, AccountType, IAccount } from "../../../account";
 import { Address, ContactInformation } from "../../../shared";
 import { ResidencyStatus } from "../enums/residency_status";
 import {
+  CommissionForRechargingCard,
   FeeACHPanama,
   FeeAchUsd,
   FeeSwap,
-  CommissionForRechargingCard,
   FeeWire,
 } from "../../../system_configuration";
 import { CompanyDTO } from "../types/company.type";
@@ -138,4 +138,6 @@ export interface IClient {
   getNationality(): string;
 
   getDocumentExpirationDate(): string;
+
+  build(): void;
 }

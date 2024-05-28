@@ -11,9 +11,9 @@ import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
+  CommissionForRechargingCard,
   FeeACHPanama,
   FeeAchUsd,
-  CommissionForRechargingCard,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -40,8 +40,7 @@ export class ClientFactory {
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
       .setFeeRechargingCard(await systemConfig.getDefaultFeeRechargingCard())
       .setFeeACHPanama(await systemConfig.getDefaultFeeACHPAB())
-      //todo
-      //.setFeeAchUsd(await systemConfig.getDefaultFeeAchUsd())
+      .setFeeAchUsd(await systemConfig.getDefaultFeeAchUsd())
 
       .build();
 
