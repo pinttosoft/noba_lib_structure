@@ -11,8 +11,9 @@ import { IClient } from "../interfaces/client.interface";
 import { Client } from "../client";
 import { GenericException } from "../../../shared";
 import {
-  FeeACHPanama,
   CommissionForRechargingCard,
+  FeeACHPanama,
+  FeeAchUsd,
   FeeSwap,
   FeeWire,
   ISystemConfigurationRepository,
@@ -39,6 +40,7 @@ export class ClientFactory {
       .setFeeSwap(await systemConfig.getDefaultFeeSwap())
       .setFeeRechargingCard(await systemConfig.getDefaultFeeRechargingCard())
       .setFeeACHPanama(await systemConfig.getDefaultFeeACHPAB())
+      .setFeeAchUsd(await systemConfig.getDefaultFeeAchUsd())
 
       .build();
 
@@ -72,11 +74,14 @@ export class ClientFactory {
             : await SystemConfigurationMongoRepository.instance().getDefaultFeeRechargingCard(),
         )
         .setTaxId(data.taxId ?? null)
-        .setAddressShipping(data.addressShipping ?? {})
         .setClientId(data.clientId);
 
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
+      }
+
+      if (data.feeAchUsd) {
+        c.setFeeAchUsd(FeeAchUsd.fromPrimitives(data.feeAchUsd));
       }
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL

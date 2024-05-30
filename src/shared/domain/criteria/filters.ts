@@ -7,7 +7,7 @@ export class Filters {
     this.filters = filters;
   }
 
-  static fromValues(filters: Array<Map<string, string>>): Filters {
+  static fromValues(filters: Array<Map<string, string | string[]>>): Filters {
     return new Filters(filters.map(Filter.fromValues));
   }
 

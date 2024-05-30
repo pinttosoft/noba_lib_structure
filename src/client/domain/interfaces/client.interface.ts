@@ -4,6 +4,7 @@ import { ResidencyStatus } from "../enums/residency_status";
 import {
   CommissionForRechargingCard,
   FeeACHPanama,
+  FeeAchUsd,
   FeeSwap,
   FeeWire,
 } from "../../../system_configuration";
@@ -73,6 +74,8 @@ export interface IClient {
 
   getFeeACHPanama(): FeeACHPanama;
 
+  getFeeAchUsd(): FeeAchUsd;
+
   getFeeRechargingCard(): CommissionForRechargingCard;
 
   getPrincipalDocuments(): Documents[];
@@ -107,6 +110,8 @@ export interface IClient {
 
   setFeeACHPanama(feeACHPanama: FeeACHPanama): IClient;
 
+  setFeeAchUsd(feeAchUsd: FeeAchUsd): IClient;
+
   deleteKycAction(id: string): void;
 
   setKycActionToPartner(kycAction: KycAction): IClient;
@@ -133,4 +138,6 @@ export interface IClient {
   getNationality(): string;
 
   getDocumentExpirationDate(): string;
+
+  build(): void;
 }

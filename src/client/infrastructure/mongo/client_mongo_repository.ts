@@ -15,6 +15,10 @@ export class ClientMongoRepository
 {
   private static _instance: ClientMongoRepository;
 
+  constructor() {
+    super(MongoClientFactory.createClient());
+  }
+
   public static instance(): ClientMongoRepository {
     if (this._instance) {
       return this._instance;
@@ -22,10 +26,6 @@ export class ClientMongoRepository
 
     this._instance = new ClientMongoRepository();
     return this._instance;
-  }
-
-  constructor() {
-    super(MongoClientFactory.createClient());
   }
 
   collectionName(): string {
@@ -41,17 +41,6 @@ export class ClientMongoRepository
     }
 
     return this.buildClient({ ...result }, result._id.toString());
-  }
-
-  private async buildClient(client: any, resultId: string): Promise<IClient> {
-    const account: IAccount =
-      await new AccountMongoRepository().findByAccountId(client.accountId);
-
-    if (!account) {
-      throw new AccountNotFound(client.accountId);
-    }
-
-    return await ClientFactory.fromPrimitives(resultId, client, account);
   }
 
   async findByClientId(clientId: string): Promise<IClient | undefined> {
@@ -116,5 +105,16 @@ export class ClientMongoRepository
     if (!result) return undefined;
 
     return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  private async buildClient(client: any, resultId: string): Promise<IClient> {
+    const account: IAccount =
+      await new AccountMongoRepository().findByAccountId(client.accountId);
+
+    if (!account) {
+      throw new AccountNotFound(client.accountId);
+    }
+
+    return ClientFactory.fromPrimitives(resultId, client, account);
   }
 }

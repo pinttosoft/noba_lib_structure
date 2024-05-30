@@ -13,7 +13,9 @@ type MongoFilterOperator =
   | "$lt"
   | "$regex"
   | "$lte"
-  | "$gte";
+  | "$gte"
+  | "$in"
+  | "$nin";
 
 type MongoFilterBetween = {
   [p: string]: { $gte: Date; $lte: Date };
@@ -59,6 +61,8 @@ export class MongoCriteriaConverter {
       [Operator.GTE, this.greaterThanOrEqualFilter],
       [Operator.LTE, this.lowerThanOrEqualFilter],
       [Operator.DATE_RANGE, this.dateRangeFilter],
+      [Operator.IN, this.inFilter],
+      [Operator.NOT_IN, this.notInFilter],
     ]);
   }
 
@@ -126,6 +130,14 @@ export class MongoCriteriaConverter {
 
   private notContainsFilter(filter: Filter): MongoFilter {
     return { [filter.field.value]: { $not: { $regex: filter.value.value } } };
+  }
+
+  private inFilter(filter: Filter): MongoFilter {
+    return { [filter.field.value]: { $in: filter.value.value } };
+  }
+
+  private notInFilter(filter: Filter): MongoFilter {
+    return { [filter.field.value]: { $nin: filter.value.value } };
   }
 
   private dateRangeFilter(filter: Filter): MongoFilterBetween {
