@@ -82,9 +82,11 @@ export class WithdrawalRequestMongoRepository
     }
 
     const counterparty: Counterparty =
-      await CounterpartyMongoRepository.instance().findByCounterpartyIdAndAssetId(
+      await CounterpartyMongoRepository.instance().findByClientIdAndCounterPartyIdAndAssetId(
         result.counterparty.counterpartyId,
         result.counterparty.assetId,
+        result.clientId,
+        result.counterparty.isInternal,
       );
 
     return WithdrawalRequest.fromPrimitives(

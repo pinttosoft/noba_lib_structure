@@ -30,6 +30,13 @@ export interface ICounterpartyRepository {
     assetId: string,
   ): Promise<Counterparty | undefined>;
 
+  findByClientIdAndCounterPartyIdAndAssetId(
+    clientId: string,
+    counterpartyId: string,
+    assetId: string,
+    isInternal?: "S" | "N"
+  ): Promise<Counterparty | undefined>;
+
   delete(counterpartyId: string): Promise<void>;
 
   list(
