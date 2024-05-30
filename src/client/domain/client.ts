@@ -58,7 +58,7 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   getAddressShipping(): Address {
-    return this.addressShipping;
+    return this.clientData.addressShipping;
   }
 
   getId(): string {
