@@ -103,6 +103,7 @@ export class CounterpartyBank extends Counterparty {
     counterparty.bankName = informationBank.bankName;
     counterparty.accountNumber = informationBank.accountNumber;
     counterparty.networkBank = informationBank.networkBank;
+    counterparty.routingNumber = informationBank.routingNumber;
 
     counterparty.clientId = data.clientId;
     counterparty.accountId = data.accountId;

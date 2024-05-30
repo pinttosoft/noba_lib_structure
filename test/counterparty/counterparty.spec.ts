@@ -138,7 +138,23 @@ describe("Counterparty", () => {
   it("Should get all external PENDING counterparies", async () => {
     const pendings = await CounterpartyMongoRepository.instance().getPending();
 
-    console.log("pendings", pendings);
+    console.log("-- pendings", pendings);
+  });
+
+  it("Should update external PENDING counterparies", async () => {
+    const counterpartyMongoRepository = CounterpartyMongoRepository.instance();
+
+    const pendingCounterparties =
+      await counterpartyMongoRepository.getPending();
+
+    console.log("--> pendingCounterparties", pendingCounterparties);
+
+    for (const counterparty of pendingCounterparties) {
+      counterparty.setStatus(CounterpartyStatus.ACTIVE);
+      await counterpartyMongoRepository.upsert(counterparty);
+
+      console.log(`Counterparty ${counterparty.getName()} has been activated`);
+    }
   });
 
   it("should fetch all internal ACH PAB counterparties for a given client id", async () => {
