@@ -34,7 +34,7 @@ export interface ICounterpartyRepository {
     clientId: string,
     counterpartyId: string,
     assetId: string,
-    isInternal?: "S" | "N"
+    isInternal?: "S" | "N",
   ): Promise<Counterparty | undefined>;
 
   delete(counterpartyId: string): Promise<void>;

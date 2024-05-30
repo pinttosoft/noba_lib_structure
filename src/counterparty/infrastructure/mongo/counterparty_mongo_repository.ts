@@ -119,10 +119,10 @@ export class CounterpartyMongoRepository
   }
 
   async findByClientIdAndCounterPartyIdAndAssetId(
-      counterpartyId: string,
-      assetId: string,
-      clientId: string,
-      isInternal?: "S" | "N"
+    counterpartyId: string,
+    assetId: string,
+    clientId: string,
+    isInternal?: "S" | "N",
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
 
@@ -147,7 +147,6 @@ export class CounterpartyMongoRepository
 
     return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
   }
-
 
   async list(
     criteria: Criteria,
