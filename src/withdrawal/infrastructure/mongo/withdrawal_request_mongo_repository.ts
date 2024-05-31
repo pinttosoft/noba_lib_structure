@@ -14,7 +14,7 @@ import {
   Counterparty,
   CounterpartyMongoRepository,
 } from "../../../counterparty";
-import { logger } from "../../../index";
+import { logger, WithdrawalType } from "../../../index";
 
 export class WithdrawalRequestMongoRepository
   extends MongoRepository<WithdrawalRequest>
@@ -86,7 +86,7 @@ export class WithdrawalRequestMongoRepository
         result.counterparty.counterpartyId,
         result.counterparty.assetId,
         result.clientId,
-        result.counterparty.isInternal,
+        result.withdrawalType === WithdrawalType.INTERNAL ? "S" : "N",
       );
 
     return WithdrawalRequest.fromPrimitives(
