@@ -176,7 +176,12 @@ export class CounterpartyBank extends Counterparty {
       informationOwner: this.getInformationOwner(),
       informationBank: this.getInformationBank(),
       informationIntermediaryBank: this.getInformationIntermediaryBank(),
-      isInternal: this.isInternal === true ? "S" : "N",
+      isInternal:
+        typeof this.isInternal === "boolean"
+          ? this.isInternal
+            ? "S"
+            : "N"
+          : this.isInternal,
       profileType: this.profileType,
       createdAt: this.createdAt,
       status: this.status,
