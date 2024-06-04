@@ -11,14 +11,6 @@ export class CounterpartyAchPab extends Counterparty {
   private holderId: string;
   private holderName: string;
 
-  getName(): string {
-    return "";
-  }
-
-  getId(): string | undefined {
-    return this.id;
-  }
-
   static newCounterparty(
     data: CounterpartyAchPabDtoType,
     isInternal: boolean = false,
@@ -49,34 +41,6 @@ export class CounterpartyAchPab extends Counterparty {
     return c;
   }
 
-  getInformationBank() {
-    return {
-      label: this.label,
-      holderEmail: this.holderEmail,
-      accountDestinationNumber: this.accountDestinationNumber,
-      bankName: this.bankName,
-      productType: this.productType,
-      holderId: this.holderId,
-      holderName: this.holderName,
-    };
-  }
-
-  getInformationOwner():
-    | { name: string; address: Address }
-    | { name: string; country: string } {
-    return {
-      name: this.ownerName,
-      address: {
-        streetOne: "",
-        streetTwo: "",
-        postalCode: "",
-        city: "",
-        region: "",
-        country: this.ownerCountry,
-      },
-    };
-  }
-
   static fromPrimitives(id: string, data: any): CounterpartyAchPab {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
     const informationOwner = data.informationOwner;
@@ -105,6 +69,42 @@ export class CounterpartyAchPab extends Counterparty {
     return c;
   }
 
+  getName(): string {
+    return "";
+  }
+
+  getId(): string | undefined {
+    return this.id;
+  }
+
+  getInformationBank() {
+    return {
+      label: this.label,
+      holderEmail: this.holderEmail,
+      accountDestinationNumber: this.accountDestinationNumber,
+      bankName: this.bankName,
+      productType: this.productType,
+      holderId: this.holderId,
+      holderName: this.holderName,
+    };
+  }
+
+  getInformationOwner():
+    | { name: string; address: Address }
+    | { name: string; country: string } {
+    return {
+      name: this.ownerName,
+      address: {
+        streetOne: "",
+        streetTwo: "",
+        postalCode: "",
+        city: "",
+        region: "",
+        country: this.ownerCountry,
+      },
+    };
+  }
+
   toPrimitives(): any {
     return {
       informationBank: this.getInformationBank(),
@@ -113,7 +113,12 @@ export class CounterpartyAchPab extends Counterparty {
       counterpartyId: this.counterpartyId,
       counterpartyType: this.counterpartyType,
       informationOwner: this.getInformationOwner(),
-      isInternal: this.isInternal === true ? "S" : "N",
+      isInternal:
+        typeof this.isInternal === "boolean"
+          ? this.isInternal
+            ? "S"
+            : "N"
+          : this.isInternal,
       createdAt: this.createdAt,
       status: this.status,
     };

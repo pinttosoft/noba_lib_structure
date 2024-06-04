@@ -14,7 +14,7 @@ import {
   Counterparty,
   CounterpartyMongoRepository,
 } from "../../../counterparty";
-import { logger } from "../../../index";
+import { logger, WithdrawalType } from "../../../index";
 
 export class WithdrawalRequestMongoRepository
   extends MongoRepository<WithdrawalRequest>
@@ -82,9 +82,11 @@ export class WithdrawalRequestMongoRepository
     }
 
     const counterparty: Counterparty =
-      await CounterpartyMongoRepository.instance().findByCounterpartyIdAndAssetId(
+      await CounterpartyMongoRepository.instance().findByClientIdAndCounterPartyIdAndAssetId(
         result.counterparty.counterpartyId,
         result.counterparty.assetId,
+        result.clientId,
+        result.withdrawalType === WithdrawalType.INTERNAL ? "S" : "N",
       );
 
     return WithdrawalRequest.fromPrimitives(

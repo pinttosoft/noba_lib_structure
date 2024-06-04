@@ -118,6 +118,36 @@ export class CounterpartyMongoRepository
     return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
   }
 
+  async findByClientIdAndCounterPartyIdAndAssetId(
+    counterpartyId: string,
+    assetId: string,
+    clientId: string,
+    isInternal?: "S" | "N",
+  ): Promise<Counterparty | undefined> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<any>({
+      counterpartyId,
+      assetId,
+      clientId,
+      ...(isInternal && { isInternal }),
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    if (result.counterpartyType === CounterpartyType.CRYPTO) {
+      return CounterpartyAsset.fromPrimitives(result._id.toString(), result);
+    }
+
+    if (result.informationBank.networkBank) {
+      return CounterpartyBank.fromPrimitives(result._id.toString(), result);
+    }
+
+    return CounterpartyAchPab.fromPrimitives(result._id.toString(), result);
+  }
+
   async list(
     criteria: Criteria,
     assetCode?: string,
