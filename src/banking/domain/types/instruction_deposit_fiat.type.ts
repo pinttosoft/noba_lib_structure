@@ -27,7 +27,7 @@ export type InstructionDepositFiat = {
     holderName: string;
     accountNumber: string;
     accountRoutingNumber: string;
-    institutionName: string
+    institutionName: string;
     memo: string;
   };
   SWIFT: {
