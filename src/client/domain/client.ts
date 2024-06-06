@@ -27,7 +27,7 @@ import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
-import { ClientFollowUp } from "./types/client-follow-up.type";
+import { FollowUpClient } from "./types/follow-up-client.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -37,7 +37,7 @@ export class Client extends AggregateRoot implements IClient {
   private id?: string;
   private isSegregated?: boolean;
   private kycRequestedChanges?: KycAction[];
-  private clientFollowUp?: ClientFollowUp[];
+  private clientFollowUp?: FollowUpClient[];
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -475,7 +475,7 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
-  setClientFollowUp(clientFollowUp: ClientFollowUp): IClient {
+  setClientFollowUp(clientFollowUp: FollowUpClient): IClient {
     if (!this.clientFollowUp) {
       this.clientFollowUp = [clientFollowUp];
     } else {
