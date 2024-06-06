@@ -14,6 +14,7 @@ import { IndividualDTO } from "../types/Individual.type";
 import { KycAction } from "../types/kyc-action.type";
 import { InvestmentProfile } from "../types/investment-profile.type";
 import { KycProfileType } from "../types/kyc-profile.type";
+import { ClientFollowUp } from "../types/client-follow-up.type";
 
 export interface IClient {
   getId(): string;
@@ -113,6 +114,8 @@ export interface IClient {
   setFeeAchUsd(feeAchUsd: FeeAchUsd): IClient;
 
   deleteKycAction(id: string): void;
+
+  setClientFollowUp(clientFollowUp: ClientFollowUp): IClient;
 
   setKycActionToPartner(kycAction: KycAction): IClient;
 

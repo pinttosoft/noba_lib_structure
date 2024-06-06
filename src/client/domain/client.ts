@@ -27,6 +27,7 @@ import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
+import { ClientFollowUp } from "./types/client-follow-up.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -36,6 +37,7 @@ export class Client extends AggregateRoot implements IClient {
   private id?: string;
   private isSegregated?: boolean;
   private kycRequestedChanges?: KycAction[];
+  private clientFollowUp?: ClientFollowUp[];
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -473,6 +475,16 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  setClientFollowUp(clientFollowUp: ClientFollowUp): IClient {
+    if (!this.clientFollowUp) {
+      this.clientFollowUp = [clientFollowUp];
+    } else {
+      this.clientFollowUp.push(clientFollowUp);
+    }
+
+    return this;
+  }
+
   setKycActionToPartner(kycAction: KycAction): IClient {
     const partners = this.getCompanyPartners().map((partner) => {
       if (partner.dni === kycAction.dni) {
@@ -642,6 +654,7 @@ export class Client extends AggregateRoot implements IClient {
       createdAt: this.createdAt,
       approvedAt: this.approvedAt,
       kycRequestedChanges: this.kycRequestedChanges,
+      clientFollowUp: this.clientFollowUp,
     };
   }
 }
