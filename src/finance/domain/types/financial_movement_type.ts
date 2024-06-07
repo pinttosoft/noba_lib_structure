@@ -12,4 +12,5 @@ export type FinancialMovement = {
   observation?: any;
   createdAt: Date;
   updatedAt?: Date;
+  profitAssetCode?: string
 };
