@@ -465,6 +465,10 @@ export class Client extends AggregateRoot implements IClient {
     return actions;
   }
 
+  getClientFollowUp(): FollowUpClient[] {
+    return this.clientFollowUp;
+  }
+
   setKycAction(kycAction: KycAction): IClient {
     if (!this.kycRequestedChanges) {
       this.kycRequestedChanges = [kycAction];

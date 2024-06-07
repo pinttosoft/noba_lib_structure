@@ -20,6 +20,7 @@ import {
   SystemConfigurationMongoRepository,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
+import { FollowUpClient } from "../types/follow-up-client.type";
 
 export class ClientFactory {
   static async createNewClient(
@@ -75,6 +76,11 @@ export class ClientFactory {
         )
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
+      // follow up
+
+      data.clientFollowUp.map((followUp: FollowUpClient) => {
+        c.setClientFollowUp(followUp);
+      });
 
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));

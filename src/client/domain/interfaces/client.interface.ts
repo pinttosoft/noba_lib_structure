@@ -103,6 +103,8 @@ export interface IClient {
 
   getKycActions(): KycAction[];
 
+  getClientFollowUp(): FollowUpClient[];
+
   setKycAction(kycActions: KycAction): IClient;
 
   setFeeSwap(feeSwap: FeeSwap): IClient;
