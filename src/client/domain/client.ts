@@ -27,6 +27,7 @@ import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
+import { KycVerification } from "./types/kyc-verification";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -448,6 +449,32 @@ export class Client extends AggregateRoot implements IClient {
 
   rejectSegregated(): void {
     this.status = AccountStatus.REJECTED;
+  }
+
+  setKYCVerification(data: KycVerification): Client {
+    this.clientData.kycVerification = data;
+
+    return this;
+  }
+
+  getKYCVerification(): KycVerification {
+    return this.clientData.kycVerification;
+  }
+
+  setKycVerificationToPartner(kycVerification: KycVerification): IClient {
+    const partners = this.getCompanyPartners().map((partner) => {
+      if (partner.dni === kycVerification.dni) {
+        return {
+          ...partner,
+          kycVerification,
+        };
+      }
+
+      return partner;
+    });
+    this.setClientData({ ...this.clientData, partners });
+
+    return this;
   }
 
   getKycActions(): KycAction[] {
