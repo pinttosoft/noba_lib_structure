@@ -523,6 +523,22 @@ export class Client extends AggregateRoot implements IClient {
     this.kycRequestedChanges.splice(foundActionIndex, 1);
   }
 
+  deleteFollowUp(id: string) {
+    if (!this.clientFollowUp || this.clientFollowUp.length === 0) {
+      throw new GenericException("Action not found");
+    }
+
+    const foundActionIndex = this.clientFollowUp.findIndex(
+      (follow: FollowUpClient): boolean => follow.id === id,
+    );
+
+    if (foundActionIndex === -1) {
+      throw new GenericException("No action found");
+    }
+
+    this.clientFollowUp.splice(foundActionIndex, 1);
+  }
+
   deleteKycActionToPartner(kycAction: KycAction): void {
     const partners = this.getCompanyPartners();
 

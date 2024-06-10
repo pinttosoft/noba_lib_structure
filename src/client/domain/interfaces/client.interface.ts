@@ -117,6 +117,8 @@ export interface IClient {
 
   deleteKycAction(id: string): void;
 
+  deleteFollowUp(id: string): void;
+
   setClientFollowUp(clientFollowUp: FollowUpClient): IClient;
 
   setKycActionToPartner(kycAction: KycAction): IClient;
