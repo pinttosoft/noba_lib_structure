@@ -2,6 +2,7 @@ import { ResidencyStatus } from "../enums/residency_status";
 import { Address, ContactInformation } from "../../../shared";
 import { DocumentSide, DocumentType } from "../../../documents";
 import { KycAction } from "./kyc-action.type";
+import { KycVerification } from "./kyc-verification";
 
 export type individualType = {
   firstName: string;
@@ -18,6 +19,7 @@ export type individualType = {
   };
   kycRequestedChanges?: KycAction[];
   residencyStatus: ResidencyStatus;
+  kycVerification?: KycVerification;
 
   documents: {
     patch: string;
