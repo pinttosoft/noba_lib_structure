@@ -76,12 +76,6 @@ export class ClientFactory {
         )
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
-      // follow up
-      if (data.clientFollowUp) {
-        data.clientFollowUp.map((followUp: FollowUpClient) => {
-          c.setClientFollowUp(followUp);
-        });
-      }
 
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));

@@ -146,6 +146,7 @@ export class Client extends AggregateRoot implements IClient {
     this.nationality = data.nationality;
     this.documentExpirationDate = data.documentExpirationDate;
     this.twoFactorActive = data.twoFactorActive ?? false;
+    this.clientFollowUp = data.clientFollowUp ?? [];
 
     return this;
   }
