@@ -1,7 +1,7 @@
-import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { DocumentType } from "./enums/document_type.enum";
 import { v4 } from "uuid";
 import { DocumentSide } from "./enums/document_side.enum";
+import { KycVerification } from "../../client/domain/types/kyc-verification";
 
 export class Documents {
   private documentId: string;
@@ -9,6 +9,7 @@ export class Documents {
   private clientId: string;
   private documentType: DocumentType;
   private documentSide: DocumentSide;
+  private kycVerification?: KycVerification;
 
   static newDocument(
     clientId: string,
@@ -33,6 +34,7 @@ export class Documents {
     f.documentType = data.documentType;
     f.documentId = data.documentId;
     f.documentSide = data.documentSide;
+    f.kycVerification = data.kycVerification;
 
     return f;
   }
@@ -43,6 +45,10 @@ export class Documents {
 
   getDocumentId(): string {
     return this.documentId;
+  }
+
+  getKycVerification(): KycVerification | undefined {
+    return this.kycVerification;
   }
 
   getPathFile(): string {
@@ -63,6 +69,7 @@ export class Documents {
       patch: this.patch,
       documentType: this.documentType,
       documentSide: this.documentSide,
+      kycVerification: this.kycVerification,
     };
   }
 }

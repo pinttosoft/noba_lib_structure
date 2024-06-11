@@ -1,6 +1,6 @@
 export type KycVerification = {
   sessionId: string;
-  dni?: string;
+  reference?: string;
   profileId?: string;
   status: string;
   AMLStatus: string;

@@ -137,6 +137,8 @@ export interface IClient {
 
   setKycVerificationToPartner(kycVerification: KycVerification): IClient;
 
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient;
+
   setCustomerIdentifierInServiceProvider(
     partnerIdProviderService: string,
     partnerDNI: string,

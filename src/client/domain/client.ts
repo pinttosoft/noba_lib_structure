@@ -463,7 +463,7 @@ export class Client extends AggregateRoot implements IClient {
 
   setKycVerificationToPartner(kycVerification: KycVerification): IClient {
     const partners = this.getCompanyPartners().map((partner) => {
-      if (partner.dni === kycVerification.dni) {
+      if (partner.dni === kycVerification.reference) {
         return {
           ...partner,
           kycVerification,
@@ -473,6 +473,23 @@ export class Client extends AggregateRoot implements IClient {
       return partner;
     });
     this.setClientData({ ...this.clientData, partners });
+
+    return this;
+  }
+
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient {
+    const documents = this.getPrincipalDocuments().map((document) => {
+      if (document.getDocumentId() === kycVerification.reference) {
+        return {
+          ...document,
+          kycVerification,
+        };
+      }
+
+      return document;
+    });
+
+    this.setClientData({ ...this.clientData, documents });
 
     return this;
   }
