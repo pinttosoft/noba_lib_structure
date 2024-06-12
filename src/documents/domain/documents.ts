@@ -29,6 +29,26 @@ export class Documents {
     return d;
   }
 
+  static updateDocument(
+    document: Documents,
+    data: {
+      patch?: string;
+      documentType?: DocumentType;
+      documentSide?: DocumentSide;
+      kycVerification?: KycVerification;
+    },
+  ): Documents {
+    const d = new Documents();
+    d.clientId = document.clientId;
+    d.patch = data.patch || document.patch;
+    d.documentType = data.documentType || document.documentType;
+    d.documentId = document.documentId;
+    d.documentSide = data.documentSide || document.documentSide;
+    d.kycVerification = data.kycVerification || document.kycVerification;
+
+    return d;
+  }
+
   static fromPrimitives(data: any): Documents {
     const f = new Documents();
     f.clientId = data.clientId;
