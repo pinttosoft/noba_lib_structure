@@ -479,17 +479,21 @@ export class Client extends AggregateRoot implements IClient {
 
   setKycVerificationToDocument(kycVerification: KycVerification): IClient {
     const documents = this.getPrincipalDocuments().map((document) => {
+      let newDoc = null;
       if (document.getDocumentId() === kycVerification.reference) {
-        return {
-          ...document,
+        newDoc = Documents.newDocument(
+          this.getClientId(),
+          document.getPathFile(),
+          document.getDocumentType(),
+          document.getDocumentSide(),
           kycVerification,
-        };
+        );
       }
 
-      return document;
+      return newDoc ? newDoc : document;
     });
 
-    this.setClientData({ ...this.clientData, documents });
+    this.documents = documents;
 
     return this;
   }

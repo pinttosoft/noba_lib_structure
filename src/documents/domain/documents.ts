@@ -16,6 +16,7 @@ export class Documents {
     path: string,
     documentType: DocumentType,
     documentSide: DocumentSide,
+    kycVerification?: KycVerification,
   ): Documents {
     const d: Documents = new Documents();
     d.clientId = clientId;
@@ -23,6 +24,7 @@ export class Documents {
     d.documentType = documentType;
     d.documentId = v4();
     d.documentSide = documentSide;
+    d.kycVerification = kycVerification;
 
     return d;
   }
