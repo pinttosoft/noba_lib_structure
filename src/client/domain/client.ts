@@ -152,7 +152,29 @@ export class Client extends AggregateRoot implements IClient {
   setDocument(dni: string, document: Documents): Client {
     if (dni === this.getIDNumber()) {
       if (this.documents && this.documents.length > 0) {
-        this.documents.push(document);
+        const documentExist = this.documents.find(
+          (doc) =>
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType(),
+        );
+
+        if (!documentExist) {
+          this.documents.push(document);
+          return;
+        }
+
+        this.documents = this.documents.map((doc) => {
+          if (
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType()
+          ) {
+            return Documents.updateDocument(doc, {
+              patch: document.getPathFile(),
+            });
+          }
+
+          return doc;
+        });
       } else {
         this.documents = [document];
       }
