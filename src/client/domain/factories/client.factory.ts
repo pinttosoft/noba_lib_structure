@@ -20,6 +20,7 @@ import {
   SystemConfigurationMongoRepository,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
+import { FollowUpClient } from "../types/follow-up-client.type";
 
 export class ClientFactory {
   static async createNewClient(

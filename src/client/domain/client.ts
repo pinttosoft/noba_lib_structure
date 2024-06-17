@@ -28,6 +28,7 @@ import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
 import { KycVerification } from "./types/kyc-verification";
+import { FollowUpClient } from "./types/follow-up-client.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -37,6 +38,7 @@ export class Client extends AggregateRoot implements IClient {
   private id?: string;
   private isSegregated?: boolean;
   private kycRequestedChanges?: KycAction[];
+  private clientFollowUp?: FollowUpClient[];
   private accountId: string;
   private taxId?: string;
   private status: AccountStatus;
@@ -145,6 +147,7 @@ export class Client extends AggregateRoot implements IClient {
     this.nationality = data.nationality;
     this.documentExpirationDate = data.documentExpirationDate;
     this.twoFactorActive = data.twoFactorActive ?? false;
+    this.clientFollowUp = data.clientFollowUp ?? [];
 
     return this;
   }
@@ -529,11 +532,25 @@ export class Client extends AggregateRoot implements IClient {
     return actions;
   }
 
+  getClientFollowUp(): FollowUpClient[] {
+    return this.clientFollowUp;
+  }
+
   setKycAction(kycAction: KycAction): IClient {
     if (!this.kycRequestedChanges) {
       this.kycRequestedChanges = [kycAction];
     } else {
       this.kycRequestedChanges.push(kycAction);
+    }
+
+    return this;
+  }
+
+  setClientFollowUp(clientFollowUp: FollowUpClient): IClient {
+    if (!this.clientFollowUp) {
+      this.clientFollowUp = [clientFollowUp];
+    } else {
+      this.clientFollowUp.push(clientFollowUp);
     }
 
     return this;
@@ -571,6 +588,22 @@ export class Client extends AggregateRoot implements IClient {
     }
 
     this.kycRequestedChanges.splice(foundActionIndex, 1);
+  }
+
+  deleteFollowUp(id: string) {
+    if (!this.clientFollowUp || this.clientFollowUp.length === 0) {
+      throw new GenericException("Action not found");
+    }
+
+    const foundActionIndex = this.clientFollowUp.findIndex(
+      (follow: FollowUpClient): boolean => follow.id === id,
+    );
+
+    if (foundActionIndex === -1) {
+      throw new GenericException("No action found");
+    }
+
+    this.clientFollowUp.splice(foundActionIndex, 1);
   }
 
   deleteKycActionToPartner(kycAction: KycAction): void {

@@ -1,4 +1,5 @@
 import {
+  Counterparty,
   CounterpartyMongoRepository,
   CounterpartyType,
   Criteria,
@@ -60,5 +61,32 @@ describe("Counterparty", () => {
     const result = await CounterpartyMongoRepository.instance().list(criteria);
     //console.log(result);
     expect(result.nextPag).toEqual(result.nextPag);
+  });
+
+  it("should get counterparty by clientId, assetId, counterPartyId", async () => {
+    const counterPartyId = "WValencia-Moreno1128024080";
+    const assetId = "FIAT_TESTNET_USD";
+    const clientId = "MSerrano181263254";
+    const isInternal = "S";
+
+    const counterparty: Counterparty =
+      await CounterpartyMongoRepository.instance().findByClientIdAndCounterPartyIdAndAssetId(
+        counterPartyId,
+        assetId,
+        clientId,
+        isInternal,
+      );
+
+    expect(counterparty).toBeDefined();
+
+    //   const withdrawalRequest =
+    //     await WithdrawalRequestMongoRepository.instance().findByWithdrawalId(
+    //       "b50ad676-79e0-41ad-a908-8744868deca0",
+    //     );
+    //
+    //   console.log(withdrawalRequest.getCounterparty());
+    //   console.log(withdrawalRequest.getCounterparty().toPrimitives());
+    //
+    //   expect(withdrawalRequest.getCounterparty()).toBeDefined();
   });
 });
