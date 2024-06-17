@@ -741,6 +741,7 @@ export class Client extends AggregateRoot implements IClient {
       createdAt: this.createdAt,
       approvedAt: this.approvedAt,
       kycRequestedChanges: this.kycRequestedChanges,
+      clientFollowUp: this.clientFollowUp,
     };
   }
 }

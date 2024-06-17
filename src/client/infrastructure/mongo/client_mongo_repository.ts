@@ -110,7 +110,7 @@ export class ClientMongoRepository
   async findByKYCProfileId(kycProfileId: string): Promise<IClient | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>({
-      "kycVerification.sessionId": kycProfileId,
+      "kycVerification.profileId": kycProfileId,
     });
 
     if (!result) {
