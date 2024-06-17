@@ -11,6 +11,7 @@ import {
   IndividualDTO,
 } from "../../src";
 import * as console from "node:console";
+import { v4 } from "uuid";
 
 describe("Client", () => {
   it("new indivual account", async () => {
@@ -273,7 +274,7 @@ describe("Client", () => {
     client.setClientFollowUp({
       action: "falta documentacion",
       date: new Date(),
-      id: "s-" + client.getClientId() + Math.random().toString(),
+      id: v4(),
     });
     console.log("client", client);
     await clientRepo.upsert(client);
