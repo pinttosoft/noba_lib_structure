@@ -10,6 +10,8 @@ import {
   IClientRepository,
   IndividualDTO,
 } from "../../src";
+import * as console from "node:console";
+import { v4 } from "uuid";
 
 describe("Client", () => {
   it("new indivual account", async () => {
@@ -263,6 +265,18 @@ describe("Client", () => {
       id: "142fgdasfgdfg",
     });
 
+    await clientRepo.upsert(client);
+  });
+  it("Add Client Follow-Up", async () => {
+    const clientRepo: IClientRepository = ClientMongoRepository.instance();
+    const client: IClient = await clientRepo.findByClientId("JLanza15781342");
+
+    client.setClientFollowUp({
+      action: "falta documentacion",
+      date: new Date(),
+      id: v4(),
+    });
+    console.log("client", client);
     await clientRepo.upsert(client);
   });
 

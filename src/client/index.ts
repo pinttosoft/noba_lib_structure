@@ -6,6 +6,7 @@ export { IClientRepository } from "./domain/interfaces/client_repository.interfa
 
 export { CompanyType } from "./domain/enums/company_type.enum";
 export { KycAction } from "./domain/types/kyc-action.type";
+export { FollowUpClient } from "./domain/types/follow-up-client.type";
 
 export { ClientFactory } from "./domain/factories/client.factory";
 export { Client } from "./domain/client";
