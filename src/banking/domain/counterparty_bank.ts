@@ -32,6 +32,7 @@ export class CounterpartyBank extends Counterparty {
     c.accountNumber = counterpartyBank.accountNumber;
 
     c.profileType = counterpartyBank.profileType;
+    c.relationshipConsumer = counterpartyBank.relationToBeneficiary;
 
     c.counterpartyType = counterpartyBank.counterpartyType;
     c.isInternal = isInternal;
@@ -78,6 +79,8 @@ export class CounterpartyBank extends Counterparty {
   static fromPrimitives(id: string, data: any): CounterpartyBank {
     const counterparty: CounterpartyBank = new CounterpartyBank();
     counterparty.id = id;
+
+    counterparty.relationshipConsumer = data.relationshipConsumer ?? undefined;
 
     const informationOwner = data.informationOwner;
     const informationBank = data.informationBank;
@@ -183,6 +186,7 @@ export class CounterpartyBank extends Counterparty {
             : "N"
           : this.isInternal,
       profileType: this.profileType,
+      relationshipConsumer: this.relationshipConsumer,
       createdAt: this.createdAt,
       status: this.status,
     };

@@ -13,7 +13,7 @@ export abstract class Counterparty extends AggregateRoot {
   protected ownerName: string;
   protected ownerCountry: string;
   protected assetId: string;
-  protected relationshipConsumer: RelationshipConsumer;
+  protected relationshipConsumer?: RelationshipConsumer;
   protected createdAt: Date;
   protected isInternal: boolean;
   protected profileType: CounterpartyProfileType;

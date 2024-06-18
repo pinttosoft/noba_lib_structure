@@ -1,7 +1,10 @@
 import { Address } from "../../../shared";
 import { NetworkBank } from "../enums/network_bank.enum";
 import { InformationIntermediaryBankDTO } from "./information_intermediary_bank.type";
-import { CounterpartyProfileType } from "../../../counterparty";
+import {
+  CounterpartyProfileType,
+  RelationshipConsumer,
+} from "../../../counterparty";
 
 export type CounterpartyBankDTO = {
   id?: string;
@@ -14,6 +17,7 @@ export type CounterpartyBankDTO = {
   routingNumber?: string;
   swiftCode?: string;
   profileType: CounterpartyProfileType;
+  relationToBeneficiary?: RelationshipConsumer;
   iban?: string;
   informationOwner: { name: string; address: Address };
   informationBank: {
