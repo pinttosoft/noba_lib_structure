@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { ExchangeStatus } from "./enums/exchange_status.enum";
 import { AmountValueObject, StringValueObject } from "../../shared";
-import { BusinessOpportunity } from "../../business_allie_program";
+import { Referred } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
 
 export class Exchange extends AggregateRoot {
@@ -41,7 +41,7 @@ export class Exchange extends AggregateRoot {
       wallet: IWallet;
       amountCredit: AmountValueObject;
     },
-    opportunity?: BusinessOpportunity,
+    opportunity?: Referred,
   ): Exchange {
     const e: Exchange = new Exchange();
 
@@ -154,21 +154,6 @@ export class Exchange extends AggregateRoot {
     return this;
   }
 
-  /**
-   * Porcentaje cobrado por el proveedor de la API
-   *
-   */
-  private calculatePercentageChargedByAPIProvider() {
-    let diff = 0;
-    if (this.destinationDetails.assetCode === "USD") {
-      diff = this.sourceDetails.amountDebit - this.baseAmount;
-    } else {
-      diff = this.baseAmount - this.destinationDetails.amountCredit;
-    }
-
-    return (diff / this.baseAmount) * 100;
-  }
-
   accept(): Exchange {
     this.status = ExchangeStatus.ACCEPTED;
     this.acceptedAt = new Date();
@@ -234,5 +219,20 @@ export class Exchange extends AggregateRoot {
       createdAt: this.createdAt,
       acceptedAt: this.acceptedAt,
     };
+  }
+
+  /**
+   * Porcentaje cobrado por el proveedor de la API
+   *
+   */
+  private calculatePercentageChargedByAPIProvider() {
+    let diff = 0;
+    if (this.destinationDetails.assetCode === "USD") {
+      diff = this.sourceDetails.amountDebit - this.baseAmount;
+    } else {
+      diff = this.baseAmount - this.destinationDetails.amountCredit;
+    }
+
+    return (diff / this.baseAmount) * 100;
   }
 }

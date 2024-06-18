@@ -2,22 +2,18 @@ import { IBusinessAllieRepository } from "../../interfaces/business_allie_reposi
 import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
 import { BusinessOpportunityDTO } from "../../type/business_opportunity.type";
-import { BusinessOpportunity } from "../../business_opportunity";
+import { Referred } from "../../business_opportunity";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 export class BusinessAllieMongoRepository
   extends MongoRepository<BusinessAllie>
   implements IBusinessAllieRepository
 {
+  private static _instance: BusinessAllieMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
-
-  collectionName(): string {
-    return "business_allie";
-  }
-
-  private static _instance: BusinessAllieMongoRepository;
 
   static instance() {
     if (this._instance) {
@@ -26,6 +22,10 @@ export class BusinessAllieMongoRepository
 
     this._instance = new BusinessAllieMongoRepository();
     return this._instance;
+  }
+
+  collectionName(): string {
+    return "business_allie";
   }
 
   async getBusinessAllie(
@@ -62,9 +62,7 @@ export class BusinessAllieMongoRepository
     })) as unknown as BusinessAllieDTO;
   }
 
-  async updateBusinessOpportunityData(
-    opportunity: BusinessOpportunity,
-  ): Promise<void> {
+  async updateBusinessOpportunityData(opportunity: Referred): Promise<void> {
     const collection = await this.collection();
 
     await collection.updateOne(
@@ -115,9 +113,7 @@ export class BusinessAllieMongoRepository
     return result.businessOpportunities;
   }
 
-  async getOpportunityByTaxId(
-    taxId: string,
-  ): Promise<BusinessOpportunity | undefined> {
+  async getOpportunityByTaxId(taxId: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
       { "businessOpportunities.taxId": taxId },
@@ -130,12 +126,12 @@ export class BusinessAllieMongoRepository
 
     const opportunity = result.businessOpportunities[0];
 
-    return new BusinessOpportunity({ ...opportunity, id: opportunity._id });
+    return new Referred({ ...opportunity, id: opportunity._id });
   }
 
   async getOpportunityByClientId(
     clientId: string,
-  ): Promise<BusinessOpportunity | undefined> {
+  ): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
       { "businessOpportunities.clientId": clientId },
@@ -148,6 +144,6 @@ export class BusinessAllieMongoRepository
 
     const opportunity = result.businessOpportunities[0];
 
-    return new BusinessOpportunity({ ...opportunity, id: opportunity._id });
+    return new Referred({ ...opportunity, id: opportunity._id });
   }
 }

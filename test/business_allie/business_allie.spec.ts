@@ -4,9 +4,9 @@ import {
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
   BusinessAllieType,
-  BusinessOpportunity,
   BusinessOpportunityDTO,
   BusinessOpportunityStatus,
+  Referred,
 } from "../../src";
 
 describe("Business Allie", () => {
@@ -58,7 +58,7 @@ describe("Business Allie", () => {
       await businessRepo.saveBusinessAllie(bAllie);
     }
 
-    const opportunityExist: BusinessOpportunity =
+    const opportunityExist: Referred =
       await businessRepo.getOpportunityByClientId(opportunityClientId);
 
     if (!opportunityExist) {
