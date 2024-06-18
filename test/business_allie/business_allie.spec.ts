@@ -3,6 +3,7 @@ import {
   BusinessAllieDTO,
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
+  BusinessAllieType,
   BusinessOpportunity,
   BusinessOpportunityDTO,
   BusinessOpportunityStatus,
@@ -24,6 +25,7 @@ describe("Business Allie", () => {
         email: "angel@gmail.com",
         referredBy: "string",
         status: BusinessAllieStatus.APPROVED,
+        type: BusinessAllieType.ALLIE,
         createdAt: new Date(),
       };
 
@@ -48,6 +50,7 @@ describe("Business Allie", () => {
         email: "angel@gmail.com",
         referredBy: "string",
         status: BusinessAllieStatus.APPROVED,
+        type: BusinessAllieType.ALLIE,
         createdAt: new Date(),
       };
 

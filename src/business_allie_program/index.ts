@@ -1,3 +1,5 @@
+export { BusinessAllieType } from "./enums/business_allie_type.enum";
+
 export { BusinessAllie } from "./business_allie";
 
 export { BusinessOpportunity } from "./business_opportunity";
