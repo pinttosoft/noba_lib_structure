@@ -1,7 +1,7 @@
 import { BusinessAllieDTO } from "../type/business_allie.type";
 import { BusinessAllie } from "../business_allie";
-import { BusinessOpportunityDTO } from "../type/business_opportunity.type";
-import { Referred } from "../business_opportunity";
+import { ReferredDTO } from "../type/business_opportunity.type";
+import { Referred } from "../referred";
 
 export interface IBusinessAllieRepository {
   saveBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
@@ -12,7 +12,7 @@ export interface IBusinessAllieRepository {
 
   addOpportunityToAllie(
     clientId: string,
-    opportunityPayload: BusinessOpportunityDTO,
+    opportunityPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null>;
 
   getOpportunityAndAllieByTaxId(

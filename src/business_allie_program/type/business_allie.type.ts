@@ -1,5 +1,5 @@
 import { BusinessAllieStatus } from "../enums/business_allie_status.enum";
-import { BusinessOpportunityDTO } from "./business_opportunity.type";
+import { ReferredDTO } from "./business_opportunity.type";
 import { BusinessAllieType } from "../enums/business_allie_type.enum";
 
 export type BusinessAllieDTO = {
@@ -8,7 +8,7 @@ export type BusinessAllieDTO = {
   name: string;
   email: string;
   referredBy?: string;
-  businessOpportunities?: BusinessOpportunityDTO[];
+  businessOpportunities?: ReferredDTO[];
   status: BusinessAllieStatus;
   type: BusinessAllieType;
   createdAt: Date;

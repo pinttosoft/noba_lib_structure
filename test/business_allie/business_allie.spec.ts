@@ -4,9 +4,9 @@ import {
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
   BusinessAllieType,
-  BusinessOpportunityDTO,
-  BusinessOpportunityStatus,
   Referred,
+  ReferredDTO,
+  ReferredStatus,
 } from "../../src";
 
 describe("Business Allie", () => {
@@ -62,12 +62,12 @@ describe("Business Allie", () => {
       await businessRepo.getOpportunityByClientId(opportunityClientId);
 
     if (!opportunityExist) {
-      const opportuntyPayload: BusinessOpportunityDTO = {
+      const opportuntyPayload: ReferredDTO = {
         taxId: "  ",
         name: "Felipe Silva",
         email: "some@email.com;",
         feeSwap: 0.5,
-        status: BusinessOpportunityStatus.OPPORTUNITY_WITH_ACTIVE_ACCOUNT,
+        status: ReferredStatus.OPPORTUNITY_WITH_ACTIVE_ACCOUNT,
         referredByClientId: clientId,
         clientId: opportunityClientId,
         createdAt: new Date(),

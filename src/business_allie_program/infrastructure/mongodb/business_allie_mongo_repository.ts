@@ -1,8 +1,8 @@
 import { IBusinessAllieRepository } from "../../interfaces/business_allie_repository.interface";
 import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
-import { BusinessOpportunityDTO } from "../../type/business_opportunity.type";
-import { Referred } from "../../business_opportunity";
+import { ReferredDTO } from "../../type/business_opportunity.type";
+import { Referred } from "../../referred";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 
 export class BusinessAllieMongoRepository
@@ -47,7 +47,7 @@ export class BusinessAllieMongoRepository
 
   async addOpportunityToAllie(
     clientId: string,
-    opportunityPayload: BusinessOpportunityDTO,
+    opportunityPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
