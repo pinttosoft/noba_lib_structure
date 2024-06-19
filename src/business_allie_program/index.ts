@@ -3,11 +3,11 @@ export { BusinessAllieType } from "./enums/business_allie_type.enum";
 export { BusinessAllie } from "./business_allie";
 
 export { Referred } from "./referred";
-export { TaxIdAlreadyExistIntoOtherOpportunity } from "./exceptions/tax_id_already_exist_into_other_opportunity";
+export { TaxIdAlreadyExistIntoOtherReferred } from "./exceptions/tax_id_already_exist_into_other_referred";
 export { ReferredDoesNotExists } from "./exceptions/referred_does_not_exists";
 
 export { BusinessAllieDTO } from "./type/business_allie.type";
-export { ReferredDTO } from "./type/business_opportunity.type";
+export { ReferredDTO } from "./type/referred.type";
 
 export { IBusinessAllieRepository } from "./interfaces/business_allie_repository.interface";
 

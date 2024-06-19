@@ -1,7 +1,7 @@
 import { IBusinessAllieRepository } from "../../interfaces/business_allie_repository.interface";
 import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
-import { ReferredDTO } from "../../type/business_opportunity.type";
+import { ReferredDTO } from "../../type/referred.type";
 import { Referred } from "../../referred";
 import { MongoClientFactory, MongoRepository } from "../../../shared";
 
@@ -45,15 +45,15 @@ export class BusinessAllieMongoRepository
     await this.persist(businessAllie.getId(), businessAllie);
   }
 
-  async addOpportunityToAllie(
+  async addReferredToAllie(
     clientId: string,
-    opportunityPayload: ReferredDTO,
+    referredPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
     await collection.updateOne(
       { clientId },
-      { $push: { businessOpportunities: opportunityPayload } },
+      { $push: { referrals: referredPayload } },
       { upsert: true },
     );
 
@@ -62,46 +62,46 @@ export class BusinessAllieMongoRepository
     })) as unknown as BusinessAllieDTO;
   }
 
-  async updateBusinessOpportunityData(opportunity: Referred): Promise<void> {
+  async updateReferredData(referred: Referred): Promise<void> {
     const collection = await this.collection();
 
     await collection.updateOne(
       {
-        clientId: opportunity.getClientIdToBusinessAllie(),
-        "businessOpportunities.taxId": opportunity.getTaxId(),
+        clientId: referred.getClientIdToBusinessAllie(),
+        "referrals.taxId": referred.getTaxId(),
       },
       {
         $set: {
           ...this.transformationToUpsertInSubDocuments(
-            "businessOpportunities",
-            opportunity.toPrimitives(),
+            "referrals",
+            referred.toPrimitives(),
           ),
         },
       },
     );
   }
 
-  async getOpportunityAndAllieByTaxId(
+  async getReferredAndAllieByTaxId(
     taxId: string,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
     return (await collection.findOne<any>({
-      "businessOpportunities.taxId": taxId,
+      "referrals.taxId": taxId,
     })) as unknown as BusinessAllieDTO;
   }
 
-  async getBusinessAllieByOpportunityClientId(
+  async getBusinessAllieByReferredClientId(
     clientId: string,
   ): Promise<BusinessAllieDTO | null> {
     const collection = await this.collection();
 
     return (await collection.findOne<any>({
-      "businessOpportunities.clientId": clientId,
+      "referrals.clientId": clientId,
     })) as unknown as BusinessAllieDTO;
   }
 
-  async getAllieOpportunitiesByClientId(
+  async getAllieReferralsByClientId(
     clientId: string,
   ): Promise<BusinessAllieDTO[] | null> {
     const collection = await this.collection();
@@ -110,40 +110,38 @@ export class BusinessAllieMongoRepository
       return null;
     }
 
-    return result.businessOpportunities;
+    return result.referrals;
   }
 
-  async getOpportunityByTaxId(taxId: string): Promise<Referred | undefined> {
+  async getReferredByTaxId(taxId: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
-      { "businessOpportunities.taxId": taxId },
-      { projection: { "businessOpportunities.$": 1 } },
+      { "referrals.taxId": taxId },
+      { projection: { "referrals.$": 1 } },
     );
 
     if (!result) {
       return undefined;
     }
 
-    const opportunity = result.businessOpportunities[0];
+    const referred = result.referrals[0];
 
-    return new Referred({ ...opportunity, id: opportunity._id });
+    return new Referred({ ...referred, id: referred._id });
   }
 
-  async getOpportunityByClientId(
-    clientId: string,
-  ): Promise<Referred | undefined> {
+  async getReferredByClientId(clientId: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
-      { "businessOpportunities.clientId": clientId },
-      { projection: { "businessOpportunities.$": 1 } },
+      { "referrals.clientId": clientId },
+      { projection: { "referrals.$": 1 } },
     );
 
     if (!result) {
       return undefined;
     }
 
-    const opportunity = result.businessOpportunities[0];
+    const referred = result.referrals[0];
 
-    return new Referred({ ...opportunity, id: opportunity._id });
+    return new Referred({ ...referred, id: referred._id });
   }
 }

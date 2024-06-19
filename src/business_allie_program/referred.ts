@@ -1,4 +1,4 @@
-import { ReferredDTO } from "./type/business_opportunity.type";
+import { ReferredDTO } from "./type/referred.type";
 import { ReferredStatus } from "./enums/referred_status.enum";
 import { AggregateRoot } from "../shared/domain/aggregate_root";
 

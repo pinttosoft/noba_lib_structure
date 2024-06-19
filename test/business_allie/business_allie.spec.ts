@@ -13,7 +13,7 @@ describe("Business Allie", () => {
   it("Create a Business Allie", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId: string = "ABejarano187263254";
+    const clientId: string = "Business-WANER1128024080";
     const allieExist: BusinessAllieDTO =
       await businessRepo.getBusinessAllie(clientId);
 
@@ -31,49 +31,46 @@ describe("Business Allie", () => {
 
       const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
       await businessRepo.saveBusinessAllie(bAllie);
+
+      return;
     }
+
+    console.log("allie already exists");
   });
 
   it("Should add opportunity to allie", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId: string = "ABejarano187263254";
+    const clientId: string = "Business-WANER1128024080";
     const allieExist: BusinessAllieDTO =
       await businessRepo.getBusinessAllie(clientId);
-    const opportunityClientId = "FSilva187263254";
+    const referredClientId = "MSerrano181263254";
 
     if (!allieExist) {
-      const alliePayload: BusinessAllieDTO = {
-        // client id
-        clientId: clientId,
-        name: "angel",
-        email: "angel@gmail.com",
-        referredBy: "string",
-        status: BusinessAllieStatus.APPROVED,
-        type: BusinessAllieType.ALLIE,
-        createdAt: new Date(),
-      };
-
-      const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
-      await businessRepo.saveBusinessAllie(bAllie);
+      console.log("error");
     }
 
     const opportunityExist: Referred =
-      await businessRepo.getOpportunityByClientId(opportunityClientId);
+      await businessRepo.getReferredByClientId(referredClientId);
+
+    console.log("opportunityExist", opportunityExist);
 
     if (!opportunityExist) {
-      const opportuntyPayload: ReferredDTO = {
-        taxId: "  ",
-        name: "Felipe Silva",
-        email: "some@email.com;",
+      const referredPayload: ReferredDTO = {
+        taxId: " 2 ",
+        name: "CC",
+        email: "c@email.com;",
         feeSwap: 0.5,
-        status: ReferredStatus.OPPORTUNITY_WITH_ACTIVE_ACCOUNT,
+        status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
         referredByClientId: clientId,
-        clientId: opportunityClientId,
+        clientId: referredClientId,
         createdAt: new Date(),
       };
 
-      await businessRepo.addOpportunityToAllie(clientId, opportuntyPayload);
+      await businessRepo.addReferredToAllie(clientId, referredPayload);
     }
   });
+
+  it("Should create a marketer allie", () => {});
+  it("Should add referred to a marketer allie", () => {});
 });
