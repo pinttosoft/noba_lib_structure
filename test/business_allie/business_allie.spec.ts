@@ -1,15 +1,21 @@
 import {
+  AssetMongoRepository,
   BusinessAllie,
   BusinessAllieDTO,
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
   BusinessAllieType,
+  ExchangeMarketRequest,
+  ExchangeMongoRepository,
   Referred,
   ReferredDTO,
   ReferredStatus,
+  WalletMongoRepository,
 } from "../../src";
 import { DiffusionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
 import { FeeLimitsType } from "../../src/business_allie_program/type/fee_limits.type";
+import { CreateExchange } from "./other_services/CreateExchange";
+import { IntegrationMocked } from "./other_services/integration_mocked";
 
 describe("Business Allie", () => {
   it("Create a Business Allie", async () => {
@@ -192,5 +198,28 @@ describe("Business Allie", () => {
     const referrals = await businessRepo.getReferralsByClientId(clientId);
 
     console.log("referrals", referrals);
+  });
+
+  it("Should list allies", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const clientId = "JLanza15781342";
+
+    const allies = await businessRepo;
+
+    console.log("allies", allies);
+  });
+
+  it("Should save a Exchange of  my referred", async () => {
+    //
+    const exchangeRequest: ExchangeMarketRequest = {};
+
+    const exchange = await new CreateExchange(
+      ExchangeMongoRepository.instance(),
+      IntegrationMocked,
+      WalletMongoRepository.instance(),
+      AssetMongoRepository.instance(),
+      BusinessAllieMongoRepository.instance(),
+    ).run(exchangeRequest);
   });
 });
