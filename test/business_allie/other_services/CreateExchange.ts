@@ -58,7 +58,8 @@ export class CreateExchange {
       exchangeRequest,
     );
 
-    await this.exchangeRepository.upsert(exchange);
+    // todo
+    //await this.exchangeRepository.upsert(exchange);
 
     return exchange.toPrimitives();
   }

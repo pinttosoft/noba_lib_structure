@@ -211,15 +211,31 @@ describe("Business Allie", () => {
   });
 
   it("Should save a Exchange of  my referred", async () => {
-    //
-    const exchangeRequest: ExchangeMarketRequest = {};
+    const referredClientId = "MSerrano181263254";
+    // moises btc
+    // const sourceWalletId: string = "84d69973-b4aa-4ad5-b0be-b47d29ef0e37";
+    const sourceWalletId: string = "USD";
+
+    // fsilva btc
+    // const destinationWalletId: string = "7550936a-b36f-4c8a-9f70-7c5c2fbb36f9";
+    const destinationWalletId: string = "BTC";
+
+    const exchangeRequest: ExchangeMarketRequest = {
+      amount: 100,
+      clientId: referredClientId,
+      description: "test in lib for comission's allie",
+      destinationWalletId: destinationWalletId,
+      sourceWalletId: sourceWalletId,
+    };
 
     const exchange = await new CreateExchange(
       ExchangeMongoRepository.instance(),
-      IntegrationMocked,
+      new IntegrationMocked(),
       WalletMongoRepository.instance(),
       AssetMongoRepository.instance(),
       BusinessAllieMongoRepository.instance(),
     ).run(exchangeRequest);
+
+    console.log("exchange", exchange);
   });
 });

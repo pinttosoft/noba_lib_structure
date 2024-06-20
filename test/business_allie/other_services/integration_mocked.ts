@@ -10,10 +10,28 @@ export class IntegrationMocked implements IExchangeIntegratorService {
     return Promise.resolve(undefined);
   }
 
-  createExchange(
+  async createExchange(
     exchangePayload: ExchangeMarketPayload,
   ): Promise<ExchangeRequestResponse> {
-    return Promise.resolve(undefined);
+    const response: ExchangeRequestResponse = {
+      id: "some response id",
+      action: undefined,
+      createdAt: undefined,
+      destination_details: {
+        amount_to_credit: 100,
+        asset_type_id: "",
+        destination_account_id: "",
+      },
+      exchange_type: "",
+      source_details: {
+        amount_to_debit: 102,
+        asset_type_id: "",
+        source_account_id: "",
+      },
+      status: undefined,
+    };
+
+    return Promise.resolve(response);
   }
 
   searchBalanceWallet(
