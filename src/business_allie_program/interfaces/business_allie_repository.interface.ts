@@ -4,16 +4,16 @@ import { ReferredDTO } from "../type/referred.type";
 import { Referred } from "../referred";
 
 export interface IBusinessAllieRepository {
-  saveBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
-
   getBusinessAllie(clientId: string): Promise<BusinessAllieDTO | undefined>;
 
-  getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
+  upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
 
   addReferredToAllie(
     clientId: string,
     referredByPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null>;
+
+  getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
 
   getReferredAndAllieByTaxId(
     taxId: string,

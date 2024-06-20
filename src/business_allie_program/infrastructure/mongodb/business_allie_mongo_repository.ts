@@ -41,7 +41,7 @@ export class BusinessAllieMongoRepository
     return { ...result, id: result._id } as unknown as BusinessAllieDTO;
   }
 
-  async saveBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
+  async upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
     await this.persist(businessAllie.getId(), businessAllie);
   }
 
@@ -143,5 +143,9 @@ export class BusinessAllieMongoRepository
     const referred = result.referrals[0];
 
     return new Referred({ ...referred, id: referred._id });
+  }
+
+  async updateBusinessAllie(): Promise<void> {
+    return Promise.resolve(undefined);
   }
 }
