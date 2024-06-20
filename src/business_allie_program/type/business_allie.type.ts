@@ -1,7 +1,7 @@
 import { BusinessAllieStatus } from "../enums/business_allie_status.enum";
 import { ReferredDTO } from "./referred.type";
 import { BusinessAllieType } from "../enums/business_allie_type.enum";
-import { DiffussionChannels } from "../enums/diffussion_channels.enum";
+import { DiffusionChannels } from "../enums/diffussion_channels.enum";
 import { FeeLimitsType } from "./fee_limits.type";
 
 export type BusinessAllieDTO = {
@@ -13,7 +13,7 @@ export type BusinessAllieDTO = {
   status: BusinessAllieStatus;
   type: BusinessAllieType;
   createdAt: Date;
-  diffusionChanel?: DiffussionChannels;
+  diffusionChanel?: DiffusionChannels;
   link?: string;
   referredBy?: string;
   updatedAt?: Date;

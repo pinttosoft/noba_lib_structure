@@ -81,6 +81,18 @@ export class BusinessAllieMongoRepository
     );
   }
 
+  async getReferralsByClientId(
+    clientId: string,
+  ): Promise<ReferredDTO[] | null> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({ clientId });
+    if (!result) {
+      return null;
+    }
+
+    return result.referrals;
+  }
+
   async getReferredAndAllieByTaxId(
     taxId: string,
   ): Promise<BusinessAllieDTO | null> {
@@ -99,18 +111,6 @@ export class BusinessAllieMongoRepository
     return (await collection.findOne<any>({
       "referrals.clientId": clientId,
     })) as unknown as BusinessAllieDTO;
-  }
-
-  async getAllieReferralsByClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO[] | null> {
-    const collection = await this.collection();
-    const result = await collection.findOne<any>({ clientId });
-    if (!result) {
-      return null;
-    }
-
-    return result.referrals;
   }
 
   async getReferredByTaxId(taxId: string): Promise<Referred | undefined> {
@@ -145,7 +145,27 @@ export class BusinessAllieMongoRepository
     return new Referred({ ...referred, id: referred._id });
   }
 
-  async updateBusinessAllie(): Promise<void> {
-    return Promise.resolve(undefined);
+  async deleteBusinessAllie(clientId: string) {
+    const collection = await this.collection();
+    await collection.deleteOne({ clientId });
+  }
+
+  async deleteReferred(referredByClientId: string, clientId: string) {
+    const collection = await this.collection();
+
+    const oldReferrals: ReferredDTO[] =
+      await this.getReferralsByClientId(referredByClientId);
+    // console.log("oldReferrals", oldReferrals);
+
+    const newReferrals: ReferredDTO[] = oldReferrals.filter(
+      (referred: ReferredDTO): boolean => referred.clientId !== clientId,
+    );
+
+    const allieRes = await this.getBusinessAllie(referredByClientId);
+    const allie = new BusinessAllie(allieRes);
+    allie.setReferrals(newReferrals);
+
+    await this.upsertBusinessAllie(allie);
+    // console.log("newReferrals", newReferrals);
   }
 }

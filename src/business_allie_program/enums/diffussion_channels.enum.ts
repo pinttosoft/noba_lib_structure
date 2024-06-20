@@ -1,4 +1,4 @@
-export enum DiffussionChannels {
+export enum DiffusionChannels {
   INSTAGRAM = "INSTAGRAM",
   FACEBOOK = "FACEBOOK",
   YOUTUBE = "YOUTUBE",

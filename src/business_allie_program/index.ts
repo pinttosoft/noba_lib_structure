@@ -1,5 +1,3 @@
-export { BusinessAllieType } from "./enums/business_allie_type.enum";
-
 export { BusinessAllie } from "./business_allie";
 
 export { Referred } from "./referred";
@@ -10,8 +8,10 @@ export { BusinessAllieDTO } from "./type/business_allie.type";
 export { ReferredDTO } from "./type/referred.type";
 
 export { IBusinessAllieRepository } from "./interfaces/business_allie_repository.interface";
+export { IBusinessAllie } from "./interfaces/business_alli.interface";
 
 export { BusinessAllieStatus } from "./enums/business_allie_status.enum";
 export { ReferredStatus } from "./enums/referred_status.enum";
+export { BusinessAllieType } from "./enums/business_allie_type.enum";
 
 export { BusinessAllieMongoRepository } from "./infrastructure/mongodb/business_allie_mongo_repository";

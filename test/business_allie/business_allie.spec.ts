@@ -8,7 +8,7 @@ import {
   ReferredDTO,
   ReferredStatus,
 } from "../../src";
-import { DiffussionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
+import { DiffusionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
 import { FeeLimitsType } from "../../src/business_allie_program/type/fee_limits.type";
 
 describe("Business Allie", () => {
@@ -84,7 +84,7 @@ describe("Business Allie", () => {
       const alliePayload: BusinessAllieDTO = {
         clientId: clientId,
         name: "johana",
-        diffusionChanel: DiffussionChannels.FACEBOOK,
+        diffusionChanel: DiffusionChannels.FACEBOOK,
         link: "facebook.com/johana",
         email: "johana@gmail.com",
         referredBy: "string",
@@ -102,6 +102,14 @@ describe("Business Allie", () => {
     console.log("allie already exists");
   });
 
+  it("Should delete marketer allie", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const clientId = "JLanza15781342";
+
+    await businessRepo.deleteBusinessAllie(clientId);
+  });
+
   it("Should edit marketer allie", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
@@ -110,11 +118,11 @@ describe("Business Allie", () => {
       await businessRepo.getBusinessAllie(clientId);
 
     const allie: BusinessAllie = new BusinessAllie(allieExist);
-    allie.updateStatus(BusinessAllieStatus.PENDING_REVISION);
+    allie.updateStatus(BusinessAllieStatus.DENIED);
 
     const feeLimits: FeeLimitsType = {
-      min: 0.1,
-      max: 4,
+      min: 0.2,
+      max: 6,
     };
 
     allie.updateFeeLimits(feeLimits);
@@ -129,11 +137,12 @@ describe("Business Allie", () => {
     const clientId = "JLanza15781342";
 
     const referredPayload: ReferredDTO = {
-      taxId: "1st_reffered_johana",
-      name: "amigo de johana",
-      email: "amigo_johana@email.com",
-      feeSwap: 0.9,
-      status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
+      clientId: "12345",
+      taxId: "3third_reffered_johana",
+      name: "amigo de johana 3",
+      email: "amigo_johana3@email.com",
+      feeSwap: 2,
+      status: ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT,
       referredByClientId: clientId,
       createdAt: new Date(),
     };
@@ -154,5 +163,34 @@ describe("Business Allie", () => {
     referred.setFeeSwap(0.3);
 
     await businessRepo.updateReferredData(referred);
+  });
+
+  it("Should delete referred of allie", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const clientId = "JLanza15781342";
+    const referredClientId = "1234";
+
+    console.log(
+      "1st referrals",
+      await businessRepo.getReferralsByClientId(clientId),
+    );
+
+    await businessRepo.deleteReferred(clientId, referredClientId);
+
+    console.log(
+      "2nd referrals",
+      await businessRepo.getReferralsByClientId(clientId),
+    );
+  });
+
+  it("Should list referrals of allie", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const clientId = "JLanza15781342";
+
+    const referrals = await businessRepo.getReferralsByClientId(clientId);
+
+    console.log("referrals", referrals);
   });
 });

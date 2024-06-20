@@ -13,15 +13,15 @@ export interface IBusinessAllieRepository {
     referredByPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null>;
 
+  deleteBusinessAllie(clientId: string): void;
+
   getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
 
   getReferredAndAllieByTaxId(
     taxId: string,
   ): Promise<BusinessAllieDTO | undefined>;
 
-  getAllieReferralsByClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO[] | undefined>;
+  getReferralsByClientId(clientId: string): Promise<ReferredDTO[] | undefined>;
 
   updateReferredData(referred: Referred): Promise<void>;
 
@@ -30,4 +30,6 @@ export interface IBusinessAllieRepository {
   ): Promise<BusinessAllieDTO | null>;
 
   getReferredByClientId(clientId: string): Promise<Referred | undefined>;
+
+  deleteReferred(referredByClientId: string, clientId: string): void;
 }
