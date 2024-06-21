@@ -20,7 +20,7 @@ import {
   SystemConfigurationMongoRepository,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
-import { FollowUpClient } from "../types/follow-up-client.type";
+import { TransactionalProfile } from "../../../system_configuration/domain/transactional_profile";
 
 export class ClientFactory {
   static async createNewClient(
@@ -75,7 +75,12 @@ export class ClientFactory {
             : await SystemConfigurationMongoRepository.instance().getDefaultFeeRechargingCard(),
         )
         .setTaxId(data.taxId ?? null)
-        .setClientId(data.clientId);
+        .setClientId(data.clientId)
+        .setTransactionalProfile(
+          "transactionalProfile" in data
+            ? TransactionalProfile.fromPrimitives(data.transactionalProfile)
+            : await SystemConfigurationMongoRepository.instance().getDefaultTransactionalProfile(),
+        );
 
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
