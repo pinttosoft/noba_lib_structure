@@ -12,6 +12,7 @@ import { FeeACHPAB } from "../domain/types/fee_ach_pab.type";
 import { CommissionForRechargingCard } from "../domain/commission_for_recharging_card";
 import { CommissionForIssuingCard } from "../domain/commission_for_issuing_card";
 import { FeeAchUsd } from "../domain/fee_ach_usd";
+import { TransactionalProfile } from "../domain/transactional_profile";
 
 type SystemConfig = {
   _id: ObjectId;
@@ -28,6 +29,7 @@ type SystemConfig = {
       deliveryFee: number;
     };
   };
+  transactionalProfile: TransactionalProfile;
 };
 
 export class SystemConfigurationMongoRepository
@@ -100,6 +102,14 @@ export class SystemConfigurationMongoRepository
     const result = await collection.findOne<SystemConfig>();
 
     return CommissionForRechargingCard.fromPrimitives(result.feeRechargingCard);
+  }
+
+  async getDefaultTransactionalProfile(): Promise<TransactionalProfile> {
+    const collection = await this.collection();
+
+    const result = await collection.findOne<SystemConfig>();
+
+    return TransactionalProfile.fromPrimitives(result.transactionalProfile);
   }
 
   getFeeNobaForSwapOfBusinessOpportunities(): Promise<number> {
