@@ -27,6 +27,7 @@ import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
+import { KycVerification } from "./types/kyc-verification";
 import { FollowUpClient } from "./types/follow-up-client.type";
 
 export class Client extends AggregateRoot implements IClient {
@@ -154,7 +155,29 @@ export class Client extends AggregateRoot implements IClient {
   setDocument(dni: string, document: Documents): Client {
     if (dni === this.getIDNumber()) {
       if (this.documents && this.documents.length > 0) {
-        this.documents.push(document);
+        const documentExist = this.documents.find(
+          (doc) =>
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType(),
+        );
+
+        if (!documentExist) {
+          this.documents.push(document);
+          return;
+        }
+
+        this.documents = this.documents.map((doc) => {
+          if (
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType()
+          ) {
+            return Documents.updateDocument(doc, {
+              patch: document.getPathFile(),
+            });
+          }
+
+          return doc;
+        });
       } else {
         this.documents = [document];
       }
@@ -451,6 +474,49 @@ export class Client extends AggregateRoot implements IClient {
 
   rejectSegregated(): void {
     this.status = AccountStatus.REJECTED;
+  }
+
+  setKYCVerification(data: KycVerification): Client {
+    this.clientData.kycVerification = data;
+
+    return this;
+  }
+
+  getKYCVerification(): KycVerification {
+    return this.clientData.kycVerification;
+  }
+
+  setKycVerificationToPartner(kycVerification: KycVerification): IClient {
+    const partners = this.getCompanyPartners().map((partner) => {
+      if (partner.dni === kycVerification.reference) {
+        return {
+          ...partner,
+          kycVerification,
+        };
+      }
+
+      return partner;
+    });
+    this.setClientData({ ...this.clientData, partners });
+
+    return this;
+  }
+
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient {
+    const documents = this.getPrincipalDocuments().map((document) => {
+      let newDoc = null;
+      if (document.getDocumentId() === kycVerification.reference) {
+        newDoc = Documents.updateDocument(document, {
+          kycVerification,
+        });
+      }
+
+      return newDoc ? newDoc : document;
+    });
+
+    this.documents = documents;
+
+    return this;
   }
 
   getKycActions(): KycAction[] {

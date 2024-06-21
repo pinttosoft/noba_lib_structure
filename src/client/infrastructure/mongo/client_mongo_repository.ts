@@ -107,6 +107,77 @@ export class ClientMongoRepository
     return this.buildClient({ ...result }, result._id.toString());
   }
 
+  async findByKYCProfileId(kycProfileId: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.profileId": kycProfileId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByKYCReferenceId(
+    kycReferenceId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.reference": kycReferenceId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByKYCSessionId(kycSessionId: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.sessionId": kycSessionId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByPartnerKYCProfileId(
+    partnerKYCProfileId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "partners.kycVerification.profileId": partnerKYCProfileId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByPartnerKYCSessionId(
+    partnerKYCSessionId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "partners.kycVerification.sessionId": partnerKYCSessionId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
   private async buildClient(client: any, resultId: string): Promise<IClient> {
     const account: IAccount =
       await new AccountMongoRepository().findByAccountId(client.accountId);

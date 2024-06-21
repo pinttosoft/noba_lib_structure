@@ -24,7 +24,16 @@ export class CompanyOwner implements IOwnerAccount {
 
   setDocument(document: Documents) {
     if (this.company.documents && this.company.documents.length > 0) {
-      this.company.documents.push(document.toPrimitives());
+      const documents = this.company.documents.filter(
+        (doc) =>
+          !(
+            doc.documentSide == document.getDocumentSide() &&
+            doc.documentType === document.getDocumentType()
+          ),
+      );
+      documents.push(document.toPrimitives());
+
+      this.company.documents = documents;
     } else {
       this.company.documents = [document.toPrimitives()];
     }

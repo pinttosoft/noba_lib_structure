@@ -1,7 +1,7 @@
-import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { DocumentType } from "./enums/document_type.enum";
 import { v4 } from "uuid";
 import { DocumentSide } from "./enums/document_side.enum";
+import { KycVerification } from "../../client/domain/types/kyc-verification";
 
 export class Documents {
   private documentId: string;
@@ -9,12 +9,14 @@ export class Documents {
   private clientId: string;
   private documentType: DocumentType;
   private documentSide: DocumentSide;
+  private kycVerification?: KycVerification;
 
   static newDocument(
     clientId: string,
     path: string,
     documentType: DocumentType,
     documentSide: DocumentSide,
+    kycVerification?: KycVerification,
   ): Documents {
     const d: Documents = new Documents();
     d.clientId = clientId;
@@ -22,6 +24,27 @@ export class Documents {
     d.documentType = documentType;
     d.documentId = v4();
     d.documentSide = documentSide;
+    d.kycVerification = kycVerification;
+
+    return d;
+  }
+
+  static updateDocument(
+    document: Documents,
+    data: {
+      patch?: string;
+      documentType?: DocumentType;
+      documentSide?: DocumentSide;
+      kycVerification?: KycVerification;
+    },
+  ): Documents {
+    const d = new Documents();
+    d.clientId = document.clientId;
+    d.patch = data.patch || document.patch;
+    d.documentType = data.documentType || document.documentType;
+    d.documentId = document.documentId;
+    d.documentSide = data.documentSide || document.documentSide;
+    d.kycVerification = data.kycVerification || document.kycVerification;
 
     return d;
   }
@@ -33,6 +56,7 @@ export class Documents {
     f.documentType = data.documentType;
     f.documentId = data.documentId;
     f.documentSide = data.documentSide;
+    f.kycVerification = data.kycVerification;
 
     return f;
   }
@@ -43,6 +67,10 @@ export class Documents {
 
   getDocumentId(): string {
     return this.documentId;
+  }
+
+  getKycVerification(): KycVerification | undefined {
+    return this.kycVerification;
   }
 
   getPathFile(): string {
@@ -63,6 +91,7 @@ export class Documents {
       patch: this.patch,
       documentType: this.documentType,
       documentSide: this.documentSide,
+      kycVerification: this.kycVerification,
     };
   }
 }
