@@ -15,6 +15,7 @@ import { KycAction } from "../types/kyc-action.type";
 import { InvestmentProfile } from "../types/investment-profile.type";
 import { KycProfileType } from "../types/kyc-profile.type";
 import { FollowUpClient } from "../types/follow-up-client.type";
+import { TransactionalProfile } from "../../../system_configuration/domain/transactional_profile";
 
 export interface IClient {
   getId(): string;
@@ -22,6 +23,8 @@ export interface IClient {
   setAccount(account: IAccount): IClient;
 
   setAccountId(accountId: string): IClient;
+
+  getTransactionalProfile(): TransactionalProfile;
 
   getAddressShipping(): Address;
 
@@ -84,6 +87,8 @@ export interface IClient {
   setDocument(dni: string, document: Documents): IClient;
 
   setStatus(clientStatus: AccountStatus): IClient;
+
+  setTransactionalProfile(transactionalProfile: TransactionalProfile): IClient;
 
   activeTwoFactorAuth(): void;
 
