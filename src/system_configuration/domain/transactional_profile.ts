@@ -1,33 +1,43 @@
+import { AccountType } from "../../account";
+
 export class TransactionalProfile {
   private id?: string;
-  private maxAmountPerOperation: number;
-  private maxMonthlyAmount: number;
+  company: {
+    maximumWithdrawalPerTransaction: number;
+    maximumMonthlyWithdrawal: number;
+  };
+  natural_person: {
+    maximumWithdrawalPerTransaction: number;
+    maximumMonthlyWithdrawal: number;
+  };
 
   getId(): string {
     return this.id;
   }
 
-  static fromPrimitives(data: any): TransactionalProfile {
+  static fromPrimitives(data: any, type: string): TransactionalProfile {
     const c: TransactionalProfile = new TransactionalProfile();
-
-    c.maxAmountPerOperation = data.maxAmountPerOperation;
-    c.maxMonthlyAmount = data.maxMonthlyAmount;
-
+    if (type === AccountType.COMPANY) {
+      c.company = data;
+    }
+    if (type === AccountType.INDIVIDUAL) {
+      c.natural_person = data;
+    }
     return c;
   }
 
-  getMaxMonthlyAmount(): number {
-    return this.maxMonthlyAmount;
+  getCompany() {
+    return this.company;
   }
 
-  getMaxAmountPerOperation(): number {
-    return this.maxAmountPerOperation;
+  getPerson() {
+    return this.natural_person;
   }
 
   toPrimitives(): any {
     return {
-      maxAmountPerOperation: this.maxAmountPerOperation,
-      maxMonthlyAmount: this.maxMonthlyAmount,
+      company: this.company,
+      natural_person: this.natural_person,
     };
   }
 }

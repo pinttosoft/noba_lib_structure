@@ -75,13 +75,17 @@ export class ClientFactory {
             : await SystemConfigurationMongoRepository.instance().getDefaultFeeRechargingCard(),
         )
         .setTaxId(data.taxId ?? null)
-        .setClientId(data.clientId)
-        .setTransactionalProfile(
-          "transactionalProfile" in data
-            ? TransactionalProfile.fromPrimitives(data.transactionalProfile)
-            : await SystemConfigurationMongoRepository.instance().getDefaultTransactionalProfile(),
-        );
-
+        .setClientId(data.clientId);
+      c.setTransactionalProfile(
+        "transactionalProfile" in data
+          ? TransactionalProfile.fromPrimitives(
+              data.transactionalProfile,
+              data.type,
+            )
+          : await SystemConfigurationMongoRepository.instance().getDefaultTransactionalProfile(
+              data.type,
+            ),
+      );
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
       }

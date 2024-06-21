@@ -24,7 +24,7 @@ export interface ISystemConfigurationRepository {
 
   getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard>;
 
-  getDefaultTransactionalProfile(): Promise<TransactionalProfile>;
+  getDefaultTransactionalProfile(type: string): Promise<TransactionalProfile>;
 
   getDefaultFeeAchUsd(): Promise<FeeAchUsd>;
 
