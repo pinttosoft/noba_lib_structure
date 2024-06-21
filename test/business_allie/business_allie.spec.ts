@@ -162,7 +162,6 @@ describe("Business Allie", () => {
   it("Should edit referred of allie", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId = "JLanza15781342";
     const referredTaxId = "1st_reffered_johana";
 
     const referred: Referred =
@@ -206,26 +205,45 @@ describe("Business Allie", () => {
   it("Should list allies", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId = "JLanza15781342";
 
     const allies = await businessRepo;
 
     console.log("allies", allies);
   });
 
-  it("Should save a Exchange of  my referred", async () => {
-    // const referredClientId = "MSerrano181263254";
-    const referredClientId = "ABejarano187263254";
-    // moises btc
-    // const sourceWalletId: string = "84d69973-b4aa-4ad5-b0be-b47d29ef0e37";
+  it("Should save a Exchange of  my referred usd to btc", async () => {
+    const referredClientId = "MSerrano181263254";
     const sourceWalletId: string = "USD";
 
-    // fsilva btc
-    // const destinationWalletId: string = "7550936a-b36f-4c8a-9f70-7c5c2fbb36f9";
     const destinationWalletId: string = "BTC";
 
     const exchangeRequest: ExchangeMarketRequest = {
       amount: 100,
+      clientId: referredClientId,
+      description: "test in lib for comission's allie",
+      destinationWalletId: destinationWalletId,
+      sourceWalletId: sourceWalletId,
+    };
+
+    const exchange = await new CreateExchange(
+      ExchangeMongoRepository.instance(),
+      new IntegrationMocked(),
+      WalletMongoRepository.instance(),
+      AssetMongoRepository.instance(),
+      BusinessAllieMongoRepository.instance(),
+    ).run(exchangeRequest);
+
+    console.log("exchange", exchange);
+  });
+
+  it("Should save a Exchange of  my referred btc to usd", async () => {
+    const referredClientId = "MSerrano181263254";
+    const sourceWalletId: string = "BTC";
+
+    const destinationWalletId: string = "USD";
+
+    const exchangeRequest: ExchangeMarketRequest = {
+      amount: 0.003,
       clientId: referredClientId,
       description: "test in lib for comission's allie",
       destinationWalletId: destinationWalletId,

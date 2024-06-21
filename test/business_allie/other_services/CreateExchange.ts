@@ -92,7 +92,7 @@ export class CreateExchange {
     const exchangeResponse =
       await this.exchangeIntegratorService.createExchange(exchangePayload);
 
-    logger.info(`response: `, exchangeResponse);
+    // console.log(`-- exchangeResponse response: `, exchangeResponse);
 
     return Exchange.newExchange(
       exchangeResponse.id,
