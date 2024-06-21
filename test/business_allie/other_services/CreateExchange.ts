@@ -1,5 +1,7 @@
 import {
   AmountValueObject,
+  BusinessAllieDTO,
+  BusinessAllieStatus,
   Exchange,
   ExchangeMarketActionType,
   ExchangeMarketPayload,
@@ -46,10 +48,17 @@ export class CreateExchange {
       this.assetRepository,
     ).run(exchangeRequest.clientId, exchangeRequest.destinationWalletId);
 
-    const opportunity: Referred =
-      await this.businessAllieRepository.getReferredByClientId(
+    let opportunity: Referred | undefined = undefined;
+    // todo implement in swap
+    const allie: BusinessAllieDTO =
+      await this.businessAllieRepository.getBusinessAllieByReferredClientId(
         exchangeRequest.clientId,
       );
+    if (allie?.status === BusinessAllieStatus.APPROVED) {
+      opportunity = await this.businessAllieRepository.getReferredByClientId(
+        exchangeRequest.clientId,
+      );
+    }
 
     let exchange: Exchange = await this.createExchange(
       sourceWallet,
@@ -59,7 +68,7 @@ export class CreateExchange {
     );
 
     // todo
-    //await this.exchangeRepository.upsert(exchange);
+    await this.exchangeRepository.upsert(exchange);
 
     return exchange.toPrimitives();
   }

@@ -41,7 +41,7 @@ export class Exchange extends AggregateRoot {
       wallet: IWallet;
       amountCredit: AmountValueObject;
     },
-    opportunity?: Referred,
+    referred?: Referred,
   ): Exchange {
     const e: Exchange = new Exchange();
 
@@ -63,8 +63,11 @@ export class Exchange extends AggregateRoot {
       walletId: destinationDetails.wallet.getWalletId(),
     };
 
-    if (opportunity) {
-      e.feePercentageBusinessAllie = opportunity.getFeeSwap();
+    if (referred) {
+      console.log("referred", referred.getFeeSwap());
+      e.feePercentageBusinessAllie = referred.getFeeSwap();
+    } else {
+      console.log("no referred");
     }
 
     if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
@@ -116,8 +119,13 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    //TODO posteriormente se analizara el caso de uso de aliados comerciales
-    this.feeBusinessAllie = 0;
+    // todo posteriormente se analizara el caso de uso de aliados comerciales
+    // this.feeBusinessAllie = 330;
+    console.log(
+      "-- this.feePercentageBusinessAllie  this.destinationDetails.assetCode",
+      this.feePercentageBusinessAllie,
+      this.destinationDetails.assetCode,
+    );
 
     if (
       this.destinationDetails.assetCode !== "USDT" &&
@@ -214,6 +222,7 @@ export class Exchange extends AggregateRoot {
       feeAmount: this.feeAmount,
       feeNoba: this.feeNoba,
       feeBusinessAllie: this.feeBusinessAllie,
+      feePercentageBusinessAllie: this.feePercentageBusinessAllie,
       sourceDetails: this.sourceDetails,
       destinationDetails: this.destinationDetails,
       createdAt: this.createdAt,

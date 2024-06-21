@@ -1,4 +1,5 @@
 import {
+  AccountType,
   AssetMongoRepository,
   BusinessAllie,
   BusinessAllieDTO,
@@ -69,6 +70,7 @@ describe("Business Allie", () => {
         name: "CC",
         email: "c@email.com;",
         feeSwap: 0.5,
+        type: AccountType.INDIVIDUAL,
         status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
         referredByClientId: clientId,
         clientId: referredClientId,
@@ -148,6 +150,7 @@ describe("Business Allie", () => {
       name: "amigo de johana 3",
       email: "amigo_johana3@email.com",
       feeSwap: 2,
+      type: AccountType.INDIVIDUAL,
       status: ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT,
       referredByClientId: clientId,
       createdAt: new Date(),
@@ -211,7 +214,8 @@ describe("Business Allie", () => {
   });
 
   it("Should save a Exchange of  my referred", async () => {
-    const referredClientId = "MSerrano181263254";
+    // const referredClientId = "MSerrano181263254";
+    const referredClientId = "ABejarano187263254";
     // moises btc
     // const sourceWalletId: string = "84d69973-b4aa-4ad5-b0be-b47d29ef0e37";
     const sourceWalletId: string = "USD";

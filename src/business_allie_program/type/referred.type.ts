@@ -1,4 +1,5 @@
 import { ReferredStatus } from "../enums/referred_status.enum";
+import { AccountType } from "../../account";
 
 export type ReferredDTO = {
   id?: string;
@@ -8,6 +9,7 @@ export type ReferredDTO = {
   feeSwap: number; // es lo que es aliado se gana por cada exchange
   status: ReferredStatus;
   referredByClientId: string;
+  type: AccountType;
   clientId?: string;
   createdAt?: Date;
   updatedAt?: Date;
