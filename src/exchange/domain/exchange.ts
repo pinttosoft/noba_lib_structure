@@ -121,6 +121,7 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
+    // when is not USDT
     if (
       this.destinationDetails.assetCode !== "USDT" &&
       this.sourceDetails.assetCode !== "USDT"
@@ -153,6 +154,7 @@ export class Exchange extends AggregateRoot {
       return this;
     }
 
+    // when is USDT
     const percentageAPIProvider =
       this.calculatePercentageChargedByAPIProvider();
 
@@ -238,6 +240,7 @@ export class Exchange extends AggregateRoot {
       totalAmount: this.totalAmount,
       feeAmount: this.feeAmount,
       feeNoba: this.feeNoba,
+      feePercentageNoba: this.feePercentageNoba,
       feeBusinessAllie: this.feeBusinessAllie,
       feePercentageBusinessAllie: this.feePercentageBusinessAllie,
       sourceDetails: this.sourceDetails,
