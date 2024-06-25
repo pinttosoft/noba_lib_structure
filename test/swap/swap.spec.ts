@@ -1,11 +1,11 @@
 import {
   AmountValueObject,
   BusinessAllieMongoRepository,
-  BusinessOpportunity,
   Exchange,
   ExchangeMarketActionType,
   ExchangeMarketPayload,
   ExchangeMongoRepository,
+  Referred,
   StringValueObject,
   WalletMongoRepository,
 } from "../../src";
@@ -55,7 +55,7 @@ describe("Swap", () => {
       } ${sourceWallet.getAsset()} to ${destinationWallet.getAsset()}`,
     };
 
-    const opportunity: BusinessOpportunity =
+    const opportunity: Referred =
       await BusinessAllieMongoRepository.instance().getOpportunityByClientId(
         exchangeRequest.clientId,
       );
@@ -111,7 +111,7 @@ describe("Swap", () => {
       } ${sourceWallet.getAsset()} to ${destinationWallet.getAsset()}`,
     };
 
-    const opportunity: BusinessOpportunity =
+    const opportunity: Referred =
       await BusinessAllieMongoRepository.instance().getOpportunityByClientId(
         exchangeRequest.clientId,
       );

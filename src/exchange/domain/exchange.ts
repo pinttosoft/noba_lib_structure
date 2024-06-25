@@ -1,7 +1,7 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { ExchangeStatus } from "./enums/exchange_status.enum";
 import { AmountValueObject, StringValueObject } from "../../shared";
-import { BusinessOpportunity } from "../../business_allie_program";
+import { Referred } from "../../business_allie_program";
 import { IWallet } from "../../wallet";
 
 export class Exchange extends AggregateRoot {
@@ -41,7 +41,7 @@ export class Exchange extends AggregateRoot {
       wallet: IWallet;
       amountCredit: AmountValueObject;
     },
-    opportunity?: BusinessOpportunity,
+    referred?: Referred,
   ): Exchange {
     const e: Exchange = new Exchange();
 
@@ -63,8 +63,9 @@ export class Exchange extends AggregateRoot {
       walletId: destinationDetails.wallet.getWalletId(),
     };
 
-    if (opportunity) {
-      e.feePercentageBusinessAllie = opportunity.getFeeSwap();
+    if (referred) {
+      console.log("% referred getFeeSwap: ", referred.getFeeSwap());
+      e.feePercentageBusinessAllie = referred.getFeeSwap();
     }
 
     if (sourceDetails.wallet.getAsset().getAssetCode() === "USD") {
@@ -81,6 +82,8 @@ export class Exchange extends AggregateRoot {
       e.baseAmount = destinationDetails.amountCredit.getValue();
     }
 
+    // todo remove
+    e.exchangeId = "qaz";
     e.calculateFee();
 
     return e;
@@ -93,16 +96,18 @@ export class Exchange extends AggregateRoot {
     e.status = data.status;
     e.baseAmount = data.baseAmount;
     e.totalAmount = data.totalAmount;
+
     e.feeAmount = data.feeAmount;
     e.feeNoba = data.feeNoba;
     e.feeBusinessAllie = data.feeBusinessAllie;
+    e.feePercentageNoba = data.feePercentageNoba;
+    e.feePercentageBusinessAllie = data.feePercentageBusinessAllie;
+
     e.sourceDetails = data.sourceDetails;
     e.destinationDetails = data.destinationDetails;
     e.createdAt = data.createdAt;
     e.acceptedAt = data.acceptedAt;
     e.id = id;
-    e.feePercentageNoba = data.feePercentageNoba;
-    e.feePercentageBusinessAllie = data.feePercentageBusinessAllie;
 
     return e;
   }
@@ -116,18 +121,40 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    //TODO posteriormente se analizara el caso de uso de aliados comerciales
-    this.feeBusinessAllie = 0;
-
+    // when is not USDT
     if (
       this.destinationDetails.assetCode !== "USDT" &&
       this.sourceDetails.assetCode !== "USDT"
     ) {
+      let finalPercentageToBeCharged: number = this.feePercentageNoba;
+
+      if (this.feePercentageBusinessAllie) {
+        let feePercentageBusinessAllie: number =
+          this.feePercentageBusinessAllie;
+        finalPercentageToBeCharged += feePercentageBusinessAllie;
+
+        this.feeBusinessAllie =
+          (this.destinationDetails.amountCredit * feePercentageBusinessAllie) /
+          100;
+      }
+
       this.feeNoba =
-        (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
+        (this.destinationDetails.amountCredit * finalPercentageToBeCharged) /
+        100;
+
+      console.log(
+        "-> destinationDetails.amountCredit feePercentageNoba finalPercentageToBeCharged",
+        {
+          amountCredit: this.destinationDetails.amountCredit,
+          feePercentageNoba: this.feePercentageNoba,
+          finalPercentageToBeCharged,
+        },
+      );
+
       return this;
     }
 
+    // when is USDT
     const percentageAPIProvider =
       this.calculatePercentageChargedByAPIProvider();
 
@@ -135,7 +162,7 @@ export class Exchange extends AggregateRoot {
       this.feePercentageNoba - percentageAPIProvider;
 
     console.log(
-      `Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
+      `-- Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
     );
 
     if (finalPercentageToBeCharged <= 0) {
@@ -152,21 +179,6 @@ export class Exchange extends AggregateRoot {
     this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
 
     return this;
-  }
-
-  /**
-   * Porcentaje cobrado por el proveedor de la API
-   *
-   */
-  private calculatePercentageChargedByAPIProvider() {
-    let diff = 0;
-    if (this.destinationDetails.assetCode === "USD") {
-      diff = this.sourceDetails.amountDebit - this.baseAmount;
-    } else {
-      diff = this.baseAmount - this.destinationDetails.amountCredit;
-    }
-
-    return (diff / this.baseAmount) * 100;
   }
 
   accept(): Exchange {
@@ -228,11 +240,28 @@ export class Exchange extends AggregateRoot {
       totalAmount: this.totalAmount,
       feeAmount: this.feeAmount,
       feeNoba: this.feeNoba,
+      feePercentageNoba: this.feePercentageNoba,
       feeBusinessAllie: this.feeBusinessAllie,
+      feePercentageBusinessAllie: this.feePercentageBusinessAllie,
       sourceDetails: this.sourceDetails,
       destinationDetails: this.destinationDetails,
       createdAt: this.createdAt,
       acceptedAt: this.acceptedAt,
     };
+  }
+
+  /**
+   * Porcentaje cobrado por el proveedor de la API
+   *
+   */
+  private calculatePercentageChargedByAPIProvider() {
+    let diff = 0;
+    if (this.destinationDetails.assetCode === "USD") {
+      diff = this.sourceDetails.amountDebit - this.baseAmount;
+    } else {
+      diff = this.baseAmount - this.destinationDetails.amountCredit;
+    }
+
+    return (diff / this.baseAmount) * 100;
   }
 }

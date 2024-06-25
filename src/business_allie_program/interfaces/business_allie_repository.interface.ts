@@ -1,39 +1,35 @@
 import { BusinessAllieDTO } from "../type/business_allie.type";
 import { BusinessAllie } from "../business_allie";
-import { BusinessOpportunityDTO } from "../type/business_opportunity.type";
-import { BusinessOpportunity } from "../business_opportunity";
+import { ReferredDTO } from "../type/referred.type";
+import { Referred } from "../referred";
 
 export interface IBusinessAllieRepository {
-  saveBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
-
   getBusinessAllie(clientId: string): Promise<BusinessAllieDTO | undefined>;
 
-  getOpportunityByTaxId(
-    taxId: string,
-  ): Promise<BusinessOpportunity | undefined>;
+  upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
 
-  addOpportunityToAllie(
+  addReferredToAllie(
     clientId: string,
-    opportunityPayload: BusinessOpportunityDTO,
+    referredByPayload: ReferredDTO,
   ): Promise<BusinessAllieDTO | null>;
 
-  getOpportunityAndAllieByTaxId(
+  deleteBusinessAllie(clientId: string): void;
+
+  getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
+
+  getReferredAndAllieByTaxId(
     taxId: string,
   ): Promise<BusinessAllieDTO | undefined>;
 
-  getAllieOpportunitiesByClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO[] | undefined>;
+  getReferralsByClientId(clientId: string): Promise<ReferredDTO[] | undefined>;
 
-  updateBusinessOpportunityData(
-    opportunity: BusinessOpportunity,
-  ): Promise<void>;
+  updateReferredData(referred: Referred): Promise<void>;
 
-  getBusinessAllieByOpportunityClientId(
+  getBusinessAllieByReferredClientId(
     clientId: string,
   ): Promise<BusinessAllieDTO | null>;
 
-  getOpportunityByClientId(
-    clientId: string,
-  ): Promise<BusinessOpportunity | undefined>;
+  getReferredByClientId(clientId: string): Promise<Referred | undefined>;
+
+  deleteReferred(referredByClientId: string, clientId: string): void;
 }

@@ -1,13 +1,15 @@
-import { BusinessOpportunityStatus } from "../enums/business_opportunity_status.enum";
+import { ReferredStatus } from "../enums/referred_status.enum";
+import { AccountType } from "../../account";
 
-export type BusinessOpportunityDTO = {
+export type ReferredDTO = {
   id?: string;
   taxId: string;
   name: string;
   email: string;
   feeSwap: number; // es lo que es aliado se gana por cada exchange
-  status: BusinessOpportunityStatus;
+  status: ReferredStatus;
   referredByClientId: string;
+  type: AccountType;
   clientId?: string;
   createdAt?: Date;
   updatedAt?: Date;
