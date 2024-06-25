@@ -2,13 +2,8 @@ import { AccountType } from "../../account";
 import { TransactionalProfileType } from "../../client/domain/types/transactional-profile.type";
 
 export class TransactionalProfile {
-  private id?: string;
   company: TransactionalProfileType;
   natural_person: TransactionalProfileType;
-
-  getId(): string {
-    return this.id;
-  }
 
   static fromPrimitives(data: any, type: AccountType): TransactionalProfile {
     const c: TransactionalProfile = new TransactionalProfile();
