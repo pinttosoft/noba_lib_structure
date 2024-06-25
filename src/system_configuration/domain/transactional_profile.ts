@@ -1,21 +1,16 @@
 import { AccountType } from "../../account";
+import { TransactionalProfileType } from "../../client/domain/types/transactional-profile.type";
 
 export class TransactionalProfile {
   private id?: string;
-  company: {
-    maximumWithdrawalPerTransaction: number;
-    maximumMonthlyWithdrawal: number;
-  };
-  natural_person: {
-    maximumWithdrawalPerTransaction: number;
-    maximumMonthlyWithdrawal: number;
-  };
+  company: TransactionalProfileType;
+  natural_person: TransactionalProfileType;
 
   getId(): string {
     return this.id;
   }
 
-  static fromPrimitives(data: any, type: string): TransactionalProfile {
+  static fromPrimitives(data: any, type: AccountType): TransactionalProfile {
     const c: TransactionalProfile = new TransactionalProfile();
     if (type === AccountType.COMPANY) {
       c.company = data;

@@ -106,7 +106,7 @@ export class SystemConfigurationMongoRepository
   }
 
   async getDefaultTransactionalProfile(
-    type: string,
+    type: AccountType,
   ): Promise<TransactionalProfile> {
     const collection = await this.collection();
 
