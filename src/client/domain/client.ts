@@ -22,13 +22,13 @@ import {
   FeeAchUsd,
   FeeSwap,
   FeeWire,
+  TransactionalProfile,
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
 import { FollowUpClient } from "./types/follow-up-client.type";
-import { TransactionalProfile } from "../../system_configuration/domain/transactional_profile";
 import { TransactionalProfileType } from "./types/transactional-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
@@ -133,13 +133,7 @@ export class Client extends AggregateRoot implements IClient {
   }
 
   setTransactionalProfile(transactionalProfile: TransactionalProfile): IClient {
-    if (this.clientType === AccountType.INDIVIDUAL) {
-      this.transactionalProfile = transactionalProfile.natural_person;
-    }
-    if (this.clientType === AccountType.COMPANY) {
-      this.transactionalProfile = transactionalProfile.company;
-    }
-
+    this.transactionalProfile = transactionalProfile;
     return this;
   }
 

@@ -5,7 +5,7 @@ import { FeeACHPanama } from "../feeACHPanama";
 import { CommissionForRechargingCard } from "../commission_for_recharging_card";
 import { FeeAchUsd } from "../fee_ach_usd";
 import { CommissionForIssuingCard } from "../commission_for_issuing_card";
-import { TransactionalProfile } from "../transactional_profile";
+import { TransactionalProfileData } from "../../../client/domain/types/trasactional-profile-data.type";
 
 export interface ISystemConfigurationRepository {
   getIntegratorSwapFee(): Promise<FeeSwap>;
@@ -24,7 +24,7 @@ export interface ISystemConfigurationRepository {
 
   getDefaultFeeRechargingCard(): Promise<CommissionForRechargingCard>;
 
-  getDefaultTransactionalProfile(type: string): Promise<TransactionalProfile>;
+  getDefaultTransactionalProfile(): Promise<TransactionalProfileData>;
 
   getDefaultFeeAchUsd(): Promise<FeeAchUsd>;
 
