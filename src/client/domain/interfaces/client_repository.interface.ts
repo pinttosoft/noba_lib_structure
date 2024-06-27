@@ -14,4 +14,18 @@ export interface IClientRepository {
   findAllActiveClients(): Promise<IClient[]>;
 
   findByAccountId(accountId: string): Promise<IClient>;
+
+  findByKYCProfileId(kycProfileId: string): Promise<IClient | undefined>;
+
+  findByKYCSessionId(kycSessionId: string): Promise<IClient | undefined>;
+
+  findByKYCReferenceId(kycReferenceId: string): Promise<IClient | undefined>;
+
+  findByPartnerKYCSessionId(
+    partnerKYCSessionId: string,
+  ): Promise<IClient | undefined>;
+
+  findByPartnerKYCProfileId(
+    partnerKYCProfileId: string,
+  ): Promise<IClient | undefined>;
 }

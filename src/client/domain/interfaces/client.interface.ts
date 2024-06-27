@@ -14,6 +14,7 @@ import { IndividualDTO } from "../types/Individual.type";
 import { KycAction } from "../types/kyc-action.type";
 import { InvestmentProfile } from "../types/investment-profile.type";
 import { KycProfileType } from "../types/kyc-profile.type";
+import { KycVerification } from "../types/kyc-verification";
 import { FollowUpClient } from "../types/follow-up-client.type";
 import { TransactionalProfile } from "../../../system_configuration/domain/transactional_profile";
 import { TransactionalProfileType } from "../types/transactional-profile.type";
@@ -142,6 +143,14 @@ export interface IClient {
   getOccupation(): string;
 
   getEmploymentStatus(): string;
+
+  getKYCVerification(): KycVerification;
+
+  setKYCVerification(data: KycVerification): IClient;
+
+  setKycVerificationToPartner(kycVerification: KycVerification): IClient;
+
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient;
 
   setCustomerIdentifierInServiceProvider(
     partnerIdProviderService: string,
