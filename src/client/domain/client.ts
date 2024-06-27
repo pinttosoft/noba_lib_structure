@@ -22,6 +22,7 @@ import {
   FeeAchUsd,
   FeeSwap,
   FeeWire,
+  TransactionalProfile,
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
@@ -29,6 +30,7 @@ import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
 import { KycVerification } from "./types/kyc-verification";
 import { FollowUpClient } from "./types/follow-up-client.type";
+import { TransactionalProfileType } from "./types/transactional-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -47,6 +49,7 @@ export class Client extends AggregateRoot implements IClient {
   private feeACHPanama?: FeeACHPanama;
   private feeRechargingCard: CommissionForRechargingCard;
   private feeAchUsd?: FeeAchUsd;
+  private transactionalProfile: TransactionalProfileType;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
@@ -127,6 +130,11 @@ export class Client extends AggregateRoot implements IClient {
 
   setFeeRechargingCard(fee: CommissionForRechargingCard): Client {
     this.feeRechargingCard = fee;
+    return this;
+  }
+
+  setTransactionalProfile(transactionalProfile: TransactionalProfile): IClient {
+    this.transactionalProfile = transactionalProfile;
     return this;
   }
 
@@ -424,6 +432,10 @@ export class Client extends AggregateRoot implements IClient {
 
   getFeeWire(): FeeWire {
     return this.feeWire;
+  }
+
+  getTransactionalProfile(): TransactionalProfileType {
+    return this.transactionalProfile;
   }
 
   getFeeACHPanama(): FeeACHPanama {
@@ -735,6 +747,7 @@ export class Client extends AggregateRoot implements IClient {
       feeWire: this.feeWire.toPrimitives(),
       feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       feeRechargingCard: this.feeRechargingCard.toPrimitives(),
+      transactionalProfile: this.transactionalProfile,
       feeAchUsd: this.feeAchUsd ? this.feeAchUsd.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,

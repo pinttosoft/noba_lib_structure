@@ -18,9 +18,9 @@ import {
   FeeWire,
   ISystemConfigurationRepository,
   SystemConfigurationMongoRepository,
+  TransactionalProfile,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
-import { FollowUpClient } from "../types/follow-up-client.type";
 
 export class ClientFactory {
   static async createNewClient(
@@ -62,6 +62,8 @@ export class ClientFactory {
     const c: Client = new Client();
 
     try {
+      const configsSystemTransactionalProfile =
+        await SystemConfigurationMongoRepository.instance().getDefaultTransactionalProfile();
       c.setId(id)
         .setStatus(data.status)
         .setClientData({ ...data })
@@ -76,7 +78,13 @@ export class ClientFactory {
         )
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
-
+      c.setTransactionalProfile(
+        "transactionalProfile" in data
+          ? TransactionalProfile.fromPrimitives(data.transactionalProfile)
+          : data.type == AccountType.COMPANY
+            ? configsSystemTransactionalProfile.company
+            : configsSystemTransactionalProfile.naturalPerson,
+      );
       if (data.feeACHPanama) {
         c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
       }
