@@ -498,6 +498,18 @@ export class Client extends AggregateRoot implements IClient {
     return this.clientData.kycVerification;
   }
 
+  getKYCVerificationPartner(dni: string): KycVerification {
+    const partner = this.getCompanyPartners().find(
+      (partner: IndividualDTO) => partner.dni === dni,
+    );
+
+    if (!partner) {
+      return null;
+    }
+
+    return partner.kycVerification;
+  }
+
   setKycVerificationToPartner(kycVerification: KycVerification): IClient {
     const partners = this.getCompanyPartners().map((partner) => {
       if (partner.dni === kycVerification.reference) {
