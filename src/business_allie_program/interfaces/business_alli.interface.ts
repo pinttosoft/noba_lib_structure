@@ -13,4 +13,6 @@ export interface IBusinessAllie {
   updateLink(link: string): void;
 
   updateDiffusionChanel(diffusionChanel: DiffusionChannels): void;
+
+  getFeeLimits(): FeeLimitsType;
 }

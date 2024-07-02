@@ -38,4 +38,8 @@ export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
   toPrimitives(): BusinessAllieDTO {
     return this.businessAllie;
   }
+
+  getFeeLimits(): FeeLimitsType {
+    return this.businessAllie.feeLimits;
+  }
 }
