@@ -89,9 +89,11 @@ export class ClientFactory {
             : configsSystemTransactionalProfile.naturalPerson,
       );
 
-      if (data.feeACHPanama) {
-        c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
-      }
+      c.setFeeACHPanama(
+        FeeACHPanama.fromPrimitives(
+          data.feeACHPanama ?? (await systemConfig.getDefaultFeeACHPAB()),
+        ),
+      );
 
       c.setFeeAchUsd(
         FeeAchUsd.fromPrimitives(
