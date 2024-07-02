@@ -1,6 +1,6 @@
 import {
   AmountValueObject,
-  BusinessAllieDTO,
+  BusinessAllie,
   BusinessAllieStatus,
   Exchange,
   ExchangeMarketActionType,
@@ -50,11 +50,11 @@ export class CreateExchange {
 
     let opportunity: Referred | undefined = undefined;
     // todo implement in swap
-    const allie: BusinessAllieDTO =
+    const allie: BusinessAllie =
       await this.businessAllieRepository.getBusinessAllieByReferredClientId(
         exchangeRequest.clientId,
       );
-    if (allie?.status === BusinessAllieStatus.APPROVED) {
+    if (allie?.toPrimitives().status === BusinessAllieStatus.APPROVED) {
       opportunity = await this.businessAllieRepository.getReferredByClientId(
         exchangeRequest.clientId,
       );

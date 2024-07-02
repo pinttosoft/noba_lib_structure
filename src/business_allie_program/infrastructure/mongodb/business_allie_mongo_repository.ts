@@ -28,9 +28,7 @@ export class BusinessAllieMongoRepository
     return "business_allie";
   }
 
-  async getBusinessAllie(
-    clientId: string,
-  ): Promise<BusinessAllieDTO | undefined> {
+  async getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>({ clientId });
 
@@ -38,7 +36,7 @@ export class BusinessAllieMongoRepository
       return undefined;
     }
 
-    return { ...result, id: result._id } as unknown as BusinessAllieDTO;
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
   }
 
   async upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
@@ -48,7 +46,7 @@ export class BusinessAllieMongoRepository
   async addReferredToAllie(
     clientId: string,
     referredPayload: ReferredDTO,
-  ): Promise<BusinessAllieDTO | null> {
+  ): Promise<BusinessAllie | null> {
     const collection = await this.collection();
 
     await collection.updateOne(
@@ -57,9 +55,11 @@ export class BusinessAllieMongoRepository
       { upsert: true },
     );
 
-    return (await collection.findOne<any>({
+    const result = (await collection.findOne<any>({
       clientId,
     })) as unknown as BusinessAllieDTO;
+
+    return new BusinessAllie(result);
   }
 
   async updateReferredData(referred: Referred): Promise<void> {
@@ -81,36 +81,40 @@ export class BusinessAllieMongoRepository
     );
   }
 
-  async getReferralsByClientId(
-    clientId: string,
-  ): Promise<ReferredDTO[] | null> {
+  async getReferralsByClientId(clientId: string): Promise<Referred[] | null> {
     const collection = await this.collection();
     const result = await collection.findOne<any>({ clientId });
     if (!result) {
       return null;
     }
 
-    return result.referrals;
+    return result.referrals.map((r) => new Referred(r));
   }
 
   async getReferredAndAllieByTaxId(
     taxId: string,
-  ): Promise<BusinessAllieDTO | null> {
+  ): Promise<BusinessAllie | null> {
     const collection = await this.collection();
-
-    return (await collection.findOne<any>({
+    const result = await collection.findOne<any>({
       "referrals.taxId": taxId,
-    })) as unknown as BusinessAllieDTO;
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
   }
 
   async getBusinessAllieByReferredClientId(
     clientId: string,
-  ): Promise<BusinessAllieDTO | null> {
+  ): Promise<BusinessAllie | null> {
     const collection = await this.collection();
-
-    return (await collection.findOne<any>({
+    const result = await collection.findOne<any>({
       "referrals.clientId": clientId,
-    })) as unknown as BusinessAllieDTO;
+    });
+
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
   }
 
   async getReferredByTaxId(taxId: string): Promise<Referred | undefined> {
@@ -153,16 +157,18 @@ export class BusinessAllieMongoRepository
   async deleteReferred(referredByClientId: string, clientId: string) {
     const collection = await this.collection();
 
-    const oldReferrals: ReferredDTO[] =
+    const oldReferrals: Referred[] =
       await this.getReferralsByClientId(referredByClientId);
-    // console.log("oldReferrals", oldReferrals);
+    console.log("oldReferrals", oldReferrals);
 
-    const newReferrals: ReferredDTO[] = oldReferrals.filter(
-      (referred: ReferredDTO): boolean => referred.clientId !== clientId,
+    const newReferrals: Referred[] = oldReferrals.filter(
+      (referred: Referred): boolean => referred.getClientId() !== clientId,
     );
 
     const allieRes = await this.getBusinessAllie(referredByClientId);
-    const allie = new BusinessAllie(allieRes);
+    const allie = new BusinessAllie(
+      allieRes.toPrimitives() as BusinessAllieDTO,
+    );
     allie.setReferrals(newReferrals);
 
     await this.upsertBusinessAllie(allie);

@@ -15,6 +15,10 @@ export class Referred extends AggregateRoot {
     return this.referred.id;
   }
 
+  getClientId(): string {
+    return this.referred.clientId;
+  }
+
   getClientIdToBusinessAllie() {
     return this.referred.referredByClientId;
   }

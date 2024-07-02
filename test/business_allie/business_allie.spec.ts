@@ -23,7 +23,7 @@ describe("Business Allie", () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId: string = "Business-WANER1128024080";
-    const allieExist: BusinessAllieDTO =
+    const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
 
     if (!allieExist) {
@@ -39,6 +39,10 @@ describe("Business Allie", () => {
       };
 
       const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
+      bAllie.updateFeeLimits({
+        min: 0.2,
+        max: 6,
+      });
       await businessRepo.upsertBusinessAllie(bAllie);
 
       return;
@@ -51,7 +55,7 @@ describe("Business Allie", () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId: string = "Business-WANER1128024080";
-    const allieExist: BusinessAllieDTO =
+    const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
     const referredClientId = "MSerrano181263254";
 
@@ -85,7 +89,7 @@ describe("Business Allie", () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId: string = "JLanza15781342";
-    const allieExist: BusinessAllieDTO =
+    const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
 
     if (!allieExist) {
@@ -122,10 +126,8 @@ describe("Business Allie", () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId: string = "JLanza15781342";
-    const allieExist: BusinessAllieDTO =
-      await businessRepo.getBusinessAllie(clientId);
+    const allie: BusinessAllie = await businessRepo.getBusinessAllie(clientId);
 
-    const allie: BusinessAllie = new BusinessAllie(allieExist);
     allie.updateStatus(BusinessAllieStatus.DENIED);
 
     const feeLimits: FeeLimitsType = {
@@ -146,12 +148,12 @@ describe("Business Allie", () => {
 
     const referredPayload: ReferredDTO = {
       clientId: "12345",
-      taxId: "3third_reffered_johana",
+      taxId: "1st_reffered_johana",
       name: "amigo de johana 3",
       email: "amigo_johana3@email.com",
       feeSwap: 2,
       type: AccountType.INDIVIDUAL,
-      status: ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT,
+      status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
       referredByClientId: clientId,
       createdAt: new Date(),
     };
@@ -177,7 +179,7 @@ describe("Business Allie", () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId = "JLanza15781342";
-    const referredClientId = "1234";
+    const referredClientId = "12";
 
     console.log(
       "1st referrals",

@@ -4,7 +4,7 @@ import { BusinessAllieStatus } from "./enums/business_allie_status.enum";
 import { FeeLimitsType } from "./type/fee_limits.type";
 import { IBusinessAllie } from "./interfaces/business_alli.interface";
 import { DiffusionChannels } from "./enums/diffussion_channels.enum";
-import { ReferredDTO } from "./type/referred.type";
+import { Referred } from "./referred";
 
 export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
   constructor(private readonly businessAllie: BusinessAllieDTO) {
@@ -15,8 +15,8 @@ export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
     return this.businessAllie.id;
   }
 
-  setReferrals(referrals: ReferredDTO[]): void {
-    this.businessAllie.referrals = referrals;
+  setReferrals(referrals: Referred[]): void {
+    this.businessAllie.referrals = referrals.map((r) => r.toPrimitives());
   }
 
   updateStatus(status: BusinessAllieStatus): void {
