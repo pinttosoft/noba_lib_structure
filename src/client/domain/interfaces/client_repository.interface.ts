@@ -1,4 +1,5 @@
 import { IClient } from "./client.interface";
+import { KycVerification } from "../types/kyc-verification";
 
 export interface IClientRepository {
   upsert(client: IClient): Promise<void>;
@@ -28,4 +29,15 @@ export interface IClientRepository {
   findByPartnerKYCProfileId(
     partnerKYCProfileId: string,
   ): Promise<IClient | undefined>;
+
+  setKycVerification(
+    client: IClient,
+    kycVerification: KycVerification,
+  ): Promise<void>;
+
+  setKycVerificationPartner(
+    client: IClient,
+    dni: string,
+    kycVerification: KycVerification,
+  ): Promise<void>;
 }

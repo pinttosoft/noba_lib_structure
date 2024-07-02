@@ -146,6 +146,8 @@ export interface IClient {
 
   getKYCVerification(): KycVerification;
 
+  getKYCVerificationPartner(dni: string): KycVerification;
+
   setKYCVerification(data: KycVerification): IClient;
 
   setKycVerificationToPartner(kycVerification: KycVerification): IClient;
