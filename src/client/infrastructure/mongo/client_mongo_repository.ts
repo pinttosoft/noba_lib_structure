@@ -8,6 +8,7 @@ import {
   IAccount,
 } from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
+import { KycVerification } from "../../domain/types/kyc-verification";
 
 export class ClientMongoRepository
   extends MongoRepository<IClient>
@@ -176,6 +177,33 @@ export class ClientMongoRepository
     }
 
     return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async setKycVerification(
+    client: IClient,
+    kycVerification: KycVerification,
+  ): Promise<void> {
+    const collection = await this.collection();
+    await collection.updateOne(
+      { clientId: client.getClientId() },
+      { $set: { kycVerification } },
+    );
+  }
+
+  async setKycVerificationPartner(
+    client: IClient,
+    dni: string,
+    kycVerification: KycVerification,
+  ): Promise<void> {
+    const collection = await this.collection();
+
+    await collection.updateOne(
+      {
+        clientId: client.getClientId(),
+        "partners.dni": dni,
+      },
+      { $set: { "partners.$.kycVerification": kycVerification } },
+    );
   }
 
   private async buildClient(client: any, resultId: string): Promise<IClient> {
