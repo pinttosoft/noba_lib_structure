@@ -1,5 +1,6 @@
 import { IClient } from "./client.interface";
 import { KycVerification } from "../types/kyc-verification";
+import { AccountStatus } from "../../../account";
 
 export interface IClientRepository {
   upsert(client: IClient): Promise<void>;
@@ -40,4 +41,6 @@ export interface IClientRepository {
     dni: string,
     kycVerification: KycVerification,
   ): Promise<void>;
+
+  setStatus(client: IClient, status: AccountStatus): Promise<void>;
 }

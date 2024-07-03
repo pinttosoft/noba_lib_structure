@@ -206,6 +206,14 @@ export class ClientMongoRepository
     );
   }
 
+  async setStatus(client: IClient, status: AccountStatus) {
+    const collection = await this.collection();
+    await collection.updateOne(
+      { clientId: client.getClientId() },
+      { $set: { status } },
+    );
+  }
+
   private async buildClient(client: any, resultId: string): Promise<IClient> {
     const account: IAccount =
       await new AccountMongoRepository().findByAccountId(client.accountId);
