@@ -22,6 +22,11 @@ export interface IWithdrawalRequestRepository {
     clientId: string,
     filters: GetTotalAmountByClientIdFilters,
   ): Promise<number>;
+
+  getTotalAmountByClientIdGroupByAsset(
+    clientId: string,
+    filters: GetTotalAmountByClientIdFilters,
+  ): Promise<{ [assetId: string]: number }>;
 }
 
 export type GetTotalAmountByClientIdFilters = {
