@@ -136,4 +136,49 @@ export class WithdrawalRequestMongoRepository
     const totalAmount = await result.toArray();
     return totalAmount.length > 0 ? totalAmount[0].totalAmount : 0;
   }
+
+  async getTotalAmountByClientIdGroupByAsset(
+    clientId: string,
+    filters: GetTotalAmountByClientIdFilters,
+  ): Promise<{ [assetId: string]: number }> {
+    const collection = await this.collection();
+
+    const result = collection.aggregate([
+      {
+        $match: {
+          clientId: clientId,
+          status: filters.status,
+          "counterparty.counterpartyType": filters.counterPartyType,
+          ...(filters.withdrawalType && {
+            withdrawalType: filters.withdrawalType,
+          }),
+          ...(filters.startDate &&
+            filters.endDate && {
+              createdAt: {
+                $gte: filters.startDate,
+                $lte: filters.endDate,
+              },
+            }),
+        },
+      },
+      {
+        $group: {
+          _id: "$counterparty.assetId",
+          totalAmount: {
+            $sum: "$amount",
+          },
+        },
+      },
+    ]);
+
+    const totalAmount = await result.toArray();
+
+    return totalAmount.reduce(
+      (acc, item) => {
+        acc[item._id] = item.totalAmount;
+        return acc;
+      },
+      {} as { [assetId: string]: number },
+    );
+  }
 }

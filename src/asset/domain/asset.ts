@@ -10,6 +10,7 @@ export class Asset extends AggregateRoot {
   private name: string;
   private network: string;
   private networkName?: string;
+  private coinId?: string;
 
   static createNewAsset(
     assetId: string,
@@ -19,6 +20,7 @@ export class Asset extends AggregateRoot {
     name: string,
     network: string,
     networkName?: string,
+    coinId?: string,
   ): Asset {
     const a: Asset = new Asset();
 
@@ -29,6 +31,7 @@ export class Asset extends AggregateRoot {
     a.name = name;
     a.network = network;
     a.networkName = networkName;
+    a.coinId = coinId;
 
     return a;
   }
@@ -42,6 +45,7 @@ export class Asset extends AggregateRoot {
       plainData.name,
       plainData.network,
       plainData.networkName,
+      plainData.coinId,
     );
 
     a.id = id;
@@ -76,6 +80,10 @@ export class Asset extends AggregateRoot {
     return this.icon;
   }
 
+  getCoinId(): string {
+    return this.coinId;
+  }
+
   isCryptoAsset(): boolean {
     return this.assetClassification === AssetClassification.CRYPTO;
   }
@@ -90,6 +98,7 @@ export class Asset extends AggregateRoot {
       name: this.name,
       network: this.network,
       networkName: this.networkName,
+      coinId: this.coinId,
     };
   }
 }
