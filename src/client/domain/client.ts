@@ -22,12 +22,15 @@ import {
   FeeAchUsd,
   FeeSwap,
   FeeWire,
+  TransactionalProfile,
 } from "../../system_configuration";
 import { Documents } from "../../documents";
 import { KycAction } from "./types/kyc-action.type";
 import { InvestmentProfile } from "./types/investment-profile.type";
 import { KycProfileType } from "./types/kyc-profile.type";
+import { KycVerification } from "./types/kyc-verification";
 import { FollowUpClient } from "./types/follow-up-client.type";
+import { TransactionalProfileType } from "./types/transactional-profile.type";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -46,6 +49,7 @@ export class Client extends AggregateRoot implements IClient {
   private feeACHPanama?: FeeACHPanama;
   private feeRechargingCard: CommissionForRechargingCard;
   private feeAchUsd?: FeeAchUsd;
+  private transactionalProfile: TransactionalProfileType;
   private documents: Documents[] = [];
   private companyPartners: IOwnerAccount[] = [];
   private twoFactorActive: boolean = false;
@@ -129,6 +133,11 @@ export class Client extends AggregateRoot implements IClient {
     return this;
   }
 
+  setTransactionalProfile(transactionalProfile: TransactionalProfile): IClient {
+    this.transactionalProfile = transactionalProfile;
+    return this;
+  }
+
   setFeeACHPanama(fee: FeeACHPanama) {
     this.feeACHPanama = fee;
     return this;
@@ -154,7 +163,29 @@ export class Client extends AggregateRoot implements IClient {
   setDocument(dni: string, document: Documents): Client {
     if (dni === this.getIDNumber()) {
       if (this.documents && this.documents.length > 0) {
-        this.documents.push(document);
+        const documentExist = this.documents.find(
+          (doc) =>
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType(),
+        );
+
+        if (!documentExist) {
+          this.documents.push(document);
+          return;
+        }
+
+        this.documents = this.documents.map((doc) => {
+          if (
+            doc.getDocumentSide() === document.getDocumentSide() &&
+            doc.getDocumentType() === document.getDocumentType()
+          ) {
+            return Documents.updateDocument(doc, {
+              patch: document.getPathFile(),
+            });
+          }
+
+          return doc;
+        });
       } else {
         this.documents = [document];
       }
@@ -403,6 +434,10 @@ export class Client extends AggregateRoot implements IClient {
     return this.feeWire;
   }
 
+  getTransactionalProfile(): TransactionalProfileType {
+    return this.transactionalProfile;
+  }
+
   getFeeACHPanama(): FeeACHPanama {
     return this.feeACHPanama;
   }
@@ -451,6 +486,61 @@ export class Client extends AggregateRoot implements IClient {
 
   rejectSegregated(): void {
     this.status = AccountStatus.REJECTED;
+  }
+
+  setKYCVerification(data: KycVerification): Client {
+    this.clientData.kycVerification = data;
+
+    return this;
+  }
+
+  getKYCVerification(): KycVerification {
+    return this.clientData.kycVerification;
+  }
+
+  getKYCVerificationPartner(dni: string): KycVerification {
+    const partner = this.getCompanyPartners().find(
+      (partner: IndividualDTO) => partner.dni === dni,
+    );
+
+    if (!partner) {
+      return null;
+    }
+
+    return partner.kycVerification;
+  }
+
+  setKycVerificationToPartner(kycVerification: KycVerification): IClient {
+    const partners = this.getCompanyPartners().map((partner) => {
+      if (partner.dni === kycVerification.reference) {
+        return {
+          ...partner,
+          kycVerification,
+        };
+      }
+
+      return partner;
+    });
+    this.setClientData({ ...this.clientData, partners });
+
+    return this;
+  }
+
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient {
+    const documents = this.getPrincipalDocuments().map((document) => {
+      let newDoc = null;
+      if (document.getDocumentId() === kycVerification.reference) {
+        newDoc = Documents.updateDocument(document, {
+          kycVerification,
+        });
+      }
+
+      return newDoc ? newDoc : document;
+    });
+
+    this.documents = documents;
+
+    return this;
   }
 
   getKycActions(): KycAction[] {
@@ -669,6 +759,7 @@ export class Client extends AggregateRoot implements IClient {
       feeWire: this.feeWire.toPrimitives(),
       feeACHPanama: this.feeACHPanama ? this.feeACHPanama.toPrimitives() : null,
       feeRechargingCard: this.feeRechargingCard.toPrimitives(),
+      transactionalProfile: this.transactionalProfile,
       feeAchUsd: this.feeAchUsd ? this.feeAchUsd.toPrimitives() : null,
       documents: this.documents.map((d: Documents) => d.toPrimitives()),
       twoFactorActive: this.twoFactorActive,

@@ -8,6 +8,7 @@ import {
   IAccount,
 } from "../../../account";
 import { ClientFactory } from "../../domain/factories/client.factory";
+import { KycVerification } from "../../domain/types/kyc-verification";
 
 export class ClientMongoRepository
   extends MongoRepository<IClient>
@@ -105,6 +106,112 @@ export class ClientMongoRepository
     if (!result) return undefined;
 
     return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByKYCProfileId(kycProfileId: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.profileId": kycProfileId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByKYCReferenceId(
+    kycReferenceId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.reference": kycReferenceId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByKYCSessionId(kycSessionId: string): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "kycVerification.sessionId": kycSessionId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByPartnerKYCProfileId(
+    partnerKYCProfileId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "partners.kycVerification.profileId": partnerKYCProfileId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async findByPartnerKYCSessionId(
+    partnerKYCSessionId: string,
+  ): Promise<IClient | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "partners.kycVerification.sessionId": partnerKYCSessionId,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.buildClient({ ...result }, result._id.toString());
+  }
+
+  async setKycVerification(
+    client: IClient,
+    kycVerification: KycVerification,
+  ): Promise<void> {
+    const collection = await this.collection();
+    await collection.updateOne(
+      { clientId: client.getClientId() },
+      { $set: { kycVerification } },
+    );
+  }
+
+  async setKycVerificationPartner(
+    client: IClient,
+    dni: string,
+    kycVerification: KycVerification,
+  ): Promise<void> {
+    const collection = await this.collection();
+
+    await collection.updateOne(
+      {
+        clientId: client.getClientId(),
+        "partners.dni": dni,
+      },
+      { $set: { "partners.$.kycVerification": kycVerification } },
+    );
+  }
+
+  async setStatus(client: IClient, status: AccountStatus) {
+    const collection = await this.collection();
+    await collection.updateOne(
+      { clientId: client.getClientId() },
+      { $set: { status } },
+    );
   }
 
   private async buildClient(client: any, resultId: string): Promise<IClient> {

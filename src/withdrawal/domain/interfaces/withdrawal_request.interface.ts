@@ -1,8 +1,11 @@
 import { WithdrawalRequest } from "../withdrawal_request";
 import { Criteria, Paginate } from "../../../shared";
+import { WithdrawalType } from "../enums/withdrawal_type.enum";
+import { CounterpartyType } from "../../../counterparty";
 
 export interface IWithdrawalRequestRepository {
   upsert(withdrawal: WithdrawalRequest): Promise<void>;
+
   findByClient(
     clientId: string,
     page: number,
@@ -14,4 +17,22 @@ export interface IWithdrawalRequestRepository {
   ): Promise<WithdrawalRequest | undefined>;
 
   list(criteria: Criteria): Promise<Paginate<WithdrawalRequest>>;
+
+  getTotalAmountByClientId(
+    clientId: string,
+    filters: GetTotalAmountByClientIdFilters,
+  ): Promise<number>;
+
+  getTotalAmountByClientIdGroupByAsset(
+    clientId: string,
+    filters: GetTotalAmountByClientIdFilters,
+  ): Promise<{ [assetId: string]: number }>;
 }
+
+export type GetTotalAmountByClientIdFilters = {
+  withdrawalType?: WithdrawalType;
+  status: string;
+  counterPartyType: CounterpartyType;
+  startDate?: Date;
+  endDate?: Date;
+};

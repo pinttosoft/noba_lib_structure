@@ -18,9 +18,9 @@ import {
   FeeWire,
   ISystemConfigurationRepository,
   SystemConfigurationMongoRepository,
+  TransactionalProfile,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
-import { FollowUpClient } from "../types/follow-up-client.type";
 
 export class ClientFactory {
   static async createNewClient(
@@ -62,6 +62,11 @@ export class ClientFactory {
     const c: Client = new Client();
 
     try {
+      const systemConfig: ISystemConfigurationRepository =
+        SystemConfigurationMongoRepository.instance();
+
+      const configsSystemTransactionalProfile =
+        await systemConfig.getDefaultTransactionalProfile();
       c.setId(id)
         .setStatus(data.status)
         .setClientData({ ...data })
@@ -72,18 +77,29 @@ export class ClientFactory {
         .setFeeRechargingCard(
           "feeRechargingCard" in data
             ? CommissionForRechargingCard.fromPrimitives(data.feeRechargingCard)
-            : await SystemConfigurationMongoRepository.instance().getDefaultFeeRechargingCard(),
+            : await systemConfig.getDefaultFeeRechargingCard(),
         )
         .setTaxId(data.taxId ?? null)
         .setClientId(data.clientId);
+      c.setTransactionalProfile(
+        "transactionalProfile" in data
+          ? TransactionalProfile.fromPrimitives(data.transactionalProfile)
+          : data.type == AccountType.COMPANY
+            ? configsSystemTransactionalProfile.company
+            : configsSystemTransactionalProfile.naturalPerson,
+      );
 
-      if (data.feeACHPanama) {
-        c.setFeeACHPanama(FeeACHPanama.fromPrimitives(data.feeACHPanama));
-      }
+      c.setFeeACHPanama(
+        FeeACHPanama.fromPrimitives(
+          data.feeACHPanama ?? (await systemConfig.getDefaultFeeACHPAB()),
+        ),
+      );
 
-      if (data.feeAchUsd) {
-        c.setFeeAchUsd(FeeAchUsd.fromPrimitives(data.feeAchUsd));
-      }
+      c.setFeeAchUsd(
+        FeeAchUsd.fromPrimitives(
+          data.feeAchUsd ?? (await systemConfig.getDefaultFeeAchUsd()),
+        ),
+      );
 
       // general kyc for COMPANY, and for kyc INDIVIDUAL
       if (data.kycRequestedChanges) {

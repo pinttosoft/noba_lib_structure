@@ -14,7 +14,10 @@ import { IndividualDTO } from "../types/Individual.type";
 import { KycAction } from "../types/kyc-action.type";
 import { InvestmentProfile } from "../types/investment-profile.type";
 import { KycProfileType } from "../types/kyc-profile.type";
+import { KycVerification } from "../types/kyc-verification";
 import { FollowUpClient } from "../types/follow-up-client.type";
+import { TransactionalProfile } from "../../../system_configuration/domain/transactional_profile";
+import { TransactionalProfileType } from "../types/transactional-profile.type";
 
 export interface IClient {
   getId(): string;
@@ -22,6 +25,8 @@ export interface IClient {
   setAccount(account: IAccount): IClient;
 
   setAccountId(accountId: string): IClient;
+
+  getTransactionalProfile(): TransactionalProfileType;
 
   getAddressShipping(): Address;
 
@@ -85,6 +90,8 @@ export interface IClient {
 
   setStatus(clientStatus: AccountStatus): IClient;
 
+  setTransactionalProfile(transactionalProfile: TransactionalProfile): IClient;
+
   activeTwoFactorAuth(): void;
 
   disableTwoFactorAuth(): void;
@@ -136,6 +143,16 @@ export interface IClient {
   getOccupation(): string;
 
   getEmploymentStatus(): string;
+
+  getKYCVerification(): KycVerification;
+
+  getKYCVerificationPartner(dni: string): KycVerification;
+
+  setKYCVerification(data: KycVerification): IClient;
+
+  setKycVerificationToPartner(kycVerification: KycVerification): IClient;
+
+  setKycVerificationToDocument(kycVerification: KycVerification): IClient;
 
   setCustomerIdentifierInServiceProvider(
     partnerIdProviderService: string,

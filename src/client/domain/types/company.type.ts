@@ -1,6 +1,6 @@
 import { Address, ContactInformation } from "../../../shared";
 import { CompanyType } from "../enums/company_type.enum";
-import { DocumentType } from "../../../documents";
+import { DocumentSide, DocumentType } from "../../../documents";
 import { CompanyQuestionnaire } from "../../../account";
 
 type companyType = {
@@ -19,7 +19,9 @@ type companyType = {
   } & ContactInformation;
   documents: {
     patch: string;
+    documentId: string;
     documentType: DocumentType;
+    documentSide: DocumentSide;
   }[];
   questionnaire: CompanyQuestionnaire;
   partners: any[];
