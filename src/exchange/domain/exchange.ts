@@ -83,7 +83,7 @@ export class Exchange extends AggregateRoot {
     }
 
     // todo remove
-    e.exchangeId = "qaz";
+    e.exchangeId = "qaz-" + Math.random();
     e.calculateFee();
 
     return e;
