@@ -7,8 +7,13 @@ import {
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
   BusinessAllieType,
+  Criteria,
   ExchangeMarketRequest,
   ExchangeMongoRepository,
+  Filters,
+  Operator,
+  Order,
+  OrderTypes,
   Referred,
   ReferredDTO,
   ReferredStatus,
@@ -50,6 +55,28 @@ describe("Business Allie", () => {
     }
 
     console.log("allie already exists");
+  });
+
+  it("Should list allies", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+
+    const filterStatus: Map<string, string> = new Map([
+      ["field", "status"],
+      ["operator", Operator.EQUAL],
+      ["value", BusinessAllieStatus.APPROVED],
+    ]);
+
+    const criteria: Criteria = new Criteria(
+      Filters.fromValues([filterStatus]),
+      Order.fromValues("createdAt", OrderTypes.DESC),
+      9,
+      1,
+    );
+
+    const allies = await businessRepo.fetchBusinessAllies(criteria);
+
+    console.log("allies", allies);
   });
 
   it("Should add opportunity to allie", async () => {
@@ -203,15 +230,6 @@ describe("Business Allie", () => {
     const referrals = await businessRepo.getReferralsByClientId(clientId);
 
     console.log("referrals", referrals);
-  });
-
-  it("Should list allies", async () => {
-    const businessRepo: BusinessAllieMongoRepository =
-      BusinessAllieMongoRepository.instance();
-
-    const allies = await businessRepo;
-
-    console.log("allies", allies);
   });
 
   it("Should save a Exchange of  my referred usd to btc", async () => {

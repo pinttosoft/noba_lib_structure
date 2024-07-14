@@ -3,7 +3,12 @@ import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
 import { ReferredDTO } from "../../type/referred.type";
 import { Referred } from "../../referred";
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import {
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
 
 export class BusinessAllieMongoRepository
   extends MongoRepository<BusinessAllie>
@@ -26,6 +31,12 @@ export class BusinessAllieMongoRepository
 
   collectionName(): string {
     return "business_allie";
+  }
+
+  async fetchBusinessAllies(criteria: Criteria): Promise<Paginate<any>> {
+    const document = await this.searchByCriteria<any>(criteria);
+
+    return this.buildPaginate<any>(document);
   }
 
   async getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined> {
