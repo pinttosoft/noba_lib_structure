@@ -1,6 +1,7 @@
 import { ReferredDTO } from "./type/referred.type";
 import { ReferredStatus } from "./enums/referred_status.enum";
 import { AggregateRoot } from "../shared/domain/aggregate_root";
+import { AccountStatus } from "../account";
 
 export class Referred extends AggregateRoot {
   constructor(private readonly referred: ReferredDTO) {
@@ -33,6 +34,10 @@ export class Referred extends AggregateRoot {
 
   setStatus(status: ReferredStatus) {
     this.referred.status = status;
+  }
+
+  updateAccountStatus(clientStatus: AccountStatus): void {
+    this.referred.accountStatus = clientStatus;
   }
 
   toPrimitives(): ReferredDTO {

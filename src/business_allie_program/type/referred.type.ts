@@ -1,5 +1,5 @@
 import { ReferredStatus } from "../enums/referred_status.enum";
-import { AccountType } from "../../account";
+import { AccountStatus, AccountType } from "../../account";
 
 export type ReferredDTO = {
   id?: string;
@@ -13,4 +13,5 @@ export type ReferredDTO = {
   clientId?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  accountStatus?: AccountStatus;
 };
