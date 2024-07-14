@@ -1,4 +1,5 @@
 import {
+  AccountStatus,
   AccountType,
   AssetMongoRepository,
   BusinessAllie,
@@ -261,5 +262,18 @@ describe("Business Allie", () => {
     ).run(exchangeRequest);
 
     console.log("exchange", exchange);
+  });
+
+  it("Should update account status of referred", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const referredTaxId = "MSerrano181263254";
+
+    const referred: Referred =
+      await businessRepo.getReferredByTaxId(referredTaxId);
+    console.log("referred", referred);
+    referred.updateAccountStatus(AccountStatus.CHANGES_REQUESTED);
+
+    await businessRepo.updateReferredData(referred);
   });
 });
