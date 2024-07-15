@@ -1,8 +1,11 @@
 import { BusinessAllie } from "../business_allie";
 import { ReferredDTO } from "../type/referred.type";
 import { Referred } from "../referred";
+import { Criteria, Paginate } from "../../shared";
 
 export interface IBusinessAllieRepository {
+  fetchBusinessAllies(criteria: Criteria): Promise<Paginate<BusinessAllie>>;
+
   getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined>;
 
   upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void>;

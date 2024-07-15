@@ -33,10 +33,12 @@ export class BusinessAllieMongoRepository
     return "business_allie";
   }
 
-  async fetchBusinessAllies(criteria: Criteria): Promise<Paginate<any>> {
+  async fetchBusinessAllies(
+    criteria: Criteria,
+  ): Promise<Paginate<BusinessAllie>> {
     const document = await this.searchByCriteria<any>(criteria);
 
-    return this.buildPaginate<any>(document);
+    return this.buildPaginate<BusinessAllie>(document);
   }
 
   async getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined> {
