@@ -5,8 +5,10 @@ import {
   ExchangeMarketActionType,
   ExchangeMarketPayload,
   StringValueObject,
+  Wallet,
   WalletMongoRepository,
 } from "../../src";
+import { v4 } from "uuid";
 
 describe("Exchange", () => {
   it("should create exchange USD -> CRYPTO", async () => {
@@ -151,5 +153,114 @@ describe("Exchange", () => {
     );
 
     console.log(exchange);
+  });
+
+  it("USD -> USDT calculates fee correctly when operating fee is greater than fee client percentage", async () => {
+    process.env.BASE_SWAP_FEE_PERCENT = "0.3";
+
+    const sourceWallet = {
+      getAsset: jest.fn(() => ({
+        getAssetCode: jest.fn(() => "USD"),
+      })),
+      getClient: jest.fn(() => ({
+        getFeeSwap: jest.fn(() => ({
+          getFeeForSell: jest.fn().mockReturnValue(0.3),
+          getFeeForBuy: jest.fn().mockReturnValue(0.3),
+        })),
+        getClientId: jest.fn().mockReturnValue("FSilva187263254"),
+      })),
+      getClientId: jest.fn(() => "FSilva187263254"),
+      walletId: "458b6eb2-e311-4062-9fe0-3b9c4e60bdc5",
+      getWalletId: jest
+        .fn()
+        .mockReturnValue("458b6eb2-e311-4062-9fe0-3b9c4e60bdc5"),
+    };
+
+    const destinationWallet = {
+      getAsset: jest.fn(() => ({
+        getAssetCode: jest.fn(() => "USDT"),
+      })),
+      walletId: "f50e72c8-1bc5-4944-8754-e6d077ffa76a",
+      getWalletId: jest.fn(() => "f50e72c8-1bc5-4944-8754-e6d077ffa76a"),
+      getClientId: jest.fn().mockReturnValue("FSilva187263254"),
+      getClient: jest.fn(() => ({
+        getFeeSwap: jest.fn(() => ({
+          getFeeForSell: jest.fn().mockReturnValue(0.3),
+          getFeeForBuy: jest.fn().mockReturnValue(0.3),
+        })),
+      })),
+    };
+
+    const exchange = jest.mocked(
+      Exchange.newExchange(
+        v4(),
+        {
+          assetCode: StringValueObject.create("USD"),
+          wallet: sourceWallet as unknown as Wallet,
+          amountDebit: AmountValueObject.create(1510),
+        },
+        {
+          assetCode: StringValueObject.create("USDT"),
+          wallet: destinationWallet as unknown as Wallet,
+          amountCredit: AmountValueObject.create(1508.5),
+        },
+      ),
+      { shallow: false },
+    );
+
+    console.log("exchange.calculateFee()", exchange.calculateFee());
+  });
+  it("USDT -> USD calculates fee correctly when operating fee is less than fee percentage", async () => {
+    process.env.BASE_SWAP_FEE_PERCENT = "0.3";
+
+    const sourceWallet = {
+      getAsset: jest.fn(() => ({
+        getAssetCode: jest.fn(() => "USDT"),
+      })),
+      getClient: jest.fn(() => ({
+        getFeeSwap: jest.fn(() => ({
+          getFeeForSell: jest.fn().mockReturnValue(1),
+          getFeeForBuy: jest.fn().mockReturnValue(1),
+        })),
+        getClientId: jest.fn().mockReturnValue("FSilva187263254"),
+      })),
+      getClientId: jest.fn(() => "FSilva187263254"),
+      walletId: "458b6eb2-e311-4062-9fe0-3b9c4e60bdc5",
+      getWalletId: jest
+        .fn()
+        .mockReturnValue("458b6eb2-e311-4062-9fe0-3b9c4e60bdc5"),
+    };
+
+    const destinationWallet = {
+      getAsset: jest.fn(() => ({
+        getAssetCode: jest.fn(() => "USD"),
+      })),
+      walletId: "f50e72c8-1bc5-4944-8754-e6d077ffa76a",
+      getWalletId: jest.fn(() => "f50e72c8-1bc5-4944-8754-e6d077ffa76a"),
+      getClientId: jest.fn().mockReturnValue("FSilva187263254"),
+      getClient: jest.fn(() => ({
+        getFeeSwap: jest.fn(() => ({
+          getFeeForSell: jest.fn().mockReturnValue(1),
+          getFeeForBuy: jest.fn().mockReturnValue(1),
+        })),
+      })),
+    };
+
+    const exchange = jest.mocked(
+      Exchange.newExchange(
+        v4(),
+        {
+          assetCode: StringValueObject.create("USDT"),
+          wallet: sourceWallet as unknown as Wallet,
+          amountDebit: AmountValueObject.create(100),
+        },
+        {
+          assetCode: StringValueObject.create("USD"),
+          wallet: destinationWallet as unknown as Wallet,
+          amountCredit: AmountValueObject.create(99.43),
+        },
+      ),
+      { shallow: false },
+    );
   });
 });

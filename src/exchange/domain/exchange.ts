@@ -127,20 +127,25 @@ export class Exchange extends AggregateRoot {
         (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
       return this;
     }
+    const baseSwapFeePercent = Number(process.env.BASE_SWAP_FEE_PERCENT);
 
     const percentageAPIProvider =
       this.calculatePercentageChargedByAPIProvider();
-
-    const finalPercentageToBeCharged =
-      this.feePercentageNoba - percentageAPIProvider;
 
     console.log(
       `Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
     );
 
-    if (finalPercentageToBeCharged <= 0) {
-      this.feeNoba = 0;
-      return;
+    const operatingFee = percentageAPIProvider + baseSwapFeePercent;
+    let finalPercentageToBeCharged =
+      baseSwapFeePercent + (this.feePercentageNoba - operatingFee);
+
+    if (operatingFee > this.feePercentageNoba) {
+      console.log(
+        `El porcentaje de cobro de operacion es mayor al configurado al cliente ${operatingFee} > ${this.feePercentageNoba}`,
+      );
+      finalPercentageToBeCharged =
+        baseSwapFeePercent + (operatingFee - this.feePercentageNoba);
     }
 
     console.log(
@@ -152,21 +157,6 @@ export class Exchange extends AggregateRoot {
     this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
 
     return this;
-  }
-
-  /**
-   * Porcentaje cobrado por el proveedor de la API
-   *
-   */
-  private calculatePercentageChargedByAPIProvider() {
-    let diff = 0;
-    if (this.destinationDetails.assetCode === "USD") {
-      diff = this.sourceDetails.amountDebit - this.baseAmount;
-    } else {
-      diff = this.baseAmount - this.destinationDetails.amountCredit;
-    }
-
-    return (diff / this.baseAmount) * 100;
   }
 
   accept(): Exchange {
@@ -234,5 +224,20 @@ export class Exchange extends AggregateRoot {
       createdAt: this.createdAt,
       acceptedAt: this.acceptedAt,
     };
+  }
+
+  /**
+   * Porcentaje cobrado por el proveedor de la API
+   *
+   */
+  private calculatePercentageChargedByAPIProvider() {
+    let diff = 0;
+    if (this.destinationDetails.assetCode === "USD") {
+      diff = this.sourceDetails.amountDebit - this.baseAmount;
+    } else {
+      diff = this.baseAmount - this.destinationDetails.amountCredit;
+    }
+
+    return (diff / this.baseAmount) * 100;
   }
 }
