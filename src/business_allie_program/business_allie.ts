@@ -5,6 +5,7 @@ import { FeeLimitsType } from "./type/fee_limits.type";
 import { IBusinessAllie } from "./interfaces/business_alli.interface";
 import { DiffusionChannels } from "./enums/diffussion_channels.enum";
 import { Referred } from "./referred";
+import { ReferredDTO } from "./type/referred.type";
 
 export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
   constructor(private readonly businessAllie: BusinessAllieDTO) {
@@ -13,6 +14,26 @@ export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
 
   getId(): string {
     return this.businessAllie.id;
+  }
+
+  getName(): string {
+    return this.businessAllie.name;
+  }
+
+  getClientId(): string {
+    return this.businessAllie.clientId;
+  }
+
+  getFeeLimits(): FeeLimitsType {
+    return this.businessAllie.feeLimits;
+  }
+
+  getReferrals(): ReferredDTO[] {
+    return this.businessAllie.referrals;
+  }
+
+  getStatus(): BusinessAllieStatus {
+    return this.businessAllie.status;
   }
 
   setReferrals(referrals: Referred[]): void {
@@ -37,9 +58,5 @@ export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
 
   toPrimitives(): BusinessAllieDTO {
     return this.businessAllie;
-  }
-
-  getFeeLimits(): FeeLimitsType {
-    return this.businessAllie.feeLimits;
   }
 }

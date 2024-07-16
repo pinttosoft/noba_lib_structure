@@ -85,7 +85,7 @@ describe("Business Allie", () => {
     const clientId: string = "Business-WANER1128024080";
     const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
-    const referredClientId = "MSerrano181263254";
+    const referredClientId = "ABejarano187263254";
 
     if (!allieExist) {
       console.log("error");
@@ -98,12 +98,12 @@ describe("Business Allie", () => {
 
     if (!referredExist) {
       const referredPayload: ReferredDTO = {
-        taxId: " 2 ",
-        name: "CC",
-        email: "c@email.com;",
+        taxId: "ABejarano187263254",
+        name: "ABejarano187263254",
+        email: "ABejarano187263254@email.com;",
         feeSwap: 0.5,
         type: AccountType.INDIVIDUAL,
-        status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
+        status: ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT,
         referredByClientId: clientId,
         clientId: referredClientId,
         createdAt: new Date(),
@@ -293,5 +293,9 @@ describe("Business Allie", () => {
     referred.updateAccountStatus(AccountStatus.CHANGES_REQUESTED);
 
     await businessRepo.updateReferredData(referred);
+  });
+
+  it("Should fetch all referrals", async () => {
+    console.log(await BusinessAllieMongoRepository.instance().fetchReferrals());
   });
 });

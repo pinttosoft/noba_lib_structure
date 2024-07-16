@@ -187,4 +187,28 @@ export class BusinessAllieMongoRepository
     await this.upsertBusinessAllie(allie);
     // console.log("newReferrals", newReferrals);
   }
+
+  async fetchReferrals() {
+    const collection = await this.collection();
+
+    const filter: any = {
+      "referrals.status": "REFERRED_WITH_ACTIVE_ACCOUNT",
+    };
+
+    const order = { "referrals.createdAt": -1 };
+
+    try {
+      return await collection
+        .aggregate([
+          { $unwind: "$referrals" },
+          { $match: filter },
+          { $sort: order },
+        ])
+        .toArray();
+    } catch (error) {
+      console.error(
+        `Error while executing the aggregation pipeline:${JSON.stringify(error)}`,
+      );
+    }
+  }
 }
