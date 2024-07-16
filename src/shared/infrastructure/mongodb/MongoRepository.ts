@@ -15,6 +15,44 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
   abstract collectionName(): string;
 
+  transformationToUpsertInSubDocuments(
+    subDocumentField: string,
+    primitiveData: any,
+  ): {} {
+    const response = {};
+
+    for (const key in primitiveData) {
+      response[`${subDocumentField}.$.${key}`] = primitiveData[key];
+    }
+
+    return response;
+  }
+
+  public async buildPaginate<T>(documents: T[]): Promise<Paginate<T>> {
+    const collection = await this.collection();
+
+    const count = await collection.countDocuments(this.query.filter);
+
+    const hasNextPage: boolean =
+      this.criteria.currentPage * this.criteria.limit < count;
+
+    if (documents.length === 0) {
+      return {
+        nextPag: null,
+        prevPag: null,
+        count: 0,
+        results: [],
+      };
+    }
+
+    return {
+      nextPag: hasNextPage ? Number(this.criteria.currentPage) + 1 : null,
+      prevPag: null,
+      count: count,
+      results: documents,
+    };
+  }
+
   protected client(): Promise<MongoClient> {
     return this._client;
   }
@@ -63,41 +101,52 @@ export abstract class MongoRepository<T extends AggregateRoot> {
       .toArray();
   }
 
-  transformationToUpsertInSubDocuments(
-    subDocumentField: string,
-    primitiveData: any,
-  ): {} {
-    const response = {};
-
-    for (const key in primitiveData) {
-      response[`${subDocumentField}.$.${key}`] = primitiveData[key];
-    }
-
-    return response;
-  }
-
-  public async buildPaginate<T>(documents: T[]): Promise<Paginate<T>> {
+  protected async paginateAggregation<D>(
+    pipeline: any[],
+    currentPage: number,
+    limit: number,
+    unwind?: string,
+  ): Promise<Paginate<D>> {
     const collection = await this.collection();
 
-    const count = await collection.countDocuments(this.query.filter);
+    const skip = (currentPage - 1) * limit;
 
-    const hasNextPage: boolean =
-      this.criteria.currentPage * this.criteria.limit < count;
-
-    if (documents.length === 0) {
-      return {
-        nextPag: null,
-        prevPag: null,
-        count: 0,
-        results: [],
-      };
+    const facetData: any[] = [{ $skip: skip }, { $limit: limit }];
+    if (unwind) {
+      facetData.push({
+        $replaceRoot: { newRoot: "$referrals" },
+      });
     }
 
+    const paginatedPipeline = [
+      ...pipeline,
+      {
+        $facet: {
+          totalCount: [{ $count: "total" }],
+          data: facetData,
+        },
+      },
+    ];
+
+    const result = await collection
+      .aggregate<{
+        totalCount: { total: number }[];
+        data: D[];
+      }>(paginatedPipeline)
+      .toArray();
+
+    const totalCount =
+      result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
+
+    const data = result[0].data;
+
+    const hasNextPage = currentPage * limit < totalCount;
+
     return {
-      nextPag: hasNextPage ? Number(this.criteria.currentPage) + 1 : null,
-      prevPag: null,
-      count: count,
-      results: documents,
+      nextPag: hasNextPage ? currentPage + 1 : null,
+      prevPag: currentPage > 1 ? currentPage - 1 : null,
+      count: totalCount,
+      results: data,
     };
   }
 }

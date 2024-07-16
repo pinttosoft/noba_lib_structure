@@ -296,6 +296,8 @@ describe("Business Allie", () => {
   });
 
   it("Should fetch all referrals", async () => {
-    console.log(await BusinessAllieMongoRepository.instance().fetchReferrals());
+    console.log(
+      await BusinessAllieMongoRepository.instance().fetchReferrals(1),
+    );
   });
 });
