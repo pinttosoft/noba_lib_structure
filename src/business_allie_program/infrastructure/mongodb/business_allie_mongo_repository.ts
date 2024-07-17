@@ -168,8 +168,6 @@ export class BusinessAllieMongoRepository
   }
 
   async deleteReferred(referredByClientId: string, clientId: string) {
-    const collection = await this.collection();
-
     const oldReferrals: Referred[] =
       await this.getReferralsByClientId(referredByClientId);
     console.log("oldReferrals", oldReferrals);
@@ -201,7 +199,8 @@ export class BusinessAllieMongoRepository
     //   "$referrals",
     // );
 
-    const res = await this.paginateAggregation<Referred>(criteria);
+    const res: Paginate<Referred> =
+      await this.paginateAggregation<Referred>(criteria);
     console.log("res", res);
     return res;
   }

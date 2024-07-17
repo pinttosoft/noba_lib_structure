@@ -106,38 +106,33 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   ): Promise<Paginate<D>> {
     this.criteria = criteria;
     this.query = this.criteriaConverter.convert(criteria);
-    console.log("this.query", this.query);
     const collection = await this.collection();
+
+    const skip = (this.criteria.currentPage - 1) * this.query.limit;
 
     if (this.query.filter) {
       this.query.pipelines.push({
         $match: this.query.filter,
       });
     }
-    // for (const [key, value] of Object.entries(this.query.filter)) {
-    //   console.log(`${key}: ${value}`);
-    //   this.query.pipelines.push({ key: value });
-    // }
+
+    if (this.query.sort) {
+      this.query.pipelines.push({
+        $sort: this.query.sort,
+      });
+    }
+
+    const facetData: any[] = [{ $skip: skip }, { $limit: this.query.limit }];
 
     const unwindPipeline = this.query.pipelines.find(
       (pipeline) => "$unwind" in pipeline,
     );
-
-    console.log("this.query.pipelines", this.query.pipelines);
-    // this.query.pipelines = {
-    //   ...this.query.pipelines,
-    // };
-
-    const skip = (this.criteria.currentPage - 1) * this.query.limit;
-
-    const facetData: any[] = [{ $skip: skip }, { $limit: this.query.limit }];
     if (unwindPipeline) {
       facetData.push({
         $replaceRoot: { newRoot: unwindPipeline["$unwind"] },
       });
     }
 
-    console.log("this.query.pipelines ", this.query.pipelines);
     const paginatedPipeline = [
       ...this.query.pipelines,
       {
