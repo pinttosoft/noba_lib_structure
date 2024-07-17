@@ -77,7 +77,7 @@ export class MongoCriteriaConverter {
         : { _id: -1 },
       skip: criteria.offset || 0,
       limit: criteria.limit || 0,
-      pipelines: criteria.pipelines.length > 0 ? criteria.pipelines : null,
+      pipelines: criteria.pipelines,
     };
   }
 

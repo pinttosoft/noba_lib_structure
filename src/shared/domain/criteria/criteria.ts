@@ -21,7 +21,7 @@ export class Criteria {
     this.limit = limit;
     this.currentPage = offset;
     this.offset = offset !== undefined ? (offset - 1) * limit : undefined;
-    this.pipelines = pipelines ?? null;
+    this.pipelines = pipelines ?? [];
   }
 
   public hasFilters(): boolean {
