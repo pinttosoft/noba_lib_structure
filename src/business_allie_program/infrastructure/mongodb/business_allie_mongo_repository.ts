@@ -185,23 +185,23 @@ export class BusinessAllieMongoRepository
     allie.setReferrals(newReferrals);
 
     await this.upsertBusinessAllie(allie);
-    // console.log("newReferrals", newReferrals);
   }
 
-  async fetchReferrals(currentPage: number): Promise<Paginate<Referred>> {
-    const filters: any = {
-      "referrals.status": "REFERRED_WITH_ACTIVE_ACCOUNT",
-    };
+  async fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+    // const filters: any = {
+    //   "referrals.status": "REFERRED_WITH_ACTIVE_ACCOUNT",
+    // };
+    //
+    // const order = { "referrals.createdAt": -1 };
 
-    const order = { "referrals.createdAt": -1 };
+    // const res = await this.paginateAggregation<Referred>(
+    //   [{ $unwind: "$referrals" }, { $match: filters }, { $sort: order }],
+    //   1,
+    //   10,
+    //   "$referrals",
+    // );
 
-    const res = await this.paginateAggregation<Referred>(
-      [{ $unwind: "$referrals" }, { $match: filters }, { $sort: order }],
-      1,
-      10,
-      "$referrals",
-    );
-
+    const res = await this.paginateAggregation<Referred>(criteria);
     console.log("res", res);
     return res;
   }

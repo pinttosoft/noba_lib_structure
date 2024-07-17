@@ -33,5 +33,5 @@ export interface IBusinessAllieRepository {
 
   deleteReferred(referredByClientId: string, clientId: string): void;
 
-  fetchReferrals(currentPage: number): Promise<Paginate<Referred>>;
+  fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>>;
 }

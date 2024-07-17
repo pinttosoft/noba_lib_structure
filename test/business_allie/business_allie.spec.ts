@@ -296,8 +296,29 @@ describe("Business Allie", () => {
   });
 
   it("Should fetch all referrals", async () => {
+    const filterStatus: Map<string, string> = new Map([
+      ["field", "referrals.status"],
+      ["operator", Operator.EQUAL],
+      ["value", ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT],
+    ]);
+
+    const filterType: Map<string, string> = new Map([
+      ["field", "type"],
+      ["operator", Operator.EQUAL],
+      ["value", BusinessAllieType.ALLIE],
+    ]);
+
+    const criteria: Criteria = new Criteria(
+      Filters.fromValues([filterStatus]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      2,
+      1,
+      [{ $unwind: "$referrals" }],
+    );
+
+    // console.log("criteria", criteria);
     console.log(
-      await BusinessAllieMongoRepository.instance().fetchReferrals(1),
+      await BusinessAllieMongoRepository.instance().fetchReferrals(criteria),
     );
   });
 });

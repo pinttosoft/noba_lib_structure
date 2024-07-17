@@ -102,24 +102,44 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   }
 
   protected async paginateAggregation<D>(
-    pipeline: any[],
-    currentPage: number,
-    limit: number,
-    unwind?: string,
+    criteria: Criteria,
   ): Promise<Paginate<D>> {
+    this.criteria = criteria;
+    this.query = this.criteriaConverter.convert(criteria);
+    console.log("this.query", this.query);
     const collection = await this.collection();
 
-    const skip = (currentPage - 1) * limit;
+    if (this.query.filter) {
+      this.query.pipelines.push({
+        $match: this.query.filter,
+      });
+    }
+    // for (const [key, value] of Object.entries(this.query.filter)) {
+    //   console.log(`${key}: ${value}`);
+    //   this.query.pipelines.push({ key: value });
+    // }
 
-    const facetData: any[] = [{ $skip: skip }, { $limit: limit }];
-    if (unwind) {
+    const unwindPipeline = this.query.pipelines.find(
+      (pipeline) => "$unwind" in pipeline,
+    );
+
+    console.log("this.query.pipelines", this.query.pipelines);
+    // this.query.pipelines = {
+    //   ...this.query.pipelines,
+    // };
+
+    const skip = (this.criteria.currentPage - 1) * this.query.limit;
+
+    const facetData: any[] = [{ $skip: skip }, { $limit: this.query.limit }];
+    if (unwindPipeline) {
       facetData.push({
-        $replaceRoot: { newRoot: "$referrals" },
+        $replaceRoot: { newRoot: unwindPipeline["$unwind"] },
       });
     }
 
+    console.log("this.query.pipelines ", this.query.pipelines);
     const paginatedPipeline = [
-      ...pipeline,
+      ...this.query.pipelines,
       {
         $facet: {
           totalCount: [{ $count: "total" }],
@@ -140,13 +160,64 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
     const data = result[0].data;
 
-    const hasNextPage = currentPage * limit < totalCount;
+    const hasNextPage =
+      this.criteria.currentPage * this.query.limit < totalCount;
 
     return {
-      nextPag: hasNextPage ? currentPage + 1 : null,
-      prevPag: currentPage > 1 ? currentPage - 1 : null,
+      nextPag: hasNextPage ? this.criteria.currentPage + 1 : null,
+      prevPag:
+        this.criteria.currentPage > 1 ? this.criteria.currentPage - 1 : null,
       count: totalCount,
       results: data,
     };
   }
+
+  // protected async paginateAggregation<D>(
+  //   pipeline: any[],
+  //   currentPage: number,
+  //   limit: number,
+  //   unwind?: string,
+  // ): Promise<Paginate<D>> {
+  //   const collection = await this.collection();
+  //
+  //   const skip = (currentPage - 1) * limit;
+  //
+  //   const facetData: any[] = [{ $skip: skip }, { $limit: limit }];
+  //   if (unwind) {
+  //     facetData.push({
+  //       $replaceRoot: { newRoot: "$referrals" },
+  //     });
+  //   }
+  //
+  //   const paginatedPipeline = [
+  //     ...pipeline,
+  //     {
+  //       $facet: {
+  //         totalCount: [{ $count: "total" }],
+  //         data: facetData,
+  //       },
+  //     },
+  //   ];
+  //
+  //   const result = await collection
+  //     .aggregate<{
+  //       totalCount: { total: number }[];
+  //       data: D[];
+  //     }>(paginatedPipeline)
+  //     .toArray();
+  //
+  //   const totalCount =
+  //     result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
+  //
+  //   const data = result[0].data;
+  //
+  //   const hasNextPage = currentPage * limit < totalCount;
+  //
+  //   return {
+  //     nextPag: hasNextPage ? currentPage + 1 : null,
+  //     prevPag: currentPage > 1 ? currentPage - 1 : null,
+  //     count: totalCount,
+  //     results: data,
+  //   };
+  // }
 }

@@ -35,6 +35,7 @@ export interface MongoQuery {
   sort: MongoSort;
   skip: number;
   limit: number;
+  pipelines?: any[];
 }
 
 interface TransformerFunction<T, K> {
@@ -76,6 +77,7 @@ export class MongoCriteriaConverter {
         : { _id: -1 },
       skip: criteria.offset || 0,
       limit: criteria.limit || 0,
+      pipelines: criteria.pipelines.length > 0 ? criteria.pipelines : null,
     };
   }
 
