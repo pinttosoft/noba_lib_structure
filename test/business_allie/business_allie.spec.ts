@@ -7,6 +7,7 @@ import {
   BusinessAllieMongoRepository,
   BusinessAllieStatus,
   BusinessAllieType,
+  ClientMongoRepository,
   Criteria,
   ExchangeMarketRequest,
   ExchangeMongoRepository,
@@ -23,9 +24,11 @@ import { DiffusionChannels } from "../../src/business_allie_program/enums/diffus
 import { FeeLimitsType } from "../../src/business_allie_program/type/fee_limits.type";
 import { CreateExchange } from "./other_services/CreateExchange";
 import { IntegrationMocked } from "./other_services/integration_mocked";
+import { v4 } from "uuid";
 
 describe("Business Allie", () => {
   it("Create a Business Allie", async () => {
+    const link = v4();
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
     const clientId: string = "Business-WANER1128024080";
@@ -33,15 +36,20 @@ describe("Business Allie", () => {
       await businessRepo.getBusinessAllie(clientId);
 
     if (!allieExist) {
+      const client =
+        await ClientMongoRepository.instance().findByClientId(clientId);
+      // console.log(client);
+
       const alliePayload: BusinessAllieDTO = {
-        // client id
         clientId: clientId,
-        name: "waner",
-        email: "waner@gmail.com",
-        referredBy: "string",
-        status: BusinessAllieStatus.APPROVED,
+        name: client.getName(),
+        email: client.getEmail(),
+        link: link,
+        referredBy: "Salazar",
+        status: BusinessAllieStatus.PENDING_REVISION,
         type: BusinessAllieType.ALLIE,
         createdAt: new Date(),
+        client,
       };
 
       const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
@@ -50,6 +58,8 @@ describe("Business Allie", () => {
         max: 6,
       });
       await businessRepo.upsertBusinessAllie(bAllie);
+
+      console.log("allie created!");
 
       return;
     }
@@ -79,10 +89,10 @@ describe("Business Allie", () => {
     console.log("allies", allies);
   });
 
-  it("Should add opportunity to allie", async () => {
+  it("Should add referred to allie", async () => {
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId: string = "Business-WANER1128024080";
+    const clientId: string = "MSerrano181263254";
     const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
     const referredClientId = "ABejarano187263254";
@@ -93,8 +103,6 @@ describe("Business Allie", () => {
 
     const referredExist: Referred =
       await businessRepo.getReferredByClientId(referredClientId);
-
-    console.log("referredExist", referredExist);
 
     if (!referredExist) {
       const referredPayload: ReferredDTO = {
@@ -107,10 +115,18 @@ describe("Business Allie", () => {
         referredByClientId: clientId,
         clientId: referredClientId,
         createdAt: new Date(),
+        birthdate: new Date("11-11-1980"),
+        phoneNumber: "+1 1234 41234123",
+        address: "Ocean Av. 1234, miami fl",
       };
 
       await businessRepo.addReferredToAllie(clientId, referredPayload);
+
+      console.log("Referred created");
+      return;
     }
+
+    console.log("referredExist", referredExist);
   });
 
   it("Should create a marketer allie", async () => {

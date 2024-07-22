@@ -3,6 +3,8 @@ import { ReferredDTO } from "./referred.type";
 import { BusinessAllieType } from "../enums/business_allie_type.enum";
 import { DiffusionChannels } from "../enums/diffussion_channels.enum";
 import { FeeLimitsType } from "./fee_limits.type";
+import { IClient } from "../../client";
+import { IAccount } from "../../account";
 
 export type BusinessAllieDTO = {
   id?: string;
@@ -18,4 +20,6 @@ export type BusinessAllieDTO = {
   referredBy?: string;
   updatedAt?: Date;
   feeLimits?: FeeLimitsType;
+  client?: IClient;
+  account?: IAccount;
 };

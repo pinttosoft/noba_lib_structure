@@ -24,6 +24,14 @@ export class BusinessAllie extends AggregateRoot implements IBusinessAllie {
     return this.businessAllie.clientId;
   }
 
+  getClient() {
+    return this.businessAllie.client;
+  }
+
+  getAccount() {
+    return this.businessAllie.account;
+  }
+
   getFeeLimits(): FeeLimitsType {
     return this.businessAllie.feeLimits;
   }
