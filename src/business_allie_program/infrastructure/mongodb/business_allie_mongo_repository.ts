@@ -199,9 +199,6 @@ export class BusinessAllieMongoRepository
     //   "$referrals",
     // );
 
-    const res: Paginate<Referred> =
-      await this.paginateAggregation<Referred>(criteria);
-    console.log("res", res);
-    return res;
+    return await this.paginateAggregation<Referred>(criteria);
   }
 }

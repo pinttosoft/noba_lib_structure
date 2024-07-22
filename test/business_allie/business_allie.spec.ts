@@ -18,6 +18,8 @@ import {
   Referred,
   ReferredDTO,
   ReferredStatus,
+  User,
+  UserMongoRepository,
   WalletMongoRepository,
 } from "../../src";
 import { DiffusionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
@@ -73,6 +75,7 @@ describe("Business Allie", () => {
 
     const filterStatus: Map<string, string> = new Map([
       ["field", "status"],
+      // ["field", "client.status"],
       ["operator", Operator.EQUAL],
       ["value", BusinessAllieStatus.APPROVED],
     ]);
@@ -336,5 +339,19 @@ describe("Business Allie", () => {
     console.log(
       await BusinessAllieMongoRepository.instance().fetchReferrals(criteria),
     );
+  });
+
+  it("Set user as referred ", async () => {
+    const clientId = "MSerrano181263254";
+    const user: User =
+      await UserMongoRepository.instance().findByEmail("moycs777@gmail.com");
+    if (!user) {
+      console.error("User not found to be linked to a new user");
+      return;
+    }
+
+    user.setReferredByClientId(clientId);
+
+    await UserMongoRepository.instance().upsert(user);
   });
 });
