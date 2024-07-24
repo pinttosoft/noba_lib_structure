@@ -109,14 +109,13 @@ describe("Business Allie", () => {
 
     if (!referredExist) {
       const referredPayload: ReferredDTO = {
-        taxId: "ABejarano187263254",
-        name: "ABejarano187263254",
-        email: "ABejarano187263254@email.com;",
+        taxId: "",
+        name: "asdf",
+        email: "a1@email.com;",
         feeSwap: 0.5,
         type: AccountType.INDIVIDUAL,
-        status: ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT,
+        status: ReferredStatus.REFERRED_REGISTERED_BY_ALLIE,
         referredByClientId: clientId,
-        clientId: referredClientId,
         createdAt: new Date(),
         birthdate: new Date("11-11-1980"),
         phoneNumber: "+1 1234 41234123",
