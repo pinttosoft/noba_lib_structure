@@ -44,6 +44,7 @@ export class User extends AggregateRoot {
     u.token = data.token ?? null;
     u.password = PasswordValueObject.fromPrimitive(data.password) ?? null;
     u.userId = data.userId;
+    u.referredByClientId = data.referredByClientId ?? null;
 
     return u;
   }

@@ -354,4 +354,12 @@ describe("Business Allie", () => {
 
     await UserMongoRepository.instance().upsert(user);
   });
+
+  it("should get referred by email", async () => {
+    const email = "qwerqwer@email.com;";
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const referred: Referred = await businessRepo.getReferredByEmail(email);
+    console.log("referred", referred);
+  });
 });

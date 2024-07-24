@@ -146,6 +146,22 @@ export class BusinessAllieMongoRepository
     return new Referred({ ...referred, id: referred._id });
   }
 
+  async getReferredByEmail(email: string): Promise<Referred | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>(
+      { "referrals.email": email },
+      { projection: { "referrals.$": 1 } },
+    );
+
+    if (!result) {
+      return undefined;
+    }
+
+    const referred = result.referrals[0];
+
+    return new Referred({ ...referred, id: referred._id });
+  }
+
   async getReferredByClientId(clientId: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(

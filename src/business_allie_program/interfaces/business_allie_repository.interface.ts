@@ -19,6 +19,8 @@ export interface IBusinessAllieRepository {
 
   getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
 
+  getReferredByEmail(email: string): Promise<Referred | undefined>;
+
   getReferredAndAllieByTaxId(taxId: string): Promise<BusinessAllie | undefined>;
 
   getReferralsByClientId(clientId: string): Promise<Referred[] | undefined>;
