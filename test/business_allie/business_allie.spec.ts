@@ -251,13 +251,12 @@ describe("Business Allie", () => {
   });
 
   it("Should save a Exchange of  my referred usd to btc", async () => {
-    const referredClientId = "MSerrano181263254";
+    const referredClientId = "JLanza15781342";
     const sourceWalletId: string = "USD";
-
     const destinationWalletId: string = "BTC";
 
     const exchangeRequest: ExchangeMarketRequest = {
-      amount: 100,
+      amount: 10,
       clientId: referredClientId,
       description: "test in lib for comission's allie",
       destinationWalletId: destinationWalletId,
