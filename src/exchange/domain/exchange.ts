@@ -99,8 +99,8 @@ export class Exchange extends AggregateRoot {
 
     e.feeAmount = data.feeAmount;
     e.feeNoba = data.feeNoba;
-    e.feeBusinessAllie = data.feeBusinessAllie;
     e.feePercentageNoba = data.feePercentageNoba;
+    e.feeBusinessAllie = data.feeBusinessAllie;
     e.feePercentageBusinessAllie = data.feePercentageBusinessAllie;
 
     e.sourceDetails = data.sourceDetails;
@@ -121,63 +121,84 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    // when is not USDT
-    if (
-      this.destinationDetails.assetCode !== "USDT" &&
-      this.sourceDetails.assetCode !== "USDT"
-    ) {
-      let finalPercentageToBeCharged: number = this.feePercentageNoba;
+    // USDT is not involved
+    console.log("this.isUSDTInvolved()", this.isUSDTInvolved());
+    if (this.isUSDTInvolved()) {
+      this.calculateNonUSDTFee();
 
-      if (this.feePercentageBusinessAllie) {
-        let feePercentageBusinessAllie: number =
-          this.feePercentageBusinessAllie;
-        finalPercentageToBeCharged += feePercentageBusinessAllie;
-
-        this.feeBusinessAllie =
-          (this.destinationDetails.amountCredit * feePercentageBusinessAllie) /
-          100;
-      }
-
-      this.feeNoba =
-        (this.destinationDetails.amountCredit * finalPercentageToBeCharged) /
-        100;
-
-      console.log(
-        "-> destinationDetails.amountCredit feePercentageNoba finalPercentageToBeCharged",
-        {
-          amountCredit: this.destinationDetails.amountCredit,
-          feePercentageNoba: this.feePercentageNoba,
-          finalPercentageToBeCharged,
-        },
-      );
-
-      return this;
+      return;
     }
 
-    // when is USDT
+    // USDT is involved
+    this.calculateUSDTFee();
+  }
+
+  calculateNonUSDTFee(): Exchange {
+    let finalPercentageToBeCharged: number = this.feePercentageNoba;
+    if (this.feePercentageBusinessAllie) {
+      finalPercentageToBeCharged += this.feePercentageBusinessAllie;
+      this.feeBusinessAllie =
+        (this.destinationDetails.amountCredit *
+          this.feePercentageBusinessAllie) /
+        100;
+    }
+
+    // Fee de Noba todo, se deberia dejar el de abajo(confirmar en async)
+    this.feeNoba =
+      (this.destinationDetails.amountCredit * finalPercentageToBeCharged) / 100;
+    // this.feeNoba =
+    //      (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
+    this.feeAmount = this.feeNoba =
+      (this.destinationDetails.amountCredit * finalPercentageToBeCharged) / 100;
+    console.log(
+      "-> destinationDetails.amountCredit feePercentageNoba finalPercentageToBeCharged",
+      {
+        amountCredit: this.destinationDetails.amountCredit,
+        feePercentageNoba: this.feePercentageNoba,
+        finalPercentageToBeCharged,
+      },
+    );
+
+    return this;
+  }
+
+  calculateUSDTFee(): Exchange {
     const percentageAPIProvider =
       this.calculatePercentageChargedByAPIProvider();
-
-    const finalPercentageToBeCharged =
+    let finalPercentageToBeCharged =
       this.feePercentageNoba - percentageAPIProvider;
-
+    if (this.feePercentageBusinessAllie) {
+      finalPercentageToBeCharged += this.feePercentageBusinessAllie;
+      this.feeBusinessAllie =
+        (this.destinationDetails.amountCredit *
+          this.feePercentageBusinessAllie) /
+        100;
+    }
     console.log(
       `-- Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
     );
 
     if (finalPercentageToBeCharged <= 0) {
       this.feeNoba = 0;
+      this.feeAmount = 0;
       return;
     }
-
     console.log(
       `Porcentaje final que se va a cobrar al cliente ${finalPercentageToBeCharged}`,
     );
 
     this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
-
-    this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
-
+    this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // todo check
+    // this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
+    console.log("test", {
+      "(this.baseAmount * finalPercentageToBeCharged) / 100":
+        (this.baseAmount * finalPercentageToBeCharged) / 100,
+      "Number(this.feeBusinessAllie) + Number(this.feeNoba)":
+        Number(this.feeBusinessAllie) + Number(this.feeNoba),
+    });
     return this;
   }
 
@@ -263,5 +284,12 @@ export class Exchange extends AggregateRoot {
     }
 
     return (diff / this.baseAmount) * 100;
+  }
+
+  private isUSDTInvolved(): Boolean {
+    return (
+      this.destinationDetails.assetCode !== "USDT" &&
+      this.sourceDetails.assetCode !== "USDT"
+    );
   }
 }

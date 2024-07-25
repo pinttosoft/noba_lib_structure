@@ -361,4 +361,13 @@ describe("Business Allie", () => {
     const referred: Referred = await businessRepo.getReferredByEmail(email);
     console.log("referred", referred);
   });
+
+  it("should get allie by referred id", async () => {
+    const referredClientId: string = "JLanza15781342";
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const allie =
+      await businessRepo.getBusinessAllieByReferredClientId(referredClientId);
+    console.log("allie", allie);
+  });
 });
