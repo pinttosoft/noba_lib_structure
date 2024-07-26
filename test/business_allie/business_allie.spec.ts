@@ -11,6 +11,7 @@ import {
   Criteria,
   ExchangeMarketRequest,
   ExchangeMongoRepository,
+  ExchangeTransaction,
   Filters,
   Operator,
   Order,
@@ -18,9 +19,12 @@ import {
   Referred,
   ReferredDTO,
   ReferredStatus,
+  TransactionMongoRepository,
+  TransactionType,
   User,
   UserMongoRepository,
   WalletMongoRepository,
+  WithdrawalStatus,
 } from "../../src";
 import { DiffusionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
 import { FeeLimitsType } from "../../src/business_allie_program/type/fee_limits.type";
@@ -256,7 +260,7 @@ describe("Business Allie", () => {
     const destinationWalletId: string = "BTC";
 
     const exchangeRequest: ExchangeMarketRequest = {
-      amount: 10,
+      amount: 11,
       clientId: referredClientId,
       description: "test in lib for comission's allie",
       destinationWalletId: destinationWalletId,
@@ -368,5 +372,32 @@ describe("Business Allie", () => {
     const allie =
       await businessRepo.getBusinessAllieByReferredClientId(referredClientId);
     console.log("allie", allie);
+  });
+
+  it("Should save exchange into exchange transaction", async () => {
+    const exchangeId: string = "test-0.21167725949085936";
+    const assetId: string = "FIAT_TESTNET_USD";
+    const exchange =
+      await ExchangeMongoRepository.instance().getExchangeById(exchangeId);
+
+    const transaction: ExchangeTransaction =
+      ExchangeTransaction.newExchangeTransaction(
+        exchange.getExchangeId(),
+        assetId,
+        exchange.getClientId(),
+        exchange.getSourceDetails().amountDebit,
+        `SWAP executed ${exchange.getSourceDetails().assetCode} to ${
+          exchange.getDestinationDetails().assetCode
+        }`,
+        TransactionType.WITHDRAW,
+        WithdrawalStatus.IN_PROCESS,
+        exchange,
+      );
+
+    await TransactionMongoRepository.instance().saveExchangeTransaction(
+      transaction,
+    );
+
+    console.log(transaction);
   });
 });

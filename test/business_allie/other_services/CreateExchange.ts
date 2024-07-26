@@ -1,6 +1,5 @@
 import {
   AmountValueObject,
-  BusinessAllie,
   BusinessAllieStatus,
   Exchange,
   ExchangeMarketActionType,
@@ -29,54 +28,64 @@ export class CreateExchange {
   ) {}
 
   async run(exchangeRequest: ExchangeMarketRequest): Promise<any> {
-    const sourceWallet = await new FindWalletOtherService(
-      this.walletRepository,
-      this.assetRepository,
-    ).run(exchangeRequest.clientId, exchangeRequest.sourceWalletId);
+    try {
+      const sourceWallet = await new FindWalletOtherService(
+        this.walletRepository,
+        this.assetRepository,
+      ).run(exchangeRequest.clientId, exchangeRequest.sourceWalletId);
 
-    if (sourceWallet.getBalanceAvailable() < exchangeRequest.amount) {
-      logger.info(
-        `Balance en wallet ${sourceWallet
-          .getAsset()
-          .getAssetCode()} ${sourceWallet.getBalanceAvailable()}`,
+      if (sourceWallet.getBalanceAvailable() < exchangeRequest.amount) {
+        logger.info(
+          `Balance en wallet ${sourceWallet
+            .getAsset()
+            .getAssetCode()} ${sourceWallet.getBalanceAvailable()}`,
+        );
+        throw new InsufficientBalance();
+      }
+
+      const destinationWallet = await new FindWalletOtherService(
+        this.walletRepository,
+        this.assetRepository,
+      ).run(exchangeRequest.clientId, exchangeRequest.destinationWalletId);
+
+      let referred: Referred = undefined;
+      const allie =
+        await this.businessAllieRepository.getBusinessAllieByReferredClientId(
+          exchangeRequest.clientId,
+        );
+
+      if (
+        allie &&
+        allie.toPrimitives().status === BusinessAllieStatus.APPROVED
+      ) {
+        referred = new Referred(
+          allie
+            .getReferrals()
+            .find((referred) => referred.clientId === exchangeRequest.clientId),
+        );
+      }
+
+      console.log("referred", referred);
+
+      let exchange: Exchange = await this.createExchange(
+        sourceWallet,
+        destinationWallet,
+        referred,
+        exchangeRequest,
       );
-      throw new InsufficientBalance();
+
+      await this.exchangeRepository.upsert(exchange);
+
+      return exchange.toPrimitives();
+    } catch (e) {
+      console.error("CreateExchange error: ", e);
     }
-
-    const destinationWallet = await new FindWalletOtherService(
-      this.walletRepository,
-      this.assetRepository,
-    ).run(exchangeRequest.clientId, exchangeRequest.destinationWalletId);
-
-    let opportunity: Referred | undefined = undefined;
-    // todo implement in swap
-    const allie: BusinessAllie =
-      await this.businessAllieRepository.getBusinessAllieByReferredClientId(
-        exchangeRequest.clientId,
-      );
-    if (allie?.toPrimitives().status === BusinessAllieStatus.APPROVED) {
-      opportunity = await this.businessAllieRepository.getReferredByClientId(
-        exchangeRequest.clientId,
-      );
-    }
-
-    let exchange: Exchange = await this.createExchange(
-      sourceWallet,
-      destinationWallet,
-      opportunity,
-      exchangeRequest,
-    );
-
-    // todo
-    await this.exchangeRepository.upsert(exchange);
-
-    return exchange.toPrimitives();
   }
 
   private async createExchange(
     sourceWallet: IWallet,
     destinationWallet: IWallet,
-    opportunity: Referred,
+    referred: Referred,
     exchangeRequest: ExchangeMarketRequest,
   ): Promise<Exchange> {
     const exchangePayload: ExchangeMarketPayload = {
@@ -89,10 +98,21 @@ export class CreateExchange {
         .getAssetCode()} to ${destinationWallet.getAsset().getAssetCode()}`,
     };
 
-    const exchangeResponse =
-      await this.exchangeIntegratorService.createExchange(exchangePayload);
+    // todo, remove all todos
+    // const exchangeResponse =
+    //   await this.exchangeIntegratorService.createExchange(exchangePayload);
+    if (process.env.NODE_ENV === "PROD") {
+      throw "Remove todos";
+    }
+    const exchangeResponse = {
+      id: "1",
+      destination_details: {
+        amount_to_credit: 0.000153336787,
+      },
+    };
+    //
 
-    // console.log(`-- exchangeResponse response: `, exchangeResponse);
+    logger.info(`response: `, exchangeResponse);
 
     return Exchange.newExchange(
       exchangeResponse.id,
@@ -110,7 +130,7 @@ export class CreateExchange {
           exchangeResponse.destination_details.amount_to_credit,
         ),
       },
-      opportunity,
+      referred,
     );
   }
 }

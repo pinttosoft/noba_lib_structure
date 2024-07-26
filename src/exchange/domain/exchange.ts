@@ -121,16 +121,16 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    // USDT is not involved
     console.log("this.isUSDTInvolved()", this.isUSDTInvolved());
     if (this.isUSDTInvolved()) {
-      this.calculateNonUSDTFee();
+      // USDT is involved
+      this.calculateUSDTFee();
 
       return;
     }
 
-    // USDT is involved
-    this.calculateUSDTFee();
+    // USDT is not involved
+    this.calculateNonUSDTFee();
   }
 
   calculateNonUSDTFee(): Exchange {
@@ -144,12 +144,17 @@ export class Exchange extends AggregateRoot {
     }
 
     // Fee de Noba todo, se deberia dejar el de abajo(confirmar en async)
-    this.feeNoba =
-      (this.destinationDetails.amountCredit * finalPercentageToBeCharged) / 100;
     // this.feeNoba =
-    //      (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
-    this.feeAmount = this.feeNoba =
+    //   (this.destinationDetails.amountCredit * finalPercentageToBeCharged) / 100;
+
+    this.feeNoba =
+      (this.destinationDetails.amountCredit * this.feePercentageNoba) / 100;
+    this.feeAmount =
       (this.destinationDetails.amountCredit * finalPercentageToBeCharged) / 100;
+    console.log("--- aqui feeNoba", {
+      amountCredit: this.destinationDetails.amountCredit,
+      feePercentageNoba: this.feePercentageNoba,
+    });
     console.log(
       "-> destinationDetails.amountCredit feePercentageNoba finalPercentageToBeCharged",
       {
@@ -178,6 +183,13 @@ export class Exchange extends AggregateRoot {
       `-- Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
     );
 
+    console.log("calculateUSDTFee", {
+      feePercentageNoba: this.feePercentageNoba,
+      percentageAPIProvider,
+      finalPercentageToBeCharged,
+      feePercentageBusinessAllie: this.feePercentageBusinessAllie,
+    });
+
     if (finalPercentageToBeCharged <= 0) {
       this.feeNoba = 0;
       this.feeAmount = 0;
@@ -187,7 +199,7 @@ export class Exchange extends AggregateRoot {
       `Porcentaje final que se va a cobrar al cliente ${finalPercentageToBeCharged}`,
     );
 
-    this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
     this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
     // todo check
     // this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
@@ -276,20 +288,29 @@ export class Exchange extends AggregateRoot {
    *
    */
   private calculatePercentageChargedByAPIProvider() {
+    // todo use this, but check, cause is returning negative
     let diff = 0;
     if (this.destinationDetails.assetCode === "USD") {
+      console.log("this.sourceDetails.amountDebit - this.baseAmount");
       diff = this.sourceDetails.amountDebit - this.baseAmount;
     } else {
+      console.log("this.baseAmount - this.destinationDetails.amountCredit");
       diff = this.baseAmount - this.destinationDetails.amountCredit;
     }
 
+    console.log(" calculatePercentageChargedByAPIProvider  ", {
+      sourceDetails: this.sourceDetails,
+      destinationDetails: this.destinationDetails,
+      baseAmount: this.baseAmount,
+      diff,
+    });
     return (diff / this.baseAmount) * 100;
   }
 
   private isUSDTInvolved(): Boolean {
     return (
-      this.destinationDetails.assetCode !== "USDT" &&
-      this.sourceDetails.assetCode !== "USDT"
+      this.destinationDetails.assetCode === "USDT" &&
+      this.sourceDetails.assetCode === "USDT"
     );
   }
 }

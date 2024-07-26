@@ -1,6 +1,7 @@
 import { TransactionType } from "../index";
 import { WithdrawalStatus } from "../../shared";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
+import { Exchange } from "../../exchange";
 
 export class ExchangeTransaction extends AggregateRoot {
   private id?: string;
@@ -13,6 +14,7 @@ export class ExchangeTransaction extends AggregateRoot {
   private isInternal: boolean;
   private status: WithdrawalStatus;
   private createdAt: Date;
+  private exchange?: Exchange;
 
   static newExchangeTransaction(
     exchangeId: string,
@@ -22,6 +24,7 @@ export class ExchangeTransaction extends AggregateRoot {
     reference: string,
     transactionType: TransactionType,
     status?: WithdrawalStatus,
+    exchange?: Exchange,
   ): ExchangeTransaction {
     const t = new ExchangeTransaction();
     t.transactionId = exchangeId;
@@ -34,6 +37,7 @@ export class ExchangeTransaction extends AggregateRoot {
     t.transactionType = transactionType;
     t.assetId = assetId;
     t.status = status ?? WithdrawalStatus.IN_PROCESS;
+    t.exchange = exchange ?? null;
 
     return t;
   }
@@ -50,6 +54,7 @@ export class ExchangeTransaction extends AggregateRoot {
     t.assetId = data.assetId;
     t.transactionId = data.transactionId;
     t.id = id;
+    t.exchange = data.exchange ?? null;
 
     return t;
   }
@@ -75,6 +80,7 @@ export class ExchangeTransaction extends AggregateRoot {
       isInternal: this.isInternal ? "S" : "N",
       status: this.status,
       createdAt: this.createdAt,
+      exchange: this.exchange,
     };
   }
 
