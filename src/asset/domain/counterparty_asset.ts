@@ -6,8 +6,10 @@ import {
 import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
 import { CounterpartyStatus } from "../../counterparty/domain/enums/counterparty_status.enum";
+import { WalletType } from "../../wallet";
 
 export class CounterpartyAsset extends Counterparty {
+  private walletType: WalletType;
   private informationWallet: WalletInformationDTO;
   private paymentAddress: string;
 
@@ -20,9 +22,11 @@ export class CounterpartyAsset extends Counterparty {
     profileType: CounterpartyProfileType,
     status: CounterpartyStatus,
     isInternal: boolean = false,
+    walletType: WalletType,
   ): CounterpartyAsset {
     const counterparty: CounterpartyAsset = new CounterpartyAsset();
 
+    counterparty.walletType = walletType;
     counterparty.counterpartyId = counterpartyId;
     counterparty.paymentAddress = informationWallet.address;
     counterparty.clientId = client.getClientId();
@@ -46,6 +50,7 @@ export class CounterpartyAsset extends Counterparty {
     const counterparty: CounterpartyAsset = new CounterpartyAsset();
     counterparty.id = id;
 
+    counterparty.walletType = data.walletType ?? WalletType.CRYPTO;
     counterparty.clientId = data.clientId;
     counterparty.ownerName = data.informationOwner.name;
     counterparty.ownerCountry = data.informationOwner.country;
@@ -67,6 +72,10 @@ export class CounterpartyAsset extends Counterparty {
 
   getPaymentAddress(): string {
     return this.paymentAddress;
+  }
+
+  getWalletType(): WalletType {
+    return this.walletType;
   }
 
   getInformationOwner(): { name: string; country: string } {
@@ -95,6 +104,7 @@ export class CounterpartyAsset extends Counterparty {
       informationOwner: this.getInformationOwner(),
       informationWallet: this.informationWallet,
       isInternal: this.isInternal === true ? "S" : "N",
+      walletType: this.walletType,
       createdAt: this.createdAt,
       status: this.status,
     };

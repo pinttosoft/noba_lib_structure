@@ -3,6 +3,7 @@ import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
 import { Address, removeAccents } from "../../shared";
 import { CounterpartyProfileType } from "./enums/counterparty_profile_type.enum";
 import { CounterpartyStatus } from "./enums/counterparty_status.enum";
+import { WalletType } from "../../wallet";
 
 export abstract class Counterparty extends AggregateRoot {
   protected id?: string;

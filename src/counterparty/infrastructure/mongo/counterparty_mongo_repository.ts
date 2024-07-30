@@ -12,12 +12,17 @@ import {
 } from "../../index";
 import { CounterpartyAchPab, CounterpartyBank } from "../../../banking";
 import { CounterpartyAsset } from "../../../asset";
+import { WalletType } from "../../../wallet";
 
 export class CounterpartyMongoRepository
   extends MongoRepository<Counterparty>
   implements ICounterpartyRepository
 {
   private static _instance: CounterpartyMongoRepository;
+
+  constructor() {
+    super(MongoClientFactory.createClient());
+  }
 
   public static instance(): CounterpartyMongoRepository {
     if (this._instance) {
@@ -26,10 +31,6 @@ export class CounterpartyMongoRepository
 
     this._instance = new CounterpartyMongoRepository();
     return this._instance;
-  }
-
-  constructor() {
-    super(MongoClientFactory.createClient());
   }
 
   async delete(counterpartyId: string): Promise<void> {
@@ -176,12 +177,19 @@ export class CounterpartyMongoRepository
   async findByClientIdAndAddressPayment(
     clientId: string,
     addressPayment: string,
+    cryptoWalletType?: WalletType,
   ): Promise<Counterparty | undefined> {
     const collection = await this.collection();
-    const result = await collection.findOne<any>({
+    const filter = {
       clientId: clientId,
       "informationWallet.address": addressPayment,
-    });
+    };
+
+    if (cryptoWalletType) {
+      filter["walletType"] = cryptoWalletType;
+    }
+
+    const result = await collection.findOne<any>(filter);
 
     if (!result) {
       return undefined;

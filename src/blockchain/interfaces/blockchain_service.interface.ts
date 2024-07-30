@@ -3,7 +3,6 @@ import { IClient } from "../../client";
 import { CounterpartyAsset, WalletInformationDTO } from "../../asset";
 import { DepositInformation } from "../../shared";
 import { WithdrawalPurpose } from "../../withdrawal";
-import { CounterpartyProfileType } from "../../counterparty";
 
 export interface IBlockchainService {
   lookWalletAddress(

@@ -4,6 +4,7 @@ import {
   IWalletRepository,
   OriginWallet,
   WalletNotFound,
+  WalletType,
 } from "../../wallet";
 import { ICounterpartyRepository } from "../domain/interfaces/counterparty_repository.interface";
 import { Counterparty } from "../domain/counterparty.abstract";
@@ -75,6 +76,7 @@ export class RegisterOrSearchCounterpartyInternal {
           : CounterpartyProfileType.CORPORATION,
         CounterpartyStatus.ACTIVE,
         true,
+        WalletType.CRYPTO,
       );
     }
 

@@ -1,6 +1,7 @@
 import { Criteria, Paginate } from "../../../shared";
 import { Counterparty } from "../counterparty.abstract";
 import { CounterpartyType } from "../enums/counterparty_type.enum";
+import { WalletType } from "../../../wallet";
 
 export interface ICounterpartyRepository {
   upsert(counterparty: Counterparty): Promise<void>;
@@ -13,6 +14,7 @@ export interface ICounterpartyRepository {
   findByClientIdAndAddressPayment(
     clientId: string,
     addressPayment: string,
+    cryptoWalletType?: WalletType,
   ): Promise<Counterparty | undefined>;
 
   findByCounterpartyId(

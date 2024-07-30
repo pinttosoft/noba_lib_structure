@@ -51,31 +51,29 @@ export class WalletMongoRepository
 
   async findWalletsByClientId(
     clientId: string,
-    cryptoWalletType?: WalletType,
+    cryptoWalletType?: WalletType[],
   ): Promise<IWallet[]> {
     let filter = {
       clientId,
     };
 
     if (cryptoWalletType) {
-      filter["walletType"] = cryptoWalletType;
+      filter["walletType"] = { $in: cryptoWalletType };
     }
 
     const collection = await this.collection();
 
-    const result = await collection
-      .find<WalletDocument>({
-        clientId,
-      })
-      .toArray();
+    const result = await collection.find<WalletDocument>(filter).toArray();
 
     const wallets: IWallet[] = [];
+    if (result.length === 0) {
+      return [];
+    }
+
+    const client =
+      await ClientMongoRepository.instance().findByClientId(clientId);
 
     for (const wallet of result) {
-      const client = await ClientMongoRepository.instance().findByClientId(
-        wallet.clientId,
-      );
-
       wallets.push(
         WalletFactory.fromPrimitives(
           wallet._id.toString(),
@@ -234,36 +232,6 @@ export class WalletMongoRepository
       result,
       await ClientMongoRepository.instance().findByClientId(clientId),
       await AssetMongoRepository.instance().findById(assetId),
-    );
-  }
-
-  async findWalletsByClientIdAndAssetCode(
-    clientId: string,
-    assetCode: string,
-    cryptoWalletType?: WalletType,
-  ): Promise<IWallet | undefined> {
-    const collection = await this.collection();
-
-    let filter = {
-      clientId,
-      assetCode,
-    };
-
-    if (cryptoWalletType) {
-      filter["walletType"] = cryptoWalletType;
-    }
-
-    const result = await collection.findOne<WalletDocument>(filter);
-
-    if (!result) {
-      return undefined;
-    }
-
-    return WalletFactory.fromPrimitives(
-      result._id.toString(),
-      result,
-      await ClientMongoRepository.instance().findByClientId(clientId),
-      await AssetMongoRepository.instance().findById(result.assetId),
     );
   }
 

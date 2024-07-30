@@ -12,19 +12,13 @@ export interface IWalletRepository {
 
   findWalletsByClientId(
     clientId: string,
-    cryptoWalletType?: WalletType,
+    cryptoWalletType?: WalletType[],
   ): Promise<IWallet[]>;
 
   findWalletsByClientIdAndAssetId(
     clientId: string,
     assetId: string,
     walletType?: WalletType,
-  ): Promise<IWallet | undefined>;
-
-  findWalletsByClientIdAndAssetCode(
-    clientId: string,
-    assetCode: string,
-    cryptoWalletType?: WalletType,
   ): Promise<IWallet | undefined>;
 
   findPaymentAddressesByClientIdAndByAssetId(
