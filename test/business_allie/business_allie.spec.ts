@@ -398,4 +398,33 @@ describe("Business Allie", () => {
 
     console.log(finance);
   });
+
+  it("Should get al commissions", async () => {
+    const financeRepo = FinanceMongoRepository.instance();
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", "JLanza15781342"],
+    ]);
+
+    const filterTypeFinancialMovement: Map<string, string> = new Map([
+      ["field", "typeFinancialMovement"],
+      ["operator", Operator.EQUAL],
+      ["value", "OUTGOING_PAYMENT_BUSINESS_ALLIE"],
+    ]);
+
+    const criteria: Criteria = new Criteria(
+      Filters.fromValues([filterClientId, filterTypeFinancialMovement]),
+      Order.fromValues("createdAt", OrderTypes.DESC),
+      9,
+      1,
+    );
+
+    const res = await financeRepo.list(criteria);
+
+    console.log("res", res);
+
+    expect(res.results.length).not.toBe(0);
+  });
 });

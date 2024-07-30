@@ -1,15 +1,20 @@
 import { Finance, FinancialMovement, IFinanceRepository } from "../../index";
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import {
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
 
 export class FinanceMongoRepository
   extends MongoRepository<Finance>
   implements IFinanceRepository
 {
+  private static _instance: FinanceMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
-
-  private static _instance: FinanceMongoRepository;
 
   static instance() {
     if (this._instance) {
@@ -38,5 +43,11 @@ export class FinanceMongoRepository
 
   async upsert(fee: Finance): Promise<void> {
     await this.persist(fee.getId(), fee);
+  }
+
+  async list(criteria: Criteria): Promise<Paginate<Finance>> {
+    const document: Finance[] = await this.searchByCriteria<Finance>(criteria);
+
+    return this.buildPaginate<Finance>(document);
   }
 }
