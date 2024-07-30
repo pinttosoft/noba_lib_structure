@@ -3,6 +3,7 @@ import {
   IWallet,
   IWalletRepository,
   WalletFactory,
+  WalletType,
 } from "../../../wallet";
 import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
 import { ObjectId } from "mongodb";
@@ -30,11 +31,6 @@ export class WalletMongoRepository
     super(MongoClientFactory.createClient());
   }
 
-  async deleteByWalletId(walletId: string): Promise<void> {
-    const collection = await this.collection();
-    await collection.deleteOne({ walletId });
-  }
-
   static instance() {
     if (this._instance) {
       return this._instance;
@@ -44,11 +40,27 @@ export class WalletMongoRepository
     return this._instance;
   }
 
+  async deleteByWalletId(walletId: string): Promise<void> {
+    const collection = await this.collection();
+    await collection.deleteOne({ walletId });
+  }
+
   collectionName(): string {
     return "wallets";
   }
 
-  async findWalletsByClientId(clientId: string): Promise<IWallet[]> {
+  async findWalletsByClientId(
+    clientId: string,
+    cryptoWalletType?: WalletType,
+  ): Promise<IWallet[]> {
+    let filter = {
+      clientId,
+    };
+
+    if (cryptoWalletType) {
+      filter["walletType"] = cryptoWalletType;
+    }
+
     const collection = await this.collection();
 
     const result = await collection
@@ -112,8 +124,17 @@ export class WalletMongoRepository
     clientId: string,
     page: number,
     perPage: number,
+    cryptoWalletType?: WalletType,
   ): Promise<Paginate<InstructionDepositCrypto>> {
-    return await this.paginatePaymentAddress({ clientId }, page, perPage);
+    let filter = {
+      clientId,
+    };
+
+    if (cryptoWalletType) {
+      filter["walletType"] = cryptoWalletType;
+    }
+
+    return await this.paginatePaymentAddress(filter, page, perPage);
   }
 
   async findPaymentAddressesByClientIdAndByAssetId(
@@ -124,9 +145,9 @@ export class WalletMongoRepository
 
     let filter: any;
     if (assetId) {
-      filter = { clientId, assetId, walletType: "DEPOSIT_FORT_CRYPTO" };
+      filter = { clientId, assetId, walletType: WalletType.CRYPTO };
     } else {
-      filter = { clientId, walletType: "DEPOSIT_FORT_CRYPTO" };
+      filter = { clientId, walletType: WalletType.CRYPTO };
     }
     const pipeline = [
       {
@@ -189,13 +210,20 @@ export class WalletMongoRepository
   async findWalletsByClientIdAndAssetId(
     clientId: string,
     assetId: string,
+    cryptoWalletType?: WalletType,
   ): Promise<IWallet | undefined> {
     const collection = await this.collection();
 
-    const result = await collection.findOne<WalletDocument>({
+    let filter = {
       clientId,
       assetId,
-    });
+    };
+
+    if (cryptoWalletType) {
+      filter["walletType"] = cryptoWalletType;
+    }
+
+    const result = await collection.findOne<WalletDocument>(filter);
 
     if (!result) {
       return undefined;
@@ -212,13 +240,20 @@ export class WalletMongoRepository
   async findWalletsByClientIdAndAssetCode(
     clientId: string,
     assetCode: string,
+    cryptoWalletType?: WalletType,
   ): Promise<IWallet | undefined> {
     const collection = await this.collection();
 
-    const result = await collection.findOne<WalletDocument>({
+    let filter = {
       clientId,
       assetCode,
-    });
+    };
+
+    if (cryptoWalletType) {
+      filter["walletType"] = cryptoWalletType;
+    }
+
+    const result = await collection.findOne<WalletDocument>(filter);
 
     if (!result) {
       return undefined;

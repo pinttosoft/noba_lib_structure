@@ -1,6 +1,7 @@
 import { IWallet } from "./wallet.interface";
 import { Paginate } from "../../../shared";
 import { InstructionDepositCrypto } from "../type/instruction_deposit_crypto.type";
+import { WalletType } from "../enums/wallet_type.enum";
 
 export interface IWalletRepository {
   insert(wallet: IWallet): Promise<IWallet>;
@@ -9,16 +10,21 @@ export interface IWalletRepository {
 
   updateBalance(wallet: IWallet): Promise<void>;
 
-  findWalletsByClientId(clientId: string): Promise<IWallet[]>;
+  findWalletsByClientId(
+    clientId: string,
+    cryptoWalletType?: WalletType,
+  ): Promise<IWallet[]>;
 
   findWalletsByClientIdAndAssetId(
     clientId: string,
     assetId: string,
+    walletType?: WalletType,
   ): Promise<IWallet | undefined>;
 
   findWalletsByClientIdAndAssetCode(
     clientId: string,
     assetCode: string,
+    cryptoWalletType?: WalletType,
   ): Promise<IWallet | undefined>;
 
   findPaymentAddressesByClientIdAndByAssetId(
