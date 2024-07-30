@@ -82,8 +82,6 @@ export class Exchange extends AggregateRoot {
       e.baseAmount = destinationDetails.amountCredit.getValue();
     }
 
-    // todo remove
-    e.exchangeId = "test-" + Math.random();
     e.calculateFee();
 
     return e;

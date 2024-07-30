@@ -11,20 +11,21 @@ import {
   Criteria,
   ExchangeMarketRequest,
   ExchangeMongoRepository,
-  ExchangeTransaction,
   Filters,
+  Finance,
+  FinanceMongoRepository,
+  FinancialMovement,
+  FinancialMovementStatus,
   Operator,
   Order,
   OrderTypes,
   Referred,
   ReferredDTO,
   ReferredStatus,
-  TransactionMongoRepository,
-  TransactionType,
+  TypeFinancialMovement,
   User,
   UserMongoRepository,
   WalletMongoRepository,
-  WithdrawalStatus,
 } from "../../src";
 import { DiffusionChannels } from "../../src/business_allie_program/enums/diffussion_channels.enum";
 import { FeeLimitsType } from "../../src/business_allie_program/type/fee_limits.type";
@@ -374,30 +375,27 @@ describe("Business Allie", () => {
     console.log("allie", allie);
   });
 
-  it("Should save exchange into exchange transaction", async () => {
-    const exchangeId: string = "test-0.21167725949085936";
-    const assetId: string = "FIAT_TESTNET_USD";
+  it("Should save exchange into finance", async () => {
+    const exchangeId: string = "1d823927-338c-4b75-b167-e4cae676b674";
+    const clientId: string = "JLanza15781342";
+
     const exchange =
       await ExchangeMongoRepository.instance().getExchangeById(exchangeId);
 
-    const transaction: ExchangeTransaction =
-      ExchangeTransaction.newExchangeTransaction(
-        exchange.getExchangeId(),
-        assetId,
-        exchange.getClientId(),
-        exchange.getSourceDetails().amountDebit,
-        `SWAP executed ${exchange.getSourceDetails().assetCode} to ${
-          exchange.getDestinationDetails().assetCode
-        }`,
-        TransactionType.WITHDRAW,
-        WithdrawalStatus.IN_PROCESS,
-        exchange,
-      );
+    const financePayload: FinancialMovement = {
+      clientId,
+      createdAt: new Date(),
+      referenceId: exchange.getExchangeId(),
+      amount: 20,
+      typeFinancialMovement: TypeFinancialMovement.SWAP,
+      status: FinancialMovementStatus.PENDING,
+      exchange,
+    };
 
-    await TransactionMongoRepository.instance().saveExchangeTransaction(
-      transaction,
-    );
+    const finance = new Finance(financePayload);
 
-    console.log(transaction);
+    await FinanceMongoRepository.instance().upsert(finance);
+
+    console.log(finance);
   });
 });
