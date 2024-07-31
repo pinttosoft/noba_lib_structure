@@ -18,6 +18,7 @@ export * from "./documents";
 export * from "./transaction";
 export * from "./finance";
 export * from "./world";
+export * from "./crm_marketing";
 
 export * from "./shared/infrastructure";
 export * from "./shared/infrastructure/mongodb";
