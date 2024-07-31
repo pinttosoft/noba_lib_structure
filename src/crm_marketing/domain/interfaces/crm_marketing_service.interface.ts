@@ -24,7 +24,9 @@ export interface ICrmMarketingService {
   updateContactByEmail(
     email: string,
     contact: CrmMarketingContact,
-  ): Promise<void>;
+  ): Promise<{
+    id: string;
+  }>;
 
   removeContactFromList(contactId: number, listId: number): Promise<void>;
 

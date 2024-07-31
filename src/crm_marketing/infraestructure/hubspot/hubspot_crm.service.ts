@@ -121,7 +121,9 @@ export class HubspotClientService implements ICrmMarketingService {
   async updateContactByEmail(
     email: string,
     contact: CrmMarketingContact,
-  ): Promise<void> {
+  ): Promise<{
+    id: string;
+  }> {
     const contactData = {
       properties: {
         email: contact.email,
@@ -140,6 +142,8 @@ export class HubspotClientService implements ICrmMarketingService {
     await this.hubspotClient.crm.contacts.basicApi.update(contactAPResult.id, {
       ...contactData,
     });
+
+    return { id: contactAPResult.id };
   }
 
   async getOrCreateContactByEmail(
