@@ -3,6 +3,7 @@ import {
   IWallet,
   IWalletRepository,
   WalletFactory,
+  WalletProvider,
 } from "../../../wallet";
 import { MongoClientFactory, MongoRepository, Paginate } from "../../../shared";
 import { ObjectId } from "mongodb";
@@ -30,11 +31,6 @@ export class WalletMongoRepository
     super(MongoClientFactory.createClient());
   }
 
-  async deleteByWalletId(walletId: string): Promise<void> {
-    const collection = await this.collection();
-    await collection.deleteOne({ walletId });
-  }
-
   static instance() {
     if (this._instance) {
       return this._instance;
@@ -44,16 +40,25 @@ export class WalletMongoRepository
     return this._instance;
   }
 
+  async deleteByWalletId(walletId: string): Promise<void> {
+    const collection = await this.collection();
+    await collection.deleteOne({ walletId });
+  }
+
   collectionName(): string {
     return "wallets";
   }
 
-  async findWalletsByClientId(clientId: string): Promise<IWallet[]> {
+  async findWalletsByClientId(
+    clientId: string,
+    walletProvider: WalletProvider[],
+  ): Promise<IWallet[]> {
     const collection = await this.collection();
 
     const result = await collection
       .find<WalletDocument>({
         clientId,
+        walletProvider: { $in: walletProvider },
       })
       .toArray();
 
@@ -112,22 +117,29 @@ export class WalletMongoRepository
     clientId: string,
     page: number,
     perPage: number,
+    walletProvider: WalletProvider,
   ): Promise<Paginate<InstructionDepositCrypto>> {
-    return await this.paginatePaymentAddress({ clientId }, page, perPage);
+    const filter = { clientId, walletProvider };
+    return await this.paginatePaymentAddress(filter, page, perPage);
   }
 
   async findPaymentAddressesByClientIdAndByAssetId(
     clientId: string,
+    walletProvider: WalletProvider,
     assetId?: string,
   ): Promise<InstructionDepositCrypto[]> {
     const collection = await this.collection();
 
-    let filter: any;
+    let filter: any = {
+      clientId,
+      walletType: "DEPOSIT_FORT_CRYPTO",
+      walletProvider,
+    };
+
     if (assetId) {
-      filter = { clientId, assetId, walletType: "DEPOSIT_FORT_CRYPTO" };
-    } else {
-      filter = { clientId, walletType: "DEPOSIT_FORT_CRYPTO" };
+      filter["assetId"] = assetId;
     }
+
     const pipeline = [
       {
         $match: filter,
@@ -189,12 +201,14 @@ export class WalletMongoRepository
   async findWalletsByClientIdAndAssetId(
     clientId: string,
     assetId: string,
+    walletProvider: WalletProvider,
   ): Promise<IWallet | undefined> {
     const collection = await this.collection();
 
     const result = await collection.findOne<WalletDocument>({
       clientId,
       assetId,
+      walletProvider,
     });
 
     if (!result) {

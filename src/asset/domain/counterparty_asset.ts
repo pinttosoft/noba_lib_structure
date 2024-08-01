@@ -1,11 +1,12 @@
 import {
   Counterparty,
   CounterpartyProfileType,
+  CounterpartyStatus,
   CounterpartyType,
 } from "../../counterparty";
 import { IClient } from "../../client";
 import { WalletInformationDTO } from "./types/wallet_information.type";
-import { CounterpartyStatus } from "../../counterparty/domain/enums/counterparty_status.enum";
+import { WalletProvider } from "../../wallet";
 
 export class CounterpartyAsset extends Counterparty {
   private informationWallet: WalletInformationDTO;
@@ -25,6 +26,7 @@ export class CounterpartyAsset extends Counterparty {
 
     counterparty.counterpartyId = counterpartyId;
     counterparty.paymentAddress = informationWallet.address;
+    counterparty.registeredInProvider = informationWallet.registeredInProvider;
     counterparty.clientId = client.getClientId();
     counterparty.accountId = client.getAccount().getAccountId();
     counterparty.setOwnerName(ownerName);
@@ -46,6 +48,8 @@ export class CounterpartyAsset extends Counterparty {
     const counterparty: CounterpartyAsset = new CounterpartyAsset();
     counterparty.id = id;
 
+    counterparty.registeredInProvider =
+      data.registeredInProvider ?? WalletProvider.LAYER2;
     counterparty.clientId = data.clientId;
     counterparty.ownerName = data.informationOwner.name;
     counterparty.ownerCountry = data.informationOwner.country;
@@ -97,6 +101,7 @@ export class CounterpartyAsset extends Counterparty {
       isInternal: this.isInternal === true ? "S" : "N",
       createdAt: this.createdAt,
       status: this.status,
+      registeredInProvider: this.registeredInProvider,
     };
   }
 }

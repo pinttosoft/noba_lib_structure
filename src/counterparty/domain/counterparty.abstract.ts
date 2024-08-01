@@ -3,6 +3,7 @@ import { RelationshipConsumer } from "./enums/relationship_consumer.enum";
 import { Address, removeAccents } from "../../shared";
 import { CounterpartyProfileType } from "./enums/counterparty_profile_type.enum";
 import { CounterpartyStatus } from "./enums/counterparty_status.enum";
+import { WalletProvider } from "../../wallet";
 
 export abstract class Counterparty extends AggregateRoot {
   protected id?: string;
@@ -18,9 +19,14 @@ export abstract class Counterparty extends AggregateRoot {
   protected isInternal: boolean;
   protected profileType: CounterpartyProfileType;
   protected status: CounterpartyStatus;
+  protected registeredInProvider: WalletProvider;
 
   getId(): string | undefined {
     return this.id;
+  }
+
+  getRegisteredInProvider(): WalletProvider {
+    return this.registeredInProvider;
   }
 
   getAssetId() {

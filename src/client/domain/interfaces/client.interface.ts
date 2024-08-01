@@ -18,6 +18,7 @@ import { KycVerification } from "../types/kyc-verification";
 import { FollowUpClient } from "../types/follow-up-client.type";
 import { TransactionalProfile } from "../../../system_configuration/domain/transactional_profile";
 import { TransactionalProfileType } from "../types/transactional-profile.type";
+import { WalletProvider } from "../../../wallet";
 
 export interface IClient {
   getId(): string;
@@ -27,6 +28,8 @@ export interface IClient {
   setAccountId(accountId: string): IClient;
 
   getTransactionalProfile(): TransactionalProfileType;
+
+  getAssignedWalletProvider(): WalletProvider[];
 
   getAddressShipping(): Address;
 
