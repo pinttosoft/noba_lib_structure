@@ -1,4 +1,4 @@
-import { OriginWallet } from "../../../wallet";
+import { OriginWallet, WalletProvider } from "../../../wallet";
 import { Address } from "../../../shared";
 import { RelationshipConsumer } from "../../../counterparty";
 
@@ -9,4 +9,5 @@ export type WalletInformationDTO = {
   originWallet: OriginWallet;
   institutionName?: string;
   institutionAddress?: Address;
+  registeredInProvider: WalletProvider;
 };

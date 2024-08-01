@@ -21,12 +21,14 @@ import {
   TransactionalProfile,
 } from "../../../system_configuration";
 import { Documents } from "../../../documents";
+import { WalletProvider } from "../../../wallet";
 
 export class ClientFactory {
   static async createNewClient(
     clientData: IndividualDTO | CompanyDTO,
     clientType: AccountType,
     account: IAccount,
+    assignedWalletProvider: WalletProvider[],
     companyPartners?: IOwnerAccount[],
   ): Promise<IClient> {
     const systemConfig: ISystemConfigurationRepository =
@@ -34,6 +36,7 @@ export class ClientFactory {
 
     const c: Client = new Client();
     c.setAccount(account)
+      .setAssignedWalletProvider(assignedWalletProvider)
       .setStatus(AccountStatus.REGISTERED)
       .setClientType(clientType)
       .setClientData(clientData)

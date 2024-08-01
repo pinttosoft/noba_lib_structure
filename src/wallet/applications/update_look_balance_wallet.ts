@@ -1,15 +1,21 @@
 import { IWalletRepository } from "../domain/interfaces/wallet_repository.interface";
 import { IWallet } from "../domain/interfaces/wallet.interface";
-import { logger } from "../../index";
+import { logger, WalletProvider } from "../../index";
 
 export class UpdateLockedBalanceWallet {
   constructor(private readonly walletRepository: IWalletRepository) {}
 
-  async run(clientId: string, assetId: string, amount: number): Promise<void> {
+  async run(
+    clientId: string,
+    assetId: string,
+    amount: number,
+    walletProvider: WalletProvider,
+  ): Promise<void> {
     const wallet: IWallet =
       await this.walletRepository.findWalletsByClientIdAndAssetId(
         clientId,
         assetId,
+        walletProvider,
       );
 
     logger.info(

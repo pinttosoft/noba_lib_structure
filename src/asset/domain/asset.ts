@@ -1,5 +1,6 @@
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
 import { AssetClassification } from "./enums/asset_classification.enum";
+import { WalletProvider } from "../../wallet";
 
 export class Asset extends AggregateRoot {
   private id?: string;
@@ -11,6 +12,7 @@ export class Asset extends AggregateRoot {
   private network: string;
   private networkName?: string;
   private coinId?: string;
+  private provider: WalletProvider[];
 
   static createNewAsset(
     assetId: string,
@@ -19,6 +21,7 @@ export class Asset extends AggregateRoot {
     icon: string,
     name: string,
     network: string,
+    provider: WalletProvider[],
     networkName?: string,
     coinId?: string,
   ): Asset {
@@ -32,6 +35,7 @@ export class Asset extends AggregateRoot {
     a.network = network;
     a.networkName = networkName;
     a.coinId = coinId;
+    a.provider = provider;
 
     return a;
   }
@@ -44,6 +48,7 @@ export class Asset extends AggregateRoot {
       plainData.icon,
       plainData.name,
       plainData.network,
+      plainData.provider ?? [WalletProvider.LAYER2],
       plainData.networkName,
       plainData.coinId,
     );
@@ -70,6 +75,14 @@ export class Asset extends AggregateRoot {
 
   getName(): string {
     return this.name;
+  }
+
+  getProvider(): WalletProvider[] {
+    return this.provider;
+  }
+
+  existsProvider(provider: WalletProvider): boolean {
+    return this.provider.includes(provider);
   }
 
   getNetworkInformation() {
@@ -99,6 +112,7 @@ export class Asset extends AggregateRoot {
       network: this.network,
       networkName: this.networkName,
       coinId: this.coinId,
+      provider: this.provider,
     };
   }
 }

@@ -5,6 +5,7 @@ import {
   MakeRequestInternalTransfer,
   TransactionMongoRepository,
   WalletMongoRepository,
+  WalletProvider,
   WithdrawalRequestMongoRepository,
   WithdrawalStatus,
 } from "../../src";
@@ -30,6 +31,7 @@ describe("Make request internal transfer", () => {
       payload.amount,
       "USD",
       payload.reference,
+      WalletProvider.LAYER2,
     );
   });
 
@@ -86,6 +88,7 @@ describe("Make request internal transfer", () => {
       payload.amount,
       "USD",
       payload.reference,
+      WalletProvider.LAYER2,
     );
 
     console.log("withdrawId", withdrawId);

@@ -1,6 +1,11 @@
 import { IClient } from "../../client";
 import { AggregateRoot } from "../../shared/domain/aggregate_root";
-import { InstructionDepositCrypto, IWallet, WalletType } from "../../wallet";
+import {
+  InstructionDepositCrypto,
+  IWallet,
+  WalletProvider,
+  WalletType,
+} from "../../wallet";
 import { v4 } from "uuid";
 import { InstructionDepositFiat, InstructionsAchPabType } from "../../banking";
 import { Asset } from "../../asset";
@@ -19,6 +24,12 @@ export class Wallet extends AggregateRoot implements IWallet {
     | InstructionDepositFiat
     | InstructionDepositCrypto
     | InstructionsAchPabType;
+  private walletProvider: WalletProvider;
+
+  setWalletProvider(walletProvider: WalletProvider): Wallet {
+    this.walletProvider = walletProvider;
+    return this;
+  }
 
   setId(id: string): Wallet {
     this.id = id;
@@ -27,11 +38,6 @@ export class Wallet extends AggregateRoot implements IWallet {
 
   setWalletType(type: WalletType): Wallet {
     this.walletType = type;
-    return this;
-  }
-
-  setClientId(clientId: string): IWallet {
-    this.clientId = clientId;
     return this;
   }
 
@@ -133,6 +139,10 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this.walletType;
   }
 
+  getWalletProvider(): WalletProvider {
+    return this.walletProvider;
+  }
+
   getBalanceAvailable(): number {
     return this.walletType === WalletType.FIAT
       ? this.truncate(Number(this.balance) - Number(this.lockedBalance), 2)
@@ -225,18 +235,6 @@ export class Wallet extends AggregateRoot implements IWallet {
     return this;
   }
 
-  private truncate(n, d: number) {
-    let s = n.toString();
-    let l = s.length;
-    let decimalLength = s.indexOf(".") + 1;
-    if (decimalLength === 0) {
-      return Number(n);
-    }
-
-    let numStr = s.substr(0, decimalLength + d);
-    return Number(numStr);
-  }
-
   toPrimitives(): any {
     return {
       id: this.id,
@@ -247,6 +245,19 @@ export class Wallet extends AggregateRoot implements IWallet {
       balance: this.balance,
       lockedBalance: this.lockedBalance,
       instructionForDeposit: this.instructForDeposit,
+      walletProvider: this.walletProvider,
     };
+  }
+
+  private truncate(n, d: number) {
+    let s = n.toString();
+    let l = s.length;
+    let decimalLength = s.indexOf(".") + 1;
+    if (decimalLength === 0) {
+      return Number(n);
+    }
+
+    let numStr = s.substr(0, decimalLength + d);
+    return Number(numStr);
   }
 }

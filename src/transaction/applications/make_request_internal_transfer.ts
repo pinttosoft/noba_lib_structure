@@ -13,6 +13,7 @@ import {
   IWalletRepository,
   UpdateLockedBalanceWallet,
   ValidateBalance,
+  WalletProvider,
 } from "../../wallet";
 import { FindByClientId, IClient, IClientRepository } from "../../client";
 import { AmountValueObject } from "../../shared";
@@ -34,6 +35,7 @@ export class MakeRequestInternalTransfer {
    * @param amount
    * @param assetCode
    * @param reference
+   * @param walletProvider Es el proveedor de la billetera
    */
   async run(
     clientIdOrigin: string,
@@ -41,9 +43,10 @@ export class MakeRequestInternalTransfer {
     amount: number,
     assetCode: string,
     reference: string,
+    walletProvider: WalletProvider,
   ): Promise<string> {
     logger.info(
-      `Iniciando la transferencia interna origin: ${clientIdOrigin} destino: clientIdDestination ${clientIdDestination}, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
+      `Iniciando la transferencia interna PROVEEDOR ${walletProvider} origin: ${clientIdOrigin} destino: clientIdDestination ${clientIdDestination}, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
     );
     const clientOrigin: IClient = await new FindByClientId(
       this.clientRepository,
@@ -59,7 +62,7 @@ export class MakeRequestInternalTransfer {
       await new RegisterOrSearchCounterpartyInternal(
         this.walletRepository,
         this.counterpartyRepository,
-      ).run(clientOrigin, clientDestination, asset);
+      ).run(clientOrigin, clientDestination, asset, walletProvider);
 
     logger.info(
       `Counterparty para la transferencia interna ${assetCode} ${JSON.stringify(
@@ -70,6 +73,7 @@ export class MakeRequestInternalTransfer {
       clientIdOrigin,
       amount,
       asset.getAssetId(),
+      walletProvider,
     );
 
     const withdrawalRequest: WithdrawalRequest =
@@ -93,6 +97,7 @@ export class MakeRequestInternalTransfer {
       clientOrigin.getClientId(),
       asset.getAssetId(),
       amount,
+      walletProvider,
     );
 
     return withdrawalRequest.getWithdrawalId();

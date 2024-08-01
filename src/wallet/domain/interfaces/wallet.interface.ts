@@ -6,6 +6,7 @@ import {
 } from "../../../banking";
 import { IClient } from "../../../client";
 import { Asset } from "../../../asset";
+import { WalletProvider } from "../enums/wallet_provider.enum";
 
 export interface IWallet {
   getId(): string;
@@ -27,6 +28,8 @@ export interface IWallet {
   getAsset(): Asset;
 
   getWalletType(): WalletType;
+
+  getWalletProvider(): WalletProvider;
 
   getAccountId(): string;
 

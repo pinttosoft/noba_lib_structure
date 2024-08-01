@@ -3,6 +3,7 @@ import {
   InstructionDepositCrypto,
   IWallet,
   Wallet,
+  WalletProvider,
   WalletType,
 } from "../../../wallet";
 import { GenericException } from "../../../shared";
@@ -21,11 +22,13 @@ export class WalletFactory {
       | InstructionDepositCrypto
       | InstructionDepositFiat
       | InstructionsAchPabType,
+    walletProviderType: WalletProvider,
   ): IWallet {
     const w: Wallet = new Wallet();
 
     w.setAsset(asset)
       .setInstructionForDeposit(instructionForDeposit)
+      .setWalletProvider(walletProviderType)
       .setClient(client)
       .setWalletType(type)
       .build();
@@ -43,6 +46,7 @@ export class WalletFactory {
 
     try {
       w.setId(id)
+        .setWalletProvider(data.walletProvider ?? WalletProvider.LAYER2)
         .setWalletId(data.walletId)
         .setWalletType(data.walletType)
         .setAsset(asset)

@@ -1,5 +1,5 @@
 import { IWalletRepository } from "../domain/interfaces/wallet_repository.interface";
-import { InsufficientBalance, IWallet } from "../../index";
+import { InsufficientBalance, IWallet, WalletProvider } from "../../index";
 
 export class ValidateBalance {
   constructor(private readonly walletRepository: IWalletRepository) {}
@@ -8,6 +8,7 @@ export class ValidateBalance {
     clientId: string,
     amount: number,
     assetId: string,
+    walletProvider: WalletProvider,
     fee: number = 0,
   ): Promise<number> {
     console.log(`Validando saldos ${clientId} ${assetId}`);
@@ -15,6 +16,7 @@ export class ValidateBalance {
       await this.walletRepository.findWalletsByClientIdAndAssetId(
         clientId,
         assetId,
+        walletProvider,
       );
 
     const totalAmount = Number(amount) + Number(fee);
