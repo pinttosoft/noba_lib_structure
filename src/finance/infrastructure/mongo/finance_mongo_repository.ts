@@ -71,7 +71,7 @@ export class FinanceMongoRepository
       {
         $group: {
           _id: "$exchange.destinationDetails.assetCode",
-          totalFromPipeline: {
+          total: {
             $sum: "$amount",
           },
         },

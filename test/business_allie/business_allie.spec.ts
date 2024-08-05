@@ -427,4 +427,11 @@ describe("Business Allie", () => {
 
     expect(res.results.length).not.toBe(0);
   });
+
+  it("Should get allie consolidate", async () => {
+    const clientId = "JLanza15781342";
+    const financeRepo = FinanceMongoRepository.instance();
+    const consolidate = await financeRepo.getAllieSwapConsolidate(clientId);
+    console.log("consolidate", consolidate);
+  });
 });
