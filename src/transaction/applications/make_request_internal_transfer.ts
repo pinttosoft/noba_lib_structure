@@ -82,6 +82,7 @@ export class MakeRequestInternalTransfer {
         counterparty,
         AmountValueObject.create(amount),
         reference,
+        walletProvider,
         WithdrawalType.INTERNAL,
       );
     logger.info(

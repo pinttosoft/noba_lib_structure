@@ -1,5 +1,6 @@
 export { BusinessAllie } from "./business_allie";
 
+export { Referred } from "./referred";
 export { BusinessOpportunity } from "./business_opportunity";
 export { TaxIdAlreadyExistIntoOtherOpportunity } from "./exceptions/tax_id_already_exist_into_other_opportunity";
 export { OpportunityDoesNotExists } from "./exceptions/opportunity_does_not_exists";
