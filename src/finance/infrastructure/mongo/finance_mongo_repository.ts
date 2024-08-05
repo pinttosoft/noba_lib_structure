@@ -48,6 +48,36 @@ export class FinanceMongoRepository
   async list(criteria: Criteria): Promise<Paginate<Finance>> {
     const document: Finance[] = await this.searchByCriteria<Finance>(criteria);
 
+    if (criteria.hasPipelines()) {
+      console.log("aqqqq");
+      return this.paginateAggregation(criteria);
+    }
+
     return this.buildPaginate<Finance>(document);
+  }
+
+  async getAllieSwapConsolidate(clientId: string) {
+    const collection = await this.collection();
+
+    let filter: any = {
+      clientId,
+      typeFinancialMovement: "OUTGOING_PAYMENT_BUSINESS_ALLIE",
+    };
+
+    const pipeline = [
+      {
+        $match: filter,
+      },
+      {
+        $group: {
+          _id: "$exchange.destinationDetails.assetCode",
+          totalFromPipeline: {
+            $sum: "$amount",
+          },
+        },
+      },
+    ];
+
+    return await collection.aggregate(pipeline).toArray();
   }
 }
