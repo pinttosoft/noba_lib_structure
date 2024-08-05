@@ -119,16 +119,16 @@ export class Exchange extends AggregateRoot {
   }
 
   calculateFee(): Exchange {
-    console.log("this.isUSDTInvolved()", this.isUSDTInvolved());
-    if (this.isUSDTInvolved()) {
-      // USDT is involved
-      this.calculateUSDTFee();
+    if (this.isStableCoinInvolved()) {
+      this.calculateStableCoinFee();
 
-      return;
+      return this;
     }
 
     // USDT is not involved
     this.calculateNonUSDTFee();
+
+    return this;
   }
 
   calculateNonUSDTFee(): Exchange {
@@ -162,53 +162,6 @@ export class Exchange extends AggregateRoot {
       },
     );
 
-    return this;
-  }
-
-  calculateUSDTFee(): Exchange {
-    const percentageAPIProvider =
-      this.calculatePercentageChargedByAPIProvider();
-    let finalPercentageToBeCharged =
-      this.feePercentageNoba - percentageAPIProvider;
-    if (this.feePercentageBusinessAllie) {
-      finalPercentageToBeCharged += this.feePercentageBusinessAllie;
-      this.feeBusinessAllie =
-        (this.destinationDetails.amountCredit *
-          this.feePercentageBusinessAllie) /
-        100;
-    }
-    console.log(
-      `-- Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
-    );
-
-    console.log("calculateUSDTFee", {
-      feePercentageNoba: this.feePercentageNoba,
-      percentageAPIProvider,
-      finalPercentageToBeCharged,
-      feePercentageBusinessAllie: this.feePercentageBusinessAllie,
-    });
-
-    if (finalPercentageToBeCharged <= 0) {
-      this.feeNoba = 0;
-      this.feeAmount = 0;
-      return;
-    }
-    console.log(
-      `Porcentaje final que se va a cobrar al cliente ${finalPercentageToBeCharged}`,
-    );
-
-    this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
-    this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
-    // todo check
-    // this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
-    // this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
-    // this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
-    console.log("test", {
-      "(this.baseAmount * finalPercentageToBeCharged) / 100":
-        (this.baseAmount * finalPercentageToBeCharged) / 100,
-      "Number(this.feeBusinessAllie) + Number(this.feeNoba)":
-        Number(this.feeBusinessAllie) + Number(this.feeNoba),
-    });
     return this;
   }
 
@@ -281,6 +234,56 @@ export class Exchange extends AggregateRoot {
     };
   }
 
+  private calculateStableCoinFee(): Exchange {
+    const percentageAPIProvider =
+      this.calculatePercentageChargedByAPIProvider();
+
+    let finalPercentageToBeCharged =
+      this.feePercentageNoba - percentageAPIProvider;
+
+    if (this.feePercentageBusinessAllie) {
+      finalPercentageToBeCharged += this.feePercentageBusinessAllie;
+
+      this.feeBusinessAllie =
+        (this.destinationDetails.amountCredit *
+          this.feePercentageBusinessAllie) /
+        100;
+    }
+    console.log(
+      `-- Proveedor de API cobro el procentaje de ${percentageAPIProvider} noba configuro el fee de ${this.feePercentageNoba}`,
+    );
+
+    console.log("calculateUSDTFee", {
+      feePercentageNoba: this.feePercentageNoba,
+      percentageAPIProvider,
+      finalPercentageToBeCharged,
+      feePercentageBusinessAllie: this.feePercentageBusinessAllie,
+    });
+
+    if (finalPercentageToBeCharged <= 0) {
+      this.feeNoba = 0;
+      this.feeAmount = 0;
+      return this;
+    }
+    console.log(
+      `Porcentaje final que se va a cobrar al cliente ${finalPercentageToBeCharged}`,
+    );
+
+    this.feeNoba = (this.baseAmount * this.feePercentageNoba) / 100;
+    this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // todo check
+    // this.feeNoba = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // this.feeAmount = (this.baseAmount * finalPercentageToBeCharged) / 100;
+    // this.feeAmount = Number(this.feeBusinessAllie) + Number(this.feeNoba);
+    console.log("test", {
+      "(this.baseAmount * finalPercentageToBeCharged) / 100":
+        (this.baseAmount * finalPercentageToBeCharged) / 100,
+      "Number(this.feeBusinessAllie) + Number(this.feeNoba)":
+        Number(this.feeBusinessAllie) + Number(this.feeNoba),
+    });
+    return this;
+  }
+
   /**
    * Porcentaje cobrado por el proveedor de la API
    *
@@ -305,10 +308,8 @@ export class Exchange extends AggregateRoot {
     return (diff / this.baseAmount) * 100;
   }
 
-  private isUSDTInvolved(): Boolean {
-    return (
-      this.destinationDetails.assetCode === "USDT" &&
-      this.sourceDetails.assetCode === "USDT"
-    );
+  private isStableCoinInvolved(): Boolean {
+    const stableCoins = ["USDT", "USDC", "TUSD"];
+    return stableCoins.includes(this.destinationDetails.assetCode);
   }
 }
