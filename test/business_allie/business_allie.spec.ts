@@ -317,95 +317,6 @@ describe("Business Allie", () => {
     await businessRepo.updateReferredData(referred);
   });
 
-  it("Should fetch all referrals", async () => {
-    const filterStatus: Map<string, string> = new Map([
-      ["field", "referrals.status"],
-      ["operator", Operator.EQUAL],
-      ["value", ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT],
-    ]);
-
-    const filterType: Map<string, string> = new Map([
-      ["field", "type"],
-      ["operator", Operator.EQUAL],
-      ["value", BusinessAllieType.ALLIE],
-    ]);
-
-    const criteria: Criteria = new Criteria(
-      Filters.fromValues([filterStatus]),
-      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
-      2,
-      1,
-    );
-
-    const pipelines = [{ $unwind: "$referrals" }];
-    // console.log("criteria", criteria);
-    console.log(
-      await BusinessAllieMongoRepository.instance().fetchReferrals(
-        criteria,
-        pipelines,
-      ),
-    );
-  });
-
-  // todo
-  it("Should fetch all referrals from allie", async () => {
-    // const filterStatus: Map<string, string> = new Map([
-    //   ["field", "referrals.status"],
-    //   ["operator", Operator.EQUAL],
-    //   ["value", ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT],
-    // ]);
-
-    const filterClientId: Map<string, string> = new Map([
-      ["field", "clientId"],
-      ["operator", Operator.EQUAL],
-      ["value", "JLanza15781342"],
-    ]);
-
-    const criteria: Criteria = new Criteria(
-      Filters.fromValues([filterClientId]),
-      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
-      10,
-      1,
-    );
-
-    const pipelines = [
-      {
-        $project: {
-          referrals: {
-            $filter: {
-              input: "$referrals",
-              as: "referral",
-              cond: {
-                $and: [
-                  {
-                    $gte: [
-                      "$$referral.createdAt",
-                      new Date("2024-07-30T00:04:29.846Z"),
-                    ],
-                  },
-                  {
-                    $lte: [
-                      "$$referral.createdAt",
-                      new Date("2024-08-01T00:04:29.846Z"),
-                    ],
-                  },
-                ],
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    // console.log("criteria", criteria);
-    const res = await BusinessAllieMongoRepository.instance().fetchReferrals(
-      criteria,
-      pipelines,
-    );
-
-    console.log(res.results[0]);
-  });
-
   it("Set user as referred ", async () => {
     const clientId = "MSerrano181263254";
     const user: User =
@@ -521,5 +432,19 @@ describe("Business Allie", () => {
 
     expect(paginate.results.length).toBeGreaterThanOrEqual(2);
     expect(paginate.nextPag).toBe(2);
+  });
+
+  it("Should paginate all referrals", async () => {
+    const criteria = new Criteria(
+      undefined,
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const paginate =
+      await BusinessAllieMongoRepository.instance().fetchReferrals(criteria);
+
+    console.log(paginate);
   });
 });

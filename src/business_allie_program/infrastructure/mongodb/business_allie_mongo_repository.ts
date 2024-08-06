@@ -232,7 +232,38 @@ export class BusinessAllieMongoRepository
     await this.upsertBusinessAllie(allie);
   }
 
-  async fetchReferrals(criteria: Criteria, pipelines?: any[]) {
-    return await this.paginateAggregation<Referred>(criteria, pipelines);
+  /**
+   * Pagina el listado general de Referidos
+   * @param criteria
+   */
+  async fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+    const collection = await this.collection();
+    const skip = (criteria.currentPage - 1) * criteria.limit;
+
+    const pipeline = [
+      { $unwind: "$referrals" },
+      { $replaceRoot: { newRoot: "$referrals" } },
+      {
+        $facet: {
+          totalCount: [{ $count: "total" }],
+          data: [{ $skip: skip }, { $limit: criteria.limit }],
+        },
+      },
+    ];
+
+    const result = await collection.aggregate(pipeline).toArray();
+
+    const totalCount =
+      result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
+    const data = result[0].data.map((r: any) => new Referred(r));
+
+    const hasNextPage = criteria.currentPage * criteria.limit < totalCount;
+
+    return {
+      nextPag: hasNextPage ? criteria.currentPage + 1 : null,
+      prevPag: criteria.currentPage > 1 ? criteria.currentPage - 1 : null,
+      count: totalCount,
+      results: data,
+    };
   }
 }
