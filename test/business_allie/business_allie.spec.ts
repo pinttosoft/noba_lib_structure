@@ -499,4 +499,27 @@ describe("Business Allie", () => {
     );
     console.log("consolidate", consolidate);
   });
+
+  it("Should paginated referrals to allie", async () => {
+    const clientId = "JLanza15781342";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([filterClientId]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      2,
+      1,
+    );
+
+    const paginate =
+      await BusinessAllieMongoRepository.instance().paginateReferrals(criteria);
+
+    expect(paginate.results.length).toBeGreaterThanOrEqual(2);
+    expect(paginate.nextPag).toBe(2);
+  });
 });

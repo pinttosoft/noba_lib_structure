@@ -7,6 +7,7 @@ import {
   Criteria,
   MongoClientFactory,
   MongoRepository,
+  Operator,
   Paginate,
 } from "../../../shared";
 
@@ -144,6 +145,37 @@ export class BusinessAllieMongoRepository
     const referred = result.referrals[0];
 
     return new Referred({ ...referred, id: referred._id });
+  }
+
+  /**
+   * Se espera que el criteria tenga clientId
+   * @param criteria
+   */
+  async paginateReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+    const filters = criteria.filters.filters;
+
+    let hasClientIdFilter = false;
+    let clientId = "";
+    for (const filter of filters) {
+      if (filter.field.getValue() === "clientId") {
+        hasClientIdFilter = true;
+        clientId = filter.value.getValue();
+      }
+    }
+
+    if (!hasClientIdFilter) {
+      throw new Error("clientId filter is required");
+    }
+
+    const documents = (
+      await this.paginatedArrayField<any>(criteria, "referrals")
+    )[0].referrals;
+
+    return await this.buildPaginatedArrayField<Referred>(
+      { clientId },
+      documents,
+      "referrals",
+    );
   }
 
   async getReferredByEmail(email: string): Promise<Referred | undefined> {

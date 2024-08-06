@@ -33,24 +33,30 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
     const count = await collection.countDocuments(this.query.filter);
 
-    const hasNextPage: boolean =
-      this.criteria.currentPage * this.criteria.limit < count;
+    return this.createObjectPaginate<T>(documents, count);
+  }
 
-    if (documents.length === 0) {
-      return {
-        nextPag: null,
-        prevPag: null,
-        count: 0,
-        results: [],
-      };
+  protected async buildPaginatedArrayField<T>(
+    filter: object,
+    documents: T[],
+    arrayFieldName: string,
+  ): Promise<Paginate<T>> {
+    const collection = await this.collection();
+    const result = await collection
+      .find(filter)
+      .project({
+        totalRecords: { $size: `$${arrayFieldName}` },
+      })
+      .toArray();
+    let count = 0;
+
+    if (result.length > 0) {
+      count = result[0].totalRecords;
     }
 
-    return {
-      nextPag: hasNextPage ? Number(this.criteria.currentPage) + 1 : null,
-      prevPag: null,
-      count: count,
-      results: documents,
-    };
+    console.log("totalRecords", count);
+
+    return this.createObjectPaginate<T>(documents, count);
   }
 
   protected client(): Promise<MongoClient> {
@@ -178,25 +184,44 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     };
   }
 
-  /**
-   *
-   * @param criteria
-   * @param projection campo de tipo objeto que deseo paginar
-   * @protected
-   */
-  protected async searchByCriteriaWithProjection<D>(
+  protected async paginatedArrayField<D>(
     criteria: Criteria,
-    projection: object,
+    arrayFieldName: string,
   ): Promise<D[]> {
     this.criteria = criteria;
     this.query = this.criteriaConverter.convert(criteria);
+
+    const projection: { [key: string]: any } = {};
+    projection[arrayFieldName] = {
+      $slice: [Number(this.query.skip), Number(this.query.limit)],
+    };
+
     const collection = await this.collection();
 
     return await collection
       .find<D>(this.query.filter, { projection })
       .sort(this.query.sort)
-      .skip(this.query.skip)
-      .limit(this.query.limit)
       .toArray();
+  }
+
+  private createObjectPaginate<T>(documents: T[], count: number): Paginate<T> {
+    const hasNextPage: boolean =
+      this.criteria.currentPage * this.criteria.limit < count;
+
+    if (documents.length === 0) {
+      return {
+        nextPag: null,
+        prevPag: null,
+        count: 0,
+        results: [],
+      };
+    }
+
+    return {
+      nextPag: hasNextPage ? Number(this.criteria.currentPage) + 1 : null,
+      prevPag: null,
+      count: count,
+      results: documents,
+    };
   }
 }
