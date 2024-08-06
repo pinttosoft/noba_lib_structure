@@ -70,7 +70,11 @@ export class ClientFactory {
 
       const configsSystemTransactionalProfile =
         await systemConfig.getDefaultTransactionalProfile();
+
       c.setId(id)
+        .setAssignedWalletProviders(
+          data.assignedWalletProviders ?? [WalletProvider.LAYER2],
+        )
         .setStatus(data.status)
         .setClientData({ ...data })
         .setAccount(account)
