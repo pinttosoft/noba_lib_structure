@@ -31,6 +31,7 @@ import { KycProfileType } from "./types/kyc-profile.type";
 import { KycVerification } from "./types/kyc-verification";
 import { FollowUpClient } from "./types/follow-up-client.type";
 import { TransactionalProfileType } from "./types/transactional-profile.type";
+import { WalletProvider } from "../../wallet";
 
 export class Client extends AggregateRoot implements IClient {
   private clientId: string;
@@ -58,11 +59,21 @@ export class Client extends AggregateRoot implements IClient {
   private addressShipping: Address;
   private nationality?: string;
   private documentExpirationDate?: string;
+  private assignedWalletProviders: WalletProvider[];
+
+  setAssignedWalletProviders(walletProvider: WalletProvider[]): Client {
+    this.assignedWalletProviders = walletProvider;
+    return this;
+  }
 
   setAddressShipping(address: Address): Client {
     this.addressShipping = { ...address, isShipping: true };
     this.clientData.addressShipping = this.addressShipping;
     return this;
+  }
+
+  getAssignedWalletProvider(): WalletProvider[] {
+    return this.assignedWalletProviders;
   }
 
   getAddressShipping(): Address {
@@ -767,6 +778,7 @@ export class Client extends AggregateRoot implements IClient {
       approvedAt: this.approvedAt,
       kycRequestedChanges: this.kycRequestedChanges,
       clientFollowUp: this.clientFollowUp,
+      assignedWalletProvider: this.assignedWalletProviders,
     };
   }
 }

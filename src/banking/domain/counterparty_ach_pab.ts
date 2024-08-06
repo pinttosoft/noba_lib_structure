@@ -1,6 +1,7 @@
 import { Counterparty } from "../../counterparty";
 import { CounterpartyAchPabDtoType } from "./types/counterparty_ach_pab_dto.type";
 import { Address } from "../../shared";
+import { WalletProvider } from "../../wallet";
 
 export class CounterpartyAchPab extends Counterparty {
   private label: string;
@@ -16,6 +17,8 @@ export class CounterpartyAchPab extends Counterparty {
     isInternal: boolean = false,
   ): CounterpartyAchPab {
     const c: CounterpartyAchPab = new CounterpartyAchPab();
+
+    c.registeredInProvider = WalletProvider.PINTTOSOFT;
     c.isInternal = isInternal;
     c.clientId = data.clientId;
     c.counterpartyType = data.counterpartyType;
@@ -46,6 +49,8 @@ export class CounterpartyAchPab extends Counterparty {
     const informationOwner = data.informationOwner;
 
     c.id = id;
+    c.registeredInProvider =
+      data.registeredInProvider ?? WalletProvider.PINTTOSOFT;
     c.isInternal = data.isInternal;
     c.clientId = data.clientId;
     c.counterpartyType = data.counterpartyType;

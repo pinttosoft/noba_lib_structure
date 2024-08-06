@@ -10,6 +10,7 @@ import {
 } from "../../shared";
 import { v4 } from "uuid";
 import { WithdrawalPurpose } from "./enums/withdrawal_purpose.enum";
+import { WalletProvider } from "../../wallet";
 
 export class WithdrawalRequest extends AggregateRoot {
   private id?: string;
@@ -24,21 +25,20 @@ export class WithdrawalRequest extends AggregateRoot {
   private dateWasProcessed?: Date;
   private counterparty: Counterparty;
   private withdrawalPurpose?: WithdrawalPurpose;
-
-  getId(): string {
-    return this.id;
-  }
+  private walletProvider: WalletProvider;
 
   static createNewWithdrawalRequest(
     client: IClient,
     counterparty: Counterparty,
     amount: AmountValueObject,
     reference: string,
+    walletProvider: WalletProvider,
     withdrawalType: WithdrawalType = WithdrawalType.EXTERNAL,
     withdrawalPurpose?: WithdrawalPurpose,
   ): WithdrawalRequest {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
+    w.walletProvider = walletProvider;
     w.withdrawalId = v4();
     w.clientId = client.getClientId();
     w.counterparty = counterparty;
@@ -68,6 +68,7 @@ export class WithdrawalRequest extends AggregateRoot {
     const w: WithdrawalRequest = new WithdrawalRequest();
 
     w.id = id;
+    w.walletProvider = plainData.walletProvider;
     w.clientId = plainData.clientId;
     w.amount = plainData.amount;
     w.counterparty = counterparty;
@@ -80,6 +81,14 @@ export class WithdrawalRequest extends AggregateRoot {
     w.withdrawalPurpose = plainData.withdrawalPurpose ?? null;
 
     return w;
+  }
+
+  getId(): string {
+    return this.id;
+  }
+
+  getWalletProvider() {
+    return this.walletProvider;
   }
 
   getCreatedAt(): Date {
@@ -148,6 +157,7 @@ export class WithdrawalRequest extends AggregateRoot {
       createdAt: this.createdAt,
       processingDate: this.dateWasProcessed,
       withdrawalPurpose: this.withdrawalPurpose,
+      walletProvider: this.walletProvider,
     };
   }
 }

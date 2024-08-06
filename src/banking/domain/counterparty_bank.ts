@@ -3,6 +3,7 @@ import { NetworkBank } from "./enums/network_bank.enum";
 import { Counterparty, CounterpartyStatus } from "../../counterparty";
 import { CounterpartyBankDTO } from "./types/counterparty_bank.type";
 import { InformationIntermediaryBankDTO } from "./types/information_intermediary_bank.type";
+import { WalletProvider } from "../../wallet";
 
 export class CounterpartyBank extends Counterparty {
   private ownerAddress: Address;
@@ -24,7 +25,7 @@ export class CounterpartyBank extends Counterparty {
     const c: CounterpartyBank = new CounterpartyBank();
 
     c.assetId = counterpartyBank.assetId;
-
+    c.registeredInProvider = WalletProvider.LAYER2;
     c.clientId = counterpartyBank.clientId;
     c.accountId = counterpartyBank.accountId;
     c.setOwnerName(counterpartyBank.informationOwner.name);
@@ -80,6 +81,8 @@ export class CounterpartyBank extends Counterparty {
     const counterparty: CounterpartyBank = new CounterpartyBank();
     counterparty.id = id;
 
+    counterparty.registeredInProvider =
+      data.registeredInProvider ?? WalletProvider.LAYER2;
     counterparty.relationshipConsumer = data.relationshipConsumer ?? undefined;
 
     const informationOwner = data.informationOwner;
@@ -189,6 +192,7 @@ export class CounterpartyBank extends Counterparty {
       relationshipConsumer: this.relationshipConsumer,
       createdAt: this.createdAt,
       status: this.status,
+      registeredInProvider: this.registeredInProvider,
     };
   }
 }

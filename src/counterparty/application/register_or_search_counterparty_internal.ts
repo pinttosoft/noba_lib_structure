@@ -4,6 +4,7 @@ import {
   IWalletRepository,
   OriginWallet,
   WalletNotFound,
+  WalletProvider,
 } from "../../wallet";
 import { ICounterpartyRepository } from "../domain/interfaces/counterparty_repository.interface";
 import { Counterparty } from "../domain/counterparty.abstract";
@@ -36,6 +37,7 @@ export class RegisterOrSearchCounterpartyInternal {
     clientOrigin: IClient,
     clientDestination: IClient,
     asset: Asset,
+    walletProvider: WalletProvider,
   ): Promise<Counterparty> {
     let counterparty: Counterparty =
       await this.counterpartyRepository.findMyCounterpartyByAssetId(
@@ -54,6 +56,7 @@ export class RegisterOrSearchCounterpartyInternal {
     const wallet: IWallet = await this.searchWallet(
       asset.getAssetId(),
       clientDestination,
+      walletProvider,
     );
 
     if (asset.getAssetClassification() !== AssetClassification.FIAT) {
@@ -145,11 +148,13 @@ export class RegisterOrSearchCounterpartyInternal {
   private async searchWallet(
     assetId: string,
     clientDestination: IClient,
+    walletProvider: WalletProvider,
   ): Promise<IWallet> {
     const wallet: IWallet =
       await this.walletRepository.findWalletsByClientIdAndAssetId(
         clientDestination.getClientId(),
         assetId,
+        walletProvider,
       );
 
     if (!wallet) {
