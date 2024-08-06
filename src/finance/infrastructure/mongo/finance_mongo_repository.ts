@@ -59,13 +59,17 @@ export class FinanceMongoRepository
     return this.buildPaginate<Finance>(document);
   }
 
-  async getAllieSwapConsolidate(clientId: string) {
+  async getAllieSwapConsolidate(clientId: string, assetCode?: string) {
     const collection = await this.collection();
 
     let filter: any = {
       clientId,
       typeFinancialMovement: "OUTGOING_PAYMENT_BUSINESS_ALLIE",
     };
+
+    if (assetCode) {
+      filter["exchange.destinationDetails.assetCode"] = assetCode;
+    }
 
     const pipeline = [
       {

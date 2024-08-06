@@ -11,5 +11,8 @@ export interface IFinanceRepository {
     pipelines?: any[],
   ): Promise<Paginate<Finance> | undefined>;
 
-  getAllieSwapConsolidate(clientId: string): Promise<any[] | undefined>;
+  getAllieSwapConsolidate(
+    clientId: string,
+    assetCode?: string,
+  ): Promise<any[] | undefined>;
 }

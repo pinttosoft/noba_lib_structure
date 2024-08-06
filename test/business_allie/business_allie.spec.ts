@@ -493,7 +493,10 @@ describe("Business Allie", () => {
   it("Should get allie consolidate", async () => {
     const clientId = "JLanza15781342";
     const financeRepo = FinanceMongoRepository.instance();
-    const consolidate = await financeRepo.getAllieSwapConsolidate(clientId);
+    const consolidate = await financeRepo.getAllieSwapConsolidate(
+      clientId,
+      "ETH",
+    );
     console.log("consolidate", consolidate);
   });
 });
