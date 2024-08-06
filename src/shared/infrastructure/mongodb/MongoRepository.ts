@@ -103,38 +103,49 @@ export abstract class MongoRepository<T extends AggregateRoot> {
 
   protected async paginateAggregation<D>(
     criteria: Criteria,
+    pipelines?: any[],
   ): Promise<Paginate<D>> {
     this.criteria = criteria;
+    const finalPipelines = [];
+
     this.query = this.criteriaConverter.convert(criteria);
     const collection = await this.collection();
 
     const skip = (this.criteria.currentPage - 1) * this.query.limit;
 
     if (this.query.filter) {
-      this.query.pipelines.push({
+      finalPipelines.push({
         $match: this.query.filter,
       });
     }
 
+    if (pipelines) {
+      finalPipelines.push(...pipelines);
+    }
+
     if (this.query.sort) {
-      this.query.pipelines.push({
+      finalPipelines.push({
         $sort: this.query.sort,
       });
     }
 
     const facetData: any[] = [{ $skip: skip }, { $limit: this.query.limit }];
 
-    const unwindPipeline = this.query.pipelines.find(
+    const unwindPipeline = finalPipelines.find(
       (pipeline) => "$unwind" in pipeline,
     );
     if (unwindPipeline) {
+      console.log("has unwinded pipeline");
       facetData.push({
         $replaceRoot: { newRoot: unwindPipeline["$unwind"] },
       });
     }
 
+    console.log("pipelines", pipelines);
+    console.log("finalPipelines", finalPipelines);
+
     const paginatedPipeline = [
-      ...this.query.pipelines,
+      ...finalPipelines,
       {
         $facet: {
           totalCount: [{ $count: "total" }],
@@ -167,52 +178,25 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     };
   }
 
-  // protected async paginateAggregation<D>(
-  //   pipeline: any[],
-  //   currentPage: number,
-  //   limit: number,
-  //   unwind?: string,
-  // ): Promise<Paginate<D>> {
-  //   const collection = await this.collection();
-  //
-  //   const skip = (currentPage - 1) * limit;
-  //
-  //   const facetData: any[] = [{ $skip: skip }, { $limit: limit }];
-  //   if (unwind) {
-  //     facetData.push({
-  //       $replaceRoot: { newRoot: "$referrals" },
-  //     });
-  //   }
-  //
-  //   const paginatedPipeline = [
-  //     ...pipeline,
-  //     {
-  //       $facet: {
-  //         totalCount: [{ $count: "total" }],
-  //         data: facetData,
-  //       },
-  //     },
-  //   ];
-  //
-  //   const result = await collection
-  //     .aggregate<{
-  //       totalCount: { total: number }[];
-  //       data: D[];
-  //     }>(paginatedPipeline)
-  //     .toArray();
-  //
-  //   const totalCount =
-  //     result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
-  //
-  //   const data = result[0].data;
-  //
-  //   const hasNextPage = currentPage * limit < totalCount;
-  //
-  //   return {
-  //     nextPag: hasNextPage ? currentPage + 1 : null,
-  //     prevPag: currentPage > 1 ? currentPage - 1 : null,
-  //     count: totalCount,
-  //     results: data,
-  //   };
-  // }
+  /**
+   *
+   * @param criteria
+   * @param projection campo de tipo objeto que deseo paginar
+   * @protected
+   */
+  protected async searchByCriteriaWithProjection<D>(
+    criteria: Criteria,
+    projection: object,
+  ): Promise<D[]> {
+    this.criteria = criteria;
+    this.query = this.criteriaConverter.convert(criteria);
+    const collection = await this.collection();
+
+    return await collection
+      .find<D>(this.query.filter, { projection })
+      .sort(this.query.sort)
+      .skip(this.query.skip)
+      .limit(this.query.limit)
+      .toArray();
+  }
 }

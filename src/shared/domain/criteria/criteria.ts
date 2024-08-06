@@ -7,28 +7,16 @@ export class Criteria {
   readonly limit?: number;
   readonly offset?: number;
   readonly currentPage?: number;
-  readonly pipelines?: any[];
 
-  constructor(
-    filters: Filters,
-    order: Order,
-    limit?: number,
-    offset?: number,
-    pipelines?: any[],
-  ) {
+  constructor(filters: Filters, order: Order, limit?: number, offset?: number) {
     this.filters = filters;
     this.order = order;
     this.limit = limit;
     this.currentPage = offset;
     this.offset = offset !== undefined ? (offset - 1) * limit : undefined;
-    this.pipelines = pipelines ?? [];
   }
 
   public hasFilters(): boolean {
     return this.filters.filters.length > 0;
-  }
-
-  public hasPipelines(): boolean {
-    return this.pipelines.length > 0;
   }
 }

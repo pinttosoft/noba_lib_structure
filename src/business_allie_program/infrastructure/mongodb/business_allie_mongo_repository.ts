@@ -186,7 +186,6 @@ export class BusinessAllieMongoRepository
   async deleteReferred(referredByClientId: string, clientId: string) {
     const oldReferrals: Referred[] =
       await this.getReferralsByClientId(referredByClientId);
-    console.log("oldReferrals", oldReferrals);
 
     const newReferrals: Referred[] = oldReferrals.filter(
       (referred: Referred): boolean => referred.getClientId() !== clientId,
@@ -201,20 +200,7 @@ export class BusinessAllieMongoRepository
     await this.upsertBusinessAllie(allie);
   }
 
-  async fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
-    // const filters: any = {
-    //   "referrals.status": "REFERRED_WITH_ACTIVE_ACCOUNT",
-    // };
-    //
-    // const order = { "referrals.createdAt": -1 };
-
-    // const res = await this.paginateAggregation<Referred>(
-    //   [{ $unwind: "$referrals" }, { $match: filters }, { $sort: order }],
-    //   1,
-    //   10,
-    //   "$referrals",
-    // );
-
-    return await this.paginateAggregation<Referred>(criteria);
+  async fetchReferrals(criteria: Criteria, pipelines?: any[]) {
+    return await this.paginateAggregation<Referred>(criteria, pipelines);
   }
 }

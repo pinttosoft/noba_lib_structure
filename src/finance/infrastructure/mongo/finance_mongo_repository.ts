@@ -45,10 +45,13 @@ export class FinanceMongoRepository
     await this.persist(fee.getId(), fee);
   }
 
-  async list(criteria: Criteria): Promise<Paginate<Finance>> {
+  async list(
+    criteria: Criteria,
+    pipelines?: any[],
+  ): Promise<Paginate<Finance>> {
     const document: Finance[] = await this.searchByCriteria<Finance>(criteria);
 
-    if (criteria.hasPipelines()) {
+    if (pipelines) {
       console.log("aqqqq");
       return this.paginateAggregation(criteria);
     }

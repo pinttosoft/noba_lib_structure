@@ -6,7 +6,10 @@ export interface IFinanceRepository {
 
   upsert(fee: Finance): Promise<void>;
 
-  list(criteria: Criteria): Promise<Paginate<Finance> | undefined>;
+  list(
+    criteria: Criteria,
+    pipelines?: any[],
+  ): Promise<Paginate<Finance> | undefined>;
 
   getAllieSwapConsolidate(clientId: string): Promise<any[] | undefined>;
 }
