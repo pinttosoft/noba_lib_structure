@@ -5,7 +5,7 @@ import { Paginate } from "../../domain/types/paginate";
 import { AggregateRoot } from "../../domain/aggregate_root";
 
 export abstract class MongoRepository<T extends AggregateRoot> {
-  private criteriaConverter: MongoCriteriaConverter;
+  protected criteriaConverter: MongoCriteriaConverter;
   private query: MongoQuery;
   private criteria: Criteria;
 
@@ -34,6 +34,19 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     const count = await collection.countDocuments(this.query.filter);
 
     return this.createObjectPaginate<T>(documents, count);
+  }
+
+  public async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {
+    this.criteria = criteria;
+    this.query = this.criteriaConverter.convert(criteria);
+
+    const collection = await this.collection();
+    return await collection
+      .find<D>(this.query.filter, {})
+      .sort(this.query.sort)
+      .skip(this.query.skip)
+      .limit(this.query.limit)
+      .toArray();
   }
 
   protected async buildPaginatedArrayField<T>(
@@ -92,19 +105,6 @@ export abstract class MongoRepository<T extends AggregateRoot> {
     );
 
     return result.upsertedId;
-  }
-
-  protected async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {
-    this.criteria = criteria;
-    this.query = this.criteriaConverter.convert(criteria);
-
-    const collection = await this.collection();
-    return await collection
-      .find<D>(this.query.filter, {})
-      .sort(this.query.sort)
-      .skip(this.query.skip)
-      .limit(this.query.limit)
-      .toArray();
   }
 
   protected async paginateAggregation<D>(

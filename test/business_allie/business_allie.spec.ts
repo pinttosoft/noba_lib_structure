@@ -435,8 +435,16 @@ describe("Business Allie", () => {
   });
 
   it("Should paginate all referrals", async () => {
+    const clientId = "JLanza15781342";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
     const criteria = new Criteria(
-      undefined,
+      Filters.fromValues([filterClientId]),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
       20,
       1,

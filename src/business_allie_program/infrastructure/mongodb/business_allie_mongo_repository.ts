@@ -7,7 +7,6 @@ import {
   Criteria,
   MongoClientFactory,
   MongoRepository,
-  Operator,
   Paginate,
 } from "../../../shared";
 
@@ -240,7 +239,16 @@ export class BusinessAllieMongoRepository
     const collection = await this.collection();
     const skip = (criteria.currentPage - 1) * criteria.limit;
 
-    const pipeline = [
+    const pipeline = [];
+
+    console.log("criteria.hasFilters(", criteria.hasFilters());
+    if (criteria.hasFilters()) {
+      const query = this.criteriaConverter.convert(criteria);
+      console.log("query", query.filter);
+      pipeline.push({ $match: query.filter });
+    }
+
+    pipeline.push(
       { $unwind: "$referrals" },
       { $replaceRoot: { newRoot: "$referrals" } },
       {
@@ -249,8 +257,9 @@ export class BusinessAllieMongoRepository
           data: [{ $skip: skip }, { $limit: criteria.limit }],
         },
       },
-    ];
+    );
 
+    console.log("pipeline", pipeline);
     const result = await collection.aggregate(pipeline).toArray();
 
     const totalCount =

@@ -12,7 +12,7 @@ export interface IFinanceRepository {
   ): Promise<Paginate<Finance> | undefined>;
 
   getAllieSwapConsolidate(
-    clientId: string,
+    clientId?: string,
     assetCode?: string,
   ): Promise<any[] | undefined>;
 }
