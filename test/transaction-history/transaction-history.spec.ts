@@ -6,6 +6,7 @@ import {
   Order,
   OrderTypes,
   TransactionMongoRepository,
+  TypeFinancialMovement,
 } from "../../src";
 
 describe("Transaction History", () => {
@@ -28,6 +29,36 @@ describe("Transaction History", () => {
     );
 
     const res = await transactionRepo.transactionListing(criteria);
+    expect(res.results.length).toBeGreaterThan(0);
+  });
+
+  it("list transactions by client id", async () => {
+    const transactionRepo = TransactionMongoRepository.instance();
+
+    const clientId = "MSerrano181263254";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
+    const filterMovementType: Map<string, string> = new Map([
+      ["field", "typeFinancialMovement"],
+      ["operator", Operator.EQUAL],
+      ["value", TypeFinancialMovement.OUTGOING_PAYMENT_BUSINESS_ALLIE],
+    ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([filterClientId, filterMovementType]),
+      // Filters.fromValues(prepareFilter(filterClientId)),
+      Order.fromValues("createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const res = await transactionRepo.transactionListing(criteria);
+    console.log("res.results", res.results);
     expect(res.results.length).toBeGreaterThan(0);
   });
 });

@@ -39,8 +39,8 @@ export abstract class MongoRepository<T extends AggregateRoot> {
   public async searchByCriteria<D>(criteria: Criteria): Promise<D[]> {
     this.criteria = criteria;
     this.query = this.criteriaConverter.convert(criteria);
-
     const collection = await this.collection();
+
     return await collection
       .find<D>(this.query.filter, {})
       .sort(this.query.sort)

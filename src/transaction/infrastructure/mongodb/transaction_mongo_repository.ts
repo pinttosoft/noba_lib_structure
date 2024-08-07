@@ -146,25 +146,6 @@ export class TransactionMongoRepository
     );
   }
 
-  private buildCounterparty(result: any): Counterparty {
-    if (result.counterparty.achInstructions) {
-      return CounterpartyAchPab.fromPrimitives(
-        result.counterparty.id,
-        result.counterparty,
-      );
-    }
-
-    return result.counterparty.counterpartyType == CounterpartyType.FIAT
-      ? CounterpartyBank.fromPrimitives(
-          result.counterparty.id,
-          result.counterparty,
-        )
-      : CounterpartyAsset.fromPrimitives(
-          result.counterparty.id,
-          result.counterparty,
-        );
-  }
-
   async findWithdrawalByClientIdAndAssetIdAndAmountAndStatusAndReference(
     clientId: string,
     assetId: string,
@@ -231,7 +212,7 @@ export class TransactionMongoRepository
 
   async transactionListing(criteria: Criteria): Promise<Paginate<Transaction>> {
     let document = await this.searchByCriteria<any>(criteria);
-
+    console.log("document", document);
     document = document.map((d) => ({
       ...d,
       id: d._id.toString(),
@@ -272,5 +253,24 @@ export class TransactionMongoRepository
 
   async saveDepositTransaction(transaction: TransactionDeposit): Promise<void> {
     await this.persist(transaction.getId(), transaction);
+  }
+
+  private buildCounterparty(result: any): Counterparty {
+    if (result.counterparty.achInstructions) {
+      return CounterpartyAchPab.fromPrimitives(
+        result.counterparty.id,
+        result.counterparty,
+      );
+    }
+
+    return result.counterparty.counterpartyType == CounterpartyType.FIAT
+      ? CounterpartyBank.fromPrimitives(
+          result.counterparty.id,
+          result.counterparty,
+        )
+      : CounterpartyAsset.fromPrimitives(
+          result.counterparty.id,
+          result.counterparty,
+        );
   }
 }
