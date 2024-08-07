@@ -34,6 +34,7 @@ export class MakeRequestInternalTransfer {
    * @param amount
    * @param assetCode
    * @param reference
+   * @param validateBalance Desea que valide el saldo del cliente origen
    */
   async run(
     clientIdOrigin: string,
@@ -41,6 +42,7 @@ export class MakeRequestInternalTransfer {
     amount: number,
     assetCode: string,
     reference: string,
+    validateBalance: boolean = true,
   ): Promise<string> {
     logger.info(
       `Iniciando la transferencia interna origin: ${clientIdOrigin} destino: clientIdDestination ${clientIdDestination}, monto: ${amount} assetCode: ${assetCode} referencia: ${reference}`,
@@ -66,11 +68,14 @@ export class MakeRequestInternalTransfer {
         counterparty,
       )}`,
     );
-    await new ValidateBalance(this.walletRepository).run(
-      clientIdOrigin,
-      amount,
-      asset.getAssetId(),
-    );
+
+    if (validateBalance) {
+      await new ValidateBalance(this.walletRepository).run(
+        clientIdOrigin,
+        amount,
+        asset.getAssetId(),
+      );
+    }
 
     const withdrawalRequest: WithdrawalRequest =
       WithdrawalRequest.createNewWithdrawalRequest(
