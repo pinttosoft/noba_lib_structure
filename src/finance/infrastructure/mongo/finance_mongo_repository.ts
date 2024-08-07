@@ -90,4 +90,24 @@ export class FinanceMongoRepository
 
     return await collection.aggregate(pipeline).toArray();
   }
+
+  async exportFinance(criteria: Criteria): Promise<Finance[]> {
+    const collection = await this.collection();
+    const pipeline = [];
+
+    if (criteria.hasFilters()) {
+      const query = this.criteriaConverter.convert(criteria);
+      pipeline.push({ $match: query.filter });
+    }
+
+    const result = await collection.aggregate(pipeline).toArray();
+
+    return result.map(
+      (finance) =>
+        new Finance({
+          ...finance,
+          id: finance._id,
+        } as unknown as FinancialMovement),
+    );
+  }
 }

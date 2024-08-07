@@ -241,10 +241,8 @@ export class BusinessAllieMongoRepository
 
     const pipeline = [];
 
-    console.log("criteria.hasFilters(", criteria.hasFilters());
     if (criteria.hasFilters()) {
       const query = this.criteriaConverter.convert(criteria);
-      console.log("query", query.filter);
       pipeline.push({ $match: query.filter });
     }
 
@@ -259,7 +257,6 @@ export class BusinessAllieMongoRepository
       },
     );
 
-    console.log("pipeline", pipeline);
     const result = await collection.aggregate(pipeline).toArray();
 
     const totalCount =
@@ -274,5 +271,45 @@ export class BusinessAllieMongoRepository
       count: totalCount,
       results: data,
     };
+  }
+
+  async exportAllies(criteria: Criteria): Promise<BusinessAllie[]> {
+    const collection = await this.collection();
+
+    const pipeline = [];
+
+    if (criteria.hasFilters()) {
+      const query = this.criteriaConverter.convert(criteria);
+      pipeline.push({ $match: query.filter });
+    }
+
+    const result = await collection.aggregate(pipeline).toArray();
+
+    return result.map(
+      (allie) =>
+        new BusinessAllie({ ...allie, id: allie.id } as BusinessAllieDTO),
+    );
+  }
+
+  async exportReferrals(criteria: Criteria): Promise<Referred[]> {
+    const collection = await this.collection();
+    const pipeline = [];
+
+    if (criteria.hasFilters()) {
+      const query = this.criteriaConverter.convert(criteria);
+      pipeline.push({ $match: query.filter });
+    }
+
+    pipeline.push(
+      { $unwind: "$referrals" },
+      { $replaceRoot: { newRoot: "$referrals" } },
+    );
+
+    const result = await collection.aggregate(pipeline).toArray();
+
+    return result.map(
+      (referred) =>
+        new Referred({ ...referred, id: referred.id } as ReferredDTO),
+    );
   }
 }

@@ -455,4 +455,75 @@ describe("Business Allie", () => {
 
     console.log(paginate);
   });
+
+  it("Should export allies", async () => {
+    const clientId = "JLanza15781342";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const res =
+      await BusinessAllieMongoRepository.instance().exportAllies(criteria);
+
+    expect(res).not.toBe(undefined);
+  });
+
+  it("Should export referrals", async () => {
+    const clientId = "JLanza15781342";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([filterClientId]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const res =
+      await BusinessAllieMongoRepository.instance().exportReferrals(criteria);
+
+    expect(res).not.toBe(undefined);
+  });
+
+  it("Should export finance", async () => {
+    const clientId = "JLanza15781342";
+
+    const filterClientId: Map<string, string> = new Map([
+      ["field", "clientId"],
+      ["operator", Operator.EQUAL],
+      ["value", clientId],
+    ]);
+
+    const typeMovemenFilter: Map<string, string> = new Map([
+      ["field", "typeFinancialMovement"],
+      ["operator", Operator.EQUAL],
+      ["value", TypeFinancialMovement.OUTGOING_PAYMENT_BUSINESS_ALLIE],
+    ]);
+
+    const criteria = new Criteria(
+      Filters.fromValues([filterClientId, typeMovemenFilter]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const res = await FinanceMongoRepository.instance().exportFinance(criteria);
+
+    expect(res).not.toBe(undefined);
+  });
 });

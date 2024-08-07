@@ -15,4 +15,6 @@ export interface IFinanceRepository {
     clientId?: string,
     assetCode?: string,
   ): Promise<any[] | undefined>;
+
+  exportFinance(criteria: Criteria): Promise<Finance[]>;
 }
