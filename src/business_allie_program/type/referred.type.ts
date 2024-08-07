@@ -16,5 +16,6 @@ export type ReferredDTO = {
   accountStatus?: AccountStatus;
   birthdate?: Date;
   phoneNumber?: string;
+  country?: string;
   address?: string;
 };

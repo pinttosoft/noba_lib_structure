@@ -243,7 +243,9 @@ export class BusinessAllieMongoRepository
 
     if (criteria.hasFilters()) {
       const query = this.criteriaConverter.convert(criteria);
+      console.log("query.filter", query.filter);
       pipeline.push({ $match: query.filter });
+      console.log("pipeline", pipeline);
     }
 
     pipeline.push(
@@ -261,7 +263,6 @@ export class BusinessAllieMongoRepository
 
     const totalCount =
       result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
-    const data = result[0].data.map((r: any) => new Referred(r));
 
     const hasNextPage = criteria.currentPage * criteria.limit < totalCount;
 
@@ -269,7 +270,7 @@ export class BusinessAllieMongoRepository
       nextPag: hasNextPage ? criteria.currentPage + 1 : null,
       prevPag: criteria.currentPage > 1 ? criteria.currentPage - 1 : null,
       count: totalCount,
-      results: data,
+      results: result[0].data,
     };
   }
 

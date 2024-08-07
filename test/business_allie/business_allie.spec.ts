@@ -85,8 +85,15 @@ describe("Business Allie", () => {
       ["value", BusinessAllieStatus.APPROVED],
     ]);
 
+    const filterEmail: Map<string, string> = new Map([
+      ["field", "email"],
+      // ["field", "client.status"],
+      ["operator", Operator.EQUAL],
+      ["value", "johana@gmail.com"],
+    ]);
+
     const criteria: Criteria = new Criteria(
-      Filters.fromValues([filterStatus]),
+      Filters.fromValues([filterStatus, filterEmail]),
       Order.fromValues("createdAt", OrderTypes.DESC),
       9,
       1,
@@ -443,8 +450,14 @@ describe("Business Allie", () => {
       ["value", clientId],
     ]);
 
+    // moises.alejandro.serrano@gmail.com
+    const filterEmail = new Map([
+      ["field", "referrals.email"],
+      ["operator", Operator.EQUAL],
+      ["value", "moises.alejandro.serrano@gmail.com"],
+    ]);
     const criteria = new Criteria(
-      Filters.fromValues([filterClientId]),
+      Filters.fromValues([filterEmail]),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
       20,
       1,
@@ -497,6 +510,7 @@ describe("Business Allie", () => {
     const res =
       await BusinessAllieMongoRepository.instance().exportReferrals(criteria);
 
+    console.log("res", res);
     expect(res).not.toBe(undefined);
   });
 
@@ -516,7 +530,7 @@ describe("Business Allie", () => {
     ]);
 
     const criteria = new Criteria(
-      Filters.fromValues([filterClientId]),
+      Filters.fromValues([filterClientId, typeMovemenFilter]),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
       20,
       1,
