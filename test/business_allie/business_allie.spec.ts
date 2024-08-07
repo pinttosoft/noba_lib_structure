@@ -516,14 +516,14 @@ describe("Business Allie", () => {
     ]);
 
     const criteria = new Criteria(
-      Filters.fromValues([filterClientId, typeMovemenFilter]),
+      Filters.fromValues([filterClientId]),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
       20,
       1,
     );
 
     const res = await FinanceMongoRepository.instance().exportFinance(criteria);
-
+    console.log("res", res);
     expect(res).not.toBe(undefined);
   });
 });

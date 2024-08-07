@@ -283,12 +283,7 @@ export class BusinessAllieMongoRepository
       pipeline.push({ $match: query.filter });
     }
 
-    const result = await collection.aggregate(pipeline).toArray();
-
-    return result.map(
-      (allie) =>
-        new BusinessAllie({ ...allie, id: allie.id } as BusinessAllieDTO),
-    );
+    return (await collection.aggregate(pipeline).toArray()) as BusinessAllie[];
   }
 
   async exportReferrals(criteria: Criteria): Promise<Referred[]> {
@@ -305,11 +300,6 @@ export class BusinessAllieMongoRepository
       { $replaceRoot: { newRoot: "$referrals" } },
     );
 
-    const result = await collection.aggregate(pipeline).toArray();
-
-    return result.map(
-      (referred) =>
-        new Referred({ ...referred, id: referred.id } as ReferredDTO),
-    );
+    return (await collection.aggregate(pipeline).toArray()) as Referred[];
   }
 }

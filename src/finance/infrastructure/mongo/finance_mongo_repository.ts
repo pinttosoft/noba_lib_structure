@@ -100,14 +100,6 @@ export class FinanceMongoRepository
       pipeline.push({ $match: query.filter });
     }
 
-    const result = await collection.aggregate(pipeline).toArray();
-
-    return result.map(
-      (finance) =>
-        new Finance({
-          ...finance,
-          id: finance._id,
-        } as unknown as FinancialMovement),
-    );
+    return (await collection.aggregate(pipeline).toArray()) as Finance[];
   }
 }
