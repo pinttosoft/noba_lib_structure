@@ -1,15 +1,20 @@
 import { Finance, FinancialMovement, IFinanceRepository } from "../../index";
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import {
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
 
 export class FinanceMongoRepository
   extends MongoRepository<Finance>
   implements IFinanceRepository
 {
+  private static _instance: FinanceMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
-
-  private static _instance: FinanceMongoRepository;
 
   static instance() {
     if (this._instance) {
@@ -38,5 +43,51 @@ export class FinanceMongoRepository
 
   async upsert(fee: Finance): Promise<void> {
     await this.persist(fee.getId(), fee);
+  }
+
+  async list(
+    criteria: Criteria,
+    pipelines?: any[],
+  ): Promise<Paginate<Finance>> {
+    const document: Finance[] = await this.searchByCriteria<Finance>(criteria);
+
+    if (pipelines) {
+      console.log("aqqqq");
+      return this.paginateAggregation(criteria);
+    }
+
+    return this.buildPaginate<Finance>(document);
+  }
+
+  async getAllieSwapConsolidate(clientId?: string, assetCode?: string) {
+    const collection = await this.collection();
+
+    let filter: any = {
+      typeFinancialMovement: "OUTGOING_PAYMENT_BUSINESS_ALLIE",
+    };
+
+    if (clientId) {
+      filter["clientId"] = clientId;
+    }
+
+    if (assetCode) {
+      filter["exchange.destinationDetails.assetCode"] = assetCode;
+    }
+
+    const pipeline = [
+      {
+        $match: filter,
+      },
+      {
+        $group: {
+          _id: "$exchange.destinationDetails.assetCode",
+          total: {
+            $sum: "$amount",
+          },
+        },
+      },
+    ];
+
+    return await collection.aggregate(pipeline).toArray();
   }
 }

@@ -1,39 +1,41 @@
-import { BusinessAllieDTO } from "../type/business_allie.type";
 import { BusinessAllie } from "../business_allie";
-import { BusinessOpportunityDTO } from "../type/business_opportunity.type";
-import { BusinessOpportunity } from "../business_opportunity";
+import { ReferredDTO } from "../type/referred.type";
+import { Referred } from "../referred";
+import { Criteria, Paginate } from "../../shared";
 
 export interface IBusinessAllieRepository {
-  saveBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
+  fetchBusinessAllies(criteria: Criteria): Promise<Paginate<BusinessAllie>>;
 
-  getBusinessAllie(clientId: string): Promise<BusinessAllieDTO | undefined>;
+  getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined>;
 
-  getOpportunityByTaxId(
-    taxId: string,
-  ): Promise<BusinessOpportunity | undefined>;
+  upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void>;
 
-  addOpportunityToAllie(
+  addReferredToAllie(
     clientId: string,
-    opportunityPayload: BusinessOpportunityDTO,
-  ): Promise<BusinessAllieDTO | null>;
+    referredByPayload: ReferredDTO,
+  ): Promise<BusinessAllie | null>;
 
-  getOpportunityAndAllieByTaxId(
-    taxId: string,
-  ): Promise<BusinessAllieDTO | undefined>;
+  deleteBusinessAllie(clientId: string): void;
 
-  getAllieOpportunitiesByClientId(
+  getReferredByTaxId(taxId: string): Promise<Referred | undefined>;
+
+  getReferredByEmail(email: string): Promise<Referred | undefined>;
+
+  getReferredAndAllieByTaxId(taxId: string): Promise<BusinessAllie | undefined>;
+
+  getReferralsByClientId(clientId: string): Promise<Referred[] | undefined>;
+
+  updateReferredData(referred: Referred): Promise<void>;
+
+  getBusinessAllieByReferredClientId(
     clientId: string,
-  ): Promise<BusinessAllieDTO[] | undefined>;
+  ): Promise<BusinessAllie | null>;
 
-  updateBusinessOpportunityData(
-    opportunity: BusinessOpportunity,
-  ): Promise<void>;
+  getReferredByClientId(clientId: string): Promise<Referred | undefined>;
 
-  getBusinessAllieByOpportunityClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO | null>;
+  deleteReferred(referredByClientId: string, clientId: string): void;
 
-  getOpportunityByClientId(
-    clientId: string,
-  ): Promise<BusinessOpportunity | undefined>;
+  fetchReferrals(criteria: Criteria, pipelines?: any[]): any;
+
+  paginateReferrals(criteria: Criteria): Promise<Paginate<Referred>>;
 }

@@ -1,23 +1,24 @@
 import { IBusinessAllieRepository } from "../../interfaces/business_allie_repository.interface";
 import { BusinessAllieDTO } from "../../type/business_allie.type";
 import { BusinessAllie } from "../../business_allie";
-import { BusinessOpportunityDTO } from "../../type/business_opportunity.type";
-import { BusinessOpportunity } from "../../business_opportunity";
-import { MongoClientFactory, MongoRepository } from "../../../shared";
+import { ReferredDTO } from "../../type/referred.type";
+import { Referred } from "../../referred";
+import {
+  Criteria,
+  MongoClientFactory,
+  MongoRepository,
+  Paginate,
+} from "../../../shared";
 
 export class BusinessAllieMongoRepository
   extends MongoRepository<BusinessAllie>
   implements IBusinessAllieRepository
 {
+  private static _instance: BusinessAllieMongoRepository;
+
   constructor() {
     super(MongoClientFactory.createClient());
   }
-
-  collectionName(): string {
-    return "business_allie";
-  }
-
-  private static _instance: BusinessAllieMongoRepository;
 
   static instance() {
     if (this._instance) {
@@ -28,9 +29,19 @@ export class BusinessAllieMongoRepository
     return this._instance;
   }
 
-  async getBusinessAllie(
-    clientId: string,
-  ): Promise<BusinessAllieDTO | undefined> {
+  collectionName(): string {
+    return "business_allie";
+  }
+
+  async fetchBusinessAllies(
+    criteria: Criteria,
+  ): Promise<Paginate<BusinessAllie>> {
+    const document = await this.searchByCriteria<any>(criteria);
+
+    return this.buildPaginate<BusinessAllie>(document);
+  }
+
+  async getBusinessAllie(clientId: string): Promise<BusinessAllie | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>({ clientId });
 
@@ -38,116 +49,230 @@ export class BusinessAllieMongoRepository
       return undefined;
     }
 
-    return { ...result, id: result._id } as unknown as BusinessAllieDTO;
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
   }
 
-  async saveBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
+  async upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
     await this.persist(businessAllie.getId(), businessAllie);
   }
 
-  async addOpportunityToAllie(
+  async addReferredToAllie(
     clientId: string,
-    opportunityPayload: BusinessOpportunityDTO,
-  ): Promise<BusinessAllieDTO | null> {
+    referredPayload: ReferredDTO,
+  ): Promise<BusinessAllie | null> {
     const collection = await this.collection();
 
     await collection.updateOne(
       { clientId },
-      { $push: { businessOpportunities: opportunityPayload } },
+      { $push: { referrals: referredPayload } },
       { upsert: true },
     );
 
-    return (await collection.findOne<any>({
+    const result = (await collection.findOne<any>({
       clientId,
     })) as unknown as BusinessAllieDTO;
+
+    return new BusinessAllie(result);
   }
 
-  async updateBusinessOpportunityData(
-    opportunity: BusinessOpportunity,
-  ): Promise<void> {
+  async updateReferredData(referred: Referred): Promise<void> {
     const collection = await this.collection();
 
     await collection.updateOne(
       {
-        clientId: opportunity.getClientIdToBusinessAllie(),
-        "businessOpportunities.taxId": opportunity.getTaxId(),
+        clientId: referred.getClientIdToBusinessAllie(),
+        "referrals.taxId": referred.getTaxId(),
       },
       {
         $set: {
           ...this.transformationToUpsertInSubDocuments(
-            "businessOpportunities",
-            opportunity.toPrimitives(),
+            "referrals",
+            referred.toPrimitives(),
           ),
         },
       },
     );
   }
 
-  async getOpportunityAndAllieByTaxId(
-    taxId: string,
-  ): Promise<BusinessAllieDTO | null> {
-    const collection = await this.collection();
-
-    return (await collection.findOne<any>({
-      "businessOpportunities.taxId": taxId,
-    })) as unknown as BusinessAllieDTO;
-  }
-
-  async getBusinessAllieByOpportunityClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO | null> {
-    const collection = await this.collection();
-
-    return (await collection.findOne<any>({
-      "businessOpportunities.clientId": clientId,
-    })) as unknown as BusinessAllieDTO;
-  }
-
-  async getAllieOpportunitiesByClientId(
-    clientId: string,
-  ): Promise<BusinessAllieDTO[] | null> {
+  async getReferralsByClientId(clientId: string): Promise<Referred[] | null> {
     const collection = await this.collection();
     const result = await collection.findOne<any>({ clientId });
     if (!result) {
       return null;
     }
 
-    return result.businessOpportunities;
+    return result.referrals.map((r) => new Referred(r));
   }
 
-  async getOpportunityByTaxId(
+  async getReferredAndAllieByTaxId(
     taxId: string,
-  ): Promise<BusinessOpportunity | undefined> {
+  ): Promise<BusinessAllie | null> {
     const collection = await this.collection();
-    const result = await collection.findOne<any>(
-      { "businessOpportunities.taxId": taxId },
-      { projection: { "businessOpportunities.$": 1 } },
-    );
+    const result = await collection.findOne<any>({
+      "referrals.taxId": taxId,
+    });
 
     if (!result) {
       return undefined;
     }
 
-    const opportunity = result.businessOpportunities[0];
-
-    return new BusinessOpportunity({ ...opportunity, id: opportunity._id });
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
   }
 
-  async getOpportunityByClientId(
+  async getBusinessAllieByReferredClientId(
     clientId: string,
-  ): Promise<BusinessOpportunity | undefined> {
+  ): Promise<BusinessAllie | null> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>({
+      "referrals.clientId": clientId,
+    });
+
+    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
+  }
+
+  async getReferredByTaxId(taxId: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
-      { "businessOpportunities.clientId": clientId },
-      { projection: { "businessOpportunities.$": 1 } },
+      { "referrals.taxId": taxId },
+      { projection: { "referrals.$": 1 } },
     );
 
     if (!result) {
       return undefined;
     }
 
-    const opportunity = result.businessOpportunities[0];
+    const referred = result.referrals[0];
 
-    return new BusinessOpportunity({ ...opportunity, id: opportunity._id });
+    return new Referred({ ...referred, id: referred._id });
+  }
+
+  /**
+   * Se espera que el criteria tenga clientId
+   * @param criteria
+   */
+  async paginateReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+    const filters = criteria.filters.filters;
+
+    let hasClientIdFilter = false;
+    let clientId = "";
+    for (const filter of filters) {
+      if (filter.field.getValue() === "clientId") {
+        hasClientIdFilter = true;
+        clientId = filter.value.getValue();
+      }
+    }
+
+    if (!hasClientIdFilter) {
+      throw new Error("clientId filter is required");
+    }
+
+    const documents = (
+      await this.paginatedArrayField<any>(criteria, "referrals")
+    )[0].referrals;
+
+    return await this.buildPaginatedArrayField<Referred>(
+      { clientId },
+      documents,
+      "referrals",
+    );
+  }
+
+  async getReferredByEmail(email: string): Promise<Referred | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>(
+      { "referrals.email": email },
+      { projection: { "referrals.$": 1 } },
+    );
+
+    if (!result) {
+      return undefined;
+    }
+
+    const referred = result.referrals[0];
+
+    return new Referred({ ...referred, id: referred._id });
+  }
+
+  async getReferredByClientId(clientId: string): Promise<Referred | undefined> {
+    const collection = await this.collection();
+    const result = await collection.findOne<any>(
+      { "referrals.clientId": clientId },
+      { projection: { "referrals.$": 1 } },
+    );
+
+    if (!result) {
+      return undefined;
+    }
+
+    const referred = result.referrals[0];
+
+    return new Referred({ ...referred, id: referred._id });
+  }
+
+  async deleteBusinessAllie(clientId: string) {
+    const collection = await this.collection();
+    await collection.deleteOne({ clientId });
+  }
+
+  async deleteReferred(referredByClientId: string, clientId: string) {
+    const oldReferrals: Referred[] =
+      await this.getReferralsByClientId(referredByClientId);
+
+    const newReferrals: Referred[] = oldReferrals.filter(
+      (referred: Referred): boolean => referred.getClientId() !== clientId,
+    );
+
+    const allieRes = await this.getBusinessAllie(referredByClientId);
+    const allie = new BusinessAllie(
+      allieRes.toPrimitives() as BusinessAllieDTO,
+    );
+    allie.setReferrals(newReferrals);
+
+    await this.upsertBusinessAllie(allie);
+  }
+
+  /**
+   * Pagina el listado general de Referidos
+   * @param criteria
+   */
+  async fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+    const collection = await this.collection();
+    const skip = (criteria.currentPage - 1) * criteria.limit;
+
+    const pipeline = [];
+
+    console.log("criteria.hasFilters(", criteria.hasFilters());
+    if (criteria.hasFilters()) {
+      const query = this.criteriaConverter.convert(criteria);
+      console.log("query", query.filter);
+      pipeline.push({ $match: query.filter });
+    }
+
+    pipeline.push(
+      { $unwind: "$referrals" },
+      { $replaceRoot: { newRoot: "$referrals" } },
+      {
+        $facet: {
+          totalCount: [{ $count: "total" }],
+          data: [{ $skip: skip }, { $limit: criteria.limit }],
+        },
+      },
+    );
+
+    console.log("pipeline", pipeline);
+    const result = await collection.aggregate(pipeline).toArray();
+
+    const totalCount =
+      result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
+    const data = result[0].data.map((r: any) => new Referred(r));
+
+    const hasNextPage = criteria.currentPage * criteria.limit < totalCount;
+
+    return {
+      nextPag: hasNextPage ? criteria.currentPage + 1 : null,
+      prevPag: criteria.currentPage > 1 ? criteria.currentPage - 1 : null,
+      count: totalCount,
+      results: data,
+    };
   }
 }

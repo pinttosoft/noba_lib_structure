@@ -1,5 +1,6 @@
 import { TypeFinancialMovement } from "../enums/type_financial_movement.enum";
 import { FinancialMovementStatus } from "../enums/financial_movement_status.enum";
+import { Exchange } from "../../../exchange";
 
 export type FinancialMovement = {
   id?: string;
@@ -13,4 +14,5 @@ export type FinancialMovement = {
   createdAt: Date;
   updatedAt?: Date;
   profitAssetCode?: string;
+  exchange?: Exchange;
 };

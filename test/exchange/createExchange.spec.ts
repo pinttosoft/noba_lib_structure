@@ -27,7 +27,7 @@ describe("Exchange", () => {
       );
 
     const opportunity =
-      await BusinessAllieMongoRepository.instance().getOpportunityByClientId(
+      await BusinessAllieMongoRepository.instance().getReferredByClientId(
         exchangeRequest.clientId,
       );
 
@@ -99,7 +99,7 @@ describe("Exchange", () => {
       );
 
     const opportunity =
-      await BusinessAllieMongoRepository.instance().getOpportunityByClientId(
+      await BusinessAllieMongoRepository.instance().getReferredByClientId(
         exchangeRequest.clientId,
       );
 
