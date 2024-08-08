@@ -235,40 +235,33 @@ export class BusinessAllieMongoRepository
    * Pagina el listado general de Referidos
    * @param criteria
    */
-  async fetchReferrals(
-    criteria: Criteria,
-    project?: any,
-  ): Promise<Paginate<Referred>> {
+  async fetchReferrals(criteria: Criteria): Promise<Paginate<ReferredDTO>> {
     const collection = await this.collection();
     const skip = (criteria.currentPage - 1) * criteria.limit;
 
-    const pipeline = [];
+    const filters = this.criteriaConverter.convert(criteria).filter;
 
-    if (criteria.hasFilters()) {
-      const query = this.criteriaConverter.convert(criteria);
-      console.log("query.filter", query.filter);
-      pipeline.push({ $match: query.filter });
-      console.log("pipeline", pipeline);
-    }
-
-    pipeline.push(
+    const pipeline = [
       { $unwind: "$referrals" },
       { $replaceRoot: { newRoot: "$referrals" } },
-
+      { $match: filters },
       {
         $facet: {
           totalCount: [{ $count: "total" }],
-          data: [{ $skip: skip }, { $limit: criteria.limit }],
+          data: [
+            { $skip: skip },
+            { $limit: criteria.limit },
+            { $match: filters },
+          ],
         },
       },
-    );
+    ];
 
-    console.log("-- pipeline", pipeline);
     const result = await collection.aggregate(pipeline).toArray();
-    console.log("r", result);
 
     const totalCount =
       result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;
+    const data = result[0].data.map((r: any) => r);
 
     const hasNextPage = criteria.currentPage * criteria.limit < totalCount;
 
@@ -276,7 +269,7 @@ export class BusinessAllieMongoRepository
       nextPag: hasNextPage ? criteria.currentPage + 1 : null,
       prevPag: criteria.currentPage > 1 ? criteria.currentPage - 1 : null,
       count: totalCount,
-      results: result[0].data,
+      results: data,
     };
   }
 

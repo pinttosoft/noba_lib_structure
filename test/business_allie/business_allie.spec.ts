@@ -590,4 +590,42 @@ describe("Business Allie", () => {
 
     console.log(paginate);
   });
+
+  it("Should fetch all referrals", async () => {
+    const filterStatus: Map<string, string> = new Map([
+      ["field", "status"],
+      ["operator", Operator.EQUAL],
+      ["value", ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT],
+    ]);
+
+    const filterType: Map<string, string> = new Map([
+      ["field", "type"],
+      ["operator", Operator.EQUAL],
+      ["value", AccountType.INDIVIDUAL],
+    ]);
+
+    const filterStartDate = new Map<string, any>([
+      ["field", "createdAt"],
+      ["operator", Operator.GTE],
+      ["value", new Date("2024-07-30")],
+    ]);
+
+    const filterEndDate = new Map<string, any>([
+      ["field", "createdAt"],
+      ["operator", Operator.GTE],
+      ["value", new Date("2024-07-30")],
+    ]);
+
+    const criteria: Criteria = new Criteria(
+      Filters.fromValues([filterStatus]),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      2,
+      1,
+    );
+
+    const paginate =
+      await BusinessAllieMongoRepository.instance().fetchReferrals(criteria);
+
+    console.log(paginate.results[0]);
+  });
 });
