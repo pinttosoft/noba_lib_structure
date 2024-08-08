@@ -512,16 +512,27 @@ describe("Business Allie", () => {
 
   it("Should export referrals", async () => {
     const clientId = "JLanza15781342";
+    const filters = [];
 
-    const filterClientId: Map<string, string> = new Map([
-      ["field", "clientId"],
-      ["operator", Operator.EQUAL],
-      ["value", clientId],
-    ]);
+    filters.push(
+      new Map([
+        ["field", "referredByClientId"],
+        ["operator", Operator.EQUAL],
+        ["value", clientId],
+      ]),
+    );
+
+    // filters.push(
+    //   new Map([
+    //     ["field", "name"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", "zxcv"],
+    //   ]),
+    // );
 
     const criteria = new Criteria(
-      Filters.fromValues([filterClientId]),
-      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      Filters.fromValues(filters),
+      Order.fromValues("createdAt", OrderTypes.DESC),
       20,
       1,
     );
@@ -567,7 +578,7 @@ describe("Business Allie", () => {
 
     // filters.push(
     //   new Map([
-    //     ["field", "clientId"],
+    //     ["field", "referredByClientId"],
     //     ["operator", Operator.EQUAL],
     //     ["value", clientId],
     //   ]),

@@ -2,6 +2,7 @@ import { BusinessAllie } from "../business_allie";
 import { ReferredDTO } from "../type/referred.type";
 import { Referred } from "../referred";
 import { Criteria, Paginate } from "../../shared";
+import { BusinessAllieDTO } from "../type/business_allie.type";
 
 export interface IBusinessAllieRepository {
   fetchBusinessAllies(criteria: Criteria): Promise<Paginate<BusinessAllie>>;
@@ -37,7 +38,7 @@ export interface IBusinessAllieRepository {
 
   fetchReferrals(criteria: Criteria): Promise<Paginate<ReferredDTO>>;
 
-  exportAllies(criteria: Criteria): Promise<BusinessAllie[]>;
+  exportAllies(criteria: Criteria): Promise<BusinessAllieDTO[]>;
 
-  exportReferrals(criteria: Criteria): Promise<Referred[]>;
+  exportReferrals(criteria: Criteria): Promise<ReferredDTO[]>;
 }

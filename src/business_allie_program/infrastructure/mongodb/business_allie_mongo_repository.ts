@@ -242,7 +242,7 @@ export class BusinessAllieMongoRepository
     };
   }
 
-  async exportAllies(criteria: Criteria): Promise<BusinessAllie[]> {
+  async exportAllies(criteria: Criteria): Promise<BusinessAllieDTO[]> {
     const collection = await this.collection();
 
     const pipeline = [];
@@ -252,23 +252,22 @@ export class BusinessAllieMongoRepository
       pipeline.push({ $match: query.filter });
     }
 
-    return (await collection.aggregate(pipeline).toArray()) as BusinessAllie[];
+    return (await collection
+      .aggregate(pipeline)
+      .toArray()) as BusinessAllieDTO[];
   }
 
-  async exportReferrals(criteria: Criteria): Promise<Referred[]> {
+  async exportReferrals(criteria: Criteria): Promise<ReferredDTO[]> {
     const collection = await this.collection();
     const pipeline = [];
-
-    if (criteria.hasFilters()) {
-      const query = this.criteriaConverter.convert(criteria);
-      pipeline.push({ $match: query.filter });
-    }
+    const filters = this.criteriaConverter.convert(criteria).filter;
 
     pipeline.push(
       { $unwind: "$referrals" },
       { $replaceRoot: { newRoot: "$referrals" } },
+      { $match: filters },
     );
 
-    return (await collection.aggregate(pipeline).toArray()) as Referred[];
+    return (await collection.aggregate(pipeline).toArray()) as ReferredDTO[];
   }
 }
