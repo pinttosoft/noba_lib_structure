@@ -1,5 +1,6 @@
 import { Finance } from "../finance";
 import { Criteria, Paginate } from "../../../shared";
+import { FinancialMovement } from "../types/financial_movement_type";
 
 export interface IFinanceRepository {
   getByReferenceId(referenceId: string): Promise<Finance | undefined>;
@@ -16,5 +17,5 @@ export interface IFinanceRepository {
     assetCode?: string,
   ): Promise<any[] | undefined>;
 
-  exportFinance(criteria: Criteria): Promise<Finance[]>;
+  exportFinance(criteria: Criteria): Promise<FinancialMovement[]>;
 }

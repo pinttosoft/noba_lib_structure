@@ -91,7 +91,7 @@ export class FinanceMongoRepository
     return await collection.aggregate(pipeline).toArray();
   }
 
-  async exportFinance(criteria: Criteria): Promise<Finance[]> {
+  async exportFinance(criteria: Criteria): Promise<FinancialMovement[]> {
     const collection = await this.collection();
     const pipeline = [];
 
@@ -100,6 +100,8 @@ export class FinanceMongoRepository
       pipeline.push({ $match: query.filter });
     }
 
-    return (await collection.aggregate(pipeline).toArray()) as Finance[];
+    return (await collection
+      .aggregate(pipeline)
+      .toArray()) as FinancialMovement[];
   }
 }
