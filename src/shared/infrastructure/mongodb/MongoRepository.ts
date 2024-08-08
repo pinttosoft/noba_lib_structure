@@ -49,29 +49,6 @@ export abstract class MongoRepository<T extends AggregateRoot> {
       .toArray();
   }
 
-  protected async buildPaginatedArrayField<T>(
-    filter: object,
-    documents: T[],
-    arrayFieldName: string,
-  ): Promise<Paginate<T>> {
-    const collection = await this.collection();
-    const result = await collection
-      .find(filter)
-      .project({
-        totalRecords: { $size: `$${arrayFieldName}` },
-      })
-      .toArray();
-    let count = 0;
-
-    if (result.length > 0) {
-      count = result[0].totalRecords;
-    }
-
-    console.log("totalRecords", count);
-
-    return this.createObjectPaginate<T>(documents, count);
-  }
-
   protected client(): Promise<MongoClient> {
     return this._client;
   }
@@ -182,26 +159,6 @@ export abstract class MongoRepository<T extends AggregateRoot> {
       count: totalCount,
       results: data,
     };
-  }
-
-  protected async paginatedArrayField<D>(
-    criteria: Criteria,
-    arrayFieldName: string,
-  ): Promise<D[]> {
-    this.criteria = criteria;
-    this.query = this.criteriaConverter.convert(criteria);
-
-    const projection: { [key: string]: any } = {};
-    projection[arrayFieldName] = {
-      $slice: [Number(this.query.skip), Number(this.query.limit)],
-    };
-
-    const collection = await this.collection();
-
-    return await collection
-      .find<D>(this.query.filter, { projection })
-      .sort(this.query.sort)
-      .toArray();
   }
 
   private createObjectPaginate<T>(documents: T[], count: number): Paginate<T> {

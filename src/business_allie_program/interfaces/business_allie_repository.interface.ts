@@ -37,8 +37,6 @@ export interface IBusinessAllieRepository {
 
   fetchReferrals(criteria: Criteria): Promise<Paginate<ReferredDTO>>;
 
-  paginateReferrals(criteria: Criteria): Promise<Paginate<Referred>>;
-
   exportAllies(criteria: Criteria): Promise<BusinessAllie[]>;
 
   exportReferrals(criteria: Criteria): Promise<Referred[]>;

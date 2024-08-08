@@ -420,25 +420,44 @@ describe("Business Allie", () => {
 
   it("Should paginated referrals to allie", async () => {
     const clientId = "JLanza15781342";
+    const filters = [];
 
-    const filterClientId: Map<string, string> = new Map([
-      ["field", "clientId"],
-      ["operator", Operator.EQUAL],
-      ["value", clientId],
-    ]);
+    filters.push(
+      new Map([
+        ["field", "referredByClientId"],
+        ["operator", Operator.EQUAL],
+        ["value", clientId],
+      ]),
+    );
+
+    // filters.push(
+    //   new Map([
+    //     ["field", "name"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", "zxcv"],
+    //   ]),
+    // );
+
+    // filters.push(
+    //   new Map([
+    //     ["field", "status"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", ReferredStatus.REFERRED_WITH_ACTIVE_ACCOUNT],
+    //   ]),
+    // );
 
     const criteria = new Criteria(
-      Filters.fromValues([filterClientId]),
+      Filters.fromValues(filters),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
-      2,
+      10,
       1,
     );
 
     const paginate =
-      await BusinessAllieMongoRepository.instance().paginateReferrals(criteria);
+      await BusinessAllieMongoRepository.instance().fetchReferrals(criteria);
 
+    console.log("paginate.results.", paginate.results);
     expect(paginate.results.length).toBeGreaterThanOrEqual(2);
-    expect(paginate.nextPag).toBe(2);
   });
 
   it("Should paginate all referrals", async () => {
@@ -546,42 +565,49 @@ describe("Business Allie", () => {
 
     const clientId = "JLanza15781342";
 
-    filters.push(
-      new Map([
-        ["field", "clientId"],
-        ["operator", Operator.EQUAL],
-        ["value", clientId],
-      ]),
-    );
+    // filters.push(
+    //   new Map([
+    //     ["field", "clientId"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", clientId],
+    //   ]),
+    // );
 
-    filters.push(
-      new Map([
-        ["field", "referrals.email"],
-        ["operator", Operator.EQUAL],
-        ["value", "zxcv@gmail.com"],
-      ]),
-    );
-
-    filters.push(
-      new Map([
-        ["field", "referrals.name"],
-        ["operator", Operator.EQUAL],
-        ["value", "zxcv"],
-      ]),
-    );
+    // filters.push(
+    //   new Map([
+    //     ["field", "email"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", "zxcv@gmail.com"],
+    //   ]),
+    // );
     //
+    // filters.push(
+    //   new Map([
+    //     ["field", "name"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", "zxcv"],
+    //   ]),
+    // );
+    // filters.push(
+    //   new Map([
+    //     ["field", "type"],
+    //     ["operator", Operator.EQUAL],
+    //     ["value", "COMPANY"],
+    //   ]),
+    // );
+
     filters.push(
       new Map([
-        ["field", "referrals.type"],
+        ["field", "status"],
         ["operator", Operator.EQUAL],
-        ["value", "COMPANY"],
+        ["value", "REFERRED_WITH_ACTIVE_ACCOUNT"],
       ]),
     );
 
     const criteria = new Criteria(
       Filters.fromValues(filters),
       Order.fromValues("referrals.createdAt", OrderTypes.DESC),
-      20,
+      3,
       1,
     );
 

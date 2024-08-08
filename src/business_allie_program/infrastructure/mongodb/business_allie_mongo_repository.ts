@@ -146,37 +146,6 @@ export class BusinessAllieMongoRepository
     return new Referred({ ...referred, id: referred._id });
   }
 
-  /**
-   * Se espera que el criteria tenga clientId
-   * @param criteria
-   */
-  async paginateReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
-    const filters = criteria.filters.filters;
-
-    let hasClientIdFilter = false;
-    let clientId = "";
-    for (const filter of filters) {
-      if (filter.field.getValue() === "clientId") {
-        hasClientIdFilter = true;
-        clientId = filter.value.getValue();
-      }
-    }
-
-    if (!hasClientIdFilter) {
-      throw new Error("clientId filter is required");
-    }
-
-    const documents = (
-      await this.paginatedArrayField<any>(criteria, "referrals")
-    )[0].referrals;
-
-    return await this.buildPaginatedArrayField<Referred>(
-      { clientId },
-      documents,
-      "referrals",
-    );
-  }
-
   async getReferredByEmail(email: string): Promise<Referred | undefined> {
     const collection = await this.collection();
     const result = await collection.findOne<any>(
@@ -269,7 +238,7 @@ export class BusinessAllieMongoRepository
       nextPag: hasNextPage ? criteria.currentPage + 1 : null,
       prevPag: criteria.currentPage > 1 ? criteria.currentPage - 1 : null,
       count: totalCount,
-      results: data,
+      results: result[0].data,
     };
   }
 
