@@ -235,7 +235,10 @@ export class BusinessAllieMongoRepository
    * Pagina el listado general de Referidos
    * @param criteria
    */
-  async fetchReferrals(criteria: Criteria): Promise<Paginate<Referred>> {
+  async fetchReferrals(
+    criteria: Criteria,
+    project?: any,
+  ): Promise<Paginate<Referred>> {
     const collection = await this.collection();
     const skip = (criteria.currentPage - 1) * criteria.limit;
 
@@ -251,6 +254,7 @@ export class BusinessAllieMongoRepository
     pipeline.push(
       { $unwind: "$referrals" },
       { $replaceRoot: { newRoot: "$referrals" } },
+
       {
         $facet: {
           totalCount: [{ $count: "total" }],
@@ -261,6 +265,7 @@ export class BusinessAllieMongoRepository
 
     console.log("-- pipeline", pipeline);
     const result = await collection.aggregate(pipeline).toArray();
+    console.log("r", result);
 
     const totalCount =
       result[0].totalCount.length > 0 ? result[0].totalCount[0].total : 0;

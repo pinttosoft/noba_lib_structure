@@ -568,14 +568,14 @@ describe("Business Allie", () => {
         ["operator", Operator.EQUAL],
         ["value", "zxcv"],
       ]),
-
-      filters.push(
-        new Map([
-          ["field", "referrals.type"],
-          ["operator", Operator.EQUAL],
-          ["value", "COMPANY"],
-        ]),
-      ),
+    );
+    //
+    filters.push(
+      new Map([
+        ["field", "referrals.type"],
+        ["operator", Operator.EQUAL],
+        ["value", "COMPANY"],
+      ]),
     );
 
     const criteria = new Criteria(
