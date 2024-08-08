@@ -259,6 +259,7 @@ export class BusinessAllieMongoRepository
       },
     );
 
+    console.log("-- pipeline", pipeline);
     const result = await collection.aggregate(pipeline).toArray();
 
     const totalCount =

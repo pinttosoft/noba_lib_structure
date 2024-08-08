@@ -540,4 +540,54 @@ describe("Business Allie", () => {
     console.log("res", res);
     expect(res).not.toBe(undefined);
   });
+
+  it("Should search referrals", async () => {
+    const filters = [];
+
+    const clientId = "JLanza15781342";
+
+    filters.push(
+      new Map([
+        ["field", "clientId"],
+        ["operator", Operator.EQUAL],
+        ["value", clientId],
+      ]),
+    );
+
+    filters.push(
+      new Map([
+        ["field", "referrals.email"],
+        ["operator", Operator.EQUAL],
+        ["value", "zxcv@gmail.com"],
+      ]),
+    );
+
+    filters.push(
+      new Map([
+        ["field", "referrals.name"],
+        ["operator", Operator.EQUAL],
+        ["value", "zxcv"],
+      ]),
+
+      filters.push(
+        new Map([
+          ["field", "referrals.type"],
+          ["operator", Operator.EQUAL],
+          ["value", "COMPANY"],
+        ]),
+      ),
+    );
+
+    const criteria = new Criteria(
+      Filters.fromValues(filters),
+      Order.fromValues("referrals.createdAt", OrderTypes.DESC),
+      20,
+      1,
+    );
+
+    const paginate =
+      await BusinessAllieMongoRepository.instance().fetchReferrals(criteria);
+
+    console.log(paginate);
+  });
 });
