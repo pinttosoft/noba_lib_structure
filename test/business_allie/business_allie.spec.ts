@@ -56,7 +56,6 @@ describe("Business Allie", () => {
         status: BusinessAllieStatus.PENDING_REVISION,
         type: BusinessAllieType.ALLIE,
         createdAt: new Date(),
-        client,
       };
 
       const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
