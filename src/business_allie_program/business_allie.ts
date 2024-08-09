@@ -25,9 +25,49 @@ export class BusinessAllie extends AggregateRoot {
   feeLimits?: FeeLimitsType;
   accountType?: AccountType;
 
-  static newAllie(alliePayload: BusinessAllieDTO): BusinessAllie {}
+  static newAllie(alliePayload: BusinessAllieDTO): BusinessAllie {
+    const allie = new BusinessAllie();
 
-  static fromPrimitives(id: string, data: any): BusinessAllie {}
+    allie.id = alliePayload.id;
+    allie.clientId = alliePayload.clientId;
+    allie.name = alliePayload.name;
+    allie.email = alliePayload.email;
+    allie.referrals = alliePayload.referrals;
+    allie.status = alliePayload.status;
+    allie.type = alliePayload.type;
+    allie.createdAt = alliePayload.createdAt;
+    allie.diffusionChanel = alliePayload.diffusionChanel;
+    allie.link = alliePayload.link;
+    allie.referredBy = alliePayload.referredBy;
+    allie.updatedAt = alliePayload.updatedAt;
+    allie.approvedAt = alliePayload.approvedAt;
+    allie.feeLimits = alliePayload.feeLimits;
+    allie.accountType = alliePayload.accountType;
+
+    return allie;
+  }
+
+  static fromPrimitives(id: string, data: any): BusinessAllie {
+    const allie = new BusinessAllie();
+
+    allie.id = id;
+    allie.clientId = data.clientId;
+    allie.name = data.name;
+    allie.email = data.email;
+    allie.referrals = data.referrals;
+    allie.status = data.status;
+    allie.type = data.type;
+    allie.createdAt = data.createdAt;
+    allie.diffusionChanel = data.diffusionChanel;
+    allie.link = data.link;
+    allie.referredBy = data.referredBy;
+    allie.updatedAt = data.updatedAt;
+    allie.approvedAt = data.approvedAt;
+    allie.feeLimits = data.feeLimits;
+    allie.accountType = data.accountType;
+
+    return allie;
+  }
 
   getId(): string {
     return this.id;
@@ -74,6 +114,22 @@ export class BusinessAllie extends AggregateRoot {
   }
 
   toPrimitives(): BusinessAllieDTO {
-    return this;
+    return {
+      id: this.id,
+      clientId: this.clientId,
+      name: this.name,
+      email: this.email,
+      referrals: this.referrals,
+      status: this.status,
+      type: this.type,
+      createdAt: this.createdAt,
+      diffusionChanel: this.diffusionChanel,
+      link: this.link,
+      referredBy: this.referredBy,
+      updatedAt: this.updatedAt,
+      approvedAt: this.approvedAt,
+      feeLimits: this.feeLimits,
+      accountType: this.accountType,
+    };
   }
 }
