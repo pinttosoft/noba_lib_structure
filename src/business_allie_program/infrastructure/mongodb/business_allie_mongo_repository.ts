@@ -49,7 +49,12 @@ export class BusinessAllieMongoRepository
       return undefined;
     }
 
-    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
+    console.log("r", result);
+
+    // return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
+    return BusinessAllie.fromPrimitives(result._id, {
+      ...result,
+    } as BusinessAllieDTO);
   }
 
   async upsertBusinessAllie(businessAllie: BusinessAllie): Promise<void> {
@@ -72,7 +77,8 @@ export class BusinessAllieMongoRepository
       clientId,
     })) as unknown as BusinessAllieDTO;
 
-    return new BusinessAllie(result);
+    return BusinessAllie.fromPrimitives(result.id, result);
+    // return new BusinessAllie(result);
   }
 
   async updateReferredData(referred: Referred): Promise<void> {
@@ -116,7 +122,9 @@ export class BusinessAllieMongoRepository
       return undefined;
     }
 
-    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
+    return BusinessAllie.fromPrimitives(result._id, {
+      ...result,
+    } as BusinessAllieDTO);
   }
 
   async getBusinessAllieByReferredClientId(
@@ -127,7 +135,7 @@ export class BusinessAllieMongoRepository
       "referrals.clientId": clientId,
     });
 
-    return new BusinessAllie({ ...result, id: result._id } as BusinessAllieDTO);
+    return BusinessAllie.fromPrimitives(result._id, result);
   }
 
   async getReferredByTaxId(taxId: string): Promise<Referred | undefined> {
@@ -192,7 +200,7 @@ export class BusinessAllieMongoRepository
     );
 
     const allieRes = await this.getBusinessAllie(referredByClientId);
-    const allie = new BusinessAllie(
+    const allie = BusinessAllie.newAllie(
       allieRes.toPrimitives() as BusinessAllieDTO,
     );
     allie.setReferrals(newReferrals);

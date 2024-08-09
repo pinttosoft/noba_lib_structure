@@ -38,14 +38,14 @@ describe("Business Allie", () => {
     const link = v4();
     const businessRepo: BusinessAllieMongoRepository =
       BusinessAllieMongoRepository.instance();
-    const clientId: string = "Business-WANER1128024080";
+    const clientId: string = "Negocio-Waner128837873";
     const allieExist: BusinessAllie =
       await businessRepo.getBusinessAllie(clientId);
 
     if (!allieExist) {
       const client =
         await ClientMongoRepository.instance().findByClientId(clientId);
-      // console.log(client);
+      console.log(client);
 
       const alliePayload: BusinessAllieDTO = {
         clientId: clientId,
@@ -58,7 +58,7 @@ describe("Business Allie", () => {
         createdAt: new Date(),
       };
 
-      const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
+      const bAllie: BusinessAllie = BusinessAllie.newAllie(alliePayload);
       bAllie.updateFeeLimits({
         min: 0.2,
         max: 6,
@@ -162,7 +162,7 @@ describe("Business Allie", () => {
         createdAt: new Date(),
       };
 
-      const bAllie: BusinessAllie = new BusinessAllie(alliePayload);
+      const bAllie: BusinessAllie = BusinessAllie.newAllie(alliePayload);
       await businessRepo.upsertBusinessAllie(bAllie);
 
       return;
@@ -190,6 +190,25 @@ describe("Business Allie", () => {
     const feeLimits: FeeLimitsType = {
       min: 0.2,
       max: 6,
+    };
+
+    allie.updateFeeLimits(feeLimits);
+    console.log("allie to primitives", allie.toPrimitives());
+
+    await businessRepo.upsertBusinessAllie(allie);
+  });
+
+  it("Should edit marketer allie", async () => {
+    const businessRepo: BusinessAllieMongoRepository =
+      BusinessAllieMongoRepository.instance();
+    const clientId: string = "Negocio-Waner128837873";
+    const allie: BusinessAllie = await businessRepo.getBusinessAllie(clientId);
+
+    allie.updateStatus(BusinessAllieStatus.DENIED);
+
+    const feeLimits: FeeLimitsType = {
+      min: 0.3,
+      max: 7,
     };
 
     allie.updateFeeLimits(feeLimits);
